@@ -1,14 +1,15 @@
 package controller;
-
 import view.MenuPanel;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class MenuController {
     private MenuPanel menuPanel;
+    private JPanel cards;
 
-    public MenuController(MenuPanel menuPanel){
+    public MenuController(MenuPanel menuPanel, JPanel cards){
         this.menuPanel = menuPanel;
+        this.cards = cards;
         this.attachListeners();
     }
 
@@ -23,7 +24,8 @@ public class MenuController {
     }
 
     public void settingsAction(){
-        JOptionPane.showMessageDialog(menuPanel, "Settings clicked");
+        CardLayout cl = (CardLayout) (cards.getLayout());
+        cl.show(cards, "settings");
     }
 
     public void exitAction(){

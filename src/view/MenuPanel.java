@@ -50,10 +50,6 @@ public class MenuPanel extends JPanel {
 
     public void draw(JFrame frame){
         frame.setContentPane(this);
-        frame.setSize(1200, 800);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 
     public JButton getStartButton() {
