@@ -45,10 +45,6 @@ public class SettingsPanel extends JPanel {
         Box.createVerticalGlue();
     }
 
-    public void draw(JFrame frame){
-        frame.setContentPane(this);
-    }
-
     public JButton getBackButton() {
         return backButton;
     }

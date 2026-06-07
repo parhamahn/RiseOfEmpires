@@ -1,5 +1,8 @@
+import controller.GameController;
 import controller.MenuController;
 import controller.SettingsController;
+import view.GamePanel;
+import view.HUDPanel;
 import view.MenuPanel;
 import view.SettingsPanel;
 import javax.swing.*;
@@ -23,8 +26,13 @@ public class Main {
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
+            HUDPanel hudPanel = new HUDPanel();
+            GamePanel gamePanel = new GamePanel(hudPanel);
+            GameController gameController = new GameController(gamePanel, cards);
+
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");
+            cards.add(gamePanel, "game");
 
             frame.setVisible(true);
         });

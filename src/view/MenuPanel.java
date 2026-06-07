@@ -48,10 +48,6 @@ public class MenuPanel extends JPanel {
         add(Box.createVerticalGlue());
     }
 
-    public void draw(JFrame frame){
-        frame.setContentPane(this);
-    }
-
     public JButton getStartButton() {
         return startButton;
     }

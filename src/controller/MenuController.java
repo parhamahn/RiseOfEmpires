@@ -20,7 +20,9 @@ public class MenuController {
     }
 
     public void startAction(){
-        JOptionPane.showMessageDialog(menuPanel, "Start clicked");
+        CardLayout cl = (CardLayout) (cards.getLayout());
+        menuPanel.getStartButton().setText("Continue");
+        cl.show(cards, "game");
     }
 
     public void settingsAction(){
