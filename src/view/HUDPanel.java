@@ -45,7 +45,7 @@ public class HUDPanel extends JPanel {
         this.menuButton.setMinimumSize(new Dimension(50, 50));
         this.menuButton.setFont(new Font("Serif", Font.PLAIN, 32));
         this.menuButton.setMargin(new Insets(0,0,0,0));
-        this.menuButton.setBackground(new Color(248, 178, 0));
+        this.menuButton.setBackground(new Color(255, 203, 87));
         this.menuButton.setForeground(new Color(0,0,0));
         add(menuButton);
     }

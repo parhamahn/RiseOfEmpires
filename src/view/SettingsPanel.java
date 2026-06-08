@@ -17,19 +17,25 @@ public class SettingsPanel extends JPanel {
         this.backButton = new JButton("Back");
         this.soundSliderTag = new JLabel("Sound");
 
-        this.title.setFont(new Font("Serif", Font.BOLD, 24));
-        this.soundSliderTag.setFont(new Font("Serif", Font.PLAIN, 18));
+        this.title.setFont(new Font("Pixel Game", Font.BOLD, 48));
+        this.title.setForeground(Color.WHITE);
+        this.soundSliderTag.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        this.soundSliderTag.setForeground(Color.WHITE);
 
         this.backButton.setPreferredSize(BUTTON_SIZE);
         this.backButton.setMinimumSize(BUTTON_SIZE);
         this.backButton.setMaximumSize(BUTTON_SIZE);
+        this.backButton.setBackground(new Color(255, 203, 87));
+        this.backButton.setFont(new Font("Pixel Game", Font.PLAIN, 24));
 
         soundSlider.setPreferredSize(SLIDER_SIZE);
         soundSlider.setMinimumSize(SLIDER_SIZE);
         soundSlider.setMaximumSize(SLIDER_SIZE);
+        soundSlider.setBackground(new Color(38, 38, 38));
 
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBackground(new Color(38, 38, 38));
         this.backButton.setAlignmentX(CENTER_ALIGNMENT);
         this.title.setAlignmentX(CENTER_ALIGNMENT);
         this.soundSlider.setAlignmentX(CENTER_ALIGNMENT);

@@ -2,44 +2,61 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MenuPanel extends JPanel {
     private final Dimension BUTTON_SIZE = new Dimension(200, 50);
-    private JLabel title;
+    private JLabel titleu;
+    private JLabel titlem;
+    private JLabel titled;
     private JButton startButton;
     private JButton settingsButton;
     private JButton exitButton;
 
     public MenuPanel(){
-        this.title = new JLabel("Rise of Empires");
+        this.titleu = new JLabel("Rise");
+        this.titlem = new JLabel("of");
+        this.titled = new JLabel("Empires");
         this.startButton = new JButton("Start");
         this.settingsButton = new JButton("Settings");
         this.exitButton = new JButton("Exit");
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.startButton.setAlignmentX(CENTER_ALIGNMENT);
-        this.title.setAlignmentX(CENTER_ALIGNMENT);
-        this.exitButton.setAlignmentX(CENTER_ALIGNMENT);
-        this.settingsButton.setAlignmentX(CENTER_ALIGNMENT);
+        ArrayList<JButton> buttons = new ArrayList<>();
+        buttons.add(startButton);
+        buttons.add(settingsButton);
+        buttons.add(exitButton);
 
-        title.setFont(new Font("Serif", Font.BOLD, 36));
+        for(JButton button:buttons){
+            button.setBackground(new Color(255, 203, 87));
+            button.setAlignmentX(CENTER_ALIGNMENT);
+            button.setPreferredSize(BUTTON_SIZE);
+            button.setMinimumSize(BUTTON_SIZE);
+            button.setMaximumSize(BUTTON_SIZE);
+            button.setMargin(new Insets(0,0,0,0));
+            button.setFont(new Font("Pixel Game", Font.BOLD, 24));
+        }
 
-        this.startButton.setPreferredSize(BUTTON_SIZE);
-        this.startButton.setMinimumSize(BUTTON_SIZE);
-        this.startButton.setMaximumSize(BUTTON_SIZE);
+        this.setBackground(new Color(38, 38, 38));
 
-        this.settingsButton.setPreferredSize(BUTTON_SIZE);
-        this.settingsButton.setMinimumSize(BUTTON_SIZE);
-        this.settingsButton.setMaximumSize(BUTTON_SIZE);
+        this.titleu.setForeground(new Color(0, 175, 0));
+        this.titleu.setAlignmentX(CENTER_ALIGNMENT);
+        this.titlem.setForeground(new Color(255, 255, 255));
+        this.titlem.setAlignmentX(CENTER_ALIGNMENT);
+        this.titled.setForeground(new Color(255, 0, 0));
+        this.titled.setAlignmentX(CENTER_ALIGNMENT);
 
-        this.exitButton.setPreferredSize(BUTTON_SIZE);
-        this.exitButton.setMinimumSize(BUTTON_SIZE);
-        this.exitButton.setMaximumSize(BUTTON_SIZE);
+        titleu.setFont(new Font("Pixel Game", Font.PLAIN, 90));
+        titlem.setFont(new Font("Pixel Game", Font.PLAIN, 90));
+        titled.setFont(new Font("Pixel Game", Font.BOLD, 90));
+
 
         add(Box.createVerticalGlue());
-        add(title);
-        add(Box.createRigidArea(new Dimension(0, 100)));
+        add(titleu);
+        add(titlem);
+        add(titled);
+        add(Box.createRigidArea(new Dimension(0, 80)));
         add(startButton);
         add(Box.createRigidArea(new Dimension(0, 50)));
         add(settingsButton);
