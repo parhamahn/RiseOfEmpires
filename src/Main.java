@@ -1,10 +1,9 @@
 import controller.GameController;
 import controller.MenuController;
 import controller.SettingsController;
-import view.GamePanel;
-import view.HUDPanel;
-import view.MenuPanel;
-import view.SettingsPanel;
+import model.Map;
+import view.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,7 +26,10 @@ public class Main {
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
             HUDPanel hudPanel = new HUDPanel();
-            GamePanel gamePanel = new GamePanel(hudPanel);
+            MapPanel mapPanel = new MapPanel();
+            GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
+            Map map = new Map(15, 20);
+            gamePanel.getMapPanel().setMap(map);
             GameController gameController = new GameController(gamePanel, cards);
 
             cards.add(menuPanel, "menu");
