@@ -34,22 +34,22 @@ public class GameController {
 
         actionMap.put("moveUp", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.getMapPanel().moveCamera(0, -20);
+                gamePanel.getMapPanel().moveCamera(0, -50);
             }
         });
         actionMap.put("moveDown", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.getMapPanel().moveCamera(0, 20);
+                gamePanel.getMapPanel().moveCamera(0, 50);
             }
         });
         actionMap.put("moveLeft", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.getMapPanel().moveCamera(-20, 0);
+                gamePanel.getMapPanel().moveCamera(-50, 0);
             }
         });
         actionMap.put("moveRight", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.getMapPanel().moveCamera(20, 0);
+                gamePanel.getMapPanel().moveCamera(50, 0);
             }
         });
     }

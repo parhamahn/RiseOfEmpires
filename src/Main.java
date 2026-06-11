@@ -2,6 +2,7 @@ import controller.GameController;
 import controller.MenuController;
 import controller.SettingsController;
 import model.Map;
+import model.Sound;
 import view.*;
 
 import javax.swing.*;
@@ -22,13 +23,17 @@ public class Main {
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards);
 
+            Sound music = new Sound();
+            music.load("/utils/music.wav");
+            music.play();
+
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
-            HUDPanel hudPanel = new HUDPanel();
-            MapPanel mapPanel = new MapPanel();
-            GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             Map map = new Map(15, 20);
+            HUDPanel hudPanel = new HUDPanel();
+            MapPanel mapPanel = new MapPanel(map);
+            GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             gamePanel.getMapPanel().setMap(map);
             GameController gameController = new GameController(gamePanel, cards);
 

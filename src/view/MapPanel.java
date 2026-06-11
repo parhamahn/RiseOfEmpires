@@ -6,7 +6,7 @@ import model.Map;
 import model.Hex;
 
 public class MapPanel extends JPanel {
-    private final int HEX_RADIUS = 75;
+    private final int HEX_RADIUS = 100;
     private final double SQRT3 = Math.sqrt(3);
     private final int DX = (int) (SQRT3 * HEX_RADIUS);
     private final int DY = (int) (1.5 * HEX_RADIUS);
@@ -17,7 +17,7 @@ public class MapPanel extends JPanel {
 
     private final Polygon hexShape = new Polygon();
 
-    public MapPanel() {
+    public MapPanel(Map map) {
         setBackground(Color.BLACK);
         for (int i = 0; i < 6; i++) {
             double angle = Math.toRadians(-30 + 60 * i);
@@ -25,6 +25,9 @@ public class MapPanel extends JPanel {
             int y = (int) (HEX_RADIUS * Math.sin(angle));
             hexShape.addPoint(x, y);
         }
+        setMap(map);
+        cameraX = map.getCols()*HEX_RADIUS/2 + HEX_RADIUS;
+        cameraY = map.getRows()*HEX_RADIUS/2 - HEX_RADIUS;
     }
 
     public void setMap(Map map) {
@@ -33,8 +36,8 @@ public class MapPanel extends JPanel {
     }
 
     public void moveCamera(int dx, int dy) {
-        if((cameraX + dx <= map.getCols()*HEX_RADIUS-100)&&(cameraX + dx >= -map.getCols()*HEX_RADIUS/5)){cameraX += dx;}
-        if((cameraY + dy <= map.getRows()*HEX_RADIUS-100)&&(cameraY + dy >= -map.getRows()*HEX_RADIUS/5)){cameraY += dy;}
+        if((cameraX + dx <= map.getCols()*HEX_RADIUS+100)&&(cameraX + dx >= -map.getCols()*HEX_RADIUS/10)){cameraX += dx;}
+        if((cameraY + dy <= map.getRows()*HEX_RADIUS-100)&&(cameraY + dy >= -map.getRows()*HEX_RADIUS/10)){cameraY += dy;}
         System.out.println("("+cameraX+", "+cameraY+")");
         repaint();
     }
@@ -42,6 +45,10 @@ public class MapPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawHexTiles(g);
+    }
+
+    private void drawHexTiles(Graphics g){
         if (map == null) return;
 
         Graphics2D g2 = (Graphics2D) g;
@@ -58,10 +65,19 @@ public class MapPanel extends JPanel {
                         py < -HEX_RADIUS * 2 || py > getHeight() + HEX_RADIUS * 2) continue;
 
                 Polygon tile = translatePolygon(hexShape, px, py);
-                g2.setColor(getTerrainColor(hex.getTerrainType()));
-                g2.fillPolygon(tile);
-                g2.setColor(Color.DARK_GRAY);
-                g2.drawPolygon(tile);
+                if (hex.isDiscovered()) {
+                    g2.setColor(getTerrainColor(hex.getTerrainType()));
+                    g2.fillPolygon(tile);
+                    g2.setColor(Color.DARK_GRAY);
+                    g2.drawPolygon(tile);
+                }else{
+                    g2.setColor(Color.BLACK);
+                    g2.fillPolygon(tile);
+                    g2.setColor(Color.WHITE);
+                    g2.drawPolygon(tile);
+                    g2.setFont(new Font("Pixel Game", Font.BOLD, 48));
+                    g2.drawString("?", px-10, py+10);
+                }
 
             }
         }

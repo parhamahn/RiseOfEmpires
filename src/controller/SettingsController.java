@@ -1,5 +1,6 @@
 package controller;
 
+import sounds.Music;
 import view.SettingsPanel;
 
 import javax.swing.*;
@@ -18,6 +19,13 @@ public class SettingsController {
 
     public void attachListeners(){
         settingsPanel.getBackButton().addActionListener(e -> backAction());
+        settingsPanel.getSoundSlider().addChangeListener(e -> {
+            JSlider source = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                float volume = source.getValue() / 100.0f;
+                Music.getInstance().setVolume(volume);
+            }
+        });
     }
 
     public void backAction(){

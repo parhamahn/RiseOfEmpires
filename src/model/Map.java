@@ -18,10 +18,12 @@ public class Map {
             for (int c = 0; c < cols; c++) {
                 int randomIndex = (int) (Math.random() * terrains.length);
                 Hex hex = new Hex(c, r, terrains[randomIndex]);
-                hex.setDiscovered(true);
+                hex.setDiscovered(false);
                 grid[r][c] = hex;
             }
         }
+        Hex TownHall = getHex(getCols()/2, getRows()/2);
+        TownHall.setDiscovered(true);
     }
 
     public Hex getHex(int x, int y) {

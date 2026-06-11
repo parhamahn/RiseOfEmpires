@@ -13,7 +13,7 @@ public class SettingsPanel extends JPanel {
 
     public SettingsPanel(){
         this.title = new JLabel("Settings");
-        this.soundSlider = new JSlider();
+        this.soundSlider = new JSlider(0, 100, 50);
         this.backButton = new JButton("Back");
         this.soundSliderTag = new JLabel("Sound");
 
@@ -53,5 +53,9 @@ public class SettingsPanel extends JPanel {
 
     public JButton getBackButton() {
         return backButton;
+    }
+
+    public JSlider getSoundSlider() {
+        return soundSlider;
     }
 }
