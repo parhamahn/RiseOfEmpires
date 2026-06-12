@@ -14,16 +14,62 @@ public class Map {
 
     private void generateMap() {
         Hex.TerrainType[] terrains = Hex.TerrainType.values();
+
+        int numSeeds = (rows * cols) / 2 * 3;
+
+        int[][] seedPos = new int[numSeeds][2];
+        Hex.TerrainType[] seedTerrain = new Hex.TerrainType[numSeeds];
+
+        for (int i = 0; i < numSeeds; i++) {
+            seedPos[i][0]  = (int)(Math.random() * cols);
+            seedPos[i][1]  = (int)(Math.random() * rows);
+            seedTerrain[i] = terrains[(int)(Math.random() * terrains.length)];
+        }
+
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                int randomIndex = (int) (Math.random() * terrains.length);
-                Hex hex = new Hex(c, r, terrains[randomIndex]);
-                hex.setDiscovered(true);
-                grid[r][c] = hex;
+
+                int    nearest = 0;
+                double minDist = Double.MAX_VALUE;
+
+                for (int i = 0; i < numSeeds; i++) {
+                    double dx   = c - seedPos[i][0];
+                    double dy   = r - seedPos[i][1];
+                    double dist = dx * dx + dy * dy;
+                    if (dist < minDist) {
+                        minDist  = dist;
+                        nearest  = i;
+                    }
+                }
+
+                grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
+                grid[r][c].setDiscovered(true);
             }
         }
-        Hex TownHall = getHex(getCols()/2, getRows()/2);
-        TownHall.setDiscovered(true);
+
+        Hex townHall = getHex(cols / 2, rows / 2);
+        townHall.setDiscovered(true);
+        int[][] neighbours = {
+                { 1,  0},
+                {-1,  0},
+                { 1,  1},
+                { 0,  1},
+                { 1, -1},
+                { 0, -1}
+        };
+        boolean jungleInNeighbour = false;
+        for(int[] neighbour:neighbours){
+            Hex neigh = getHex(townHall.getC()+neighbour[0], townHall.getR()+neighbour[1]);
+            neigh.setDiscovered(true);
+            if (neigh.getTerrainType()== Hex.TerrainType.FOREST){
+                jungleInNeighbour = true;
+            }
+        }
+
+        if(!jungleInNeighbour){
+            getHex(townHall.getC()+neighbours[3][0], townHall.getR()+neighbours[3][1]).setTerrainType(Hex.TerrainType.FOREST);
+        }
+
     }
 
     public Hex getHex(int x, int y) {
