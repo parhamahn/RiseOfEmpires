@@ -18,7 +18,7 @@ public class Map {
             for (int c = 0; c < cols; c++) {
                 int randomIndex = (int) (Math.random() * terrains.length);
                 Hex hex = new Hex(c, r, terrains[randomIndex]);
-                hex.setDiscovered(false);
+                hex.setDiscovered(true);
                 grid[r][c] = hex;
             }
         }

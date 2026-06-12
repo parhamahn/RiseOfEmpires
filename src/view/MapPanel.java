@@ -1,7 +1,10 @@
 package view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+
 import model.Map;
 import model.Hex;
 
@@ -14,6 +17,10 @@ public class MapPanel extends JPanel {
     private Map map;
     private int cameraX = 0;
     private int cameraY = 0;
+    private BufferedImage plainImage;
+    private BufferedImage forestImage;
+    private BufferedImage mountainImage;
+    private BufferedImage meadowImage;
 
     private final Polygon hexShape = new Polygon();
 
@@ -28,6 +35,14 @@ public class MapPanel extends JPanel {
         setMap(map);
         cameraX = map.getCols()*HEX_RADIUS/2 + HEX_RADIUS;
         cameraY = map.getRows()*HEX_RADIUS/2 - HEX_RADIUS;
+        try {
+            plainImage = ImageIO.read(getClass().getResource("/utils/plainhex.png"));
+            forestImage = ImageIO.read(getClass().getResource("/utils/foresthex.png"));
+            mountainImage = ImageIO.read(getClass().getResource("/utils/mountainhex.png"));
+            meadowImage = ImageIO.read(getClass().getResource("/utils/meadowhex.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setMap(Map map) {
@@ -66,10 +81,15 @@ public class MapPanel extends JPanel {
 
                 Polygon tile = translatePolygon(hexShape, px, py);
                 if (hex.isDiscovered()) {
-                    g2.setColor(getTerrainColor(hex.getTerrainType()));
-                    g2.fillPolygon(tile);
-                    g2.setColor(Color.DARK_GRAY);
-                    g2.drawPolygon(tile);
+                    BufferedImage img = getTerrainImage(hex.getTerrainType());
+                    g2.drawImage(
+                            img,
+                            px - HEX_RADIUS + 12,
+                            py - HEX_RADIUS,
+                            HEX_RADIUS * 2 - 20,
+                            HEX_RADIUS * 2,
+                            null
+                    );
                 }else{
                     g2.setColor(Color.BLACK);
                     g2.fillPolygon(tile);
@@ -91,12 +111,12 @@ public class MapPanel extends JPanel {
         return result;
     }
 
-    private Color getTerrainColor(Hex.TerrainType terrain) {
+    private BufferedImage getTerrainImage(Hex.TerrainType terrain) {
         return switch (terrain) {
-            case PLAIN   -> new Color(107, 142, 35);
-            case FOREST  -> new Color(0, 100, 0);
-            case MOUNTAIN-> new Color(160, 160, 160);
-            case MEADOW  -> new Color(144, 238, 144);
+            case PLAIN -> plainImage;
+            case FOREST -> forestImage;
+            case MOUNTAIN -> mountainImage;
+            case MEADOW -> meadowImage;
         };
     }
 }
