@@ -1,10 +1,11 @@
-package model;
+package helpers;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 
 public class Sound {
+
     private Clip clip;
     private FloatControl volumeControl;
     private float currentVolume = 0.7f;
@@ -16,39 +17,16 @@ public class Sound {
                 System.err.println("Audio file not found: " + path);
                 return;
             }
+
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
-            AudioFormat format = audioStream.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-
-            Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
-            Mixer selectedMixer = null;
-            for (Mixer.Info mixerInfo : mixerInfos) {
-                if (mixerInfo.getName().contains("PCH [plughw:1,0]")) {
-                    selectedMixer = AudioSystem.getMixer(mixerInfo);
-                    break;
-                }
-            }
-            if (selectedMixer == null) {
-                for (Mixer.Info mixerInfo : mixerInfos) {
-                    Mixer m = AudioSystem.getMixer(mixerInfo);
-                    if (m.isLineSupported(info)) {
-                        selectedMixer = m;
-                        break;
-                    }
-                }
-            }
-            if (selectedMixer == null) {
-                System.err.println("No usable mixer found");
-                return;
-            }
-
-            clip = (Clip) selectedMixer.getLine(info);
+            clip = AudioSystem.getClip();
             clip.open(audioStream);
+
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 setVolume(currentVolume);
             }
-            clip.setFramePosition(0);
+
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
@@ -61,6 +39,13 @@ public class Sound {
         }
     }
 
+    public void playOnce() {
+        if (clip != null) {
+            clip.setFramePosition(0);
+            clip.start();
+        }
+    }
+
     public void stop() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
@@ -68,11 +53,11 @@ public class Sound {
     }
 
     public void setVolume(float percent) {
-        currentVolume = percent;
+        currentVolume = Math.max(0f, Math.min(1f, percent));
         if (volumeControl != null) {
             float min = volumeControl.getMinimum();
             float max = volumeControl.getMaximum();
-            float dB = min + (max - min) * percent;
+            float dB = min + (max - min) * currentVolume;
             volumeControl.setValue(dB);
         }
     }

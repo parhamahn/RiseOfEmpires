@@ -1,22 +1,27 @@
 package controller;
 
+import helpers.SoundEffects;
+import model.GameState;
+import model.Hex;
 import view.GamePanel;
+import view.MapPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class GameController {
     private GamePanel gamePanel;
     private JPanel cards;
+    private GameState gameState;
 
-    public GameController(GamePanel gamePanel, JPanel cards){
+    public GameController(GamePanel gamePanel, JPanel cards, GameState gameState){
         this.gamePanel = gamePanel;
         this.cards = cards;
+        this.gameState = gameState;
         this.attachHUDListeners();
         this.attachCameraListeners();
+        this.attachHexSelectionListener();
     }
 
     private void attachHUDListeners() {
@@ -54,6 +59,19 @@ public class GameController {
         });
     }
 
+    private void attachHexSelectionListener() {
+        MapPanel mapPanel = gamePanel.getMapPanel();
+        mapPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
+                if (clicked != null && clicked.isDiscovered()) {
+                    gameState.setSelectedHex(clicked);
+                    SoundEffects.getInstance().playSelectHexSoundEffect();
+                }
+            }
+        });
+    }
 
     private void menuAction(){
         CardLayout cl = (CardLayout) (cards.getLayout());

@@ -1,8 +1,8 @@
 import controller.GameController;
 import controller.MenuController;
 import controller.SettingsController;
-import model.Map;
-import model.Sound;
+import helpers.Sound;
+import model.*;
 import view.*;
 
 import javax.swing.*;
@@ -20,6 +20,11 @@ public class Main {
             JPanel cards = new JPanel(new CardLayout());
             frame.setContentPane(cards);
 
+            Storage storage = new Storage();
+            Production production = new Production();
+            Map map = new Map(15, 20);
+            GameState gameState = new GameState(storage, production, map);
+
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards);
 
@@ -30,12 +35,12 @@ public class Main {
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
-            Map map = new Map(15, 20);
             HUDPanel hudPanel = new HUDPanel();
-            MapPanel mapPanel = new MapPanel(map);
+            MapPanel mapPanel = new MapPanel(map, gameState);
             GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             gamePanel.getMapPanel().setMap(map);
-            GameController gameController = new GameController(gamePanel, cards);
+
+            GameController gameController = new GameController(gamePanel, cards, gameState);
 
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");

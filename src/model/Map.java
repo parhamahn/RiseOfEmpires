@@ -15,7 +15,7 @@ public class Map {
     private void generateMap() {
         Hex.TerrainType[] terrains = Hex.TerrainType.values();
 
-        int numSeeds = (rows * cols) / 2 * 3;
+        int numSeeds = (rows * cols)/2;
 
         int[][] seedPos = new int[numSeeds][2];
         Hex.TerrainType[] seedTerrain = new Hex.TerrainType[numSeeds];
@@ -47,8 +47,8 @@ public class Map {
             }
         }
 
-        Hex townHall = getHex(cols / 2, rows / 2);
-        townHall.setDiscovered(true);
+        Hex townHallHex = getHex(cols / 2, rows / 2);
+        townHallHex.setDiscovered(true);
         int[][] neighbours = {
                 { 1,  0},
                 {-1,  0},
@@ -59,7 +59,7 @@ public class Map {
         };
         boolean jungleInNeighbour = false;
         for(int[] neighbour:neighbours){
-            Hex neigh = getHex(townHall.getC()+neighbour[0], townHall.getR()+neighbour[1]);
+            Hex neigh = getHex(townHallHex.getC()+neighbour[0], townHallHex.getR()+neighbour[1]);
             neigh.setDiscovered(true);
             if (neigh.getTerrainType()== Hex.TerrainType.FOREST){
                 jungleInNeighbour = true;
@@ -67,7 +67,7 @@ public class Map {
         }
 
         if(!jungleInNeighbour){
-            getHex(townHall.getC()+neighbours[3][0], townHall.getR()+neighbours[3][1]).setTerrainType(Hex.TerrainType.FOREST);
+            getHex(townHallHex.getC()+neighbours[3][0], townHallHex.getR()+neighbours[3][1]).setTerrainType(Hex.TerrainType.FOREST);
         }
 
     }

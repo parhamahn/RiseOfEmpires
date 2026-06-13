@@ -1,6 +1,4 @@
-package sounds;
-
-import model.Sound;
+package helpers;
 
 public class Music {
     private static Music instance;
@@ -22,19 +20,8 @@ public class Music {
         backgroundMusic.load(path);
     }
     
-    public void playBackgroundMusic() {
-        backgroundMusic.play();
-    }
-    
-    public void stopBackgroundMusic() {
-        backgroundMusic.stop();
-    }
-    
     public void setVolume(float percent) {
         backgroundMusic.setVolume(percent);
     }
     
-    public float getVolume() {
-        return backgroundMusic.getVolume();
-    }
 }

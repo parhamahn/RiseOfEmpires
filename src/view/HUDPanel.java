@@ -1,4 +1,6 @@
 package view;
+import helpers.ImageLoader;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,29 +14,29 @@ public class HUDPanel extends JPanel {
 
     public HUDPanel(){
         this.menuButton = new JButton("\uD804\uDC54");
-        this.setBackground(new Color(0, 0, 0, 200));
+        this.setBackground(new Color(0, 0, 0, 175));
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        ImageIcon woodIcon = loadIcon("/utils/wood.png");
+        ImageIcon woodIcon = ImageLoader.getInstance().loadIcon("/utils/wood.png");
         woodStat = new ResourceStat(woodIcon, 0, 10, 3);
         add(woodStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon stoneIcon = loadIcon("/utils/stone.png");
+        ImageIcon stoneIcon = ImageLoader.getInstance().loadIcon("/utils/stone.png");
         stoneStat = new ResourceStat(stoneIcon, 0, 10, -1);
         add(stoneStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon ironIcon = loadIcon("/utils/iron.png");
+        ImageIcon ironIcon = ImageLoader.getInstance().loadIcon("/utils/iron.png");
         ironStat = new ResourceStat(ironIcon, 0, 10, -5);
         add(ironStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon foodIcon = loadIcon("/utils/food.png");
+        ImageIcon foodIcon = ImageLoader.getInstance().loadIcon("/utils/food.png");
         foodStat = new ResourceStat(foodIcon, 0, 10, 0);
         add(foodStat);
 
@@ -48,18 +50,6 @@ public class HUDPanel extends JPanel {
         this.menuButton.setBackground(new Color(255, 203, 87));
         this.menuButton.setForeground(new Color(0,0,0));
         add(menuButton);
-    }
-
-    private ImageIcon loadIcon(String path) {
-        java.net.URL imgURL = getClass().getResource(path);
-        if (imgURL != null) {
-            ImageIcon raw = new ImageIcon(imgURL);
-            Image resized = raw.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
-            return new ImageIcon(resized);
-        } else {
-            System.err.println("Couldn't find icon: " + path);
-            return new ImageIcon();
-        }
     }
 
     public JButton getMenuButton() {

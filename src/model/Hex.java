@@ -10,12 +10,13 @@ public class Hex {
     private boolean discovered;
     private TerrainType terrainType;
     private List<ResourceType> resourceTypes;
-
+    private Building building;
 
     public Hex(int c, int r, TerrainType terrainType){
         this.c = c;
         this.r = r;
         this.terrainType = terrainType;
+        this.building = null;
     }
 
 
@@ -33,4 +34,12 @@ public class Hex {
 
     public List<ResourceType> getResourceTypes() {return resourceTypes;}
     public void setResourceTypes(List<ResourceType> resourceTypes) {this.resourceTypes = resourceTypes;}
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
 }
