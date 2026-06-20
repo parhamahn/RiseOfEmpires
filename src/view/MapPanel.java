@@ -3,7 +3,6 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 
 import model.*;
@@ -13,6 +12,7 @@ public class MapPanel extends JPanel {
     private final double SQRT3 = Math.sqrt(3);
     private final int DX = (int) (SQRT3 * HEX_RADIUS);
     private final int DY = (int) (1.5 * HEX_RADIUS);
+    private final java.util.Map<Hex.ResourceType, BufferedImage> resourceIcons = new java.util.HashMap<>();
 
     private Map map;
     private GameState gameState;
@@ -44,6 +44,13 @@ public class MapPanel extends JPanel {
             mountainImage = ImageIO.read(getClass().getResource("/utils/mountainhex.png"));
             meadowImage = ImageIO.read(getClass().getResource("/utils/meadowhex.png"));
             townHallImage = ImageIO.read(getClass().getResource("/utils/townhall.png"));
+            resourceIcons.put(Hex.ResourceType.WOOD, ImageIO.read(getClass().getResource("/utils/wood.png")));
+            resourceIcons.put(Hex.ResourceType.STONE, ImageIO.read(getClass().getResource("/utils/stone.png")));
+            resourceIcons.put(Hex.ResourceType.IRON, ImageIO.read(getClass().getResource("/utils/iron.png")));
+            resourceIcons.put(Hex.ResourceType.WHEAT, ImageIO.read(getClass().getResource("/utils/wheat.png")));
+            resourceIcons.put(Hex.ResourceType.RICE, ImageIO.read(getClass().getResource("/utils/rice.png")));
+            resourceIcons.put(Hex.ResourceType.COW, ImageIO.read(getClass().getResource("/utils/cow.png")));
+            resourceIcons.put(Hex.ResourceType.SHEEP, ImageIO.read(getClass().getResource("/utils/sheep.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,6 +66,7 @@ public class MapPanel extends JPanel {
         drawHexTiles(g);
         drawBuildings(g);
         drawHexHighlight(g);
+        drawRawResources(g);
         drawActionsAllowedOnHex(g);
 
 
@@ -177,6 +185,8 @@ public class MapPanel extends JPanel {
         if (gameState.getSelectedHex()!=null){
             if(gameState.getSelectedHex().getBuilding()==null){
                 Graphics2D g2 = (Graphics2D) g;
+                g.setFont(new Font("Pixel Game", Font.BOLD, 48));
+                g.setColor(new Color(238, 255, 0));
                 Point center = getHexCenter(gameState.getSelectedHex().getC(), gameState.getSelectedHex().getR());
                 String text = "TASK";
                 g2.drawString(text, center.x-g2.getFontMetrics().stringWidth(text)/2, center.y);
@@ -200,6 +210,58 @@ public class MapPanel extends JPanel {
             case MOUNTAIN -> mountainImage;
             case MEADOW -> meadowImage;
         };
+    }
+
+    private Polygon createMiniHex(int cx, int cy, int radius) {
+        Polygon p = new Polygon();
+        for (int i = 0; i < 6; i++) {
+            double angle = Math.toRadians(-30 + 60 * i);
+            int x = cx + (int) (radius * Math.cos(angle));
+            int y = cy + (int) (radius * Math.sin(angle));
+            p.addPoint(x, y);
+        }
+        return p;
+    }
+
+    private void drawRawResources(Graphics g) {
+        if (map == null) return;
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int iconSize = 22;
+        int badgeRadius = iconSize / 2 + 7;
+        int spacing = badgeRadius * 2 + 4;
+
+        for (int r = 0; r < map.getRows(); r++) {
+            for (int c = 0; c < map.getCols(); c++) {
+                Hex hex = map.getHex(c, r);
+                if (hex == null || !hex.isDiscovered() || hex.getBuilding() != null) continue;
+
+                java.util.List<Hex.ResourceType> resources = hex.getResourceTypes();
+                if (resources.isEmpty()) continue;
+
+                Point center = getHexCenter(c, r);
+                int rowWidth = spacing * resources.size();
+                int startX = center.x - rowWidth / 2 + spacing / 2;
+                int y = center.y + HEX_RADIUS / 2 + badgeRadius;
+
+                for (int i = 0; i < resources.size(); i++) {
+                    BufferedImage icon = resourceIcons.get(resources.get(i));
+                    if (icon == null) continue;
+
+                    int cx = startX + i * spacing;
+                    Polygon badge = createMiniHex(cx, y-2*iconSize, badgeRadius);
+
+                    g2.setColor(new Color(0, 0, 0, 160));
+                    g2.fillPolygon(badge);
+                    g2.setColor(new Color(255, 255, 255, 90));
+                    g2.setStroke(new BasicStroke(1.5f));
+                    g2.drawPolygon(badge);
+
+                    g2.drawImage(icon, cx - iconSize / 2, y - 5*iconSize/2, iconSize, iconSize, null);
+                }
+            }
+        }
     }
 
     private BufferedImage getBuildingImage(Building building) {

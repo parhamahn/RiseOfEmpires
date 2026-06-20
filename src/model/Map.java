@@ -2,17 +2,20 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Map {
     private final Hex[][] grid;
     private final int rows;
     private final int cols;
+    private final Random RANDOM = new Random();
 
     public Map(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.grid = new Hex[rows][cols];
         generateMap();
+        setResources(grid);
     }
 
     private void generateMap() {
@@ -46,7 +49,7 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(false);
+                grid[r][c].setDiscovered(true);
             }
         }
 
@@ -72,6 +75,45 @@ public class Map {
         }
         return null;
     }
+
+
+    public void setResources(Hex[][] tiles){
+        for (int i=0; i<cols; i++){
+            for (int j=0; j<rows;j++){
+                Hex hex = getHex(i, j);
+                List<Hex.ResourceType> resourceTypes = hex.getResourceTypes();
+
+                if(hex.getTerrainType()== Hex.TerrainType.FOREST){
+
+                    resourceTypes.add(Hex.ResourceType.WOOD);
+
+                }else if (hex.getTerrainType()== Hex.TerrainType.MEADOW){
+
+                    if (RANDOM.nextDouble()<=0.5){
+                        resourceTypes.add(Hex.ResourceType.WHEAT);
+                    }else{
+                        if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.RICE);
+                    }
+
+
+                }else if (hex.getTerrainType()== Hex.TerrainType.MOUNTAIN){
+
+                    resourceTypes.add(Hex.ResourceType.STONE);
+                    if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.IRON);
+
+                }else if (hex.getTerrainType()== Hex.TerrainType.PLAIN){
+
+                    if (RANDOM.nextDouble()<=0.3) {
+                        resourceTypes.add(Hex.ResourceType.COW);
+                    }else{
+                        if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.SHEEP);
+                    }
+
+                }
+            }
+        }
+    }
+
 
     public List<Hex> getNeighbourHexes(Hex hex){
         List<Hex> neighboursTiles = new ArrayList<>();

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hex {
@@ -16,6 +17,7 @@ public class Hex {
         this.c = c;
         this.r = r;
         this.terrainType = terrainType;
+        this.resourceTypes = new ArrayList<>();
         this.building = null;
     }
 

@@ -7,10 +7,10 @@ import java.awt.*;
 public class HUDPanel extends JPanel {
 
     private JButton menuButton;
-    private ResourceStat woodStat;
-    private ResourceStat stoneStat;
-    private ResourceStat ironStat;
-    private ResourceStat foodStat;
+    public ResourceStat woodStat;
+    public ResourceStat stoneStat;
+    public ResourceStat ironStat;
+    public ResourceStat foodStat;
 
     public HUDPanel(){
         this.menuButton = new JButton("\uD804\uDC54");
