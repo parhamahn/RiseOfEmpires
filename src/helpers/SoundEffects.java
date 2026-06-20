@@ -1,18 +1,22 @@
 package helpers;
 
 public class SoundEffects {
-    
-    private static SoundEffects instance = new SoundEffects();
-    
+
+    private static final SoundEffects instance = new SoundEffects();
+    private final Sound selectHexSoundEffect;
+
+    private SoundEffects() {
+        selectHexSoundEffect = new Sound();
+        selectHexSoundEffect.load("/utils/selecthex.wav");
+        selectHexSoundEffect.setVolume(1f);
+    }
+
     public static SoundEffects getInstance(){
         return instance;
     }
-    
+
     public void playSelectHexSoundEffect(){
-        Sound effect = new Sound();
-        effect.load("/utils/selecthex.wav");
-        effect.setVolume(1f);
-        effect.playOnce();
+        selectHexSoundEffect.playOnce();
     }
-    
+
 }

@@ -3,6 +3,7 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 
 import model.*;
@@ -58,6 +59,7 @@ public class MapPanel extends JPanel {
         drawHexTiles(g);
         drawBuildings(g);
         drawHexHighlight(g);
+        drawActionsAllowedOnHex(g);
 
 
     }
@@ -119,8 +121,10 @@ public class MapPanel extends JPanel {
                     g2.fillPolygon(tile);
                     g2.setColor(Color.WHITE);
                     g2.drawPolygon(tile);
-                    g2.setFont(new Font("Pixel Game", Font.BOLD, 48));
-                    g2.drawString("?", center.x-10, center.y+10);
+                    if (gameState.getSelectedHex()!=hex) {
+                        g2.setFont(new Font("Pixel Game", Font.BOLD, 48));
+                        g2.drawString("?", center.x - 10, center.y + 10);
+                    }
                 }
 
             }
@@ -167,6 +171,19 @@ public class MapPanel extends JPanel {
             g2.drawPolygon(tile);
         }
     }
+
+
+    private void drawActionsAllowedOnHex(Graphics g){
+        if (gameState.getSelectedHex()!=null){
+            if(gameState.getSelectedHex().getBuilding()==null){
+                Graphics2D g2 = (Graphics2D) g;
+                Point center = getHexCenter(gameState.getSelectedHex().getC(), gameState.getSelectedHex().getR());
+                String text = "TASK";
+                g2.drawString(text, center.x-g2.getFontMetrics().stringWidth(text)/2, center.y);
+            }
+        }
+    }
+
 
     private Polygon translatePolygon(Polygon p, int dx, int dy) {
         Polygon result = new Polygon();

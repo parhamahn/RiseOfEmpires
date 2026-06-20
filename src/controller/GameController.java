@@ -65,9 +65,14 @@ public class GameController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
-                if (clicked != null && clicked.isDiscovered()) {
-                    gameState.setSelectedHex(clicked);
-                    SoundEffects.getInstance().playSelectHexSoundEffect();
+                if (clicked != null) {
+                    for(Hex neighbour:gameState.getMap().getNeighbourHexes(clicked)) {
+                        if(neighbour.isDiscovered()) {
+                            gameState.setSelectedHex(clicked);
+                            SoundEffects.getInstance().playSelectHexSoundEffect();
+                            return;
+                        }
+                    }
                 }
             }
         });

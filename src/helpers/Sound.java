@@ -8,7 +8,6 @@ public class Sound {
 
     private Clip clip;
     private FloatControl volumeControl;
-    private float currentVolume = 0.7f;
 
     public void load(String path) {
         try {
@@ -17,16 +16,14 @@ public class Sound {
                 System.err.println("Audio file not found: " + path);
                 return;
             }
-
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
             clip = AudioSystem.getClip();
             clip.open(audioStream);
+            audioStream.close();
 
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                setVolume(currentVolume);
             }
-
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
@@ -34,13 +31,14 @@ public class Sound {
 
     public void play() {
         if (clip != null) {
+            clip.setFramePosition(0);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clip.start();
         }
     }
 
     public void playOnce() {
         if (clip != null) {
+            if (clip.isRunning()) clip.stop();
             clip.setFramePosition(0);
             clip.start();
         }
@@ -53,16 +51,18 @@ public class Sound {
     }
 
     public void setVolume(float percent) {
-        currentVolume = Math.max(0f, Math.min(1f, percent));
-        if (volumeControl != null) {
-            float min = volumeControl.getMinimum();
-            float max = volumeControl.getMaximum();
-            float dB = min + (max - min) * currentVolume;
-            volumeControl.setValue(dB);
-        }
+        if (volumeControl == null) return;
+        percent = Math.max(0f, Math.min(1f, percent));
+        float dB = (percent == 0f) ? volumeControl.getMinimum()
+                : (float) (Math.log10(percent) * 20.0);
+        dB = Math.max(volumeControl.getMinimum(), Math.min(volumeControl.getMaximum(), dB));
+        volumeControl.setValue(dB);
     }
 
-    public float getVolume() {
-        return currentVolume;
+    public void close() {
+        if (clip != null) {
+            clip.stop();
+            clip.close();
+        }
     }
 }

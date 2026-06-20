@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Map {
     private final Hex[][] grid;
     private final int rows;
@@ -43,31 +46,22 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(true);
+                grid[r][c].setDiscovered(false);
             }
         }
 
         Hex townHallHex = getHex(cols / 2, rows / 2);
         townHallHex.setDiscovered(true);
-        int[][] neighbours = {
-                { 1,  0},
-                {-1,  0},
-                { 1,  1},
-                { 0,  1},
-                { 1, -1},
-                { 0, -1}
-        };
         boolean jungleInNeighbour = false;
-        for(int[] neighbour:neighbours){
-            Hex neigh = getHex(townHallHex.getC()+neighbour[0], townHallHex.getR()+neighbour[1]);
-            neigh.setDiscovered(true);
-            if (neigh.getTerrainType()== Hex.TerrainType.FOREST){
+        for(Hex neighbour:getNeighbourHexes(townHallHex)){
+            neighbour.setDiscovered(true);
+            if (neighbour.getTerrainType()== Hex.TerrainType.FOREST){
                 jungleInNeighbour = true;
             }
         }
 
         if(!jungleInNeighbour){
-            getHex(townHallHex.getC()+neighbours[3][0], townHallHex.getR()+neighbours[3][1]).setTerrainType(Hex.TerrainType.FOREST);
+            getHex(townHallHex.getC(), townHallHex.getR()+1).setTerrainType(Hex.TerrainType.FOREST);
         }
 
     }
@@ -77,6 +71,23 @@ public class Map {
             return grid[y][x];
         }
         return null;
+    }
+
+    public List<Hex> getNeighbourHexes(Hex hex){
+        List<Hex> neighboursTiles = new ArrayList<>();
+        int[][] neighbours = {
+                { 1,  0},
+                {-1,  0},
+                { 1,  1},
+                { 0,  1},
+                { 1, -1},
+                { 0, -1}
+        };
+        for(int[] neighbour:neighbours){
+            Hex neigh = getHex(hex.getC()+neighbour[0], hex.getR()+neighbour[1]);
+            neighboursTiles.add(neigh);
+        }
+        return neighboursTiles;
     }
 
     public int getRows() { return rows; }

@@ -32,4 +32,8 @@ public class GameState {
     public void setSelectedHex(Hex selectedHex) {
         this.selectedHex = selectedHex;
     }
+
+    public Map getMap() {
+        return map;
+    }
 }

@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
+    private static Sound music;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Rise of Empires");
@@ -28,7 +30,7 @@ public class Main {
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards);
 
-            Sound music = new Sound();
+            music = new Sound();
             music.load("/utils/music.wav");
             music.play();
 

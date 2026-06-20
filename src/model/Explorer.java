@@ -1,4 +1,9 @@
 package model;
 
-public class Explorer {
+public class Explorer extends Unit{
+
+    @Override
+    public void run() {
+
+    }
 }
