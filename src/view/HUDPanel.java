@@ -1,5 +1,4 @@
 package view;
-import helpers.ImageLoader;
 import model.GameState;
 
 import javax.swing.*;
@@ -22,22 +21,22 @@ public class HUDPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        woodStat = new ResourceStat("/utils/wood.png", gameState.getStorage().getWood_quantity(), gameState.getStorage().getWood_max(), gameState.getProduction().getWood_production());
+        woodStat = new ResourceStat("/utils/wood.png", gameState.getStorage().getWoodQuantity(), gameState.getStorage().getWoodMax(), gameState.getProduction().getWoodProduction());
         add(woodStat);
 
         add(Box.createHorizontalStrut(20));
 
-        stoneStat = new ResourceStat("/utils/stone.png", gameState.getStorage().getStone_quantity(), gameState.getStorage().getStone_max(), gameState.getProduction().getStone_production());
+        stoneStat = new ResourceStat("/utils/stone.png", gameState.getStorage().getStoneQuantity(), gameState.getStorage().getStoneMax(), gameState.getProduction().getStoneProduction());
         add(stoneStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ironStat = new ResourceStat("/utils/iron.png", gameState.getStorage().getIron_quantity(), gameState.getStorage().getIron_max(), gameState.getProduction().getIron_production());
+        ironStat = new ResourceStat("/utils/iron.png", gameState.getStorage().getIronQuantity(), gameState.getStorage().getIronMax(), gameState.getProduction().getIronProduction());
         add(ironStat);
 
         add(Box.createHorizontalStrut(20));
 
-        foodStat = new ResourceStat("/utils/food.png", gameState.getStorage().getFood_quantity(), gameState.getStorage().getFood_max(), gameState.getProduction().getFood_production());
+        foodStat = new ResourceStat("/utils/food.png", gameState.getStorage().getFoodQuantity(), gameState.getStorage().getFoodMax(), gameState.getProduction().getFoodProduction());
         add(foodStat);
 
         add(Box.createHorizontalGlue());

@@ -10,87 +10,87 @@ public class Storage {
     public int DEFAULT_IRON_QUANTITY = 0;
     public int DEFAULT_FOOD_QUANTITY = 75;
 
-    private int wood_quantity;
-    private int stone_quantity;
-    private int iron_quantity;
-    private int food_quantity;
-    private int wood_max;
-    private int stone_max;
-    private int iron_max;
-    private int food_max;
+    private int woodQuantity;
+    private int stoneQuantity;
+    private int ironQuantity;
+    private int foodQuantity;
+    private int woodMax;
+    private int stoneMax;
+    private int ironMax;
+    private int foodMax;
 
-    public Storage(){
-        this.wood_quantity = DEFAULT_WOOD_QUANTITY;
-        this.stone_quantity = DEFAULT_STONE_QUANTITY;
-        this.iron_quantity = DEFAULT_IRON_QUANTITY;
-        this.food_quantity = DEFAULT_FOOD_QUANTITY;
-        this.food_max = DEFAULT_FOOD_MAX_STORAGE;
-        this.stone_max = DEFAULT_STONE_MAX_STORAGE;
-        this.iron_max = DEFAULT_IRON_MAX_STORAGE;
-        this.wood_max = DEFAULT_WOOD_MAX_STORAGE;
+    public Storage() {
+        this.woodQuantity = DEFAULT_WOOD_QUANTITY;
+        this.stoneQuantity = DEFAULT_STONE_QUANTITY;
+        this.ironQuantity = DEFAULT_IRON_QUANTITY;
+        this.foodQuantity = DEFAULT_FOOD_QUANTITY;
+        this.foodMax = DEFAULT_FOOD_MAX_STORAGE;
+        this.stoneMax = DEFAULT_STONE_MAX_STORAGE;
+        this.ironMax = DEFAULT_IRON_MAX_STORAGE;
+        this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
     }
 
-    public int getWood_quantity() {
-        return wood_quantity;
+    public int getWoodQuantity() {
+        return woodQuantity;
     }
 
-    public void setWood_quantity(int wood_quantity) {
-        this.wood_quantity = wood_quantity;
+    public void setWoodQuantity(int woodQuantity) {
+        this.woodQuantity = woodQuantity;
     }
 
-    public int getStone_quantity() {
-        return stone_quantity;
+    public int getStoneQuantity() {
+        return stoneQuantity;
     }
 
-    public void setStone_quantity(int stone_quantity) {
-        this.stone_quantity = stone_quantity;
+    public void setStoneQuantity(int stoneQuantity) {
+        this.stoneQuantity = stoneQuantity;
     }
 
-    public int getIron_quantity() {
-        return iron_quantity;
+    public int getIronQuantity() {
+        return ironQuantity;
     }
 
-    public void setIron_quantity(int iron_quantity) {
-        this.iron_quantity = iron_quantity;
+    public void setIronQuantity(int ironQuantity) {
+        this.ironQuantity = ironQuantity;
     }
 
-    public int getFood_quantity() {
-        return food_quantity;
+    public int getFoodQuantity() {
+        return foodQuantity;
     }
 
-    public void setFood_quantity(int food_quantity) {
-        this.food_quantity = food_quantity;
+    public void setFoodQuantity(int foodQuantity) {
+        this.foodQuantity = foodQuantity;
     }
 
-    public int getFood_max() {
-        return food_max;
+    public int getFoodMax() {
+        return foodMax;
     }
 
-    public void setFood_max(int food_max) {
-        this.food_max = food_max;
+    public void setFoodMax(int foodMax) {
+        this.foodMax = foodMax;
     }
 
-    public int getIron_max() {
-        return iron_max;
+    public int getIronMax() {
+        return ironMax;
     }
 
-    public void setIron_max(int iron_max) {
-        this.iron_max = iron_max;
+    public void setIronMax(int ironMax) {
+        this.ironMax = ironMax;
     }
 
-    public int getStone_max() {
-        return stone_max;
+    public int getStoneMax() {
+        return stoneMax;
     }
 
-    public void setStone_max(int stone_max) {
-        this.stone_max = stone_max;
+    public void setStoneMax(int stoneMax) {
+        this.stoneMax = stoneMax;
     }
 
-    public int getWood_max() {
-        return wood_max;
+    public int getWoodMax() {
+        return woodMax;
     }
 
-    public void setWood_max(int wood_max) {
-        this.wood_max = wood_max;
+    public void setWoodMax(int woodMax) {
+        this.woodMax = woodMax;
     }
 }

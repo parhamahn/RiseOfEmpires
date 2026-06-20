@@ -30,6 +30,6 @@ public class Cost {
     }
 
     public boolean enoughResources(Cost cost, Storage storage){
-        return storage.getWood_quantity() >= cost.getWoodNeeded() && storage.getStone_quantity() >= cost.getStoneNeeded() && storage.getIron_quantity() >= cost.getIronNeeded();
+        return storage.getWoodQuantity() >= cost.getWoodNeeded() && storage.getStoneQuantity() >= cost.getStoneNeeded() && storage.getIronQuantity() >= cost.getIronNeeded();
     }
 }

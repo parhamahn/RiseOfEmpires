@@ -3,47 +3,47 @@ package model;
 public class Production {
     private int DEFAULT_FOOD_PRODUCTION = 5;
 
-    public int food_production;
-    public int wood_production;
-    public int stone_production;
-    public int iron_production;
+    public int foodProduction;
+    public int woodProduction;
+    public int stoneProduction;
+    public int ironProduction;
 
     public Production(){
-        this.food_production = DEFAULT_FOOD_PRODUCTION;
-        this.wood_production = 0;
-        this.stone_production = 0;
-        this.iron_production = 0;
+        this.foodProduction = DEFAULT_FOOD_PRODUCTION;
+        this.woodProduction = 0;
+        this.stoneProduction = 0;
+        this.ironProduction = 0;
     }
 
-    public int getFood_production() {
-        return food_production;
+    public int getFoodProduction() {
+        return foodProduction;
     }
 
-    public void setFood_production(int food_production) {
-        this.food_production = food_production;
+    public void setFoodProduction(int foodProduction) {
+        this.foodProduction = foodProduction;
     }
 
-    public int getWood_production() {
-        return wood_production;
+    public int getWoodProduction() {
+        return woodProduction;
     }
 
-    public void setWood_production(int wood_production) {
-        this.wood_production = wood_production;
+    public void setWoodProduction(int woodProduction) {
+        this.woodProduction = woodProduction;
     }
 
-    public int getStone_production() {
-        return stone_production;
+    public int getStoneProduction() {
+        return stoneProduction;
     }
 
-    public void setStone_production(int stone_production) {
-        this.stone_production = stone_production;
+    public void setStoneProduction(int stoneProduction) {
+        this.stoneProduction = stoneProduction;
     }
 
-    public int getIron_production() {
-        return iron_production;
+    public int getIronProduction() {
+        return ironProduction;
     }
 
-    public void setIron_production(int iron_production) {
-        this.iron_production = iron_production;
+    public void setIronProduction(int ironProduction) {
+        this.ironProduction = ironProduction;
     }
 }
