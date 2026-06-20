@@ -1,5 +1,6 @@
 package view;
 import helpers.ImageLoader;
+import model.GameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,32 +13,31 @@ public class HUDPanel extends JPanel {
     public ResourceStat ironStat;
     public ResourceStat foodStat;
 
-    public HUDPanel(){
+    private GameState gameState;
+
+    public HUDPanel(GameState gameState){
+        this.gameState = gameState;
         this.menuButton = new JButton("\uD804\uDC54");
         this.setBackground(new Color(0, 0, 0, 175));
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        ImageIcon woodIcon = ImageLoader.getInstance().loadIcon("/utils/wood.png");
-        woodStat = new ResourceStat(woodIcon, 0, 10, 3);
+        woodStat = new ResourceStat("/utils/wood.png", gameState.getStorage().getWood_quantity(), gameState.getStorage().getWood_max(), gameState.getProduction().getWood_production());
         add(woodStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon stoneIcon = ImageLoader.getInstance().loadIcon("/utils/stone.png");
-        stoneStat = new ResourceStat(stoneIcon, 0, 10, -1);
+        stoneStat = new ResourceStat("/utils/stone.png", gameState.getStorage().getStone_quantity(), gameState.getStorage().getStone_max(), gameState.getProduction().getStone_production());
         add(stoneStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon ironIcon = ImageLoader.getInstance().loadIcon("/utils/iron.png");
-        ironStat = new ResourceStat(ironIcon, 0, 10, -5);
+        ironStat = new ResourceStat("/utils/iron.png", gameState.getStorage().getIron_quantity(), gameState.getStorage().getIron_max(), gameState.getProduction().getIron_production());
         add(ironStat);
 
         add(Box.createHorizontalStrut(20));
 
-        ImageIcon foodIcon = ImageLoader.getInstance().loadIcon("/utils/food.png");
-        foodStat = new ResourceStat(foodIcon, 0, 10, 0);
+        foodStat = new ResourceStat("/utils/food.png", gameState.getStorage().getFood_quantity(), gameState.getStorage().getFood_max(), gameState.getProduction().getFood_production());
         add(foodStat);
 
         add(Box.createHorizontalGlue());
@@ -54,5 +54,37 @@ public class HUDPanel extends JPanel {
 
     public JButton getMenuButton() {
         return menuButton;
+    }
+
+    public ResourceStat getFoodStat() {
+        return foodStat;
+    }
+
+    public void setFoodStat(ResourceStat foodStat) {
+        this.foodStat = foodStat;
+    }
+
+    public ResourceStat getIronStat() {
+        return ironStat;
+    }
+
+    public void setIronStat(ResourceStat ironStat) {
+        this.ironStat = ironStat;
+    }
+
+    public ResourceStat getStoneStat() {
+        return stoneStat;
+    }
+
+    public void setStoneStat(ResourceStat stoneStat) {
+        this.stoneStat = stoneStat;
+    }
+
+    public ResourceStat getWoodStat() {
+        return woodStat;
+    }
+
+    public void setWoodStat(ResourceStat woodStat) {
+        this.woodStat = woodStat;
     }
 }

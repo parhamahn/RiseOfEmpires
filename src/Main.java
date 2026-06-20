@@ -37,7 +37,7 @@ public class Main {
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
-            HUDPanel hudPanel = new HUDPanel();
+            HUDPanel hudPanel = new HUDPanel(gameState);
             MapPanel mapPanel = new MapPanel(map, gameState);
             GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             gamePanel.getMapPanel().setMap(map);

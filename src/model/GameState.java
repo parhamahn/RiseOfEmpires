@@ -36,4 +36,12 @@ public class GameState {
     public Map getMap() {
         return map;
     }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public Production getProduction() {
+        return production;
+    }
 }

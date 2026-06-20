@@ -1,5 +1,7 @@
 package view;
 
+import helpers.ImageLoader;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,20 +10,23 @@ public class ResourceStat extends JPanel {
     private JLabel countLabel;
     private JLabel changeLabel;
 
-    public ResourceStat(ImageIcon icon, int count, int maximum, int change) {
+    public ResourceStat(String iconPath, int count, int maximum, int change) {
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
+
+        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath);
 
         iconLabel = new JLabel(icon);
         iconLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         countLabel = new JLabel(count +"/"+ maximum);
-        countLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        countLabel.setFont(new Font("Pixel Game", Font.BOLD, 24));
         countLabel.setForeground(Color.WHITE);
         countLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         changeLabel = new JLabel();
+        changeLabel.setFont(new Font("Pixel Game", Font.BOLD, 18));
         if (change > 0){
             changeLabel.setText("+"+change);
             changeLabel.setForeground(new Color(0, 175, 0));
