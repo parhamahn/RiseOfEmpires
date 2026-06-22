@@ -2,8 +2,8 @@ package model;
 
 public class Explorer extends Unit{
 
-    @Override
-    public void run() {
-
+    public Explorer(){
+        super(UNIT_TYPE.EXPLORER, 5, 1);
     }
+
 }

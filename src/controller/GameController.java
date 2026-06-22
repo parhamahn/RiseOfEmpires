@@ -3,6 +3,7 @@ package controller;
 import helpers.SoundEffects;
 import model.GameState;
 import model.Hex;
+import model.TownHall;
 import view.GamePanel;
 import view.MapPanel;
 
@@ -66,16 +67,22 @@ public class GameController {
             public void mouseClicked(MouseEvent e) {
                 Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
                 if (clicked != null) {
-                    for(Hex neighbour:gameState.getMap().getNeighbourHexes(clicked)) {
-                        if(neighbour.isDiscovered()) {
-                            gameState.setSelectedHex(clicked);
-                            SoundEffects.getInstance().playSelectHexSoundEffect();
-                            return;
-                        }
-                    }
+                    gameState.setSelectedHex(clicked);
+                    SoundEffects.getInstance().playSelectHexSoundEffect();
+
+                    updateUnitListPanel();
                 }
             }
         });
+    }
+
+    private void updateUnitListPanel() {
+        Hex selected = gameState.getSelectedHex();
+        if (selected != null && selected.getBuilding() instanceof TownHall) {
+            gamePanel.getUnitListPanel().updateUnits(gameState.getUnits());
+        } else {
+            gamePanel.getUnitListPanel().clear();
+        }
     }
 
     private void menuAction(){

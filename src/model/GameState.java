@@ -8,6 +8,7 @@ public class GameState {
     private Production production;
     private Hex selectedHex;
     private List<Building> buildings;
+    private List<Unit> units;
     private Map map;
 
 
@@ -18,6 +19,13 @@ public class GameState {
         this.map = map;
         buildings = new ArrayList<>();
         buildings.add(new TownHall(map.getHex(map.getCols()/2, map.getRows()/2)));
+
+        units = new ArrayList<>();
+        units.add(new Builder());
+        units.add(new Builder());
+        units.add(new Worker());
+        units.add(new Worker());
+        units.add(new Explorer());
     }
 
 
@@ -43,5 +51,13 @@ public class GameState {
 
     public Production getProduction() {
         return production;
+    }
+
+    public List<Unit> getUnits() {
+        return units;
+    }
+
+    public void setUnits(List<Unit> units) {
+        this.units = units;
     }
 }

@@ -8,11 +8,11 @@ public class ImageLoader {
 
     public static ImageLoader getInstance(){return instance;}
 
-    public ImageIcon loadIcon(String path) {
+    public ImageIcon loadIcon(String path, int size) {
         java.net.URL imgURL = getClass().getResource(path);
         if (imgURL != null) {
             ImageIcon raw = new ImageIcon(imgURL);
-            Image resized = raw.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+            Image resized = raw.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
             return new ImageIcon(resized);
         } else {
             System.err.println("Couldn't find icon: " + path);

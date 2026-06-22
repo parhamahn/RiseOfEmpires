@@ -34,8 +34,9 @@ public class MenuPanel extends JPanel {
             button.setPreferredSize(BUTTON_SIZE);
             button.setMinimumSize(BUTTON_SIZE);
             button.setMaximumSize(BUTTON_SIZE);
-            button.setMargin(new Insets(0,0,0,0));
+            button.setMargin(new Insets(10,0,0,0));
             button.setFont(new Font("Pixel Game", Font.BOLD, 24));
+            button.setFocusable(false);
         }
 
         this.setBackground(new Color(38, 38, 38));

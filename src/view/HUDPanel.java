@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class HUDPanel extends JPanel {
 
+    private JButton endTurnButton;
     private JButton menuButton;
     public ResourceStat woodStat;
     public ResourceStat stoneStat;
@@ -17,6 +18,7 @@ public class HUDPanel extends JPanel {
     public HUDPanel(GameState gameState){
         this.gameState = gameState;
         this.menuButton = new JButton("\uD804\uDC54");
+        this.endTurnButton = new JButton("End Turn");
         this.setBackground(new Color(0, 0, 0, 175));
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -41,6 +43,20 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
+
+        this.endTurnButton.setPreferredSize(new Dimension(200, 50));
+        this.endTurnButton.setFocusable(false);
+        this.endTurnButton.setMaximumSize(new Dimension(200, 50));
+        this.endTurnButton.setMinimumSize(new Dimension(200, 50));
+        this.endTurnButton.setFont(new Font("Pixel Game", Font.PLAIN, 32));
+        this.endTurnButton.setMargin(new Insets(10,0,0,0));
+        this.endTurnButton.setBackground(new Color(255, 203, 87));
+        this.endTurnButton.setForeground(new Color(0,0,0));
+        add(endTurnButton);
+
+        add(Box.createHorizontalStrut(20));
+
+        this.menuButton.setFocusable(false);
         this.menuButton.setPreferredSize(new Dimension(50, 50));
         this.menuButton.setMaximumSize(new Dimension(50, 50));
         this.menuButton.setMinimumSize(new Dimension(50, 50));

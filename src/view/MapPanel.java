@@ -264,6 +264,7 @@ public class MapPanel extends JPanel {
         }
     }
 
+
     private BufferedImage getBuildingImage(Building building) {
         if(building instanceof TownHall){
             return townHallImage;

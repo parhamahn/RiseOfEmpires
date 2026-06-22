@@ -27,6 +27,7 @@ public class SettingsPanel extends JPanel {
         this.backButton.setMaximumSize(BUTTON_SIZE);
         this.backButton.setBackground(new Color(255, 203, 87));
         this.backButton.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        this.backButton.setFocusable(false);
 
         soundSlider.setPreferredSize(SLIDER_SIZE);
         soundSlider.setMinimumSize(SLIDER_SIZE);

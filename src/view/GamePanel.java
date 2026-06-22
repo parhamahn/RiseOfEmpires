@@ -12,6 +12,7 @@ public class GamePanel extends JPanel {
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;
+    private UnitListPanel unitListPanel;
     private Timer gameLoop;
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -43,6 +44,20 @@ public class GamePanel extends JPanel {
             repaint();
         });
         gameLoop.start();
+
+        unitListPanel = new UnitListPanel();
+        layeredPane.add(unitListPanel, JLayeredPane.PALETTE_LAYER);
+        layeredPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = layeredPane.getSize();
+                mapPanel.setBounds(0, 0, size.width, size.height);
+                hudWrapper.setBounds(0, 0, size.width, size.height);
+
+                int panelWidth = 120;
+                unitListPanel.setBounds(0, 0, panelWidth, size.height);
+            }
+        });
     }
 
     public void startLoop() { gameLoop.start(); }
@@ -50,4 +65,5 @@ public class GamePanel extends JPanel {
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }
+    public UnitListPanel getUnitListPanel() {return unitListPanel;}
 }

@@ -15,7 +15,7 @@ public class ResourceStat extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
 
-        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath);
+        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 48);
 
         iconLabel = new JLabel(icon);
         iconLabel.setAlignmentY(CENTER_ALIGNMENT);
