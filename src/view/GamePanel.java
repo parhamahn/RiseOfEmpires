@@ -8,11 +8,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class GamePanel extends JPanel {
-    private final int FPS = 60;
+    private final int FPS = 120;
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;
     private UnitListPanel unitListPanel;
+    private TaskListPanel taskListPanel;
     private Timer gameLoop;
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -58,6 +59,19 @@ public class GamePanel extends JPanel {
                 unitListPanel.setBounds(0, 0, panelWidth, size.height);
             }
         });
+
+
+        taskListPanel = new TaskListPanel();
+        layeredPane.add(taskListPanel, JLayeredPane.PALETTE_LAYER);
+        layeredPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = layeredPane.getSize();
+                taskListPanel.setBounds(0, 0, size.width, size.height);
+            }
+        });
+
+
     }
 
     public void startLoop() { gameLoop.start(); }
@@ -66,4 +80,5 @@ public class GamePanel extends JPanel {
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }
     public UnitListPanel getUnitListPanel() {return unitListPanel;}
+    public TaskListPanel getTaskListPanel() { return taskListPanel; }
 }

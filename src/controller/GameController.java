@@ -3,6 +3,7 @@ package controller;
 import helpers.SoundEffects;
 import model.GameState;
 import model.Hex;
+import model.Task;
 import model.TownHall;
 import view.GamePanel;
 import view.MapPanel;
@@ -66,11 +67,19 @@ public class GameController {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
-                if (clicked != null) {
+                boolean discoveredNeighbour = false;
+                for(Hex hex:gameState.getMap().getNeighbourHexes(clicked)){
+                    if (hex.isDiscovered()) {
+                        discoveredNeighbour = true;
+                        break;
+                    }
+                }
+                if (clicked != null && discoveredNeighbour) {
                     gameState.setSelectedHex(clicked);
                     SoundEffects.getInstance().playSelectHexSoundEffect();
 
                     updateUnitListPanel();
+                    updateTaskListPanel();
                 }
             }
         });
@@ -80,13 +89,27 @@ public class GameController {
         Hex selected = gameState.getSelectedHex();
         if (selected != null && selected.getBuilding() instanceof TownHall) {
             gamePanel.getUnitListPanel().updateUnits(gameState.getUnits());
+            gamePanel.getTaskListPanel().clear();
         } else {
             gamePanel.getUnitListPanel().clear();
         }
     }
 
+
+    private void updateTaskListPanel() {
+        Hex selected = gameState.getSelectedHex();
+        if (selected != null && selected.getBuilding() == null) {
+            gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected));
+        } else {
+            gamePanel.getTaskListPanel().clear();
+        }
+    }
+
+
     private void menuAction(){
         CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, "menu");
     }
+
+
 }

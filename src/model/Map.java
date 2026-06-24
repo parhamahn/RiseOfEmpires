@@ -49,7 +49,7 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(true);
+                grid[r][c].setDiscovered(false);
             }
         }
 
@@ -108,7 +108,6 @@ public class Map {
                     }else{
                         if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.SHEEP);
                     }
-
                 }
             }
         }

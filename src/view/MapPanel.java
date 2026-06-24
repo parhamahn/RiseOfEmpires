@@ -67,7 +67,6 @@ public class MapPanel extends JPanel {
         drawBuildings(g);
         drawHexHighlight(g);
         drawRawResources(g);
-        drawActionsAllowedOnHex(g);
 
 
     }
@@ -177,20 +176,6 @@ public class MapPanel extends JPanel {
             g2.setColor(new Color(238, 255, 0));
             g2.setStroke(new BasicStroke(4));
             g2.drawPolygon(tile);
-        }
-    }
-
-
-    private void drawActionsAllowedOnHex(Graphics g){
-        if (gameState.getSelectedHex()!=null){
-            if(gameState.getSelectedHex().getBuilding()==null){
-                Graphics2D g2 = (Graphics2D) g;
-                g.setFont(new Font("Pixel Game", Font.BOLD, 48));
-                g.setColor(new Color(238, 255, 0));
-                Point center = getHexCenter(gameState.getSelectedHex().getC(), gameState.getSelectedHex().getR());
-                String text = "TASK";
-                g2.drawString(text, center.x-g2.getFontMetrics().stringWidth(text)/2, center.y);
-            }
         }
     }
 
