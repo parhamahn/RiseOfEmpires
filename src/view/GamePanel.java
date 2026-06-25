@@ -8,7 +8,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class GamePanel extends JPanel {
-    private final int FPS = 120;
+    private final int FPS = 24;
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;

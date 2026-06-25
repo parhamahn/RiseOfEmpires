@@ -102,4 +102,8 @@ public class HUDPanel extends JPanel {
     public void setWoodStat(ResourceStat woodStat) {
         this.woodStat = woodStat;
     }
+
+    public JButton getEndTurnButton() {
+        return endTurnButton;
+    }
 }

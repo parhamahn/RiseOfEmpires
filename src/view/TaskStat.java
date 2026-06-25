@@ -32,4 +32,8 @@ public class TaskStat{
     public JButton getButton() {
         return button;
     }
+
+    public Task.TASK getTask() {
+        return task;
+    }
 }

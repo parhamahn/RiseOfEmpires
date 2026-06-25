@@ -7,9 +7,11 @@ import model.Task;
 import model.TownHall;
 import view.GamePanel;
 import view.MapPanel;
+import view.TaskStat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.*;
 
 public class GameController {
@@ -27,7 +29,10 @@ public class GameController {
     }
 
     private void attachHUDListeners() {
+
         gamePanel.getHudPanel().getMenuButton().addActionListener(e -> menuAction());
+        gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> endTurnAction());
+
     }
 
     private void attachCameraListeners(){
@@ -99,7 +104,10 @@ public class GameController {
     private void updateTaskListPanel() {
         Hex selected = gameState.getSelectedHex();
         if (selected != null && selected.getBuilding() == null) {
-            gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected));
+            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected));
+            for (TaskStat stat:stats){
+                stat.getButton().addActionListener(e -> handleBuildingTask(stat.getTask(), selected));
+            }
         } else {
             gamePanel.getTaskListPanel().clear();
         }
@@ -109,6 +117,16 @@ public class GameController {
     private void menuAction(){
         CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, "menu");
+    }
+
+
+    private void endTurnAction(){
+        System.out.println("CLICKED END TURN BUTTON");
+    }
+
+
+    private void handleBuildingTask(Task.TASK task, Hex hex){
+        System.out.println("Player wants to build "+ task + " on hex : (" + hex.getC()+", "+hex.getR()+")");
     }
 
 

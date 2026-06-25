@@ -15,7 +15,7 @@ public abstract class Unit{
 
 
     protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn){
-        unitType = unitType;
+        this.unitType = unitType;
         this.actionPointsMax = actionPointsMax;
         this.actionPoints = actionPointsMax;
         this.isAssigned = false;
