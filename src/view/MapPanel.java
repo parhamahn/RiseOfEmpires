@@ -132,14 +132,11 @@ public class MapPanel extends JPanel {
                 Polygon tile = translatePolygon(hexShape, center.x, center.y);
                 if (hex.isDiscovered()) {
                     BufferedImage img = getTerrainImage(hex.getTerrainType());
-                    g2.drawImage(
-                            img,
-                            center.x - HEX_RADIUS + 12,
-                            center.y - HEX_RADIUS,
-                            HEX_RADIUS * 2 - 20,
-                            HEX_RADIUS * 2,
-                            null
-                    );
+                    Shape oldClip = g2.getClip();
+                    g2.setClip(tile);
+                    g2.drawImage(img, center.x - HEX_RADIUS, center.y - HEX_RADIUS,
+                            HEX_RADIUS * 2, HEX_RADIUS * 2, null);
+                    g2.setClip(oldClip);
                 }else{
                     g2.setColor(Color.BLACK);
                     g2.fillPolygon(tile);
@@ -165,21 +162,22 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int imgWidth = HEX_RADIUS*7/4;
-        int imgHeight = HEX_RADIUS*7/3;
-
-
         for (Building building : gameState.getBuildings()) {
             BufferedImage img = getBuildingImage(building);
             if (img == null) continue;
 
             Point center = getHexCenter(building.getHex().getC(), building.getHex().getR());
+            Polygon tile = translatePolygon(hexShape, center.x, center.y);
+
+            Shape oldClip = g2.getClip();
+            g2.setClip(tile);
             g2.drawImage(img,
-                    center.x - imgWidth / 2,
-                    center.y - imgHeight / 2 - 20,
-                    imgWidth,
-                    imgHeight,
+                    center.x - HEX_RADIUS,
+                    center.y - HEX_RADIUS,
+                    HEX_RADIUS * 2,
+                    HEX_RADIUS * 2,
                     null);
+            g2.setClip(oldClip);
         }
     }
 
