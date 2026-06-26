@@ -46,7 +46,7 @@ public class ResourceStat extends JPanel {
     }
 
     public void setCount(int newCount, int newMaximum) {
-        countLabel = new JLabel(newCount +"/"+ newMaximum);
+        countLabel.setText(newCount +"/"+ newMaximum);
     }
 
     public void setIcon(ImageIcon newIcon) {

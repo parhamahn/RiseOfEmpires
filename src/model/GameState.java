@@ -18,7 +18,12 @@ public class GameState {
         this.selectedHex = null;
         this.map = map;
         buildings = new ArrayList<>();
-        buildings.add(new TownHall(map.getHex(map.getCols()/2, map.getRows()/2)));
+
+        Hex townHallHex = map.getHex(map.getCols()/2, map.getRows()/2);
+        TownHall townHall = new TownHall(townHallHex);
+        townHallHex.setBuilding(townHall);
+        buildings.add(townHall);
+
 
         units = new ArrayList<>();
         units.add(new Builder());

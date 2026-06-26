@@ -1,6 +1,8 @@
 package view;
 
+import model.Cost;
 import model.GameState;
+import model.Task;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,8 +76,14 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void startLoop() { gameLoop.start(); }
-    public void stopLoop()  { gameLoop.stop();  }
+    public void showNotEnoughResources(Cost cost){
+        String message = " requires             "+cost.toString();
+        JLabel label = new JLabel(message);
+        label.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        JOptionPane.showMessageDialog(null,label,"Not Enough Resources",JOptionPane.WARNING_MESSAGE);
+
+
+    }
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }

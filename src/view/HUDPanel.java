@@ -106,4 +106,14 @@ public class HUDPanel extends JPanel {
     public JButton getEndTurnButton() {
         return endTurnButton;
     }
+
+    public void refresh() {
+        woodStat.setCount(gameState.getStorage().getWoodQuantity(), gameState.getStorage().getWoodMax());
+        stoneStat.setCount(gameState.getStorage().getStoneQuantity(), gameState.getStorage().getStoneMax());
+        ironStat.setCount(gameState.getStorage().getIronQuantity(), gameState.getStorage().getIronMax());
+        foodStat.setCount(gameState.getStorage().getFoodQuantity(), gameState.getStorage().getFoodMax());
+        revalidate();
+        repaint();
+    }
+
 }

@@ -1,16 +1,14 @@
 package controller;
 
 import helpers.SoundEffects;
-import model.GameState;
-import model.Hex;
-import model.Task;
-import model.TownHall;
+import model.*;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
 import java.util.List;
 import java.awt.event.*;
 
@@ -125,8 +123,28 @@ public class GameController {
     }
 
 
-    private void handleBuildingTask(Task.TASK task, Hex hex){
-        System.out.println("Player wants to build "+ task + " on hex : (" + hex.getC()+", "+hex.getR()+")");
+    private void handleBuildingTask(Task.TASK task, Hex hex) {
+        Building building = switch (task) {
+            case FARM        -> new Farm(hex);
+            case LUMBER_MILL -> new LumberMill(hex);
+            case STONE_MINE  -> new StoneMine(hex);
+            case IRON_MINE   -> new IronMine(hex);
+            case STABLE      -> new Stable(hex);
+            case TOWN        -> new Town(hex);
+        };
+
+        if (building.getCost().enoughResources(gameState.getStorage())) {
+            building.getCost().pay(gameState.getStorage());
+            hex.setBuilding(building);
+            gameState.getBuildings().add(building);
+            gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
+        } else {
+            gamePanel.showNotEnoughResources(building.getCost());
+        }
+
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getHudPanel().refresh();
+        gamePanel.getMapPanel().repaint();
     }
 
 

@@ -29,7 +29,19 @@ public class Cost {
         return APNeeded;
     }
 
-    public boolean enoughResources(Cost cost, Storage storage){
-        return storage.getWoodQuantity() >= cost.getWoodNeeded() && storage.getStoneQuantity() >= cost.getStoneNeeded() && storage.getIronQuantity() >= cost.getIronNeeded();
+    public boolean enoughResources(Storage storage){
+        return storage.getWoodQuantity() >= this.getWoodNeeded() && storage.getStoneQuantity() >= this.getStoneNeeded() && storage.getIronQuantity() >= this.getIronNeeded();
     }
+
+    public void pay(Storage storage){
+        storage.setIronQuantity(storage.getIronQuantity()-this.getIronNeeded());
+        storage.setStoneQuantity(storage.getStoneQuantity()-this.getStoneNeeded());
+        storage.setWoodQuantity(storage.getWoodQuantity()-this.getWoodNeeded());
+    }
+
+    @Override
+    public String toString(){
+        return "wood : "+woodNeeded + " | stone : "+stoneNeeded+ " | iron : "+ironNeeded;
+    }
+
 }

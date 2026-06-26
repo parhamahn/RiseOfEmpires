@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.Comparator;
 
 import model.*;
 
@@ -23,6 +25,12 @@ public class MapPanel extends JPanel {
     private BufferedImage mountainImage;
     private BufferedImage meadowImage;
     private BufferedImage townHallImage;
+    private BufferedImage farmHexImage;
+    private BufferedImage stoneMineHexImage;
+    private BufferedImage ironMineHexImage;
+    private BufferedImage stableHexImage;
+    private BufferedImage townHexImage;
+    private BufferedImage lumberMillHexImage;
 
     private final Polygon hexShape = new Polygon();
 
@@ -44,6 +52,15 @@ public class MapPanel extends JPanel {
             mountainImage = ImageIO.read(getClass().getResource("/utils/mountainhex.png"));
             meadowImage = ImageIO.read(getClass().getResource("/utils/meadowhex.png"));
             townHallImage = ImageIO.read(getClass().getResource("/utils/townhall.png"));
+
+            farmHexImage = ImageIO.read(getClass().getResource("/utils/farmhex.png"));
+            lumberMillHexImage = ImageIO.read(getClass().getResource("/utils/lumbermillhex.png"));
+            townHexImage = ImageIO.read(getClass().getResource("/utils/townhex.png"));
+            stoneMineHexImage = ImageIO.read(getClass().getResource("/utils/stoneminehex.png"));
+            ironMineHexImage = ImageIO.read(getClass().getResource("/utils/ironminehex.png"));
+            stableHexImage = ImageIO.read(getClass().getResource("/utils/stablehex.png"));
+
+
             resourceIcons.put(Hex.ResourceType.WOOD, ImageIO.read(getClass().getResource("/utils/wood.png")));
             resourceIcons.put(Hex.ResourceType.STONE, ImageIO.read(getClass().getResource("/utils/stone.png")));
             resourceIcons.put(Hex.ResourceType.IRON, ImageIO.read(getClass().getResource("/utils/iron.png")));
@@ -151,6 +168,7 @@ public class MapPanel extends JPanel {
         int imgWidth = HEX_RADIUS*7/4;
         int imgHeight = HEX_RADIUS*7/3;
 
+
         for (Building building : gameState.getBuildings()) {
             BufferedImage img = getBuildingImage(building);
             if (img == null) continue;
@@ -251,10 +269,13 @@ public class MapPanel extends JPanel {
 
 
     private BufferedImage getBuildingImage(Building building) {
-        if(building instanceof TownHall){
-            return townHallImage;
-        }else{
-            return null;
-        }
+        if (building instanceof TownHall)   return townHallImage;
+        if (building instanceof Farm)       return farmHexImage;
+        if (building instanceof LumberMill) return lumberMillHexImage;
+        if (building instanceof StoneMine)  return stoneMineHexImage;
+        if (building instanceof IronMine)   return ironMineHexImage;
+        if (building instanceof Stable)     return stableHexImage;
+        if (building instanceof Town)       return townHexImage;
+        return null;
     }
 }
