@@ -10,6 +10,7 @@ public class Task {
 
         List<TASK> availableTasks = new ArrayList<>();
         if(hex.isDiscovered()) {
+            availableTasks.add(TASK.TOWN);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
                     if (hex.getResourceTypes().contains(Hex.ResourceType.COW) || hex.getResourceTypes().contains(Hex.ResourceType.SHEEP))

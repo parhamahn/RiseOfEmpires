@@ -1,4 +1,7 @@
-package model;
+package model.unit;
+
+import model.Hex;
+import model.Storage;
 
 public abstract class Unit{
     public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};
@@ -10,7 +13,7 @@ public abstract class Unit{
     protected int actionPoints;
     protected int actionPointsMax;
     protected boolean isWorking;
-    protected boolean isAssigned;
+    public boolean isAssigned;
     protected int foodConsumptionPerTurn;
 
 
@@ -71,4 +74,19 @@ public abstract class Unit{
         return unitType;
     }
 
+    public int getActionPoints() {
+        return actionPoints;
+    }
+
+    public void setActionPoints(int actionPoints) {
+        this.actionPoints = actionPoints;
+    }
+
+    public int getActionPointsMax() {
+        return actionPointsMax;
+    }
+
+    public void setActionPointsMax(int actionPointsMax) {
+        this.actionPointsMax = actionPointsMax;
+    }
 }

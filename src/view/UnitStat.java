@@ -1,7 +1,7 @@
 package view;
 
 import helpers.ImageLoader;
-import model.Unit;
+import model.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;

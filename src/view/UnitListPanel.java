@@ -1,9 +1,8 @@
 package view;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
-import model.Unit;
+import model.unit.Unit;
 
 public class UnitListPanel extends JPanel {
     public UnitListPanel() {

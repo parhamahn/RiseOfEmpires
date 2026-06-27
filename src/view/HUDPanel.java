@@ -112,6 +112,12 @@ public class HUDPanel extends JPanel {
         stoneStat.setCount(gameState.getStorage().getStoneQuantity(), gameState.getStorage().getStoneMax());
         ironStat.setCount(gameState.getStorage().getIronQuantity(), gameState.getStorage().getIronMax());
         foodStat.setCount(gameState.getStorage().getFoodQuantity(), gameState.getStorage().getFoodMax());
+
+        woodStat.setChange(gameState.getProduction().getWoodProduction());
+        foodStat.setChange(gameState.getProduction().getFoodProduction());
+        stoneStat.setChange(gameState.getProduction().getStoneProduction());
+        ironStat.setChange(gameState.getProduction().getIronProduction());
+
         revalidate();
         repaint();
     }

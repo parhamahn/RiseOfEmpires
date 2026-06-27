@@ -1,5 +1,12 @@
 package model;
 
+import model.building.Building;
+import model.building.TownHall;
+import model.unit.Builder;
+import model.unit.Explorer;
+import model.unit.Unit;
+import model.unit.Worker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +17,8 @@ public class GameState {
     private List<Building> buildings;
     private List<Unit> units;
     private Map map;
+    private boolean isStarving;
+    private int tunrNumber;
 
 
     public GameState(Storage storage, Production production, Map map){
@@ -17,6 +26,8 @@ public class GameState {
         this.production = production;
         this.selectedHex = null;
         this.map = map;
+        this.tunrNumber = 0;
+        this.isStarving = false;
         buildings = new ArrayList<>();
 
         Hex townHallHex = map.getHex(map.getCols()/2, map.getRows()/2);
@@ -31,6 +42,8 @@ public class GameState {
         units.add(new Worker());
         units.add(new Worker());
         units.add(new Explorer());
+
+        this.production.recalculate(this);
     }
 
 
@@ -62,7 +75,19 @@ public class GameState {
         return units;
     }
 
+    public void nextTurn(){
+        this.tunrNumber+=1;
+    }
+
     public void setUnits(List<Unit> units) {
         this.units = units;
+    }
+
+    public boolean isStarving() {
+        return isStarving;
+    }
+
+    public void setStarving(boolean starving) {
+        isStarving = starving;
     }
 }

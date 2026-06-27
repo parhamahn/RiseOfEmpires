@@ -48,8 +48,16 @@ public class ResourceStat extends JPanel {
     public void setCount(int newCount, int newMaximum) {
         countLabel.setText(newCount +"/"+ newMaximum);
     }
-
-    public void setIcon(ImageIcon newIcon) {
-        iconLabel.setIcon(newIcon);
+    public void setChange(int change) {
+        if (change > 0) {
+            changeLabel.setText("+" + change);
+            changeLabel.setForeground(new Color(0, 175, 0));
+        } else if (change < 0) {
+            changeLabel.setText(String.valueOf(change));
+            changeLabel.setForeground(new Color(222, 0, 19));
+        } else {
+            changeLabel.setText("0");
+            changeLabel.setForeground(new Color(248, 178, 0));
+        }
     }
 }

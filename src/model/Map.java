@@ -49,7 +49,7 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(true);
+                grid[r][c].setDiscovered(false);
             }
         }
 

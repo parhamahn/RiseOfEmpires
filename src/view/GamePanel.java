@@ -45,6 +45,7 @@ public class GamePanel extends JPanel {
 
         gameLoop = new Timer(1000 / FPS, e -> {
             repaint();
+            hudPanel.refresh();
         });
         gameLoop.start();
 

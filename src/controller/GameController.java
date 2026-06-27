@@ -1,7 +1,9 @@
 package controller;
 
+import controller.logics.EndTurn;
 import helpers.SoundEffects;
 import model.*;
+import model.building.*;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
@@ -119,7 +121,9 @@ public class GameController {
 
 
     private void endTurnAction(){
-        System.out.println("CLICKED END TURN BUTTON");
+
+        EndTurn.endTurn(gameState);
+
     }
 
 
@@ -142,6 +146,7 @@ public class GameController {
             gamePanel.showNotEnoughResources(building.getCost());
         }
 
+        gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();

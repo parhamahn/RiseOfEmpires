@@ -1,5 +1,7 @@
 package model;
 
+import model.building.Building;
+
 import java.util.ArrayList;
 import java.util.List;
 

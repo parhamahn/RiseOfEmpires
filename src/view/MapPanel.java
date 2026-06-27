@@ -4,10 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.Comparator;
 
 import model.*;
+import model.building.*;
 
 public class MapPanel extends JPanel {
     private final int HEX_RADIUS = 100;

@@ -1,7 +1,13 @@
 package model;
 
+import model.building.Building;
+import model.unit.Unit;
+
 public class Production {
     private int DEFAULT_FOOD_PRODUCTION = 5;
+    private int DEFAULT_WOOD_PRODUCTION = 5;
+    private int DEFAULT_STONE_PRODUCTION = 5;
+    private int DEFAULT_IRON_PRODUCTION = 5;
 
     public int foodProduction;
     public int woodProduction;
@@ -10,9 +16,9 @@ public class Production {
 
     public Production(){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;
-        this.woodProduction = 0;
-        this.stoneProduction = 0;
-        this.ironProduction = 0;
+        this.woodProduction = DEFAULT_WOOD_PRODUCTION;
+        this.stoneProduction = DEFAULT_STONE_PRODUCTION;
+        this.ironProduction = DEFAULT_IRON_PRODUCTION;
     }
 
     public int getFoodProduction() {
@@ -46,4 +52,26 @@ public class Production {
     public void setIronProduction(int ironProduction) {
         this.ironProduction = ironProduction;
     }
+
+    public void recalculate(GameState gameState){
+        this.foodProduction = DEFAULT_FOOD_PRODUCTION;
+        this.woodProduction = DEFAULT_WOOD_PRODUCTION;
+        this.stoneProduction = DEFAULT_STONE_PRODUCTION;
+        this.ironProduction = DEFAULT_IRON_PRODUCTION;
+
+        for(Unit unit: gameState.getUnits()){
+            unit.resetActionPointsForNewTurn();
+            this.foodProduction -= Unit.FoodPerTurn;
+        }
+
+        for (Building building:gameState.getBuildings()){
+            if(building.getUpkeep()!=null){
+                this.woodProduction-=building.getUpkeep().getWoodNeeded();
+                this.stoneProduction-=building.getUpkeep().getStoneNeeded();
+                this.ironProduction-=building.getUpkeep().getIronNeeded();
+            }
+        }
+
+    }
+
 }
