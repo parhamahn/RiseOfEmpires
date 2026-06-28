@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -49,7 +50,7 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(false);
+                grid[r][c].setDiscovered(true);
             }
         }
 
@@ -82,32 +83,32 @@ public class Map {
             for (int j=0; j<rows;j++){
                 Hex hex = getHex(i, j);
                 if (hex.getBuilding()==null){
-                    List<Hex.ResourceType> resourceTypes = hex.getResourceTypes();
+                    HashMap<Hex.ResourceType, Integer> resources = hex.getResources();
 
                     if(hex.getTerrainType()== Hex.TerrainType.FOREST){
 
-                        resourceTypes.add(Hex.ResourceType.WOOD);
+                        resources.put(Hex.ResourceType.WOOD, 200);
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.MEADOW){
 
                         if (RANDOM.nextDouble()<=0.5){
-                            resourceTypes.add(Hex.ResourceType.WHEAT);
+                            resources.put(Hex.ResourceType.WHEAT, 100);
                         }else{
-                            if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.RICE);
+                            if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.RICE, 100);
                         }
 
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.MOUNTAIN){
 
-                        resourceTypes.add(Hex.ResourceType.STONE);
-                        if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.IRON);
+                        resources.put(Hex.ResourceType.STONE, 100);
+                        if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.IRON, 50);
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.PLAIN){
 
                         if (RANDOM.nextDouble()<=0.3) {
-                            resourceTypes.add(Hex.ResourceType.COW);
+                            resources.put(Hex.ResourceType.COW, 200);
                         }else{
-                            if (RANDOM.nextDouble()<=0.3) resourceTypes.add(Hex.ResourceType.SHEEP);
+                            if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.SHEEP, 200);
                         }
                     }
                 }

@@ -4,21 +4,25 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.HashMap;
 
+import helpers.ImageLoader;
 import model.*;
 import model.building.*;
+import model.unit.Unit;
 
 public class MapPanel extends JPanel {
-    private final int HEX_RADIUS = 100;
-    private final double SQRT3 = Math.sqrt(3);
-    private final int DX = (int) (SQRT3 * HEX_RADIUS);
-    private final int DY = (int) (1.5 * HEX_RADIUS);
+    private static final int HEX_RADIUS = 100;
+    private static final double SQRT3 = Math.sqrt(3);
+    private static final int DX = (int) (SQRT3 * HEX_RADIUS);
+    private static final int DY = (int) (1.5 * HEX_RADIUS);
     private final java.util.Map<Hex.ResourceType, BufferedImage> resourceIcons = new java.util.HashMap<>();
 
     private Map map;
     private GameState gameState;
-    private int cameraX = 0;
-    private int cameraY = 0;
+    private static int cameraX = 0;
+    private static int cameraY = 0;
     private BufferedImage plainImage;
     private BufferedImage forestImage;
     private BufferedImage mountainImage;
@@ -83,6 +87,7 @@ public class MapPanel extends JPanel {
         drawBuildings(g);
         drawHexHighlight(g);
         drawRawResources(g);
+        drawUnits(g);
 
 
     }
@@ -152,6 +157,14 @@ public class MapPanel extends JPanel {
     }
 
     private Point getHexCenter(int c, int r) {
+        int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
+        int py = (int) (r * DY) - cameraY;
+        return new Point(px, py);
+    }
+
+    public static Point getHexCenter(Hex hex){
+        int c = hex.getC();
+        int r = hex.getR();
         int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
         int py = (int) (r * DY) - cameraY;
         return new Point(px, py);
@@ -237,7 +250,7 @@ public class MapPanel extends JPanel {
                 Hex hex = map.getHex(c, r);
                 if (hex == null || !hex.isDiscovered() || hex.getBuilding() != null) continue;
 
-                java.util.List<Hex.ResourceType> resources = hex.getResourceTypes();
+                HashMap<Hex.ResourceType, Integer> resources = hex.getResources();
                 if (resources.isEmpty()) continue;
 
                 Point center = getHexCenter(c, r);
@@ -246,7 +259,7 @@ public class MapPanel extends JPanel {
                 int y = center.y + HEX_RADIUS / 2 + badgeRadius;
 
                 for (int i = 0; i < resources.size(); i++) {
-                    BufferedImage icon = resourceIcons.get(resources.get(i));
+                    BufferedImage icon = resourceIcons.get(resources.keySet().toArray()[i]);
                     if (icon == null) continue;
 
                     int cx = startX + i * spacing;
@@ -265,6 +278,29 @@ public class MapPanel extends JPanel {
     }
 
 
+    private void drawUnits(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+
+        for (Unit unit : gameState.getUnits()) {
+            if (unit.isMoving()) {
+                int drawX, drawY;
+                drawX = unit.getPositionX();
+                drawY = unit.getPositionY();
+                String iconPath = "/utils/"
+                        + unit.getClass().getName()
+                        .toLowerCase()
+                        .replace("model.", "")
+                        .replace("unit.", "")
+                        + ".png";
+                ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 50);
+                if (icon != null) {
+                    g2.drawImage(icon.getImage(), drawX - 25, drawY - 25, 50, 50, null);
+                }
+            }
+        }
+    }
+
+
     private BufferedImage getBuildingImage(Building building) {
         if (building instanceof TownHall)   return townHallImage;
         if (building instanceof Farm)       return farmHexImage;
@@ -274,5 +310,9 @@ public class MapPanel extends JPanel {
         if (building instanceof Stable)     return stableHexImage;
         if (building instanceof Town)       return townHexImage;
         return null;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 }

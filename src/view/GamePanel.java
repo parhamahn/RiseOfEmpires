@@ -3,6 +3,7 @@ package view;
 import model.Cost;
 import model.GameState;
 import model.Task;
+import model.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +47,18 @@ public class GamePanel extends JPanel {
         gameLoop = new Timer(1000 / FPS, e -> {
             repaint();
             hudPanel.refresh();
+            boolean anyMoving = false;
+            for (Unit unit : mapPanel.getGameState().getUnits()) {
+                if (unit.isMoving()) {
+                    boolean arrived = unit.step();
+                    if (arrived) {
+                        unit.setHex(unit.getDestination());
+                        unit.setMoving(false);
+                    }
+                    anyMoving = true;
+                }
+            }
+            if (anyMoving) repaint();
         });
         gameLoop.start();
 

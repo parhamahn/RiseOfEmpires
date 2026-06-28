@@ -15,7 +15,7 @@ public class UnitStat{
         this.unit = unit;
         this.button = new JButton();
 
-        String iconPath = "/utils/"+unit.getClass().getName().toLowerCase().replace("model.", "") + ".png";
+        String iconPath = "/utils/"+unit.getClass().getName().toLowerCase().replace("model.", "").replace("unit.", "") + ".png";
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 75);
 
         button.setIcon(icon);

@@ -148,6 +148,7 @@ public class GameController {
 
         gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
+        gameState.updateUnits();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();
     }

@@ -5,7 +5,7 @@ import model.Hex;
 
 public class Town extends Building{
 
-    private final static Cost cost = new Cost(50, 25, 0, 3);
+    private final static Cost cost = new Cost(40, 20, 10, 3);
     private final static Cost upkeep = new Cost(5, 3, 0, 0);
 
     public Town(Hex hex) {

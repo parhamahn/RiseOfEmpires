@@ -12,6 +12,8 @@ public class HUDPanel extends JPanel {
     public ResourceStat stoneStat;
     public ResourceStat ironStat;
     public ResourceStat foodStat;
+    public JLabel turnLabel;
+    public JLabel unitsLabel;
 
     private GameState gameState;
 
@@ -19,6 +21,8 @@ public class HUDPanel extends JPanel {
         this.gameState = gameState;
         this.menuButton = new JButton("\uD804\uDC54");
         this.endTurnButton = new JButton("End Turn");
+        this.turnLabel = new JLabel();
+        this.unitsLabel = new JLabel();
         this.setBackground(new Color(0, 0, 0, 175));
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -43,6 +47,19 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
+        unitsLabel.setText("Units : "+ gameState.getUnitCount()+"/"+gameState.getMaxUnit());
+        unitsLabel.setForeground(Color.WHITE);
+        unitsLabel.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        add(unitsLabel);
+
+        add(Box.createHorizontalStrut(20));
+
+        turnLabel.setText("Turn : "+ gameState.getTunrNumber());
+        turnLabel.setForeground(Color.WHITE);
+        turnLabel.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        add(turnLabel);
+
+        add(Box.createHorizontalStrut(20));
 
         this.endTurnButton.setPreferredSize(new Dimension(200, 50));
         this.endTurnButton.setFocusable(false);
@@ -117,6 +134,9 @@ public class HUDPanel extends JPanel {
         foodStat.setChange(gameState.getProduction().getFoodProduction());
         stoneStat.setChange(gameState.getProduction().getStoneProduction());
         ironStat.setChange(gameState.getProduction().getIronProduction());
+
+        turnLabel.setText("Turn : "+ gameState.getTunrNumber());
+        unitsLabel.setText("Units : "+ gameState.getUnitCount()+"/"+gameState.getMaxUnit());
 
         revalidate();
         repaint();

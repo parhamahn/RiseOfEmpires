@@ -3,6 +3,7 @@ package model;
 import model.building.Building;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Hex {
@@ -12,14 +13,14 @@ public class Hex {
     private int c,r;
     private boolean discovered;
     private TerrainType terrainType;
-    private List<ResourceType> resourceTypes;
+    private HashMap<ResourceType, Integer> resources;
     private Building building;
 
     public Hex(int c, int r, TerrainType terrainType){
         this.c = c;
         this.r = r;
         this.terrainType = terrainType;
-        this.resourceTypes = new ArrayList<>();
+        this.resources = new HashMap<>();
         this.building = null;
     }
 
@@ -36,8 +37,7 @@ public class Hex {
     public TerrainType getTerrainType() {return terrainType;}
     public void setTerrainType(TerrainType terrainType) {this.terrainType = terrainType;}
 
-    public List<ResourceType> getResourceTypes() {return resourceTypes;}
-    public void setResourceTypes(List<ResourceType> resourceTypes) {this.resourceTypes = resourceTypes;}
+    public HashMap<ResourceType, Integer> getResources() {return resources;}
 
     public Building getBuilding() {
         return building;
@@ -46,4 +46,6 @@ public class Hex {
     public void setBuilding(Building building) {
         this.building = building;
     }
+
+
 }

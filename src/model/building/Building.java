@@ -38,7 +38,7 @@ public abstract class Building {
     }
 
     public boolean assignWorker(Worker worker){
-        if(assignedWorkers.size()<workerCapacity && !worker.isAssigned){
+        if(assignedWorkers.size()<workerCapacity && !worker.isAssigned()){
             assignedWorkers.add(worker);
             return true;
         }
