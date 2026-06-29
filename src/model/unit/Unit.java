@@ -19,9 +19,7 @@ public abstract class Unit{
     protected boolean isMoving;
     protected int foodConsumptionPerTurn;
     protected Hex hex;
-    protected Hex destination;
-    protected int destinationX;
-    protected int destinationY;
+
 
 
     protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn){
@@ -31,7 +29,6 @@ public abstract class Unit{
         this.isAssigned = false;
         this.isWorking = false;
         this.hex = null;
-        this.destination = null;
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
     }
 
@@ -49,10 +46,6 @@ public abstract class Unit{
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
-    }
-
-    public Hex getDestination() {
-        return destination;
     }
 
 
@@ -148,23 +141,6 @@ public abstract class Unit{
         isMoving = moving;
     }
 
-    public void startMovingTo(Hex target, int targetX, int targetY){
-        destinationX = targetX;
-        destinationY = targetY;
-
-        double dist = Math.hypot(targetX - positionX, targetY - positionY);
-        this.isMoving = true;
-        this.destination = target;
-    }
-
-    public boolean step() {
-        if (Math.hypot(destinationX - positionX, destinationY - positionY) < SPEED) {
-            positionX = destinationX;
-            positionY = destinationY;
-            return true;
-        }
-        return false;
-    }
 
 }
 

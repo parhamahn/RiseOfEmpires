@@ -23,12 +23,14 @@ public class GameState {
     private int tunrNumber;
     private int maxUnit;
     private int unitCount;
+    private Unit selectedUnit;
 
 
     public GameState(Storage storage, Production production, Map map){
         this.storage = storage;
         this.production = production;
         this.selectedHex = null;
+        this.selectedUnit = null;
         this.map = map;
         this.tunrNumber = 0;
         this.isStarving = false;
@@ -52,6 +54,7 @@ public class GameState {
         for (Unit unit:units){
             unit.setHex(townHallHex);
         }
+        townHallHex.getUnits().addAll(units);
 
 
         this.production.recalculate(this);
@@ -155,4 +158,11 @@ public class GameState {
         unitCount=count;
     }
 
+    public Unit getSelectedUnit() {
+        return selectedUnit;
+    }
+
+    public void setSelectedUnit(Unit selectedUnit) {
+        this.selectedUnit = selectedUnit;
+    }
 }

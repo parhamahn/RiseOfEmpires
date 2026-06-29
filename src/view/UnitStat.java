@@ -32,4 +32,8 @@ public class UnitStat{
     public JButton getButton() {
         return button;
     }
+
+    public Unit getUnit() {
+        return unit;
+    }
 }

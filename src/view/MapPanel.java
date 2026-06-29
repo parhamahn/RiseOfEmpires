@@ -231,13 +231,20 @@ public class MapPanel extends JPanel {
 
     private void drawHexHighlight(Graphics g) {
         Hex selected = gameState.getSelectedHex();
-        if (selected != null && selected.getBuilding() == null) {
+        if (selected != null) {
             Graphics2D g2 = (Graphics2D) g;
             Point center = getHexCenter(selected);
             Polygon tile = translatePolygon(hexShape, center.x, center.y);
             g2.setColor(new Color(238, 255, 0));
             g2.setStroke(new BasicStroke(4));
             g2.drawPolygon(tile);
+            if(gameState.getSelectedUnit()!=null){
+                for (Hex hex:map.getNeighbourHexes(selected)){
+                    Point ncenter = getHexCenter(hex);
+                    Polygon ntile = translatePolygon(hexShape, ncenter.x, ncenter.y);
+                    g2.drawPolygon(ntile);
+                }
+            }
         }
     }
 
@@ -315,7 +322,7 @@ public class MapPanel extends JPanel {
         int unitSize = Math.max(20, hexRadius / 2);
 
         for (Unit unit : gameState.getUnits()) {
-            if (unit.isMoving()) {
+            if (unit.isMoving() || unit.getHex().getBuilding()==null) {
                 int drawX = unit.getPositionX();
                 int drawY = unit.getPositionY();
                 String iconPath = "/utils/"
@@ -330,6 +337,7 @@ public class MapPanel extends JPanel {
                 }
             }
         }
+        initUnitPositions();
     }
 
     private BufferedImage getBuildingImage(Building building) {

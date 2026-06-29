@@ -1,6 +1,7 @@
 package model;
 
 import model.building.Building;
+import model.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class Hex {
     private TerrainType terrainType;
     private HashMap<ResourceType, Integer> resources;
     private Building building;
+    private List<Unit> units;
 
     public Hex(int c, int r, TerrainType terrainType){
         this.c = c;
@@ -22,6 +24,7 @@ public class Hex {
         this.terrainType = terrainType;
         this.resources = new HashMap<>();
         this.building = null;
+        this.units = new ArrayList<>();
     }
 
 
@@ -47,5 +50,15 @@ public class Hex {
         this.building = building;
     }
 
+    public void setResources(HashMap<ResourceType, Integer> resources) {
+        this.resources = resources;
+    }
 
+    public List<Unit> getUnits() {
+        return units;
+    }
+
+    public void setUnits(List<Unit> units) {
+        this.units = units;
+    }
 }

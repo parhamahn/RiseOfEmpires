@@ -16,7 +16,7 @@ public class Map {
         this.cols = cols;
         this.grid = new Hex[rows][cols];
         generateMap();
-        setResources(grid);
+        setResources();
     }
 
     private void generateMap() {
@@ -50,7 +50,7 @@ public class Map {
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(true);
+                grid[r][c].setDiscovered(false);
             }
         }
 
@@ -78,7 +78,7 @@ public class Map {
     }
 
 
-    public void setResources(Hex[][] tiles){
+    public void setResources(){
         for (int i=0; i<cols; i++){
             for (int j=0; j<rows;j++){
                 Hex hex = getHex(i, j);
@@ -119,14 +119,26 @@ public class Map {
 
     public List<Hex> getNeighbourHexes(Hex hex){
         List<Hex> neighboursTiles = new ArrayList<>();
-        int[][] neighbours = {
-                { 1,  0},
-                {-1,  0},
-                { 1,  1},
-                { 0,  1},
-                { 1, -1},
-                { 0, -1}
-        };
+        int[][] neighbours;
+        if(hex.getR()%2==1){
+            neighbours = new int[][]{
+                    {1, 0},
+                    {-1, 0},
+                    {1, 1},
+                    {0, 1},
+                    {1, -1},
+                    {0, -1}
+            };
+        }else{
+            neighbours = new int[][]{
+                    {1, 0},
+                    {-1, 0},
+                    {0, 1},
+                    {-1, 1},
+                    {0, -1},
+                    {-1, -1}
+            };
+        }
         for(int[] neighbour:neighbours){
             Hex neigh = getHex(hex.getC()+neighbour[0], hex.getR()+neighbour[1]);
             neighboursTiles.add(neigh);

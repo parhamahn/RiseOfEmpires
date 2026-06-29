@@ -7,6 +7,7 @@ import model.building.*;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
+import view.UnitStat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,12 +89,16 @@ public class GameController {
                         break;
                     }
                 }
-                if (clicked != null && discoveredNeighbour) {
-                    gameState.setSelectedHex(clicked);
-                    SoundEffects.getInstance().playSelectHexSoundEffect();
+                if(gameState.getSelectedUnit()!=null){
+                    handleUnitMoving(clicked);
+                }else{
+                    if (clicked != null && discoveredNeighbour) {
+                        gameState.setSelectedHex(clicked);
+                        SoundEffects.getInstance().playSelectHexSoundEffect();
 
-                    updateUnitListPanel();
-                    updateTaskListPanel();
+                        updateUnitListPanel();
+                        updateTaskListPanel();
+                    }
                 }
             }
         });
@@ -101,8 +106,14 @@ public class GameController {
 
     private void updateUnitListPanel() {
         Hex selected = gameState.getSelectedHex();
-        if (selected != null && selected.getBuilding() instanceof TownHall) {
-            gamePanel.getUnitListPanel().updateUnits(gameState.getUnits());
+        if (selected != null) {
+            List<UnitStat> stats = gamePanel.getUnitListPanel().updateUnits(gameState.getSelectedHex().getUnits());
+            for (UnitStat stat:stats){
+                stat.getButton().addActionListener(e -> {
+                    gameState.setSelectedUnit(stat.getUnit());
+                    gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                });
+            }
             gamePanel.getTaskListPanel().clear();
         } else {
             gamePanel.getUnitListPanel().clear();
@@ -159,6 +170,18 @@ public class GameController {
         gameState.updateUnits();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();
+    }
+
+    private void handleUnitMoving(Hex clicked){
+        gameState.getSelectedUnit().setHex(clicked);
+        clicked.getUnits().add(gameState.getSelectedUnit());
+        gameState.getSelectedHex().getUnits().remove(gameState.getSelectedUnit());
+        gameState.setSelectedUnit(null);
+        gameState.setSelectedHex(clicked);
+        gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        updateUnitListPanel();
+        updateTaskListPanel();
     }
 
 

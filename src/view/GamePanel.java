@@ -47,18 +47,6 @@ public class GamePanel extends JPanel {
         gameLoop = new Timer(1000 / FPS, e -> {
             repaint();
             hudPanel.refresh();
-            boolean anyMoving = false;
-            for (Unit unit : mapPanel.getGameState().getUnits()) {
-                if (unit.isMoving()) {
-                    boolean arrived = unit.step();
-                    if (arrived) {
-                        unit.setHex(unit.getDestination());
-                        unit.setMoving(false);
-                    }
-                    anyMoving = true;
-                }
-            }
-            if (anyMoving) repaint();
         });
         gameLoop.start();
 
@@ -72,9 +60,10 @@ public class GamePanel extends JPanel {
                 hudWrapper.setBounds(0, 0, size.width, size.height);
 
                 int panelWidth = 120;
-                unitListPanel.setBounds(0, 0, panelWidth, size.height);
+                unitListPanel.setBounds(size.width - panelWidth, 0, panelWidth, size.height);
             }
         });
+
 
 
         taskListPanel = new TaskListPanel();
