@@ -1,6 +1,5 @@
 package model.unit;
 
-import model.Direction;
 import model.Hex;
 import model.Storage;
 import view.MapPanel;
@@ -23,7 +22,6 @@ public abstract class Unit{
     protected Hex destination;
     protected int destinationX;
     protected int destinationY;
-    protected Direction direction;
 
 
     protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn){
@@ -34,7 +32,6 @@ public abstract class Unit{
         this.isWorking = false;
         this.hex = null;
         this.destination = null;
-        this.direction = null;
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
     }
 
@@ -58,33 +55,6 @@ public abstract class Unit{
         return destination;
     }
 
-    public void setDestination(Hex destination) {
-        this.destination = destination;
-    }
-
-    public int getDestinationX() {
-        return destinationX;
-    }
-
-    public void setDestinationX(int destinationX) {
-        this.destinationX = destinationX;
-    }
-
-    public int getDestinationY() {
-        return destinationY;
-    }
-
-    public void setDestinationY(int destinationY) {
-        this.destinationY = destinationY;
-    }
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
 
     public boolean consumeFood(Storage storage){
         if (storage.getFoodQuantity() >= foodConsumptionPerTurn) {
@@ -183,17 +153,11 @@ public abstract class Unit{
         destinationY = targetY;
 
         double dist = Math.hypot(targetX - positionX, targetY - positionY);
-        this.direction = new Direction(
-                (targetX - positionX) / dist * SPEED,
-                (targetY - positionY) / dist * SPEED
-        );
         this.isMoving = true;
         this.destination = target;
     }
 
     public boolean step() {
-        positionX += (int) direction.getDx();
-        positionY += (int) direction.getDy();
         if (Math.hypot(destinationX - positionX, destinationY - positionY) < SPEED) {
             positionX = destinationX;
             positionY = destinationY;

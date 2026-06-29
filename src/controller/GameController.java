@@ -43,6 +43,15 @@ public class GameController {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "moveDown");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "moveLeft");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "moveRight");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0), "zoomIn");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "zoomOut");
+
+        actionMap.put("zoomIn",  new AbstractAction() {
+            public void actionPerformed(ActionEvent e) { gamePanel.getMapPanel().zoom(1); }
+        });
+        actionMap.put("zoomOut", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) { gamePanel.getMapPanel().zoom(-1); }
+        });
 
         actionMap.put("moveUp", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -104,7 +113,7 @@ public class GameController {
     private void updateTaskListPanel() {
         Hex selected = gameState.getSelectedHex();
         if (selected != null && selected.getBuilding() == null) {
-            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected));
+            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected), gameState);
             for (TaskStat stat:stats){
                 stat.getButton().addActionListener(e -> handleBuildingTask(stat.getTask(), selected));
             }
@@ -123,6 +132,7 @@ public class GameController {
     private void endTurnAction(){
 
         EndTurn.endTurn(gameState);
+        updateTaskListPanel();
 
     }
 
@@ -142,8 +152,6 @@ public class GameController {
             hex.setBuilding(building);
             gameState.getBuildings().add(building);
             gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
-        } else {
-            gamePanel.showNotEnoughResources(building.getCost());
         }
 
         gameState.getProduction().recalculate(gameState);

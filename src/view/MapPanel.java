@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import helpers.ImageLoader;
@@ -13,16 +12,20 @@ import model.building.*;
 import model.unit.Unit;
 
 public class MapPanel extends JPanel {
-    private static final int HEX_RADIUS = 100;
     private static final double SQRT3 = Math.sqrt(3);
-    private static final int DX = (int) (SQRT3 * HEX_RADIUS);
-    private static final int DY = (int) (1.5 * HEX_RADIUS);
+    private static final int MIN_RADIUS = 40;
+    private static final int MAX_RADIUS = 180;
+    private static final int ZOOM_STEP = 15;
+
+    private int hexRadius = 100;
+    private int dx;
+    private int dy;
     private final java.util.Map<Hex.ResourceType, BufferedImage> resourceIcons = new java.util.HashMap<>();
 
     private Map map;
     private GameState gameState;
-    private static int cameraX = 0;
-    private static int cameraY = 0;
+    private int cameraX = 0;
+    private int cameraY = 0;
     private BufferedImage plainImage;
     private BufferedImage forestImage;
     private BufferedImage mountainImage;
@@ -40,22 +43,16 @@ public class MapPanel extends JPanel {
     public MapPanel(Map map, GameState gameState) {
         this.gameState = gameState;
         setBackground(Color.BLACK);
-        for (int i = 0; i < 6; i++) {
-            double angle = Math.toRadians(-30 + 60 * i);
-            int x = (int) (HEX_RADIUS * Math.cos(angle));
-            int y = (int) (HEX_RADIUS * Math.sin(angle));
-            hexShape.addPoint(x, y);
-        }
+        rebuildHexShape();
         setMap(map);
-        cameraX = map.getCols()*HEX_RADIUS/2 + HEX_RADIUS;
-        cameraY = map.getRows()*HEX_RADIUS/2 - HEX_RADIUS;
+        cameraX = map.getCols() * hexRadius / 2 + hexRadius;
+        cameraY = map.getRows() * hexRadius / 2 - hexRadius;
         try {
             plainImage = ImageIO.read(getClass().getResource("/utils/plainhex.png"));
             forestImage = ImageIO.read(getClass().getResource("/utils/foresthex.png"));
             mountainImage = ImageIO.read(getClass().getResource("/utils/mountainhex.png"));
             meadowImage = ImageIO.read(getClass().getResource("/utils/meadowhex.png"));
             townHallImage = ImageIO.read(getClass().getResource("/utils/townhall.png"));
-
             farmHexImage = ImageIO.read(getClass().getResource("/utils/farmhex.png"));
             lumberMillHexImage = ImageIO.read(getClass().getResource("/utils/lumbermillhex.png"));
             townHexImage = ImageIO.read(getClass().getResource("/utils/townhex.png"));
@@ -63,53 +60,102 @@ public class MapPanel extends JPanel {
             ironMineHexImage = ImageIO.read(getClass().getResource("/utils/ironminehex.png"));
             stableHexImage = ImageIO.read(getClass().getResource("/utils/stablehex.png"));
 
-
-            resourceIcons.put(Hex.ResourceType.WOOD, ImageIO.read(getClass().getResource("/utils/wood.png")));
+            resourceIcons.put(Hex.ResourceType.WOOD,  ImageIO.read(getClass().getResource("/utils/wood.png")));
             resourceIcons.put(Hex.ResourceType.STONE, ImageIO.read(getClass().getResource("/utils/stone.png")));
-            resourceIcons.put(Hex.ResourceType.IRON, ImageIO.read(getClass().getResource("/utils/iron.png")));
+            resourceIcons.put(Hex.ResourceType.IRON,  ImageIO.read(getClass().getResource("/utils/iron.png")));
             resourceIcons.put(Hex.ResourceType.WHEAT, ImageIO.read(getClass().getResource("/utils/wheat.png")));
-            resourceIcons.put(Hex.ResourceType.RICE, ImageIO.read(getClass().getResource("/utils/rice.png")));
-            resourceIcons.put(Hex.ResourceType.COW, ImageIO.read(getClass().getResource("/utils/cow.png")));
+            resourceIcons.put(Hex.ResourceType.RICE,  ImageIO.read(getClass().getResource("/utils/rice.png")));
+            resourceIcons.put(Hex.ResourceType.COW,   ImageIO.read(getClass().getResource("/utils/cow.png")));
             resourceIcons.put(Hex.ResourceType.SHEEP, ImageIO.read(getClass().getResource("/utils/sheep.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        initUnitPositions();
     }
 
+    private void rebuildHexShape() {
+        dx = (int) (SQRT3 * hexRadius);
+        dy = (int) (1.5 * hexRadius);
+        hexShape.reset();
+        for (int i = 0; i < 6; i++) {
+            double angle = Math.toRadians(-30 + 60 * i);
+            int x = (int) (hexRadius * Math.cos(angle));
+            int y = (int) (hexRadius * Math.sin(angle));
+            hexShape.addPoint(x, y);
+        }
+    }
+
+    private void initUnitPositions() {
+        for (Unit unit : gameState.getUnits()) {
+            if (unit.getHex() != null) {
+                Point p = getHexCenter(unit.getHex());
+                unit.setPositionX(p.x);
+                unit.setPositionY(p.y);
+            }
+        }
+    }
+
+    public void zoom(int direction) {
+        int newRadius = hexRadius + direction * ZOOM_STEP;
+        if (newRadius < MIN_RADIUS || newRadius > MAX_RADIUS) return;
+
+        int cx = getWidth() / 2;
+        int cy = getHeight() / 2;
+
+        int newDx = (int) (SQRT3 * newRadius);
+        int newDy = (int) (1.5 * newRadius);
+
+        cameraX = (int) ((cameraX + cx) * (double) newDx / dx) - cx;
+        cameraY = (int) ((cameraY + cy) * (double) newDy / dy) - cy;
+
+        hexRadius = newRadius;
+        rebuildHexShape();
+
+        cameraX = Math.max(-getWidth() + dx,  Math.min(map.getCols() * dx - dx, cameraX));
+        cameraY = Math.max(-getHeight() + dy, Math.min(map.getRows() * dy - dy, cameraY));
+
+        for (Unit unit : gameState.getUnits()) {
+            if (!unit.isMoving() && unit.getHex() != null) {
+                Point p = getHexCenter(unit.getHex());
+                unit.setPositionX(p.x);
+                unit.setPositionY(p.y);
+            }
+        }
+
+        repaint();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
-
-
         super.paintComponent(g);
         drawHexTiles(g);
         drawBuildings(g);
         drawHexHighlight(g);
         drawRawResources(g);
         drawUnits(g);
-
-
     }
-
-
 
     public void setMap(Map map) {
         this.map = map;
         repaint();
     }
 
-    public void moveCamera(int dx, int dy) {
-        if((cameraX + dx <= map.getCols()*HEX_RADIUS+100)&&(cameraX + dx >= -map.getCols()*HEX_RADIUS/10)){cameraX += dx;}
-        if((cameraY + dy <= map.getRows()*HEX_RADIUS-100)&&(cameraY + dy >= -map.getRows()*HEX_RADIUS/10)){cameraY += dy;}
-    }
+    public void moveCamera(int deltaX, int deltaY) {
+        int screenW = getWidth();
+        int screenH = getHeight();
 
+        int mapWorldW = map.getCols() * dx;
+        int mapWorldH = map.getRows() * dy;
+
+        cameraX = Math.max(-screenW + dx, Math.min(mapWorldW - dx, cameraX + deltaX));
+        cameraY = Math.max(-screenH + dy, Math.min(mapWorldH - dy, cameraY + deltaY));
+    }
 
     public Hex getHexAt(int screenX, int screenY) {
         for (int r = 0; r < map.getRows(); r++) {
             for (int c = 0; c < map.getCols(); c++) {
-                int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
-                int py = (int) (r * DY) - cameraY;
+                int px = (int) ((c + 0.5 * (r & 1)) * dx) - cameraX;
+                int py = (int) (r * dy) - cameraY;
                 Polygon tile = translatePolygon(hexShape, px, py);
                 if (tile.contains(screenX, screenY)) {
                     return map.getHex(c, r);
@@ -119,8 +165,7 @@ public class MapPanel extends JPanel {
         return null;
     }
 
-
-    private void drawHexTiles(Graphics g){
+    private void drawHexTiles(Graphics g) {
         if (map == null) return;
 
         Graphics2D g2 = (Graphics2D) g;
@@ -132,42 +177,37 @@ public class MapPanel extends JPanel {
                 if (hex == null) continue;
 
                 Point center = getHexCenter(c, r);
-
                 Polygon tile = translatePolygon(hexShape, center.x, center.y);
+
                 if (hex.isDiscovered()) {
                     BufferedImage img = getTerrainImage(hex.getTerrainType());
                     Shape oldClip = g2.getClip();
                     g2.setClip(tile);
-                    g2.drawImage(img, center.x - HEX_RADIUS, center.y - HEX_RADIUS,
-                            HEX_RADIUS * 2, HEX_RADIUS * 2, null);
+                    g2.drawImage(img, center.x - hexRadius, center.y - hexRadius,
+                            hexRadius * 2, hexRadius * 2, null);
                     g2.setClip(oldClip);
-                }else{
+                } else {
                     g2.setColor(Color.BLACK);
                     g2.fillPolygon(tile);
                     g2.setColor(Color.WHITE);
                     g2.drawPolygon(tile);
-                    if (gameState.getSelectedHex()!=hex) {
-                        g2.setFont(new Font("Pixel Game", Font.BOLD, 48));
-                        g2.drawString("?", center.x - 10, center.y + 10);
+                    if (gameState.getSelectedHex() != hex) {
+                        g2.setFont(new Font("Pixel Game", Font.BOLD, Math.max(12, hexRadius / 2)));
+                        g2.drawString("?", center.x - hexRadius / 10, center.y + hexRadius / 10);
                     }
                 }
-
             }
         }
     }
 
     private Point getHexCenter(int c, int r) {
-        int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
-        int py = (int) (r * DY) - cameraY;
+        int px = (int) ((c + 0.5 * (r & 1)) * dx) - cameraX;
+        int py = (int) (r * dy) - cameraY;
         return new Point(px, py);
     }
 
-    public static Point getHexCenter(Hex hex){
-        int c = hex.getC();
-        int r = hex.getR();
-        int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
-        int py = (int) (r * DY) - cameraY;
-        return new Point(px, py);
+    public Point getHexCenter(Hex hex) {
+        return getHexCenter(hex.getC(), hex.getR());
     }
 
     private void drawBuildings(Graphics g) {
@@ -183,45 +223,38 @@ public class MapPanel extends JPanel {
 
             Shape oldClip = g2.getClip();
             g2.setClip(tile);
-            g2.drawImage(img,
-                    center.x - HEX_RADIUS,
-                    center.y - HEX_RADIUS,
-                    HEX_RADIUS * 2,
-                    HEX_RADIUS * 2,
-                    null);
+            g2.drawImage(img, center.x - hexRadius, center.y - hexRadius,
+                    hexRadius * 2, hexRadius * 2, null);
             g2.setClip(oldClip);
         }
     }
 
-    private void drawHexHighlight(Graphics g){
-        if(gameState.getSelectedHex()!=null && gameState.getSelectedHex().getBuilding()==null){
+    private void drawHexHighlight(Graphics g) {
+        Hex selected = gameState.getSelectedHex();
+        if (selected != null && selected.getBuilding() == null) {
             Graphics2D g2 = (Graphics2D) g;
-            int c = gameState.getSelectedHex().getC();
-            int r = gameState.getSelectedHex().getR();
-            int px = (int) ((c + 0.5 * (r & 1)) * DX) - cameraX;
-            int py = (int) (r * DY) - cameraY;
-            Polygon tile = translatePolygon(hexShape, px, py);
+            Point center = getHexCenter(selected);
+            Polygon tile = translatePolygon(hexShape, center.x, center.y);
             g2.setColor(new Color(238, 255, 0));
             g2.setStroke(new BasicStroke(4));
             g2.drawPolygon(tile);
         }
     }
 
-
-    private Polygon translatePolygon(Polygon p, int dx, int dy) {
+    private Polygon translatePolygon(Polygon p, int offsetX, int offsetY) {
         Polygon result = new Polygon();
         for (int i = 0; i < p.npoints; i++) {
-            result.addPoint(p.xpoints[i] + dx, p.ypoints[i] + dy);
+            result.addPoint(p.xpoints[i] + offsetX, p.ypoints[i] + offsetY);
         }
         return result;
     }
 
     private BufferedImage getTerrainImage(Hex.TerrainType terrain) {
         return switch (terrain) {
-            case PLAIN -> plainImage;
-            case FOREST -> forestImage;
+            case PLAIN    -> plainImage;
+            case FOREST   -> forestImage;
             case MOUNTAIN -> mountainImage;
-            case MEADOW -> meadowImage;
+            case MEADOW   -> meadowImage;
         };
     }
 
@@ -241,9 +274,9 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int iconSize = 22;
+        int iconSize   = Math.max(10, hexRadius / 5);
         int badgeRadius = iconSize / 2 + 7;
-        int spacing = badgeRadius * 2 + 4;
+        int spacing    = badgeRadius * 2 + 4;
 
         for (int r = 0; r < map.getRows(); r++) {
             for (int c = 0; c < map.getCols(); c++) {
@@ -255,15 +288,15 @@ public class MapPanel extends JPanel {
 
                 Point center = getHexCenter(c, r);
                 int rowWidth = spacing * resources.size();
-                int startX = center.x - rowWidth / 2 + spacing / 2;
-                int y = center.y + HEX_RADIUS / 2 + badgeRadius;
+                int startX  = center.x - rowWidth / 2 + spacing / 2;
+                int y       = center.y + hexRadius / 2 + badgeRadius;
 
                 for (int i = 0; i < resources.size(); i++) {
                     BufferedImage icon = resourceIcons.get(resources.keySet().toArray()[i]);
                     if (icon == null) continue;
 
-                    int cx = startX + i * spacing;
-                    Polygon badge = createMiniHex(cx, y-2*iconSize, badgeRadius);
+                    int iconX  = startX + i * spacing;
+                    Polygon badge = createMiniHex(iconX, y - 2 * iconSize, badgeRadius);
 
                     g2.setColor(new Color(0, 0, 0, 160));
                     g2.fillPolygon(badge);
@@ -271,35 +304,33 @@ public class MapPanel extends JPanel {
                     g2.setStroke(new BasicStroke(1.5f));
                     g2.drawPolygon(badge);
 
-                    g2.drawImage(icon, cx - iconSize / 2, y - 5*iconSize/2, iconSize, iconSize, null);
+                    g2.drawImage(icon, iconX - iconSize / 2, y - 5 * iconSize / 2, iconSize, iconSize, null);
                 }
             }
         }
     }
 
-
     private void drawUnits(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        int unitSize = Math.max(20, hexRadius / 2);
 
         for (Unit unit : gameState.getUnits()) {
             if (unit.isMoving()) {
-                int drawX, drawY;
-                drawX = unit.getPositionX();
-                drawY = unit.getPositionY();
+                int drawX = unit.getPositionX();
+                int drawY = unit.getPositionY();
                 String iconPath = "/utils/"
                         + unit.getClass().getName()
                         .toLowerCase()
                         .replace("model.", "")
                         .replace("unit.", "")
                         + ".png";
-                ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 50);
+                ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, unitSize);
                 if (icon != null) {
-                    g2.drawImage(icon.getImage(), drawX - 25, drawY - 25, 50, 50, null);
+                    g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2, unitSize, unitSize, null);
                 }
             }
         }
     }
-
 
     private BufferedImage getBuildingImage(Building building) {
         if (building instanceof TownHall)   return townHallImage;

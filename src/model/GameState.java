@@ -51,8 +51,6 @@ public class GameState {
 
         for (Unit unit:units){
             unit.setHex(townHallHex);
-            unit.setPositionX(MapPanel.getHexCenter(townHallHex).x);
-            unit.setPositionY(MapPanel.getHexCenter(townHallHex).y);
         }
 
 

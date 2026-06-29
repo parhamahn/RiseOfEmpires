@@ -90,14 +90,6 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void showNotEnoughResources(Cost cost){
-        String message = " requires             "+cost.toString();
-        JLabel label = new JLabel(message);
-        label.setFont(new Font("Pixel Game", Font.PLAIN, 24));
-        JOptionPane.showMessageDialog(null,label,"Not Enough Resources",JOptionPane.WARNING_MESSAGE);
-
-
-    }
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }

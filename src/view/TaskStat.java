@@ -10,10 +10,12 @@ public class TaskStat{
 
     private Task.TASK task;
     private JButton button;
+    private boolean canAfford;
 
-    public TaskStat(Task.TASK task){
+    public TaskStat(Task.TASK task, boolean canAfford){
         this.task = task;
         this.button = new JButton();
+        this.canAfford = canAfford;
 
         String iconPath = "/utils/"+task.toString().toLowerCase()+".png";
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 75);
@@ -26,6 +28,12 @@ public class TaskStat{
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setOpaque(false);
+
+        if(!canAfford){
+            Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
+            button.setDisabledIcon(new ImageIcon(grayImage));
+            button.setEnabled(false);
+        }
 
     }
 
