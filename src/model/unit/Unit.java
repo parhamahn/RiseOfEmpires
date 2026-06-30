@@ -7,7 +7,6 @@ import view.MapPanel;
 public abstract class Unit{
     public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};
     public static final int FoodPerTurn = 1;
-    public static final int SPEED = 2;
 
     protected UNIT_TYPE unitType;
     protected int positionX;
@@ -19,6 +18,7 @@ public abstract class Unit{
     protected boolean isMoving;
     protected int foodConsumptionPerTurn;
     protected Hex hex;
+    private Hex targetHex;
 
 
 
@@ -29,6 +29,7 @@ public abstract class Unit{
         this.isAssigned = false;
         this.isWorking = false;
         this.hex = null;
+        this.targetHex = null;
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
     }
 
@@ -141,6 +142,12 @@ public abstract class Unit{
         isMoving = moving;
     }
 
+    public Hex getTargetHex() {
+        return targetHex;
+    }
 
+    public void setTargetHex(Hex targetHex) {
+        this.targetHex = targetHex;
+    }
 }
 

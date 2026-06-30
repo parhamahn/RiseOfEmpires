@@ -22,6 +22,7 @@ public class MapPanel extends JPanel {
     private int dy;
     private final java.util.Map<Hex.ResourceType, BufferedImage> resourceIcons = new java.util.HashMap<>();
 
+    private Runnable onUnitArrived;
     private Map map;
     private GameState gameState;
     private int cameraX = 0;
@@ -87,11 +88,40 @@ public class MapPanel extends JPanel {
 
     private void initUnitPositions() {
         for (Unit unit : gameState.getUnits()) {
-            if (unit.getHex() != null) {
+            if (!unit.isMoving()) {
                 Point p = getHexCenter(unit.getHex());
                 unit.setPositionX(p.x);
                 unit.setPositionY(p.y);
+            } else {
+                animateUnitTowardHex(unit);
             }
+        }
+    }
+
+    private void animateUnitTowardHex(Unit unit) {
+        Point target = getHexCenter(unit.getTargetHex());
+        int dx = target.x - unit.getPositionX();
+        int dy = target.y - unit.getPositionY();
+        double distance = Math.hypot(dx, dy);
+
+        int speed = Math.max(2, hexRadius / 15);
+
+        if (distance <= speed) {
+            unit.getHex().getUnits().remove(unit);
+            unit.getTargetHex().getUnits().add(unit);
+            unit.setHex(unit.getTargetHex());
+            unit.setTargetHex(null);
+            unit.setMoving(false);
+
+            Point finalPos = getHexCenter(unit.getHex());
+            unit.setPositionX(finalPos.x);
+            unit.setPositionY(finalPos.y);
+
+            if (onUnitArrived != null) onUnitArrived.run();
+
+        } else {
+            unit.setPositionX(unit.getPositionX() + (int) Math.round(speed * dx / distance));
+            unit.setPositionY(unit.getPositionY() + (int) Math.round(speed * dy / distance));
         }
     }
 
@@ -321,8 +351,10 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         int unitSize = Math.max(20, hexRadius / 2);
 
+        initUnitPositions();
+
         for (Unit unit : gameState.getUnits()) {
-            if (unit.isMoving() || unit.getHex().getBuilding()==null) {
+            if (unit.isMoving() || !unit.isAssigned()) {
                 int drawX = unit.getPositionX();
                 int drawY = unit.getPositionY();
                 String iconPath = "/utils/"
@@ -337,7 +369,6 @@ public class MapPanel extends JPanel {
                 }
             }
         }
-        initUnitPositions();
     }
 
     private BufferedImage getBuildingImage(Building building) {
@@ -353,5 +384,9 @@ public class MapPanel extends JPanel {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setOnUnitArrived(Runnable onUnitArrived) {
+        this.onUnitArrived = onUnitArrived;
     }
 }

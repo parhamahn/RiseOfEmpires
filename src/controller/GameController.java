@@ -4,6 +4,7 @@ import controller.logics.EndTurn;
 import helpers.SoundEffects;
 import model.*;
 import model.building.*;
+import model.unit.Unit;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
@@ -27,6 +28,7 @@ public class GameController {
         this.attachHUDListeners();
         this.attachCameraListeners();
         this.attachHexSelectionListener();
+        gamePanel.getMapPanel().setOnUnitArrived(this::updateUnitListPanel);
     }
 
     private void attachHUDListeners() {
@@ -173,9 +175,18 @@ public class GameController {
     }
 
     private void handleUnitMoving(Hex clicked){
-        gameState.getSelectedUnit().setHex(clicked);
-        clicked.getUnits().add(gameState.getSelectedUnit());
-        gameState.getSelectedHex().getUnits().remove(gameState.getSelectedUnit());
+        if(gameState.getSelectedHex()==clicked){
+            Unit unit = gameState.getSelectedUnit();
+            unit.setAssigned(true);
+        }
+
+        if(gameState.getMap().getNeighbourHexes(gameState.getSelectedHex()).contains(clicked)){
+            Unit unit = gameState.getSelectedUnit();
+            unit.setTargetHex(clicked);
+            unit.setMoving(true);
+            unit.setAssigned(false);
+        }
+
         gameState.setSelectedUnit(null);
         gameState.setSelectedHex(clicked);
         gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
