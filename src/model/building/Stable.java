@@ -5,6 +5,7 @@ import model.Hex;
 import model.Task;
 
 public class Stable extends Building {
+    public final static int productingPerUnit = 3;
 
     private final static Cost cost = Task.getCostForTask(Task.TASK.STABLE);
     private final static Cost upkeep = new Cost(2, 1, 0, 0);

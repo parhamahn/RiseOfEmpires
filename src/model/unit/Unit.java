@@ -13,7 +13,6 @@ public abstract class Unit{
     protected int positionY;
     protected int actionPoints;
     protected int actionPointsMax;
-    protected boolean isWorking;
     protected boolean isAssigned;
     protected boolean isMoving;
     protected int foodConsumptionPerTurn;
@@ -27,7 +26,6 @@ public abstract class Unit{
         this.actionPointsMax = actionPointsMax;
         this.actionPoints = actionPointsMax;
         this.isAssigned = false;
-        this.isWorking = false;
         this.hex = null;
         this.targetHex = null;
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
@@ -110,13 +108,7 @@ public abstract class Unit{
         this.unitType = unitType;
     }
 
-    public boolean isWorking() {
-        return isWorking;
-    }
 
-    public void setWorking(boolean working) {
-        isWorking = working;
-    }
 
     public boolean isAssigned() {
         return isAssigned;

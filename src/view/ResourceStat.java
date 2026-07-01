@@ -21,12 +21,12 @@ public class ResourceStat extends JPanel {
         iconLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         countLabel = new JLabel(count +"/"+ maximum);
-        countLabel.setFont(new Font("Pixel Game", Font.BOLD, 24));
+        countLabel.setFont(new Font("Pixel Game", Font.BOLD, 32));
         countLabel.setForeground(Color.WHITE);
         countLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         changeLabel = new JLabel();
-        changeLabel.setFont(new Font("Pixel Game", Font.BOLD, 18));
+        changeLabel.setFont(new Font("Pixel Game", Font.BOLD, 24));
         if (change > 0){
             changeLabel.setText("+"+change);
             changeLabel.setForeground(new Color(0, 175, 0));

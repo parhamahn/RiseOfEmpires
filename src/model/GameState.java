@@ -53,7 +53,6 @@ public class GameState {
 
         for (Unit unit:units){
             unit.setHex(townHallHex);
-            unit.setAssigned(true);
         }
         townHallHex.getUnits().addAll(units);
 

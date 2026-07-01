@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Building {
+    public static int actionPointToAssign = 1;
+
     private Hex hex;
     private Cost cost;
     private Cost upkeep;

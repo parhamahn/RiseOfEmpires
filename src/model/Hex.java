@@ -61,4 +61,13 @@ public class Hex {
     public void setUnits(List<Unit> units) {
         this.units = units;
     }
+
+    public int getAPToMove(){
+        return switch (this.terrainType){
+            case MOUNTAIN -> 4;
+            case FOREST -> 2;
+            case MEADOW, PLAIN -> 1;
+        };
+    }
+
 }

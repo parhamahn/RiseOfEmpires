@@ -1,6 +1,6 @@
 package model;
 
-import model.building.Building;
+import model.building.*;
 import model.unit.Unit;
 
 public class Production {
@@ -65,13 +65,71 @@ public class Production {
         }
 
         for (Building building:gameState.getBuildings()){
+
+            if(building instanceof LumberMill){
+                int workingWorkers = 0;
+                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+
+                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.WOOD, 0);
+                int producingResource = Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex);
+
+                building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex-producingResource);
+
+                this.woodProduction += producingResource;
+
+
+            }
+
+            if(building instanceof StoneMine){
+                int workingWorkers = 0;
+                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+
+                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.STONE, 0);
+                int producingResource = Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex);
+
+                building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex-producingResource);
+
+                this.stoneProduction += producingResource;
+
+
+            }
+
+            if(building instanceof IronMine){
+                int workingWorkers = 0;
+                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+
+                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.IRON, 0);
+                int producingResource = Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex);
+
+                building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex-producingResource);
+
+                this.ironProduction += producingResource;
+
+
+            }
+
+            if(building instanceof Farm){
+                int workingWorkers = 0;
+                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+
+                int resourceOnHex = building.getHex().getResources().getOrDefault(((Farm) building).getFarming(), 0);
+                int producingResource = Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex);
+
+                building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex-producingResource);
+
+                this.foodProduction += producingResource;
+
+
+            }
+
+
+
             if(building.getUpkeep()!=null){
                 this.woodProduction-=building.getUpkeep().getWoodNeeded();
                 this.stoneProduction-=building.getUpkeep().getStoneNeeded();
                 this.ironProduction-=building.getUpkeep().getIronNeeded();
             }
         }
-
     }
 
 }

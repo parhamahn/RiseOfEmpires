@@ -354,7 +354,7 @@ public class MapPanel extends JPanel {
         initUnitPositions();
 
         for (Unit unit : gameState.getUnits()) {
-            if (unit.isMoving() || !unit.isAssigned()) {
+            if (unit.isMoving() || (!unit.isAssigned() && !(unit.getHex().getBuilding()instanceof TownHall))) {
                 int drawX = unit.getPositionX();
                 int drawY = unit.getPositionY();
                 String iconPath = "/utils/"

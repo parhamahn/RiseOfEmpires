@@ -5,6 +5,7 @@ import helpers.SoundEffects;
 import model.*;
 import model.building.*;
 import model.unit.Unit;
+import model.unit.Worker;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
@@ -177,14 +178,39 @@ public class GameController {
     private void handleUnitMoving(Hex clicked){
         if(gameState.getSelectedHex()==clicked){
             Unit unit = gameState.getSelectedUnit();
-            unit.setAssigned(true);
+            if(gameState.getSelectedHex().getBuilding()!=null && !(gameState.getSelectedHex().getBuilding() instanceof Town)) {
+                if(unit instanceof Worker){
+                    if(!unit.isAssigned()){
+                        if (unit.getActionPoints() >= Building.actionPointToAssign) {
+                            unit.setAssigned(true);
+                            unit.setActionPoints(unit.getActionPoints()-Building.actionPointToAssign);
+                            gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker)unit);
+                            gameState.getProduction().recalculate(gameState);
+                            gamePanel.getHudPanel().refresh();
+                        }
+                    }else{
+                        unit.setAssigned(false);
+                        gameState.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
+                        gameState.getProduction().recalculate(gameState);
+                        gamePanel.getHudPanel().refresh();
+                    }
+                }
+            }
         }
 
         if(gameState.getMap().getNeighbourHexes(gameState.getSelectedHex()).contains(clicked)){
             Unit unit = gameState.getSelectedUnit();
-            unit.setTargetHex(clicked);
-            unit.setMoving(true);
-            unit.setAssigned(false);
+            if(unit.getActionPoints()>=gameState.getSelectedHex().getAPToMove()) {
+
+                unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
+                gameState.getProduction().recalculate(gameState);
+                gamePanel.getHudPanel().refresh();
+
+                unit.setActionPoints(unit.getActionPoints()-gameState.getSelectedHex().getAPToMove());
+                unit.setTargetHex(clicked);
+                unit.setMoving(true);
+                unit.setAssigned(false);
+            }
         }
 
         gameState.setSelectedUnit(null);
