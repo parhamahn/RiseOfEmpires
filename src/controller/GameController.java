@@ -4,6 +4,7 @@ import controller.logics.EndTurn;
 import helpers.SoundEffects;
 import model.*;
 import model.building.*;
+import model.unit.Builder;
 import model.unit.Unit;
 import model.unit.Worker;
 import view.GamePanel;
@@ -29,7 +30,7 @@ public class GameController {
         this.attachHUDListeners();
         this.attachCameraListeners();
         this.attachHexSelectionListener();
-        gamePanel.getMapPanel().setOnUnitArrived(this::updateUnitListPanel);
+        gamePanel.getMapPanel().setOnUnitArrived(this::updateLists);
     }
 
     private void attachHUDListeners() {
@@ -153,20 +154,30 @@ public class GameController {
 
     private void handleBuildingTask(Task.TASK task, Hex hex) {
         Building building = switch (task) {
-            case FARM        -> new Farm(hex);
+            case FARM        -> new Farm(hex, Hex.ResourceType.WHEAT);
             case LUMBER_MILL -> new LumberMill(hex);
             case STONE_MINE  -> new StoneMine(hex);
             case IRON_MINE   -> new IronMine(hex);
-            case STABLE      -> new Stable(hex);
+            case STABLE      -> new Stable(hex, Hex.ResourceType.COW);
             case TOWN        -> new Town(hex);
         };
 
-        if (building.getCost().enoughResources(gameState.getStorage())) {
-            building.getCost().pay(gameState.getStorage());
-            hex.setBuilding(building);
-            gameState.getBuildings().add(building);
-            gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
+        building.getCost().pay(gameState.getStorage());
+        for(Unit unit:hex.getUnits()){
+            if(unit instanceof Builder && unit.getActionPoints()>=building.getCost().getAPNeeded()) {
+                unit.setActionPoints(unit.getActionPoints() - building.getCost().getAPNeeded());
+                ((Builder) unit).setCharges(((Builder) unit).getCharges()-1);
+                if(((Builder) unit).getCharges()==0){
+                    gameState.getUnits().remove(unit);
+                    hex.getUnits().remove(unit);
+                    updateUnitListPanel();
+                }
+                break;
+            }
         }
+        hex.setBuilding(building);
+        gameState.getBuildings().add(building);
+        gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
 
         gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
@@ -202,9 +213,11 @@ public class GameController {
             Unit unit = gameState.getSelectedUnit();
             if(unit.getActionPoints()>=gameState.getSelectedHex().getAPToMove()) {
 
-                unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
-                gameState.getProduction().recalculate(gameState);
-                gamePanel.getHudPanel().refresh();
+                if(unit.getHex().getBuilding()!=null){
+                    unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
+                    gameState.getProduction().recalculate(gameState);
+                    gamePanel.getHudPanel().refresh();
+                }
 
                 unit.setActionPoints(unit.getActionPoints()-gameState.getSelectedHex().getAPToMove());
                 unit.setTargetHex(clicked);
@@ -221,5 +234,9 @@ public class GameController {
         updateTaskListPanel();
     }
 
+    public void updateLists(){
+        updateUnitListPanel();
+        updateTaskListPanel();
+    }
 
 }

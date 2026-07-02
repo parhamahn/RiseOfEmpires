@@ -73,10 +73,18 @@ public class Production {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.WOOD, 0);
                 int producingResource = Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex);
 
-                building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex-producingResource);
+                if(resourceOnHex-producingResource!=0) {
+                    building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex - producingResource);
+                }else{
+                    gameState.getBuildings().remove(building);
+                    building.getHex().getResources().remove(Hex.ResourceType.WOOD);
+                    for(Unit unit:building.getHex().getUnits()){
+                        unit.setAssigned(false);
+                    }
+                    building.getHex().setBuilding(null);
+                }
 
                 this.woodProduction += producingResource;
-
 
             }
 
@@ -87,8 +95,16 @@ public class Production {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.STONE, 0);
                 int producingResource = Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex);
 
-                building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex-producingResource);
-
+                if(resourceOnHex-producingResource!=0) {
+                    building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex - producingResource);
+                }else{
+                    gameState.getBuildings().remove(building);
+                    building.getHex().getResources().remove(Hex.ResourceType.STONE);
+                    for(Unit unit:building.getHex().getUnits()){
+                        unit.setAssigned(false);
+                    }
+                    building.getHex().setBuilding(null);
+                }
                 this.stoneProduction += producingResource;
 
 
@@ -101,8 +117,16 @@ public class Production {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.IRON, 0);
                 int producingResource = Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex);
 
-                building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex-producingResource);
-
+                if(resourceOnHex-producingResource!=0) {
+                    building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex - producingResource);
+                }else{
+                    gameState.getBuildings().remove(building);
+                    building.getHex().getResources().remove(Hex.ResourceType.IRON);
+                    for(Unit unit:building.getHex().getUnits()){
+                        unit.setAssigned(false);
+                    }
+                    building.getHex().setBuilding(null);
+                }
                 this.ironProduction += producingResource;
 
 
@@ -115,14 +139,41 @@ public class Production {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(((Farm) building).getFarming(), 0);
                 int producingResource = Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex);
 
-                building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex-producingResource);
-
+                if(resourceOnHex-producingResource!=0) {
+                    building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex - producingResource);
+                }else{
+                    gameState.getBuildings().remove(building);
+                    building.getHex().getResources().remove(((Farm) building).getFarming());
+                    for(Unit unit:building.getHex().getUnits()){
+                        unit.setAssigned(false);
+                    }
+                    building.getHex().setBuilding(null);
+                }
                 this.foodProduction += producingResource;
+            }
 
+            if(building instanceof Stable){
+                int workingWorkers = 0;
+                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
 
+                int resourceOnHex = building.getHex().getResources().getOrDefault(((Stable) building).getBreeding(), 0);
+                int producingResource = Math.min(workingWorkers*Stable.productingPerUnit, resourceOnHex);
+
+                if(resourceOnHex-producingResource!=0) {
+                    building.getHex().getResources().put(((Stable) building).getBreeding(), resourceOnHex - producingResource);
+                }else{
+                    gameState.getBuildings().remove(building);
+                    building.getHex().getResources().remove(((Stable) building).getBreeding());
+                    for(Unit unit:building.getHex().getUnits()){
+                        unit.setAssigned(false);
+                    }
+                    building.getHex().setBuilding(null);
+                }
+                this.foodProduction += producingResource;
             }
 
 
+            if(this.foodProduction<0 && gameState.getStorage().getFoodQuantity()<0)gameState.setStarving(true);
 
             if(building.getUpkeep()!=null){
                 this.woodProduction-=building.getUpkeep().getWoodNeeded();

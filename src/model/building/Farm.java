@@ -11,15 +11,12 @@ public class Farm extends Building{
     private final static Cost cost = Task.getCostForTask(Task.TASK.FARM);
     private final static Cost upkeep = new Cost(2, 1, 0, 0);
 
-    public Farm(Hex hex) {
+    public Farm(Hex hex, Hex.ResourceType farming) {
         super(hex, cost, upkeep, 2);
+        this.farming = farming;
     }
 
     public Hex.ResourceType getFarming() {
         return farming;
-    }
-
-    public void setFarming(Hex.ResourceType farming) {
-        this.farming = farming;
     }
 }

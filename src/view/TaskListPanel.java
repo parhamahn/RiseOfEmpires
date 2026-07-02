@@ -6,6 +6,8 @@ import java.util.List;
 
 import model.GameState;
 import model.Task;
+import model.unit.Builder;
+import model.unit.Unit;
 
 public class TaskListPanel extends JPanel {
     public TaskListPanel() {
@@ -18,7 +20,14 @@ public class TaskListPanel extends JPanel {
         removeAll();
         List<TaskStat> stats = new ArrayList<>();
         for (Task.TASK task : tasks) {
-            TaskStat stat = new TaskStat(task, Task.getCostForTask(task).enoughResources(gameState.getStorage()));
+            boolean enoughAP = false;
+            for(Unit unit:gameState.getSelectedHex().getUnits()){
+                if(unit instanceof Builder){
+                    enoughAP = Task.getCostForTask(task).enoughAP(unit.getActionPoints());
+                }
+            }
+            boolean canBuild = Task.getCostForTask(task).enoughResources(gameState.getStorage()) && enoughAP;
+            TaskStat stat = new TaskStat(task, canBuild);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));
             stats.add(stat);

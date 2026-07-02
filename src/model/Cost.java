@@ -33,6 +33,10 @@ public class Cost {
         return storage.getWoodQuantity() >= this.getWoodNeeded() && storage.getStoneQuantity() >= this.getStoneNeeded() && storage.getIronQuantity() >= this.getIronNeeded();
     }
 
+    public boolean enoughAP(int AP){
+        return AP >= this.APNeeded;
+    }
+
     public void pay(Storage storage){
         storage.setIronQuantity(storage.getIronQuantity()-this.getIronNeeded());
         storage.setStoneQuantity(storage.getStoneQuantity()-this.getStoneNeeded());
