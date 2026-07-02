@@ -3,10 +3,7 @@ package model;
 import model.building.Building;
 import model.building.Town;
 import model.building.TownHall;
-import model.unit.Builder;
-import model.unit.Explorer;
-import model.unit.Unit;
-import model.unit.Worker;
+import model.unit.*;
 import view.MapPanel;
 
 import java.util.ArrayList;

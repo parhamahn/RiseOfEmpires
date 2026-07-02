@@ -12,6 +12,7 @@ import view.UnitStat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.awt.event.*;
@@ -161,18 +162,20 @@ public class GameController {
         };
 
         building.getCost().pay(gameState.getStorage());
+        List<Unit> toRemove = new ArrayList<>();
         for(Unit unit:hex.getUnits()){
             if(unit instanceof Builder && unit.getActionPoints()>=building.getCost().getAPNeeded()) {
                 unit.setActionPoints(unit.getActionPoints() - building.getCost().getAPNeeded());
                 ((Builder) unit).setCharges(((Builder) unit).getCharges()-1);
                 if(((Builder) unit).getCharges()==0){
                     gameState.getUnits().remove(unit);
-                    hex.getUnits().remove(unit);
+                    toRemove.add(unit);
                     updateUnitListPanel();
                 }
                 break;
             }
         }
+        hex.getUnits().removeAll(toRemove);
         hex.setBuilding(building);
         gameState.getBuildings().add(building);
         gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
@@ -190,12 +193,14 @@ public class GameController {
             if (unit instanceof Worker) {
                 if (gameState.getSelectedHex().getBuilding() != null && !(gameState.getSelectedHex().getBuilding() instanceof Town)) {
                     if (!unit.isAssigned()) {
-                        if (unit.getActionPoints() >= Building.actionPointToAssign) {
-                            unit.setAssigned(true);
-                            unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
-                            gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
-                            gameState.getProduction().recalculate(gameState);
-                            gamePanel.getHudPanel().refresh();
+                        if(gameState.getSelectedHex().getUnits().size()<gameState.getSelectedHex().getBuilding().getWorkerCapacity()){
+                            if (unit.getActionPoints() >= Building.actionPointToAssign) {
+                                unit.setAssigned(true);
+                                unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
+                                gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
+                                gameState.getProduction().recalculate(gameState);
+                                gamePanel.getHudPanel().refresh();
+                            }
                         }
                     } else {
                         unit.setAssigned(false);
@@ -211,6 +216,9 @@ public class GameController {
                     }
                 }
                 clicked.setInEmpireBorder(true);
+                gameState.getSelectedHex().getUnits().remove(unit);
+                gameState.getUnits().remove(unit);
+                updateLists();
             }
         }
 
@@ -224,7 +232,7 @@ public class GameController {
                     gamePanel.getHudPanel().refresh();
                 }
 
-                unit.setActionPoints(unit.getActionPoints()-gameState.getSelectedHex().getAPToMove());
+                unit.setActionPoints(unit.getActionPoints()-clicked.getAPToMove());
                 unit.setTargetHex(clicked);
                 unit.setMoving(true);
                 unit.setAssigned(false);

@@ -3,6 +3,9 @@ package model;
 import model.building.*;
 import model.unit.Unit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Production {
     private int DEFAULT_FOOD_PRODUCTION = 5;
     private int DEFAULT_WOOD_PRODUCTION = 5;
@@ -66,6 +69,8 @@ public class Production {
 
         for (Building building:gameState.getBuildings()){
 
+            List<Building> toRemove = new ArrayList<>();
+
             if(building instanceof LumberMill){
                 int workingWorkers = 0;
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
@@ -76,11 +81,12 @@ public class Production {
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex - producingResource);
                 }else{
-                    gameState.getBuildings().remove(building);
+                    toRemove.add(building);
                     building.getHex().getResources().remove(Hex.ResourceType.WOOD);
                     for(Unit unit:building.getHex().getUnits()){
                         unit.setAssigned(false);
                     }
+                    building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     building.getHex().setBuilding(null);
                 }
 
@@ -98,10 +104,13 @@ public class Production {
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex - producingResource);
                 }else{
-                    gameState.getBuildings().remove(building);
+                    toRemove.add(building);
                     building.getHex().getResources().remove(Hex.ResourceType.STONE);
                     for(Unit unit:building.getHex().getUnits()){
                         unit.setAssigned(false);
+                    }
+                    if(building.getHex().getResources().isEmpty()){
+                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
                     building.getHex().setBuilding(null);
                 }
@@ -120,10 +129,13 @@ public class Production {
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex - producingResource);
                 }else{
-                    gameState.getBuildings().remove(building);
+                    toRemove.add(building);
                     building.getHex().getResources().remove(Hex.ResourceType.IRON);
                     for(Unit unit:building.getHex().getUnits()){
                         unit.setAssigned(false);
+                    }
+                    if(building.getHex().getResources().isEmpty()){
+                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
                     building.getHex().setBuilding(null);
                 }
@@ -142,10 +154,13 @@ public class Production {
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex - producingResource);
                 }else{
-                    gameState.getBuildings().remove(building);
+                    toRemove.add(building);
                     building.getHex().getResources().remove(((Farm) building).getFarming());
                     for(Unit unit:building.getHex().getUnits()){
                         unit.setAssigned(false);
+                    }
+                    if(building.getHex().getResources().isEmpty()){
+                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
                     building.getHex().setBuilding(null);
                 }
@@ -162,18 +177,27 @@ public class Production {
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(((Stable) building).getBreeding(), resourceOnHex - producingResource);
                 }else{
-                    gameState.getBuildings().remove(building);
+                    toRemove.add(building);
                     building.getHex().getResources().remove(((Stable) building).getBreeding());
                     for(Unit unit:building.getHex().getUnits()){
                         unit.setAssigned(false);
+                    }
+                    if(building.getHex().getResources().isEmpty()){
+                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
                     building.getHex().setBuilding(null);
                 }
                 this.foodProduction += producingResource;
             }
 
+            gameState.getBuildings().removeAll(toRemove);
 
-            if(this.foodProduction<0 && gameState.getStorage().getFoodQuantity()<0)gameState.setStarving(true);
+            if(this.foodProduction<0 && gameState.getStorage().getFoodQuantity()<0) {
+                gameState.setStarving(true);
+                for(Unit unit:gameState.getUnits()){
+                    unit.setActionPoints(unit.getActionPoints()-2);
+                }
+            }
 
             if(building.getUpkeep()!=null){
                 this.woodProduction-=building.getUpkeep().getWoodNeeded();

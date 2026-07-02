@@ -369,6 +369,15 @@ public class MapPanel extends JPanel {
                 if (icon != null) {
                     g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2, unitSize, unitSize, null);
                 }
+                int barWidth = unitSize/4*3;
+                int barHeight = 4;
+                int barX = drawX-barWidth/2;
+                int barY = drawY+barWidth/4;
+                double apf = (double)unit.getActionPoints()/unit.getActionPointsMax();
+                g2.setColor(new Color(60,60,60));
+                g2.fillRect(barX, barY, barWidth, barHeight);
+                g2.setColor(new Color(50,200,50));
+                g2.fillRect(barX, barY, (int)(apf*barWidth), barHeight);
             }
         }
     }
@@ -379,7 +388,7 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(new Color(0, 31, 232));
-        g2.setStroke(new BasicStroke(Math.max(2f, hexRadius / 15f),
+        g2.setStroke(new BasicStroke(Math.max(1f, hexRadius / 20f),
                 BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
         for (int r = 0; r < map.getRows(); r++) {

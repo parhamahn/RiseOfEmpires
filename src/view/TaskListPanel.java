@@ -26,7 +26,7 @@ public class TaskListPanel extends JPanel {
                     enoughAP = Task.getCostForTask(task).enoughAP(unit.getActionPoints());
                 }
             }
-            boolean canBuild = Task.getCostForTask(task).enoughResources(gameState.getStorage()) && enoughAP;
+            boolean canBuild = Task.getCostForTask(task).enoughResources(gameState.getStorage()) && enoughAP && gameState.getSelectedHex().isInEmpireBorder();
             TaskStat stat = new TaskStat(task, canBuild);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));
