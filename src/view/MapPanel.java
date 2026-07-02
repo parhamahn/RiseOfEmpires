@@ -40,6 +40,7 @@ public class MapPanel extends JPanel {
     private BufferedImage lumberMillHexImage;
 
     private final Polygon hexShape = new Polygon();
+    private static final int[] EDGE_START_FOR_DIRECTION = {0, 3, 1, 2, 5, 4};
 
     public MapPanel(Map map, GameState gameState) {
         this.gameState = gameState;
@@ -161,6 +162,7 @@ public class MapPanel extends JPanel {
         drawHexTiles(g);
         drawBuildings(g);
         drawHexHighlight(g);
+        drawEmpireBorder(g);
         drawRawResources(g);
         drawUnits(g);
     }
@@ -366,6 +368,36 @@ public class MapPanel extends JPanel {
                 ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, unitSize);
                 if (icon != null) {
                     g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2, unitSize, unitSize, null);
+                }
+            }
+        }
+    }
+
+    private void drawEmpireBorder(Graphics g) {
+        if (map == null) return;
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(new Color(0, 31, 232));
+        g2.setStroke(new BasicStroke(Math.max(2f, hexRadius / 15f),
+                BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+        for (int r = 0; r < map.getRows(); r++) {
+            for (int c = 0; c < map.getCols(); c++) {
+                Hex hex = map.getHex(c, r);
+                if (hex == null || !hex.isInEmpireBorder()) continue;
+
+                Point center = getHexCenter(c, r);
+                Polygon tile = translatePolygon(hexShape, center.x, center.y);
+
+                java.util.List<Hex> neighbours = map.getNeighbourHexes(hex);
+                for (int dir = 0; dir < neighbours.size(); dir++) {
+                    Hex neighbour = neighbours.get(dir);
+                    if (neighbour != null && neighbour.isInEmpireBorder()) continue;
+                    int v1 = EDGE_START_FOR_DIRECTION[dir];
+                    int v2 = (v1 + 1) % 6;
+                    g2.drawLine(tile.xpoints[v1], tile.ypoints[v1],
+                            tile.xpoints[v2], tile.ypoints[v2]);
                 }
             }
         }

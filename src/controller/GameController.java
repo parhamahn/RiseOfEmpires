@@ -4,9 +4,7 @@ import controller.logics.EndTurn;
 import helpers.SoundEffects;
 import model.*;
 import model.building.*;
-import model.unit.Builder;
-import model.unit.Unit;
-import model.unit.Worker;
+import model.unit.*;
 import view.GamePanel;
 import view.MapPanel;
 import view.TaskStat;
@@ -30,7 +28,7 @@ public class GameController {
         this.attachHUDListeners();
         this.attachCameraListeners();
         this.attachHexSelectionListener();
-        gamePanel.getMapPanel().setOnUnitArrived(this::updateLists);
+        gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
     }
 
     private void attachHUDListeners() {
@@ -187,30 +185,37 @@ public class GameController {
     }
 
     private void handleUnitMoving(Hex clicked){
-        if(gameState.getSelectedHex()==clicked){
-            Unit unit = gameState.getSelectedUnit();
-            if(gameState.getSelectedHex().getBuilding()!=null && !(gameState.getSelectedHex().getBuilding() instanceof Town)) {
-                if(unit instanceof Worker){
-                    if(!unit.isAssigned()){
+        Unit unit = gameState.getSelectedUnit();
+        if(gameState.getSelectedHex()==clicked) {
+            if (unit instanceof Worker) {
+                if (gameState.getSelectedHex().getBuilding() != null && !(gameState.getSelectedHex().getBuilding() instanceof Town)) {
+                    if (!unit.isAssigned()) {
                         if (unit.getActionPoints() >= Building.actionPointToAssign) {
                             unit.setAssigned(true);
-                            unit.setActionPoints(unit.getActionPoints()-Building.actionPointToAssign);
-                            gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker)unit);
+                            unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
+                            gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
                             gameState.getProduction().recalculate(gameState);
                             gamePanel.getHudPanel().refresh();
                         }
-                    }else{
+                    } else {
                         unit.setAssigned(false);
                         gameState.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
                         gameState.getProduction().recalculate(gameState);
                         gamePanel.getHudPanel().refresh();
                     }
                 }
+            } else if (unit instanceof BorderExpander) {
+                for (Hex neighbor:gameState.getMap().getNeighbourHexes(gameState.getSelectedHex())){
+                    if (!neighbor.isInEmpireBorder()){
+                        neighbor.setInEmpireBorder(true);
+                    }
+                }
+                clicked.setInEmpireBorder(true);
             }
         }
 
+
         if(gameState.getMap().getNeighbourHexes(gameState.getSelectedHex()).contains(clicked)){
-            Unit unit = gameState.getSelectedUnit();
             if(unit.getActionPoints()>=gameState.getSelectedHex().getAPToMove()) {
 
                 if(unit.getHex().getBuilding()!=null){
@@ -237,6 +242,21 @@ public class GameController {
     public void updateLists(){
         updateUnitListPanel();
         updateTaskListPanel();
+    }
+
+    public void discover(){
+        for(Unit unit:gameState.getSelectedHex().getUnits()){
+            if(unit instanceof Explorer){
+                for(Hex neighbor:gameState.getMap().getNeighbourHexes(gameState.getSelectedHex())){
+                    neighbor.setDiscovered(true);
+                }
+            }
+        }
+    }
+
+    public void onArrive(){
+        updateLists();
+        discover();
     }
 
 }

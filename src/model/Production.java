@@ -68,7 +68,7 @@ public class Production {
 
             if(building instanceof LumberMill){
                 int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.WOOD, 0);
                 int producingResource = Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex);
@@ -90,7 +90,7 @@ public class Production {
 
             if(building instanceof StoneMine){
                 int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.STONE, 0);
                 int producingResource = Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex);
@@ -112,7 +112,7 @@ public class Production {
 
             if(building instanceof IronMine){
                 int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.IRON, 0);
                 int producingResource = Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex);
@@ -134,7 +134,7 @@ public class Production {
 
             if(building instanceof Farm){
                 int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(((Farm) building).getFarming(), 0);
                 int producingResource = Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex);
@@ -154,7 +154,7 @@ public class Production {
 
             if(building instanceof Stable){
                 int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){if(unit.getActionPoints()>0)workingWorkers+=1;}
+                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(((Stable) building).getBreeding(), 0);
                 int producingResource = Math.min(workingWorkers*Stable.productingPerUnit, resourceOnHex);

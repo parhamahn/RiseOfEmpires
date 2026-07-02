@@ -13,6 +13,7 @@ public class Hex {
 
     private int c,r;
     private boolean discovered;
+    private boolean inEmpireBorder;
     private TerrainType terrainType;
     private HashMap<ResourceType, Integer> resources;
     private Building building;
@@ -27,6 +28,13 @@ public class Hex {
         this.units = new ArrayList<>();
     }
 
+    public boolean isInEmpireBorder() {
+        return inEmpireBorder;
+    }
+
+    public void setInEmpireBorder(boolean inEmpireBorder) {
+        this.inEmpireBorder = inEmpireBorder;
+    }
 
     public int getC() {return c;}
     public void setC(int c) {this.c = c;}
