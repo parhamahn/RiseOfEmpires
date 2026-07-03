@@ -211,7 +211,7 @@ public class MapPanel extends JPanel {
                 Point center = getHexCenter(c, r);
                 Polygon tile = translatePolygon(hexShape, center.x, center.y);
 
-                if (hex.isDiscovered()) {
+                if (hex.isDiscovered() || !hex.getUnits().isEmpty()) {
                     BufferedImage img = getTerrainImage(hex.getTerrainType());
                     Shape oldClip = g2.getClip();
                     g2.setClip(tile);
