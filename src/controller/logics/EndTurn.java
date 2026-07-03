@@ -1,7 +1,11 @@
 package controller.logics;
 
 import model.GameState;
+import model.building.*;
 import model.unit.Unit;
+import view.WarningDialogs;
+
+import java.util.Random;
 
 public class EndTurn {
 
@@ -25,6 +29,32 @@ public class EndTurn {
             gameState.setStarving(true);
         } else {
             gameState.setStarving(false);
+        }
+
+
+        boolean anyDamagesToBuilding = false;
+        for(Building building:gameState.getBuildings()){
+            if (building instanceof Farm || building instanceof IronMine || building instanceof Stable || building instanceof StoneMine){
+                if(!building.getUpkeep().enoughResources(gameState.getStorage())){
+                    Random random = new Random();
+                    boolean damageBuilding = random.nextDouble() <= 0.3;
+                    if(damageBuilding){
+                        anyDamagesToBuilding = true;
+                        building.setNoUpkeepTurns(building.getNoUpkeepTurns()+1);
+                        if(building.getNoUpkeepTurns()==3){
+                            building.getHex().setBuilding(null);
+                            for(Unit unit:building.getAssignedWorkers())unit.setAssigned(false);
+                            building.getAssignedWorkers().clear();
+                            gameState.getBuildings().remove(building);
+                        }
+                    }
+                }
+            }
+        }
+        if(anyDamagesToBuilding){
+            gameState.setUpkeepDisaster(true);
+        }else{
+            gameState.setUpkeepDisaster(false);
         }
 
         gameState.nextTurn();

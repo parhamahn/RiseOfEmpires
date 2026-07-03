@@ -5,10 +5,7 @@ import helpers.SoundEffects;
 import model.*;
 import model.building.*;
 import model.unit.*;
-import view.GamePanel;
-import view.MapPanel;
-import view.TaskStat;
-import view.UnitStat;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,6 +143,12 @@ public class GameController {
     private void endTurnAction(){
 
         EndTurn.endTurn(gameState);
+        if(gameState.isUpkeepDisaster()){
+            WarningDialogs.upkeepDisaster(gamePanel);
+        }
+        if(gameState.isStarving()){
+            WarningDialogs.starvationDisaster(gamePanel);
+        }
         updateTaskListPanel();
 
     }
@@ -170,8 +173,8 @@ public class GameController {
                 if(((Builder) unit).getCharges()==0){
                     gameState.getUnits().remove(unit);
                     toRemove.add(unit);
-                    updateUnitListPanel();
                 }
+                updateUnitListPanel();
                 break;
             }
         }
@@ -193,7 +196,7 @@ public class GameController {
             if (unit instanceof Worker) {
                 if (gameState.getSelectedHex().getBuilding() != null && !(gameState.getSelectedHex().getBuilding() instanceof Town)) {
                     if (!unit.isAssigned()) {
-                        if(gameState.getSelectedHex().getUnits().size()<gameState.getSelectedHex().getBuilding().getWorkerCapacity()){
+                        if(gameState.getSelectedHex().getBuilding().getAssignedWorkers().size()<gameState.getSelectedHex().getBuilding().getWorkerCapacity()){
                             if (unit.getActionPoints() >= Building.actionPointToAssign) {
                                 unit.setAssigned(true);
                                 unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
@@ -224,7 +227,7 @@ public class GameController {
 
 
         if(gameState.getMap().getNeighbourHexes(gameState.getSelectedHex()).contains(clicked)){
-            if(unit.getActionPoints()>=gameState.getSelectedHex().getAPToMove()) {
+            if(unit.getActionPoints()>=clicked.getAPToMove()) {
 
                 if(unit.getHex().getBuilding()!=null){
                     unit.getHex().getBuilding().getAssignedWorkers().remove(unit);

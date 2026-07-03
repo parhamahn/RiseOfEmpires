@@ -63,13 +63,12 @@ public class Production {
         this.ironProduction = DEFAULT_IRON_PRODUCTION;
 
         for(Unit unit: gameState.getUnits()){
-            unit.resetActionPointsForNewTurn();
             this.foodProduction -= Unit.FoodPerTurn;
         }
 
-        for (Building building:gameState.getBuildings()){
+        List<Building> toRemove = new ArrayList<>();
 
-            List<Building> toRemove = new ArrayList<>();
+        for (Building building:gameState.getBuildings()){
 
             if(building instanceof LumberMill){
                 int workingWorkers = 0;
@@ -190,8 +189,6 @@ public class Production {
                 this.foodProduction += producingResource;
             }
 
-            gameState.getBuildings().removeAll(toRemove);
-
             if(this.foodProduction<0 && gameState.getStorage().getFoodQuantity()<0) {
                 gameState.setStarving(true);
                 for(Unit unit:gameState.getUnits()){
@@ -205,6 +202,7 @@ public class Production {
                 this.ironProduction-=building.getUpkeep().getIronNeeded();
             }
         }
+        gameState.getBuildings().removeAll(toRemove);
     }
 
 }

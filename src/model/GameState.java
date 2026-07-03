@@ -17,6 +17,7 @@ public class GameState {
     private List<Unit> units;
     private Map map;
     private boolean isStarving;
+    private boolean upkeepDisaster;
     private int tunrNumber;
     private int maxUnit;
     private int unitCount;
@@ -31,6 +32,7 @@ public class GameState {
         this.map = map;
         this.tunrNumber = 0;
         this.isStarving = false;
+        this.upkeepDisaster=false;
         this.maxUnit = 6;
         this.unitCount = 5;
         buildings = new ArrayList<>();
@@ -161,5 +163,13 @@ public class GameState {
 
     public void setSelectedUnit(Unit selectedUnit) {
         this.selectedUnit = selectedUnit;
+    }
+
+    public boolean isUpkeepDisaster() {
+        return upkeepDisaster;
+    }
+
+    public void setUpkeepDisaster(boolean upkeepDisaster) {
+        this.upkeepDisaster = upkeepDisaster;
     }
 }

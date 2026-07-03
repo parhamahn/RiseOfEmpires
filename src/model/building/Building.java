@@ -15,12 +15,14 @@ public abstract class Building {
     private Cost upkeep;
     private List<Worker> assignedWorkers = new ArrayList<>();
     private int workerCapacity;
+    private int noUpkeepTurns;
 
     public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity){
         this.hex = hex;
         this.cost = cost;
         this.upkeep = upkeep;
         this.workerCapacity = workerCapacity;
+        this.noUpkeepTurns = 0;
     }
 
     public Hex getHex() {
@@ -55,4 +57,11 @@ public abstract class Building {
         return workerCapacity;
     }
 
+    public int getNoUpkeepTurns() {
+        return noUpkeepTurns;
+    }
+
+    public void setNoUpkeepTurns(int noUpkeepTurns) {
+        this.noUpkeepTurns = noUpkeepTurns;
+    }
 }

@@ -55,6 +55,7 @@ public class Map {
         }
 
         Hex townHallHex = getHex(cols / 2, rows / 2);
+        townHallHex.setTerrainType(Hex.TerrainType.PLAIN);
         townHallHex.setDiscovered(true);
         townHallHex.setInEmpireBorder(true);
         boolean jungleInNeighbour = false;
