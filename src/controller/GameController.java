@@ -164,6 +164,16 @@ public class GameController {
 
     private void endTurnAction(){
 
+        for(Unit unit:gameState.getUnits()){
+            if(unit.getActionPoints()!=0){
+                int x = WarningDialogs.unitsWithActionPoints(gamePanel);
+                if(x==JOptionPane.NO_OPTION){
+                    return;
+                }else{
+                    break;
+                }
+            }
+        }
         EndTurn.endTurn(gameState);
         CookUnit.checkCooks(gameState);
         gamePanel.getTownHallPanel().refresh();

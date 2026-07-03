@@ -27,6 +27,9 @@ public class EndTurn {
             for (Unit unit : gameState.getUnits()) {
                 unit.setActionPoints(Math.max(0, unit.getActionPoints()*2/3));
             }
+            for(CookQueue cookQueue:gameState.getUnitQueues()){
+                cookQueue.setTurnToCook(cookQueue.getTurnToCook()+1);
+            }
             gameState.setStarving(true);
         } else {
             gameState.setStarving(false);

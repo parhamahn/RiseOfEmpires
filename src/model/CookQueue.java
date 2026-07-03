@@ -16,6 +16,10 @@ public class CookQueue {
         return turnToCook;
     }
 
+    public void setTurnToCook(int turnToCook) {
+        this.turnToCook = turnToCook;
+    }
+
     public Unit getUnit() {
         return unit;
     }

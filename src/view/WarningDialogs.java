@@ -12,4 +12,8 @@ public class WarningDialogs {
         JOptionPane.showMessageDialog(jPanel, "You don't have enough food to feed your people !");
     }
 
+    public static int unitsWithActionPoints(JPanel jPanel){
+        return JOptionPane.showConfirmDialog(jPanel, "There are units with action points. Are you sure ?","", JOptionPane.YES_NO_OPTION);
+    }
+
 }
