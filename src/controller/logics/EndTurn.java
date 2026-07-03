@@ -53,7 +53,7 @@ public class EndTurn {
             }
         }
         gameState.setUpkeepDisaster(anyDamagesToBuilding);
-
+        gameState.updateTownCapacity();
         gameState.nextTurn();
 
     }

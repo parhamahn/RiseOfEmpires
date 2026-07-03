@@ -1,14 +1,14 @@
 package model;
 
 public class Storage {
-    public int DEFAULT_WOOD_MAX_STORAGE = 100;
-    public int DEFAULT_STONE_MAX_STORAGE = 100;
-    public int DEFAULT_IRON_MAX_STORAGE = 100;
-    public int DEFAULT_FOOD_MAX_STORAGE = 100;
+    public int DEFAULT_WOOD_MAX_STORAGE = 75;
+    public int DEFAULT_STONE_MAX_STORAGE = 50;
+    public int DEFAULT_IRON_MAX_STORAGE = 25;
+    public int DEFAULT_FOOD_MAX_STORAGE = 50;
     public int DEFAULT_WOOD_QUANTITY = 50;
     public int DEFAULT_STONE_QUANTITY = 25;
     public int DEFAULT_IRON_QUANTITY = 0;
-    public int DEFAULT_FOOD_QUANTITY = 75;
+    public int DEFAULT_FOOD_QUANTITY = 25;
 
     private int woodQuantity;
     private int stoneQuantity;
@@ -92,5 +92,12 @@ public class Storage {
 
     public void setWoodMax(int woodMax) {
         this.woodMax = woodMax;
+    }
+
+    public void upgradeStorage(int x){
+        this.foodMax *= x;
+        this.woodMax *= x;
+        this.stoneMax *= x;
+        this.ironMax *= x;
     }
 }

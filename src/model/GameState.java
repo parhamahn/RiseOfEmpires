@@ -168,6 +168,16 @@ public class GameState {
         return townHallHex;
     }
 
+    public void updateTownCapacity(){
+        int townCount = 0;
+        for(Building building:buildings){
+            if(building instanceof Town){
+                townCount+=1;
+            }
+        }
+        maxUnit = 6 + townCount;
+    }
+
     public List<CookQueue> getUnitQueues() {
         return unitQueues;
     }

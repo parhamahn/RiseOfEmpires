@@ -48,6 +48,8 @@ public class GameController {
         }
         gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e-> {
             gameState.setStorageLevel(gameState.getStorageLevel()+1);
+            gameState.getStorage().upgradeStorage(gameState.getStorageLevel());
+            updateTaskListPanel();
             gamePanel.getTownHallPanel().refresh();
         });
     }
@@ -204,7 +206,7 @@ public class GameController {
         hex.setBuilding(building);
         gameState.getBuildings().add(building);
         gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
-
+        gameState.updateTownCapacity();
         gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();

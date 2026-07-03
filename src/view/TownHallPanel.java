@@ -257,9 +257,13 @@ public class TownHallPanel extends JPanel {
         String upgradePath = (gameState.getStorageLevel() == 1)
                 ? "/utils/upgrade_storage2.png"
                 : "/utils/upgrade_storage3.png";
-        ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(upgradePath, -1);
-        Image scaled = rawIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
-        upgradeStorageButton.setIcon(new ImageIcon(scaled));
+        if(gameState.getStorageLevel()<3){
+            ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(upgradePath, -1);
+            Image scaled = rawIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
+            upgradeStorageButton.setIcon(new ImageIcon(scaled));
+        }else{
+            upgradeStorageButton.setEnabled(false);
+        }
 
         boolean atCap = (gameState.getUnits().size() + gameState.getUnitQueues().size()) >= gameState.getMaxUnit();
         for (Map.Entry<Unit.UNIT_TYPE, JButton> entry : cookButtons.entrySet()) {
