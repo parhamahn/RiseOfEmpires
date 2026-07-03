@@ -17,6 +17,7 @@ public class GamePanel extends JPanel {
     private MapPanel mapPanel;
     private UnitListPanel unitListPanel;
     private TaskListPanel taskListPanel;
+    private TownHallPanel townHallPanel;
     private Timer gameLoop;
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -64,8 +65,6 @@ public class GamePanel extends JPanel {
             }
         });
 
-
-
         taskListPanel = new TaskListPanel();
         layeredPane.add(taskListPanel, JLayeredPane.PALETTE_LAYER);
         layeredPane.addComponentListener(new ComponentAdapter() {
@@ -77,6 +76,15 @@ public class GamePanel extends JPanel {
         });
 
 
+        townHallPanel = new TownHallPanel();
+        layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
+        layeredPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension size = layeredPane.getSize();
+                townHallPanel.setBounds(0, 0, size.width, size.height);
+            }
+        });
     }
 
 
@@ -84,4 +92,5 @@ public class GamePanel extends JPanel {
     public MapPanel getMapPanel() { return mapPanel; }
     public UnitListPanel getUnitListPanel() {return unitListPanel;}
     public TaskListPanel getTaskListPanel() { return taskListPanel; }
+    public TownHallPanel getTownHallPanel() { return townHallPanel; }
 }

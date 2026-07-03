@@ -26,6 +26,7 @@ public class GameController {
         this.attachHUDListeners();
         this.attachCameraListeners();
         this.attachHexSelectionListener();
+        this.attachTownHallPanelListeners();
         gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
     }
 
@@ -34,6 +35,10 @@ public class GameController {
         gamePanel.getHudPanel().getMenuButton().addActionListener(e -> menuAction());
         gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> endTurnAction());
 
+    }
+
+    private void attachTownHallPanelListeners(){
+        gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> gamePanel.getTownHallPanel().close());
     }
 
     private void attachCameraListeners(){
@@ -92,7 +97,11 @@ public class GameController {
                 if(gameState.getSelectedUnit()!=null){
                     handleUnitMoving(clicked);
                 }else{
-                    if (clicked != null && discoveredNeighbour) {
+                    if (discoveredNeighbour) {
+                        if (gameState.getSelectedHex()==clicked && clicked.getBuilding() instanceof TownHall){
+                            gamePanel.getTownHallPanel().open();
+                        }
+
                         gameState.setSelectedHex(clicked);
                         SoundEffects.getInstance().playSelectHexSoundEffect();
 
