@@ -20,8 +20,10 @@ public class GameState {
     private boolean upkeepDisaster;
     private int tunrNumber;
     private int maxUnit;
-    private int unitCount;
     private Unit selectedUnit;
+    private int storageLevel;
+    private Hex townHallHex;
+    private List<CookQueue> unitQueues;
 
 
     public GameState(Storage storage, Production production, Map map){
@@ -30,16 +32,18 @@ public class GameState {
         this.selectedHex = null;
         this.selectedUnit = null;
         this.map = map;
-        this.tunrNumber = 0;
+        this.tunrNumber = 1;
         this.isStarving = false;
         this.upkeepDisaster=false;
         this.maxUnit = 6;
-        this.unitCount = 5;
+        this.storageLevel = 1;
+        this.unitQueues = new ArrayList<>();
         buildings = new ArrayList<>();
 
         Hex townHallHex = map.getHex(map.getCols()/2, map.getRows()/2);
         TownHall townHall = new TownHall(townHallHex);
         townHallHex.setBuilding(townHall);
+        this.townHallHex = townHallHex;
         buildings.add(townHall);
 
 
@@ -136,27 +140,6 @@ public class GameState {
         this.maxUnit = maxUnit;
     }
 
-    public int getUnitCount() {
-        return unitCount;
-    }
-
-    public void setUnitCount(int unitCount) {
-        this.unitCount = unitCount;
-    }
-
-    public void updateUnits(){
-        int extra = 0;
-        int count = 0;
-        for (Building building:buildings){
-            if(building instanceof Town)extra+=2;
-        }
-        for(Unit unit:units){
-            count+=1;
-        }
-        maxUnit=6+extra;
-        unitCount=count;
-    }
-
     public Unit getSelectedUnit() {
         return selectedUnit;
     }
@@ -171,5 +154,21 @@ public class GameState {
 
     public void setUpkeepDisaster(boolean upkeepDisaster) {
         this.upkeepDisaster = upkeepDisaster;
+    }
+
+    public int getStorageLevel() {
+        return storageLevel;
+    }
+
+    public void setStorageLevel(int storageLevel) {
+        this.storageLevel = storageLevel;
+    }
+
+    public Hex getTownHallHex() {
+        return townHallHex;
+    }
+
+    public List<CookQueue> getUnitQueues() {
+        return unitQueues;
     }
 }

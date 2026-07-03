@@ -1,5 +1,6 @@
 package controller.logics;
 
+import model.CookQueue;
 import model.GameState;
 import model.building.*;
 import model.unit.Unit;
@@ -51,11 +52,7 @@ public class EndTurn {
                 }
             }
         }
-        if(anyDamagesToBuilding){
-            gameState.setUpkeepDisaster(true);
-        }else{
-            gameState.setUpkeepDisaster(false);
-        }
+        gameState.setUpkeepDisaster(anyDamagesToBuilding);
 
         gameState.nextTurn();
 

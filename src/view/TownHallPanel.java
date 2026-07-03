@@ -1,6 +1,8 @@
 package view;
 
 import helpers.ImageLoader;
+import model.CookQueue;
+import model.GameState;
 import model.unit.Unit;
 
 import javax.swing.*;
@@ -14,18 +16,19 @@ public class TownHallPanel extends JPanel {
     private static final Color PANEL_BG = new Color(28, 28, 28);
     private static final Color GOLD = new Color(255, 203, 87);
 
+    private GameState gameState;
+
     private JButton closeButton;
 
-    private JButton woodUpgradeButton;
-    private JButton stoneUpgradeButton;
-    private JButton ironUpgradeButton;
-    private JButton foodUpgradeButton;
+    private JButton upgradeStorageButton;
 
     private Map<Unit.UNIT_TYPE, JButton> cookButtons;
 
     private JPanel queuePanel;
 
-    public TownHallPanel() {
+    public TownHallPanel(GameState gameState) {
+        this.gameState = gameState;
+
         setOpaque(false);
         setLayout(new GridBagLayout());
         setVisible(false);
@@ -91,16 +94,15 @@ public class TownHallPanel extends JPanel {
         section.add(sectionLabel("Upgrade Storage"));
         section.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        woodUpgradeButton = createIconButton("/utils/wood.png");
-        stoneUpgradeButton = createIconButton("/utils/stone.png");
-        ironUpgradeButton = createIconButton("/utils/iron.png");
-        foodUpgradeButton = createIconButton("/utils/food.png");
+        String path = (gameState.getStorageLevel() == 1)
+                ? "/utils/upgrade_storage2.png"
+                : "/utils/upgrade_storage3.png";
 
-        for (JButton button : List.of(woodUpgradeButton, stoneUpgradeButton, ironUpgradeButton, foodUpgradeButton)) {
-            button.setAlignmentX(CENTER_ALIGNMENT);
-            section.add(button);
-            section.add(Box.createRigidArea(new Dimension(0, 10)));
-        }
+        upgradeStorageButton = createRectangularButton(path, 200, 60);
+
+        upgradeStorageButton.setAlignmentX(CENTER_ALIGNMENT);
+        section.add(upgradeStorageButton);
+        section.add(Box.createVerticalGlue());
 
         return section;
     }
@@ -169,6 +171,11 @@ public class TownHallPanel extends JPanel {
         JButton button = new JButton();
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 64);
         button.setIcon(icon);
+        if(gameState.getMaxUnit() == gameState.getUnits().size()){
+            button.setEnabled(false);
+            button.setDisabledIcon(new ImageIcon(
+                    GrayFilter.createDisabledImage(icon.getImage())));
+        }
         button.setFocusPainted(false);
         button.setBackground(new Color(0, 0, 0, 0));
         button.setMargin(new Insets(0, 0, 0, 0));
@@ -178,13 +185,38 @@ public class TownHallPanel extends JPanel {
         return button;
     }
 
-    public void setQueue(List<String> queueEntries) {
+    private JButton createRectangularButton(String iconPath, int width, int height) {
+        JButton button = new JButton();
+        ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(iconPath, -1);
+
+        Image scaled = rawIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        button.setIcon(new ImageIcon(scaled));
+
+        button.setFocusPainted(false);
+        button.setBackground(new Color(0, 0, 0, 0));
+        button.setMargin(new Insets(0, 0, 0, 0));
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+
+        return button;
+    }
+
+    public void setQueue(List<CookQueue> cookQueues) {
         queuePanel.removeAll();
-        for (String entry : queueEntries) {
-            JLabel label = new JLabel(entry);
+        for (CookQueue cq : cookQueues) {
+            String unitName = cq.getUnit().getUnitType().toString();
+            int turns = cq.getTurnToCook()-gameState.getTunrNumber();
+
+            String text;
+            text = unitName + " : " + turns + " turn" + (turns > 1 ? "s" : "") + " left";
+
+
+            JLabel label = new JLabel(text);
             label.setFont(new Font("Pixel Game", Font.PLAIN, 14));
-            label.setForeground(Color.WHITE);
+            label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
             label.setAlignmentX(CENTER_ALIGNMENT);
+
             queuePanel.add(label);
             queuePanel.add(Box.createRigidArea(new Dimension(0, 4)));
         }
@@ -193,6 +225,7 @@ public class TownHallPanel extends JPanel {
     }
 
     public void open() {
+        refresh();
         setVisible(true);
     }
 
@@ -202,22 +235,6 @@ public class TownHallPanel extends JPanel {
 
     public JButton getCloseButton() {
         return closeButton;
-    }
-
-    public JButton getWoodUpgradeButton() {
-        return woodUpgradeButton;
-    }
-
-    public JButton getStoneUpgradeButton() {
-        return stoneUpgradeButton;
-    }
-
-    public JButton getIronUpgradeButton() {
-        return ironUpgradeButton;
-    }
-
-    public JButton getFoodUpgradeButton() {
-        return foodUpgradeButton;
     }
 
     public JButton getCookButton(Unit.UNIT_TYPE type) {
@@ -231,4 +248,32 @@ public class TownHallPanel extends JPanel {
     public JPanel getQueuePanel() {
         return queuePanel;
     }
+
+    public JButton getUpgradeStorageButton() {
+        return upgradeStorageButton;
+    }
+
+    public void refresh() {
+        String upgradePath = (gameState.getStorageLevel() == 1)
+                ? "/utils/upgrade_storage2.png"
+                : "/utils/upgrade_storage3.png";
+        ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(upgradePath, -1);
+        Image scaled = rawIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
+        upgradeStorageButton.setIcon(new ImageIcon(scaled));
+
+        boolean atCap = (gameState.getUnits().size() + gameState.getUnitQueues().size()) >= gameState.getMaxUnit();
+        for (Map.Entry<Unit.UNIT_TYPE, JButton> entry : cookButtons.entrySet()) {
+            JButton button = entry.getValue();
+            button.setEnabled(!atCap);
+            if (atCap) {
+                ImageIcon normalIcon = (ImageIcon) button.getIcon();
+                if (normalIcon != null) {
+                    button.setDisabledIcon(new ImageIcon(
+                            GrayFilter.createDisabledImage(normalIcon.getImage())));
+                }
+            }
+        }
+        setQueue(gameState.getUnitQueues());
+    }
+
 }

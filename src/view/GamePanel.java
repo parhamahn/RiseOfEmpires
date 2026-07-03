@@ -76,7 +76,7 @@ public class GamePanel extends JPanel {
         });
 
 
-        townHallPanel = new TownHallPanel();
+        townHallPanel = new TownHallPanel(mapPanel.getGameState());
         layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override

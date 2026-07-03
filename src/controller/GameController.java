@@ -1,5 +1,6 @@
 package controller;
 
+import controller.logics.CookUnit;
 import controller.logics.EndTurn;
 import helpers.SoundEffects;
 import model.*;
@@ -39,6 +40,16 @@ public class GameController {
 
     private void attachTownHallPanelListeners(){
         gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> gamePanel.getTownHallPanel().close());
+        for(Unit.UNIT_TYPE unitType:Unit.UNIT_TYPE.values()){
+            gamePanel.getTownHallPanel().getCookButton(unitType).addActionListener(e-> {
+                CookUnit.startCook(gameState, unitType);
+                gamePanel.getTownHallPanel().refresh();
+            });
+        }
+        gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e-> {
+            gameState.setStorageLevel(gameState.getStorageLevel()+1);
+            gamePanel.getTownHallPanel().refresh();
+        });
     }
 
     private void attachCameraListeners(){
@@ -152,13 +163,15 @@ public class GameController {
     private void endTurnAction(){
 
         EndTurn.endTurn(gameState);
+        CookUnit.checkCooks(gameState);
+        gamePanel.getTownHallPanel().refresh();
+        updateLists();
         if(gameState.isUpkeepDisaster()){
             WarningDialogs.upkeepDisaster(gamePanel);
         }
         if(gameState.isStarving()){
             WarningDialogs.starvationDisaster(gamePanel);
         }
-        updateTaskListPanel();
 
     }
 
@@ -194,7 +207,6 @@ public class GameController {
 
         gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
-        gameState.updateUnits();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();
     }

@@ -47,7 +47,7 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
-        unitsLabel.setText("Units : "+ gameState.getUnitCount()+"/"+gameState.getMaxUnit());
+        unitsLabel.setText("Units : "+ gameState.getUnits().size()+"/"+gameState.getMaxUnit());
         unitsLabel.setForeground(Color.WHITE);
         unitsLabel.setFont(new Font("Pixel Game", Font.PLAIN, 24));
         add(unitsLabel);
@@ -136,7 +136,7 @@ public class HUDPanel extends JPanel {
         ironStat.setChange(gameState.getProduction().getIronProduction());
 
         turnLabel.setText("Turn : "+ gameState.getTunrNumber());
-        unitsLabel.setText("Units : "+ gameState.getUnitCount()+"/"+gameState.getMaxUnit());
+        unitsLabel.setText("Units : "+ gameState.getUnits().size()+"/"+gameState.getMaxUnit());
 
         revalidate();
         repaint();
