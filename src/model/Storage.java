@@ -95,9 +95,9 @@ public class Storage {
     }
 
     public void upgradeStorage(int x){
-        this.foodMax *= x;
-        this.woodMax *= x;
-        this.stoneMax *= x;
-        this.ironMax *= x;
+        this.foodMax = DEFAULT_FOOD_MAX_STORAGE * x;
+        this.woodMax = DEFAULT_WOOD_MAX_STORAGE * x;
+        this.stoneMax = DEFAULT_STONE_MAX_STORAGE * x;
+        this.ironMax = DEFAULT_IRON_MAX_STORAGE * x;
     }
 }

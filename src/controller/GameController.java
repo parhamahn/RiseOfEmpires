@@ -190,7 +190,7 @@ public class GameController {
 
     private void handleBuildingTask(Task.TASK task, Hex hex) {
         Building building = switch (task) {
-            case FARM        -> new Farm(hex, Hex.ResourceType.WHEAT);
+            case FARM        -> new Farm(hex, hex.getResources().containsKey(Hex.ResourceType.WHEAT)? Hex.ResourceType.WHEAT: Hex.ResourceType.RICE);
             case LUMBER_MILL -> new LumberMill(hex);
             case STONE_MINE  -> new StoneMine(hex);
             case IRON_MINE   -> new IronMine(hex);

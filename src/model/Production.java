@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Production {
-    private int DEFAULT_FOOD_PRODUCTION = 5;
-    private int DEFAULT_WOOD_PRODUCTION = 5;
-    private int DEFAULT_STONE_PRODUCTION = 5;
-    private int DEFAULT_IRON_PRODUCTION = 5;
+    private int DEFAULT_FOOD_PRODUCTION = 9;
+    private int DEFAULT_WOOD_PRODUCTION = 3;
+    private int DEFAULT_STONE_PRODUCTION = 2;
+    private int DEFAULT_IRON_PRODUCTION = 1;
 
     public int foodProduction;
     public int woodProduction;
@@ -63,7 +63,7 @@ public class Production {
         this.ironProduction = DEFAULT_IRON_PRODUCTION;
 
         for(Unit unit: gameState.getUnits()){
-            this.foodProduction -= Unit.FoodPerTurn;
+            this.foodProduction -= unit.getFoodConsumptionPerTurn();
         }
 
         List<Building> toRemove = new ArrayList<>();

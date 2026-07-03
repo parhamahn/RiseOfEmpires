@@ -7,7 +7,7 @@ import model.Task;
 public class Town extends Building{
 
     private final static Cost cost = Task.getCostForTask(Task.TASK.TOWN);
-    private final static Cost upkeep = new Cost(5, 3, 0, 0);
+    private final static Cost upkeep = new Cost(3, 2, 0, 0);
 
     public Town(Hex hex) {
         super(hex, cost, upkeep, 0);
