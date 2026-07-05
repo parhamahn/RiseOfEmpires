@@ -47,7 +47,7 @@ public class Task {
             case STONE_MINE  -> new Cost(25, 0,  0, 3);
             case IRON_MINE   -> new Cost(40, 0,  0, 3);
             case STABLE      -> new Cost(20, 0,  0, 2);
-            case TOWN        -> new Cost(40, 20, 10, 3);
+            case TOWN        -> new Cost(40, 20, 5, 3);
         };
     }
 

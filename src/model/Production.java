@@ -75,7 +75,7 @@ public class Production {
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.WOOD, 0);
-                int producingResource = Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex);
+                int producingResource = Math.min(Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex), gameState.getStorage().getWoodMax()-gameState.getStorage().getWoodQuantity());
 
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex - producingResource);
@@ -98,7 +98,7 @@ public class Production {
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.STONE, 0);
-                int producingResource = Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex);
+                int producingResource = Math.min(Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex), gameState.getStorage().getStoneMax()-gameState.getStorage().getStoneQuantity());
 
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex - producingResource);
@@ -123,7 +123,7 @@ public class Production {
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.IRON, 0);
-                int producingResource = Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex);
+                int producingResource = Math.min(Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex), gameState.getStorage().getIronMax()-gameState.getStorage().getIronQuantity());
 
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex - producingResource);
@@ -148,7 +148,7 @@ public class Production {
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(((Farm) building).getFarming(), 0);
-                int producingResource = Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex);
+                int producingResource = Math.min(Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex), gameState.getStorage().getFoodMax()-gameState.getStorage().getFoodQuantity());
 
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex - producingResource);
@@ -171,7 +171,7 @@ public class Production {
                 for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
 
                 int resourceOnHex = building.getHex().getResources().getOrDefault(((Stable) building).getBreeding(), 0);
-                int producingResource = Math.min(workingWorkers*Stable.productingPerUnit, resourceOnHex);
+                int producingResource = Math.min(Math.min(workingWorkers*Stable.productingPerUnit, resourceOnHex), gameState.getStorage().getFoodMax()-gameState.getStorage().getFoodQuantity());
 
                 if(resourceOnHex-producingResource!=0) {
                     building.getHex().getResources().put(((Stable) building).getBreeding(), resourceOnHex - producingResource);

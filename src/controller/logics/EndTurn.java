@@ -18,12 +18,12 @@ public class EndTurn {
             unit.resetActionPointsForNewTurn();
         }
 
-        gameState.getStorage().setFoodQuantity(Math.min(gameState.getStorage().getFoodMax(), gameState.getProduction().getFoodProduction()+gameState.getStorage().getFoodQuantity()));
-        gameState.getStorage().setWoodQuantity(Math.min(gameState.getStorage().getWoodMax(), gameState.getProduction().getWoodProduction()+gameState.getStorage().getWoodQuantity()));
-        gameState.getStorage().setStoneQuantity(Math.min(gameState.getStorage().getStoneMax(), gameState.getProduction().getStoneProduction()+gameState.getStorage().getStoneQuantity()));
-        gameState.getStorage().setIronQuantity(Math.min(gameState.getStorage().getIronMax(), gameState.getProduction().getIronProduction()+gameState.getStorage().getIronQuantity()));
+        gameState.getStorage().setFoodQuantity(Math.max(Math.min(gameState.getStorage().getFoodMax(), gameState.getProduction().getFoodProduction()+gameState.getStorage().getFoodQuantity()), 0));
+        gameState.getStorage().setWoodQuantity(Math.max(Math.min(gameState.getStorage().getWoodMax(), gameState.getProduction().getWoodProduction()+gameState.getStorage().getWoodQuantity()), 0));
+        gameState.getStorage().setStoneQuantity(Math.max(Math.min(gameState.getStorage().getStoneMax(), gameState.getProduction().getStoneProduction()+gameState.getStorage().getStoneQuantity()), 0));
+        gameState.getStorage().setIronQuantity(Math.max(Math.min(gameState.getStorage().getIronMax(), gameState.getProduction().getIronProduction()+gameState.getStorage().getIronQuantity()), 0));
 
-        if (gameState.getStorage().getFoodQuantity() < 0) {
+        if (gameState.getStorage().getFoodQuantity() == 0 && gameState.getProduction().getFoodProduction()<0) {
             for (Unit unit : gameState.getUnits()) {
                 unit.setActionPoints(Math.max(0, unit.getActionPoints()*2/3));
             }
