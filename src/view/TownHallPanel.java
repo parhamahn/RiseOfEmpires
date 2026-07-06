@@ -206,7 +206,7 @@ public class TownHallPanel extends JPanel {
         queuePanel.removeAll();
         for (CookQueue cq : cookQueues) {
             String unitName = cq.getUnit().getUnitType().toString();
-            int turns = cq.getTurnToCook()-gameState.getTunrNumber();
+            int turns = cq.getTurnToCook()-gameState.getTurnNumber();
 
             String text;
             text = unitName + " : " + turns + " turn" + (turns > 1 ? "s" : "") + " left";

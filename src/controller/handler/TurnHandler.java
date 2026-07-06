@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.util.Random;
 
 public class TurnHandler {
+    private static final double UPKEEP_DAMAGE_CHANCE = 0.3;
+    private static final int MAX_UPKEEP_TURNS = 3;
+
     private final GameState gameState;
     private final GamePanel gamePanel;
     private final CookUnitHandler cookUnitHandler;
@@ -73,11 +76,11 @@ public class TurnHandler {
         for (Building building : gameState.getBuildings()) {
             if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(gameState.getStorage())) {
                 Random random = new Random();
-                boolean damageBuilding = random.nextDouble() <= 0.3;
+                boolean damageBuilding = random.nextDouble() <= UPKEEP_DAMAGE_CHANCE;
                 if (damageBuilding) {
                     anyDamagesToBuilding = true;
                     building.setNoUpkeepTurns(building.getNoUpkeepTurns() + 1);
-                    if (building.getNoUpkeepTurns() == 3) {
+                    if (building.getNoUpkeepTurns() == MAX_UPKEEP_TURNS) {
                         building.getHex().setBuilding(null);
                         for (Unit unit : building.getAssignedWorkers()) unit.setAssigned(false);
                         building.getAssignedWorkers().clear();

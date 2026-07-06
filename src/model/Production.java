@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Production {
-    private int DEFAULT_FOOD_PRODUCTION = 9;
-    private int DEFAULT_WOOD_PRODUCTION = 3;
-    private int DEFAULT_STONE_PRODUCTION = 2;
-    private int DEFAULT_IRON_PRODUCTION = 1;
+    private final int DEFAULT_FOOD_PRODUCTION = 9;
+    private final int DEFAULT_WOOD_PRODUCTION = 3;
+    private final int DEFAULT_STONE_PRODUCTION = 2;
+    private final int DEFAULT_IRON_PRODUCTION = 1;
 
-    public int foodProduction;
-    public int woodProduction;
-    public int stoneProduction;
-    public int ironProduction;
+    private int foodProduction;
+    private int woodProduction;
+    private int stoneProduction;
+    private int ironProduction;
 
     public Production(){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;
@@ -28,32 +28,16 @@ public class Production {
         return foodProduction;
     }
 
-    public void setFoodProduction(int foodProduction) {
-        this.foodProduction = foodProduction;
-    }
-
     public int getWoodProduction() {
         return woodProduction;
-    }
-
-    public void setWoodProduction(int woodProduction) {
-        this.woodProduction = woodProduction;
     }
 
     public int getStoneProduction() {
         return stoneProduction;
     }
 
-    public void setStoneProduction(int stoneProduction) {
-        this.stoneProduction = stoneProduction;
-    }
-
     public int getIronProduction() {
         return ironProduction;
-    }
-
-    public void setIronProduction(int ironProduction) {
-        this.ironProduction = ironProduction;
     }
 
     public void recalculate(GameState gameState){

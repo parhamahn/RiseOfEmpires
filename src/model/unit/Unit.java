@@ -5,7 +5,7 @@ import model.Storage;
 
 public abstract class Unit{
     public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};
-    public static final int FoodPerTurn = 1;
+    public static final int FOOD_PER_TURN = 1;
 
     protected UNIT_TYPE unitType;
     protected int positionX;

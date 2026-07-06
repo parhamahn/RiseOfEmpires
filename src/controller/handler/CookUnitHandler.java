@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CookUnitHandler {
+    private static final int COOK_DELAY = 3;
 
     public void startCook(GameState gameState, Unit.UNIT_TYPE unitType) {
         Unit unit = switch (unitType) {
@@ -22,13 +23,13 @@ public class CookUnitHandler {
             return;
         }
 
-        gameState.getUnitQueues().add(new CookQueue(unit, gameState.getTunrNumber() + 3));
+        gameState.getUnitQueues().add(new CookQueue(unit, gameState.getTurnNumber() + COOK_DELAY));
     }
 
     public void checkCooks(GameState gameState) {
         List<CookQueue> toRemove = new ArrayList<>();
         for (CookQueue cookQueue : gameState.getUnitQueues()) {
-            if (cookQueue.getTurnToCook() - gameState.getTunrNumber() == 0) {
+            if (cookQueue.getTurnToCook() - gameState.getTurnNumber() == 0) {
                 cookQueue.getUnit().setHex(gameState.getTownHallHex());
                 gameState.getTownHallHex().getUnits().add(cookQueue.getUnit());
                 gameState.getUnits().add(cookQueue.getUnit());

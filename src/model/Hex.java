@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Hex {
+    private static final int FLAT_AP_COST = 1;
+    private static final int FOREST_AP_COST = 2;
+    private static final int MOUNTAIN_AP_COST = 4;
+
     public enum TerrainType {PLAIN, FOREST, MOUNTAIN, MEADOW}
     public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP}
 
@@ -62,9 +66,9 @@ public class Hex {
 
     public int getAPToMove(){
         return switch (this.terrainType){
-            case MOUNTAIN -> 4;
-            case FOREST -> 2;
-            case MEADOW, PLAIN -> 1;
+            case MOUNTAIN -> MOUNTAIN_AP_COST;
+            case FOREST -> FOREST_AP_COST;
+            case MEADOW, PLAIN -> FLAT_AP_COST;
         };
     }
 

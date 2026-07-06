@@ -16,7 +16,7 @@ public class GameState {
     private Map map;
     private boolean isStarving;
     private boolean upkeepDisaster;
-    private int tunrNumber;
+    private int turnNumber;
     private int maxUnit;
     private Unit selectedUnit;
     private int storageLevel;
@@ -30,7 +30,7 @@ public class GameState {
         this.selectedHex = null;
         this.selectedUnit = null;
         this.map = map;
-        this.tunrNumber = 1;
+        this.turnNumber = 1;
         this.isStarving = false;
         this.upkeepDisaster=false;
         this.maxUnit = 6;
@@ -91,7 +91,7 @@ public class GameState {
     }
 
     public void nextTurn(){
-        this.tunrNumber+=1;
+        this.turnNumber++;
     }
 
     public boolean isStarving() {
@@ -102,8 +102,8 @@ public class GameState {
         isStarving = starving;
     }
 
-    public int getTunrNumber() {
-        return tunrNumber;
+    public int getTurnNumber() {
+        return turnNumber;
     }
 
 
