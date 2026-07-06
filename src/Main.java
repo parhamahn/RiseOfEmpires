@@ -1,8 +1,10 @@
 import controller.GameController;
 import controller.MenuController;
+import controller.SelectionContext;
 import controller.SettingsController;
 import helpers.Sound;
 import model.*;
+import model.state.GameState;
 import view.*;
 
 import javax.swing.*;
@@ -26,6 +28,7 @@ public class Main {
             Production production = new Production();
             Map map = new Map(15, 20);
             GameState gameState = new GameState(storage, production, map);
+            SelectionContext selectionContext = new SelectionContext();
 
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards);
@@ -38,11 +41,11 @@ public class Main {
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
             HUDPanel hudPanel = new HUDPanel(gameState);
-            MapPanel mapPanel = new MapPanel(map, gameState);
+            MapPanel mapPanel = new MapPanel(map, gameState, selectionContext);
             GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             gamePanel.getMapPanel().setMap(map);
 
-            GameController gameController = new GameController(gamePanel, cards, gameState);
+            GameController gameController = new GameController(gamePanel, cards, gameState, selectionContext);
 
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");

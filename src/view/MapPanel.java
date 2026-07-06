@@ -6,9 +6,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import controller.SelectionContext;
 import helpers.ImageLoader;
 import model.*;
 import model.building.Building;
+import model.state.GameState;
 import model.unit.Unit;
 
 public class MapPanel extends JPanel {
@@ -25,6 +27,7 @@ public class MapPanel extends JPanel {
     private Runnable onUnitArrived;
     private Map map;
     private GameState gameState;
+    private SelectionContext selectionContext;
     private int cameraX = 0;
     private int cameraY = 0;
     private BufferedImage plainImage;
@@ -43,8 +46,9 @@ public class MapPanel extends JPanel {
     private static final int[] EDGE_START_FOR_DIRECTION = {0, 3, 1, 2, 5, 4};
     private final java.util.Map<String, BufferedImage> buildingImages = new java.util.HashMap<>();
 
-    public MapPanel(Map map, GameState gameState) {
+    public MapPanel(Map map, GameState gameState, SelectionContext selectionContext) {
         this.gameState = gameState;
+        this.selectionContext = selectionContext;
         setBackground(Color.BLACK);
         rebuildHexShape();
         setMap(map);
@@ -97,7 +101,7 @@ public class MapPanel extends JPanel {
     }
 
     private void initUnitPositions() {
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (!unit.isMoving()) {
                 Point p = getHexCenter(unit.getHex());
                 unit.setPositionX(p.x);
@@ -154,7 +158,7 @@ public class MapPanel extends JPanel {
         cameraX = Math.max(-getWidth() + dx,  Math.min(map.getCols() * dx - dx, cameraX));
         cameraY = Math.max(-getHeight() + dy, Math.min(map.getRows() * dy - dy, cameraY));
 
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (!unit.isMoving() && unit.getHex() != null) {
                 Point p = getHexCenter(unit.getHex());
                 unit.setPositionX(p.x);
@@ -232,7 +236,7 @@ public class MapPanel extends JPanel {
                     g2.fillPolygon(tile);
                     g2.setColor(Color.WHITE);
                     g2.drawPolygon(tile);
-                    if (gameState.getSelectedHex() != hex) {
+                    if (selectionContext.getSelectedHex() != hex) {
                         g2.setFont(new Font("Pixel Game", Font.BOLD, Math.max(12, hexRadius / 2)));
                         g2.drawString("?", center.x - hexRadius / 10, center.y + hexRadius / 10);
                     }
@@ -255,7 +259,7 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        for (Building building : gameState.getBuildings()) {
+        for (Building building : gameState.getEmpireState().getBuildings()) {
             BufferedImage img = getBuildingImage(building);
             if (img == null) continue;
 
@@ -271,7 +275,7 @@ public class MapPanel extends JPanel {
     }
 
     private void drawHexHighlight(Graphics g) {
-        Hex selected = gameState.getSelectedHex();
+        Hex selected = selectionContext.getSelectedHex();
         if (selected != null) {
             Graphics2D g2 = (Graphics2D) g;
             Point center = getHexCenter(selected);
@@ -279,7 +283,7 @@ public class MapPanel extends JPanel {
             g2.setColor(new Color(238, 255, 0));
             g2.setStroke(new BasicStroke(4));
             g2.drawPolygon(tile);
-            if(gameState.getSelectedUnit()!=null){
+            if(selectionContext.getSelectedUnit()!=null){
                 for (Hex hex:map.getNeighbourHexes(selected)){
                     Point ncenter = getHexCenter(hex);
                     Polygon ntile = translatePolygon(hexShape, ncenter.x, ncenter.y);
@@ -364,7 +368,7 @@ public class MapPanel extends JPanel {
 
         initUnitPositions();
 
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (unit.isMoving() || (!unit.isAssigned() && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
                 int drawX = unit.getPositionX();
                 int drawY = unit.getPositionY();

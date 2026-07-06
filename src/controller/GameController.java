@@ -1,7 +1,7 @@
 package controller;
 
 import controller.handler.*;
-import model.GameState;
+import model.state.GameState;
 import view.GamePanel;
 
 import javax.swing.*;
@@ -12,13 +12,13 @@ public class GameController {
     private UnitHandler unitHandler;
     private BuildingHandler buildingHandler;
 
-    public GameController(GamePanel gamePanel, JPanel cards, GameState gameState){
+    public GameController(GamePanel gamePanel, JPanel cards, GameState gameState, SelectionContext selectionContext){
         this.cards = cards;
         CookUnitHandler cookUnitHandler = new CookUnitHandler();
-        this.unitHandler = new UnitHandler(gameState, gamePanel);
-        this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler);
+        this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler, selectionContext);
+        this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);
         TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
-        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler);
+        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext);
 
         gamePanel.getHudPanel().getMenuButton().addActionListener(e -> menuAction());
         gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> turnHandler.endTurnAction());
@@ -34,8 +34,8 @@ public class GameController {
     }
 
     public void onArrive(){
-        buildingHandler.updateTaskListPanel();
         unitHandler.updateUnitListPanel();
+        buildingHandler.updateTaskListPanel();
         unitHandler.discover();
     }
 

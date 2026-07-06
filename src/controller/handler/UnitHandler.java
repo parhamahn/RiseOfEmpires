@@ -1,6 +1,7 @@
 package controller.handler;
 
-import model.GameState;
+import controller.SelectionContext;
+import model.state.GameState;
 import model.Hex;
 import model.building.Building;
 import model.unit.Unit;
@@ -9,21 +10,24 @@ import view.GamePanel;
 import view.UnitStat;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnitHandler {
     private final GameState gameState;
     private final GamePanel gamePanel;
+    private final SelectionContext selectionContext;
+    private final BuildingHandler buildingHandler;
 
-    public UnitHandler(GameState gameState, GamePanel gamePanel) {
+    public UnitHandler(GameState gameState, GamePanel gamePanel, SelectionContext selectionContext, BuildingHandler buildingHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
+        this.selectionContext = selectionContext;
+        this.buildingHandler = buildingHandler;
     }
 
     public void handleUnitMoving(Hex clicked) {
-        Unit unit = gameState.getSelectedUnit();
-        if (gameState.getSelectedHex() == clicked) {
+        Unit unit = selectionContext.getSelectedUnit();
+        if (selectionContext.getSelectedHex() == clicked) {
             if (unit.isWorker()) {
                 handleWorkerAssignment(clicked, unit);
             } else if (unit.isBorderExpander()) {
@@ -31,11 +35,11 @@ public class UnitHandler {
             }
         }
 
-        if (gameState.getMap().getNeighbourHexes(gameState.getSelectedHex()).contains(clicked)) {
+        if (gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex()).contains(clicked)) {
             if (unit.getActionPoints() >= clicked.getAPToMove()) {
                 if (unit.getHex().getBuilding() != null) {
                     unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
-                    gameState.getProduction().recalculate(gameState);
+                    gameState.getEmpireState().recalculateProduction();
                     gamePanel.getHudPanel().refresh();
                 }
                 unit.setActionPoints(unit.getActionPoints() - clicked.getAPToMove());
@@ -45,54 +49,55 @@ public class UnitHandler {
             }
         }
 
-        gameState.setSelectedUnit(null);
-        gameState.setSelectedHex(clicked);
+        selectionContext.setSelectedUnit(null);
+        selectionContext.setSelectedHex(clicked);
         gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         updateUnitListPanel();
+        buildingHandler.updateTaskListPanel();
     }
 
     private void handleWorkerAssignment(Hex clicked, Unit unit) {
-        if (gameState.getSelectedHex().getBuilding() != null && !gameState.getSelectedHex().getBuilding().isTown()) {
+        if (selectionContext.getSelectedHex().getBuilding() != null && !selectionContext.getSelectedHex().getBuilding().isTown()) {
             if (!unit.isAssigned()) {
-                if (gameState.getSelectedHex().getBuilding().getAssignedWorkers().size() < gameState.getSelectedHex().getBuilding().getWorkerCapacity()) {
+                if (selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().size() < selectionContext.getSelectedHex().getBuilding().getWorkerCapacity()) {
                     if (unit.getActionPoints() >= Building.actionPointToAssign) {
                         unit.setAssigned(true);
                         unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
-                        gameState.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
-                        gameState.getProduction().recalculate(gameState);
+                        selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
+                        gameState.getEmpireState().recalculateProduction();
                         gamePanel.getHudPanel().refresh();
                     }
                 }
             } else {
                 unit.setAssigned(false);
-                gameState.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
-                gameState.getProduction().recalculate(gameState);
+                selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
+                gameState.getEmpireState().recalculateProduction();
                 gamePanel.getHudPanel().refresh();
             }
         }
     }
 
     private void handleBorderExpansion(Hex clicked, Unit unit) {
-        for (Hex neighbor : gameState.getMap().getNeighbourHexes(gameState.getSelectedHex())) {
+        for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex())) {
             if (!neighbor.isInEmpireBorder() && neighbor.isDiscovered()) {
                 neighbor.setInEmpireBorder(true);
             }
         }
         clicked.setInEmpireBorder(true);
-        gameState.getSelectedHex().getUnits().remove(unit);
-        gameState.getUnits().remove(unit);
+        selectionContext.getSelectedHex().getUnits().remove(unit);
+        gameState.getEmpireState().getUnits().remove(unit);
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
     }
 
     public void updateUnitListPanel() {
-        Hex selected = gameState.getSelectedHex();
+        Hex selected = selectionContext.getSelectedHex();
         if (selected != null) {
             List<UnitStat> stats = gamePanel.getUnitListPanel().updateUnits(selected.getUnits());
             for (UnitStat stat : stats) {
                 stat.getButton().addActionListener(e -> {
-                    gameState.setSelectedUnit(stat.getUnit());
+                    selectionContext.setSelectedUnit(stat.getUnit());
                     gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 });
             }
@@ -103,11 +108,11 @@ public class UnitHandler {
     }
 
     public void discover() {
-        Hex selected = gameState.getSelectedHex();
+        Hex selected = selectionContext.getSelectedHex();
         if (selected != null) {
             for (Unit unit : selected.getUnits()) {
                 if (unit.isExplorer()) {
-                    for (Hex neighbor : gameState.getMap().getNeighbourHexes(selected)) {
+                    for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selected)) {
                         neighbor.setDiscovered(true);
                     }
                 }

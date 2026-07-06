@@ -2,7 +2,7 @@ package view;
 
 import helpers.ImageLoader;
 import model.CookQueue;
-import model.GameState;
+import model.state.GameState;
 import model.unit.Unit;
 
 import javax.swing.*;
@@ -94,7 +94,7 @@ public class TownHallPanel extends JPanel {
         section.add(sectionLabel("Upgrade Storage"));
         section.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        String path = (gameState.getStorageLevel() == 1)
+        String path = (gameState.getEmpireState().getStorageLevel() == 1)
                 ? "/utils/upgrade_storage2.png"
                 : "/utils/upgrade_storage3.png";
 
@@ -171,7 +171,7 @@ public class TownHallPanel extends JPanel {
         JButton button = new JButton();
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 64);
         button.setIcon(icon);
-        if(gameState.getMaxUnit() == gameState.getUnits().size()){
+        if(gameState.getEmpireState().getMaxUnit() == gameState.getEmpireState().getUnits().size()){
             button.setEnabled(false);
             button.setDisabledIcon(new ImageIcon(
                     GrayFilter.createDisabledImage(icon.getImage())));
@@ -206,7 +206,7 @@ public class TownHallPanel extends JPanel {
         queuePanel.removeAll();
         for (CookQueue cq : cookQueues) {
             String unitName = cq.getUnit().getUnitType().toString();
-            int turns = cq.getTurnToCook()-gameState.getTurnNumber();
+            int turns = cq.getTurnToCook()-gameState.getWorldState().getTurnNumber();
 
             String text;
             text = unitName + " : " + turns + " turn" + (turns > 1 ? "s" : "") + " left";
@@ -250,10 +250,10 @@ public class TownHallPanel extends JPanel {
     }
 
     public void refresh() {
-        String upgradePath = (gameState.getStorageLevel() == 1)
+        String upgradePath = (gameState.getEmpireState().getStorageLevel() == 1)
                 ? "/utils/upgrade_storage2.png"
                 : "/utils/upgrade_storage3.png";
-        if(gameState.getStorageLevel()<3){
+        if(gameState.getEmpireState().getStorageLevel()<3){
             ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(upgradePath, -1);
             Image scaled = rawIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
             upgradeStorageButton.setIcon(new ImageIcon(scaled));
@@ -261,7 +261,7 @@ public class TownHallPanel extends JPanel {
             upgradeStorageButton.setEnabled(false);
         }
 
-        boolean atCap = (gameState.getUnits().size() + gameState.getUnitQueues().size()) >= gameState.getMaxUnit();
+        boolean atCap = (gameState.getEmpireState().getUnits().size() + gameState.getEmpireState().getUnitQueues().size()) >= gameState.getEmpireState().getMaxUnit();
         for (Map.Entry<Unit.UNIT_TYPE, JButton> entry : cookButtons.entrySet()) {
             JButton button = entry.getValue();
             button.setEnabled(!atCap);
@@ -273,7 +273,7 @@ public class TownHallPanel extends JPanel {
                 }
             }
         }
-        setQueue(gameState.getUnitQueues());
+        setQueue(gameState.getEmpireState().getUnitQueues());
     }
 
 }

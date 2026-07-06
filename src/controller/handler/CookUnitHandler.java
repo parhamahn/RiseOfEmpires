@@ -1,7 +1,7 @@
 package controller.handler;
 
 import model.CookQueue;
-import model.GameState;
+import model.state.GameState;
 import model.unit.*;
 
 import java.util.ArrayList;
@@ -18,25 +18,25 @@ public class CookUnitHandler {
             case EXPLORER -> new Explorer();
         };
 
-        int totalUnits = gameState.getUnits().size() + gameState.getUnitQueues().size();
-        if (totalUnits >= gameState.getMaxUnit()) {
+        int totalUnits = gameState.getEmpireState().getUnits().size() + gameState.getEmpireState().getUnitQueues().size();
+        if (totalUnits >= gameState.getEmpireState().getMaxUnit()) {
             return;
         }
 
-        gameState.getUnitQueues().add(new CookQueue(unit, gameState.getTurnNumber() + COOK_DELAY));
+        gameState.getEmpireState().getUnitQueues().add(new CookQueue(unit, gameState.getWorldState().getTurnNumber() + COOK_DELAY));
     }
 
     public void checkCooks(GameState gameState) {
         List<CookQueue> toRemove = new ArrayList<>();
-        for (CookQueue cookQueue : gameState.getUnitQueues()) {
-            if (cookQueue.getTurnToCook() - gameState.getTurnNumber() == 0) {
-                cookQueue.getUnit().setHex(gameState.getTownHallHex());
-                gameState.getTownHallHex().getUnits().add(cookQueue.getUnit());
-                gameState.getUnits().add(cookQueue.getUnit());
+        for (CookQueue cookQueue : gameState.getEmpireState().getUnitQueues()) {
+            if (cookQueue.getTurnToCook() - gameState.getWorldState().getTurnNumber() == 0) {
+                cookQueue.getUnit().setHex(gameState.getEmpireState().getTownHallHex());
+                gameState.getEmpireState().getTownHallHex().getUnits().add(cookQueue.getUnit());
+                gameState.getEmpireState().getUnits().add(cookQueue.getUnit());
                 toRemove.add(cookQueue);
             }
-            gameState.getProduction().recalculate(gameState);
+            gameState.getEmpireState().recalculateProduction();
         }
-        gameState.getUnitQueues().removeAll(toRemove);
+        gameState.getEmpireState().getUnitQueues().removeAll(toRemove);
     }
 }

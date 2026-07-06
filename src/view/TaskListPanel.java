@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.GameState;
+import controller.SelectionContext;
+import model.state.GameState;
 import model.Task;
 import model.building.Building;
 import model.unit.Unit;
@@ -16,17 +17,17 @@ public class TaskListPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(75, 10, 10, 10));
     }
 
-    public List<TaskStat> updateTasks(List<Task.TASK> tasks, GameState gameState) {
+    public List<TaskStat> updateTasks(List<Task.TASK> tasks, GameState gameState, SelectionContext selectionContext) {
         removeAll();
         List<TaskStat> stats = new ArrayList<>();
         for (Task.TASK task : tasks) {
             boolean enoughAP = false;
-            for(Unit unit:gameState.getSelectedHex().getUnits()){
+            for(Unit unit: selectionContext.getSelectedHex().getUnits()){
                 if(unit.isBuilder()){
                     enoughAP = Building.getBuildCost(task).enoughAP(unit.getActionPoints());
                 }
             }
-            boolean canBuild = Building.getBuildCost(task).enoughResources(gameState.getStorage()) && enoughAP && gameState.getSelectedHex().isInEmpireBorder();
+            boolean canBuild = Building.getBuildCost(task).enoughResources(gameState.getEmpireState().getStorage()) && enoughAP && selectionContext.getSelectedHex().isInEmpireBorder();
             TaskStat stat = new TaskStat(task, canBuild);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));

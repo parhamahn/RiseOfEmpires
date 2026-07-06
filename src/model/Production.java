@@ -1,6 +1,7 @@
 package model;
 
 import model.building.Building;
+import model.state.EmpireState;
 import model.unit.Unit;
 
 import java.util.ArrayList;
@@ -38,25 +39,25 @@ public class Production {
     }
 
 
-    public void recalculate(GameState gameState){
+    public void recalculate(EmpireState empire){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;
         this.woodProduction = DEFAULT_WOOD_PRODUCTION;
         this.stoneProduction = DEFAULT_STONE_PRODUCTION;
         this.ironProduction = DEFAULT_IRON_PRODUCTION;
 
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : empire.getUnits()) {
             this.foodProduction -= unit.getFoodConsumptionPerTurn();
         }
 
         List<Building> toRemove = new ArrayList<>();
 
-        for (Building building : gameState.getBuildings()) {
+        for (Building building : empire.getBuildings()) {
             int workers = building.getAssignedWorkers().size();
             Hex.ResourceType resourceType = building.getResourceType();
 
             if (workers > 0 && resourceType != null) {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
-                int storageCap = getStorageCap(gameState, resourceType);
+                int storageCap = getStorageCap(empire, resourceType);
                 int producingResource = Math.min(Math.min(workers * building.getProductionPerWorker(), resourceOnHex), storageCap);
 
                 if (resourceOnHex - producingResource > 0) {
@@ -76,9 +77,9 @@ public class Production {
                 addProduction(resourceType, producingResource);
             }
 
-            if (this.foodProduction < 0 && gameState.getStorage().getFoodQuantity() < 0) {
-                gameState.setStarving(true);
-                for (Unit unit : gameState.getUnits()) {
+            if (this.foodProduction < 0 && empire.getStorage().getFoodQuantity() < 0) {
+                empire.setStarving(true);
+                for (Unit unit : empire.getUnits()) {
                     unit.setActionPoints(unit.getActionPoints() - 2);
                 }
             }
@@ -89,7 +90,7 @@ public class Production {
                 this.ironProduction -= building.getUpkeep().getIronNeeded();
             }
         }
-        gameState.getBuildings().removeAll(toRemove);
+        empire.getBuildings().removeAll(toRemove);
     }
 
     private void addProduction(Hex.ResourceType resourceType, int amount) {
@@ -101,12 +102,12 @@ public class Production {
         }
     }
 
-    private int getStorageCap(GameState gameState, Hex.ResourceType resourceType) {
+    private int getStorageCap(EmpireState empire, Hex.ResourceType resourceType) {
         return switch (resourceType) {
-            case WOOD  -> gameState.getStorage().getWoodMax()  - gameState.getStorage().getWoodQuantity();
-            case STONE -> gameState.getStorage().getStoneMax() - gameState.getStorage().getStoneQuantity();
-            case IRON  -> gameState.getStorage().getIronMax()  - gameState.getStorage().getIronQuantity();
-            case WHEAT, RICE, COW, SHEEP -> gameState.getStorage().getFoodMax() - gameState.getStorage().getFoodQuantity();
+            case WOOD  -> empire.getStorage().getWoodMax()  - empire.getStorage().getWoodQuantity();
+            case STONE -> empire.getStorage().getStoneMax() - empire.getStorage().getStoneQuantity();
+            case IRON  -> empire.getStorage().getIronMax()  - empire.getStorage().getIronQuantity();
+            case WHEAT, RICE, COW, SHEEP -> empire.getStorage().getFoodMax() - empire.getStorage().getFoodQuantity();
             default -> 0;
         };
     }

@@ -1,7 +1,7 @@
 package controller.handler;
 
 import model.CookQueue;
-import model.GameState;
+import model.state.GameState;
 import model.building.Building;
 import model.unit.Unit;
 import view.GamePanel;
@@ -27,7 +27,7 @@ public class TurnHandler {
     }
 
     public void endTurnAction() {
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (unit.getActionPoints() != 0) {
                 int x = WarningDialogs.unitsWithActionPoints(gamePanel);
                 if (x == JOptionPane.NO_OPTION) {
@@ -42,41 +42,41 @@ public class TurnHandler {
         gamePanel.getTownHallPanel().refresh();
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
-        if (gameState.isUpkeepDisaster()) {
+        if (gameState.getEmpireState().isUpkeepDisaster()) {
             WarningDialogs.upkeepDisaster(gamePanel);
         }
-        if (gameState.isStarving()) {
+        if (gameState.getEmpireState().isStarving()) {
             WarningDialogs.starvationDisaster(gamePanel);
         }
     }
 
     private void endTurn() {
-        gameState.getProduction().recalculate(gameState);
+        gameState.getEmpireState().recalculateProduction();
 
-        for (Unit unit : gameState.getUnits()) {
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
             unit.resetActionPointsForNewTurn();
         }
 
-        gameState.getStorage().setFoodQuantity(Math.max(Math.min(gameState.getStorage().getFoodMax(), gameState.getProduction().getFoodProduction() + gameState.getStorage().getFoodQuantity()), 0));
-        gameState.getStorage().setWoodQuantity(Math.max(Math.min(gameState.getStorage().getWoodMax(), gameState.getProduction().getWoodProduction() + gameState.getStorage().getWoodQuantity()), 0));
-        gameState.getStorage().setStoneQuantity(Math.max(Math.min(gameState.getStorage().getStoneMax(), gameState.getProduction().getStoneProduction() + gameState.getStorage().getStoneQuantity()), 0));
-        gameState.getStorage().setIronQuantity(Math.max(Math.min(gameState.getStorage().getIronMax(), gameState.getProduction().getIronProduction() + gameState.getStorage().getIronQuantity()), 0));
+        gameState.getEmpireState().getStorage().setFoodQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getFoodMax(), gameState.getEmpireState().getProduction().getFoodProduction() + gameState.getEmpireState().getStorage().getFoodQuantity()), 0));
+        gameState.getEmpireState().getStorage().setWoodQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getWoodMax(), gameState.getEmpireState().getProduction().getWoodProduction() + gameState.getEmpireState().getStorage().getWoodQuantity()), 0));
+        gameState.getEmpireState().getStorage().setStoneQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getStoneMax(), gameState.getEmpireState().getProduction().getStoneProduction() + gameState.getEmpireState().getStorage().getStoneQuantity()), 0));
+        gameState.getEmpireState().getStorage().setIronQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getIronMax(), gameState.getEmpireState().getProduction().getIronProduction() + gameState.getEmpireState().getStorage().getIronQuantity()), 0));
 
-        if (gameState.getStorage().getFoodQuantity() == 0 && gameState.getProduction().getFoodProduction() < 0) {
-            for (Unit unit : gameState.getUnits()) {
+        if (gameState.getEmpireState().getStorage().getFoodQuantity() == 0 && gameState.getEmpireState().getProduction().getFoodProduction() < 0) {
+            for (Unit unit : gameState.getEmpireState().getUnits()) {
                 unit.setActionPoints(Math.max(0, unit.getActionPoints() * 2 / 3));
             }
-            for (CookQueue cookQueue : gameState.getUnitQueues()) {
+            for (CookQueue cookQueue : gameState.getEmpireState().getUnitQueues()) {
                 cookQueue.setTurnToCook(cookQueue.getTurnToCook() + 1);
             }
-            gameState.setStarving(true);
+            gameState.getEmpireState().setStarving(true);
         } else {
-            gameState.setStarving(false);
+            gameState.getEmpireState().setStarving(false);
         }
 
         boolean anyDamagesToBuilding = false;
-        for (Building building : gameState.getBuildings()) {
-            if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(gameState.getStorage())) {
+        for (Building building : gameState.getEmpireState().getBuildings()) {
+            if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(gameState.getEmpireState().getStorage())) {
                 Random random = new Random();
                 boolean damageBuilding = random.nextDouble() <= UPKEEP_DAMAGE_CHANCE;
                 if (damageBuilding) {
@@ -86,13 +86,13 @@ public class TurnHandler {
                         building.getHex().setBuilding(null);
                         for (Unit unit : building.getAssignedWorkers()) unit.setAssigned(false);
                         building.getAssignedWorkers().clear();
-                        gameState.getBuildings().remove(building);
+                        gameState.getEmpireState().getBuildings().remove(building);
                     }
                 }
             }
         }
-        gameState.setUpkeepDisaster(anyDamagesToBuilding);
+        gameState.getEmpireState().setUpkeepDisaster(anyDamagesToBuilding);
         buildingHandler.updateTownCapacity();
-        gameState.nextTurn();
+        gameState.getWorldState().nextTurn();
     }
 }

@@ -1,6 +1,8 @@
 package controller.handler;
 
-import model.GameState;
+import controller.SelectionContext;
+import model.state.EmpireState;
+import model.state.GameState;
 import model.Hex;
 import model.Task;
 import model.unit.Unit;
@@ -16,11 +18,13 @@ public class BuildingHandler {
     private final GameState gameState;
     private final GamePanel gamePanel;
     private final CookUnitHandler cookUnitHandler;
+    private final SelectionContext selectionContext;
 
-    public BuildingHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler) {
+    public BuildingHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, SelectionContext selectionContext) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.cookUnitHandler = cookUnitHandler;
+        this.selectionContext = selectionContext;
     }
 
     public void attachTownHallPanelListeners() {
@@ -32,8 +36,8 @@ public class BuildingHandler {
             });
         }
         gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e -> {
-            gameState.setStorageLevel(gameState.getStorageLevel() + 1);
-            gameState.getStorage().upgradeStorage(gameState.getStorageLevel());
+            gameState.getEmpireState().setStorageLevel(gameState.getEmpireState().getStorageLevel() + 1);
+            gameState.getEmpireState().getStorage().upgradeStorage(gameState.getEmpireState().getStorageLevel());
             updateTaskListPanel();
             gamePanel.getTownHallPanel().refresh();
         });
@@ -49,14 +53,14 @@ public class BuildingHandler {
             case TOWN -> new Town(hex);
         };
 
-        building.getCost().pay(gameState.getStorage());
+        building.getCost().pay(gameState.getEmpireState().getStorage());
         List<Unit> toRemove = new ArrayList<>();
         for (Unit unit : hex.getUnits()) {
             if (unit.isBuilder() && unit.getActionPoints() >= building.getCost().getAPNeeded()) {
                 unit.setActionPoints(unit.getActionPoints() - building.getCost().getAPNeeded());
                 unit.setCharges(unit.getCharges() - 1);
                 if (unit.getCharges() == 0) {
-                    gameState.getUnits().remove(unit);
+                    gameState.getEmpireState().getUnits().remove(unit);
                     toRemove.add(unit);
                 }
                 break;
@@ -64,19 +68,19 @@ public class BuildingHandler {
         }
         hex.getUnits().removeAll(toRemove);
         hex.setBuilding(building);
-        gameState.getBuildings().add(building);
-        gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
+        gameState.getEmpireState().getBuildings().add(building);
+        gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         updateTownCapacity();
-        gameState.getProduction().recalculate(gameState);
+        gameState.getEmpireState().recalculateProduction();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();
     }
 
     public void updateTaskListPanel() {
-        Hex selected = gameState.getSelectedHex();
+        Hex selected = selectionContext.getSelectedHex();
         if (selected != null && selected.getBuilding() == null) {
-            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected), gameState);
+            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected), gameState, selectionContext);
             for (TaskStat stat : stats) {
                 stat.getButton().addActionListener(e -> handleBuildingTask(stat.getTask(), selected));
             }
@@ -87,11 +91,11 @@ public class BuildingHandler {
 
     public void updateTownCapacity(){
         int townCount = 0;
-        for (Building building : gameState.getBuildings()) {
+        for (Building building : gameState.getEmpireState().getBuildings()) {
             if (building.isTown()) {
                 townCount++;
             }
         }
-        gameState.setMaxUnit(GameState.DEFAULT_UNIT_CAPACITY + townCount);
+        gameState.getEmpireState().setMaxUnit(EmpireState.DEFAULT_UNIT_CAPACITY + townCount);
     }
 }
