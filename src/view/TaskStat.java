@@ -29,7 +29,7 @@ public class TaskStat{
         button.setFocusPainted(false);
         button.setOpaque(false);
 
-        if(!canAfford){
+        if(!this.canAfford){
             Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
             button.setDisabledIcon(new ImageIcon(grayImage));
             button.setEnabled(false);

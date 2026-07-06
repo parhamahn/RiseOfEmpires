@@ -88,38 +88,6 @@ public class HUDPanel extends JPanel {
         return menuButton;
     }
 
-    public ResourceStat getFoodStat() {
-        return foodStat;
-    }
-
-    public void setFoodStat(ResourceStat foodStat) {
-        this.foodStat = foodStat;
-    }
-
-    public ResourceStat getIronStat() {
-        return ironStat;
-    }
-
-    public void setIronStat(ResourceStat ironStat) {
-        this.ironStat = ironStat;
-    }
-
-    public ResourceStat getStoneStat() {
-        return stoneStat;
-    }
-
-    public void setStoneStat(ResourceStat stoneStat) {
-        this.stoneStat = stoneStat;
-    }
-
-    public ResourceStat getWoodStat() {
-        return woodStat;
-    }
-
-    public void setWoodStat(ResourceStat woodStat) {
-        this.woodStat = woodStat;
-    }
-
     public JButton getEndTurnButton() {
         return endTurnButton;
     }

@@ -2,7 +2,6 @@ package model.unit;
 
 import model.Hex;
 import model.Storage;
-import view.MapPanel;
 
 public abstract class Unit{
     public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};
@@ -60,22 +59,6 @@ public abstract class Unit{
         this.actionPoints = actionPointsMax;
     }
 
-    public void moveToPosition(int newX, int newY) {
-
-        this.positionX = newX;
-        this.positionY = newY;
-
-    }
-
-    public int getMovementAPCost(Hex hex) {
-        return switch (hex.getTerrainType()){
-            case MEADOW -> 1;
-            case PLAIN -> 1;
-            case FOREST -> 2;
-            case MOUNTAIN -> 4;
-        };
-    }
-
     public UNIT_TYPE getUnitType(){
         return unitType;
     }
@@ -92,9 +75,6 @@ public abstract class Unit{
         return actionPointsMax;
     }
 
-    public void setActionPointsMax(int actionPointsMax) {
-        this.actionPointsMax = actionPointsMax;
-    }
 
     public Hex getHex() {
         return hex;
@@ -103,11 +83,6 @@ public abstract class Unit{
     public void setHex(Hex hex) {
         this.hex = hex;
     }
-
-    public void setUnitType(UNIT_TYPE unitType) {
-        this.unitType = unitType;
-    }
-
 
 
     public boolean isAssigned() {
@@ -120,10 +95,6 @@ public abstract class Unit{
 
     public int getFoodConsumptionPerTurn() {
         return foodConsumptionPerTurn;
-    }
-
-    public void setFoodConsumptionPerTurn(int foodConsumptionPerTurn) {
-        this.foodConsumptionPerTurn = foodConsumptionPerTurn;
     }
 
     public boolean isMoving() {

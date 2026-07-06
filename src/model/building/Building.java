@@ -41,18 +41,6 @@ public abstract class Building {
         return assignedWorkers;
     }
 
-    public boolean assignWorker(Worker worker){
-        if(assignedWorkers.size()<workerCapacity && !worker.isAssigned()){
-            assignedWorkers.add(worker);
-            return true;
-        }
-        return false;
-    }
-
-    public void removeWorker(Worker worker){
-        assignedWorkers.remove(worker);
-    }
-
     public int getWorkerCapacity() {
         return workerCapacity;
     }

@@ -1,10 +1,5 @@
 package view;
 
-import model.Cost;
-import model.GameState;
-import model.Task;
-import model.unit.Unit;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;

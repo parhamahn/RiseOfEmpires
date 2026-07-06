@@ -37,10 +37,8 @@ public class Hex {
     }
 
     public int getC() {return c;}
-    public void setC(int c) {this.c = c;}
 
     public int getR() {return r;}
-    public void setR(int r) {this.r = r;}
 
     public boolean isDiscovered() {return discovered;}
     public void setDiscovered(boolean discovered) {this.discovered = discovered;}
@@ -58,16 +56,8 @@ public class Hex {
         this.building = building;
     }
 
-    public void setResources(HashMap<ResourceType, Integer> resources) {
-        this.resources = resources;
-    }
-
     public List<Unit> getUnits() {
         return units;
-    }
-
-    public void setUnits(List<Unit> units) {
-        this.units = units;
     }
 
     public int getAPToMove(){

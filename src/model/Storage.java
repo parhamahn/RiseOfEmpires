@@ -66,32 +66,16 @@ public class Storage {
         return foodMax;
     }
 
-    public void setFoodMax(int foodMax) {
-        this.foodMax = foodMax;
-    }
-
     public int getIronMax() {
         return ironMax;
-    }
-
-    public void setIronMax(int ironMax) {
-        this.ironMax = ironMax;
     }
 
     public int getStoneMax() {
         return stoneMax;
     }
 
-    public void setStoneMax(int stoneMax) {
-        this.stoneMax = stoneMax;
-    }
-
     public int getWoodMax() {
         return woodMax;
-    }
-
-    public void setWoodMax(int woodMax) {
-        this.woodMax = woodMax;
     }
 
     public void upgradeStorage(int x){

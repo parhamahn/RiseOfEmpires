@@ -245,10 +245,6 @@ public class TownHallPanel extends JPanel {
         return cookButtons;
     }
 
-    public JPanel getQueuePanel() {
-        return queuePanel;
-    }
-
     public JButton getUpgradeStorageButton() {
         return upgradeStorageButton;
     }

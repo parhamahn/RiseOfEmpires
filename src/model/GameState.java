@@ -4,7 +4,6 @@ import model.building.Building;
 import model.building.Town;
 import model.building.TownHall;
 import model.unit.*;
-import view.MapPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,10 +95,6 @@ public class GameState {
         this.tunrNumber+=1;
     }
 
-    public void setUnits(List<Unit> units) {
-        this.units = units;
-    }
-
     public boolean isStarving() {
         return isStarving;
     }
@@ -108,36 +103,13 @@ public class GameState {
         isStarving = starving;
     }
 
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
-    public void setProduction(Production production) {
-        this.production = production;
-    }
-
-    public void setBuildings(List<Building> buildings) {
-        this.buildings = buildings;
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
     public int getTunrNumber() {
         return tunrNumber;
     }
 
-    public void setTunrNumber(int tunrNumber) {
-        this.tunrNumber = tunrNumber;
-    }
 
     public int getMaxUnit() {
         return maxUnit;
-    }
-
-    public void setMaxUnit(int maxUnit) {
-        this.maxUnit = maxUnit;
     }
 
     public Unit getSelectedUnit() {
