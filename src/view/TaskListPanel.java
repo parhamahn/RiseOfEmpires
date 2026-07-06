@@ -6,7 +6,6 @@ import java.util.List;
 
 import model.GameState;
 import model.Task;
-import model.unit.Builder;
 import model.unit.Unit;
 
 public class TaskListPanel extends JPanel {
@@ -22,7 +21,7 @@ public class TaskListPanel extends JPanel {
         for (Task.TASK task : tasks) {
             boolean enoughAP = false;
             for(Unit unit:gameState.getSelectedHex().getUnits()){
-                if(unit instanceof Builder){
+                if(unit.isBuilder()){
                     enoughAP = Task.getCostForTask(task).enoughAP(unit.getActionPoints());
                 }
             }

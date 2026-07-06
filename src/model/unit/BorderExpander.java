@@ -6,4 +6,6 @@ public class BorderExpander extends Unit{
         super(UNIT_TYPE.BORDER_EXPANDER, 10, 1);
     }
 
+    @Override
+    public boolean isBorderExpander() { return true; }
 }

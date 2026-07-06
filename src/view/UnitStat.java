@@ -1,9 +1,7 @@
 package view;
 
 import helpers.ImageLoader;
-import model.building.TownHall;
 import model.unit.Unit;
-import model.unit.Worker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +26,7 @@ public class UnitStat{
                 g.fillRect(barX, barY, barWidth, barHeight);
                 g.setColor(new Color(50,200,50));
                 g.fillRect(barX, barY, (int)(apf*barWidth), barHeight);
-                if(!(unit.getHex().getBuilding() instanceof TownHall) && unit instanceof Worker && unit.isAssigned()){
+                if(unit.isWorker() && unit.isAssigned() && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall())){
                     g.setFont(new Font("sanserif", Font.PLAIN, 18));
                     g.drawString("\u2699", barX, barY-5);
                 }

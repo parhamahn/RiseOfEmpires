@@ -6,4 +6,6 @@ public class Worker extends Unit{
         super(UNIT_TYPE.WORKER, 5, 2);
     }
 
+    @Override
+    public boolean isWorker() { return true; }
 }

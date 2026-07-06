@@ -16,4 +16,7 @@ public class Builder extends Unit{
     public void setCharges(int charges) {
         this.charges = charges;
     }
+
+    @Override
+    public boolean isBuilder() { return true; }
 }

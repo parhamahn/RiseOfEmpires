@@ -6,4 +6,6 @@ public class Explorer extends Unit{
         super(UNIT_TYPE.EXPLORER, 5, 1);
     }
 
+    @Override
+    public boolean isExplorer() { return true; }
 }

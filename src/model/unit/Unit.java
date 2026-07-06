@@ -112,5 +112,12 @@ public abstract class Unit{
     public void setTargetHex(Hex targetHex) {
         this.targetHex = targetHex;
     }
+
+    public boolean isWorker() { return false; }
+    public boolean isBuilder() { return false; }
+    public boolean isExplorer() { return false; }
+    public boolean isBorderExpander() { return false; }
+    public int getCharges() { return 0; }
+    public void setCharges(int charges) { }
 }
 
