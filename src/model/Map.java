@@ -19,6 +19,11 @@ public class Map {
         setResources();
     }
 
+
+    public int getRows() { return rows; }
+    public int getCols() { return cols; }
+
+
     private void generateMap() {
         Hex.TerrainType[] terrains = Hex.TerrainType.values();
 
@@ -79,7 +84,6 @@ public class Map {
         }
         return null;
     }
-
 
     public void setResources(){
         for (int i=0; i<cols; i++){
@@ -148,7 +152,4 @@ public class Map {
         }
         return neighboursTiles;
     }
-
-    public int getRows() { return rows; }
-    public int getCols() { return cols; }
 }

@@ -19,6 +19,7 @@ public class Storage {
     private int ironMax;
     private int foodMax;
 
+
     public Storage() {
         this.woodQuantity = DEFAULT_WOOD_QUANTITY;
         this.stoneQuantity = DEFAULT_STONE_QUANTITY;
@@ -30,53 +31,44 @@ public class Storage {
         this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
     }
 
+
     public int getWoodQuantity() {
         return woodQuantity;
     }
-
     public void setWoodQuantity(int woodQuantity) {
         this.woodQuantity = woodQuantity;
     }
-
     public int getStoneQuantity() {
         return stoneQuantity;
     }
-
     public void setStoneQuantity(int stoneQuantity) {
         this.stoneQuantity = stoneQuantity;
     }
-
     public int getIronQuantity() {
         return ironQuantity;
     }
-
     public void setIronQuantity(int ironQuantity) {
         this.ironQuantity = ironQuantity;
     }
-
     public int getFoodQuantity() {
         return foodQuantity;
     }
-
     public void setFoodQuantity(int foodQuantity) {
         this.foodQuantity = foodQuantity;
     }
-
     public int getFoodMax() {
         return foodMax;
     }
-
     public int getIronMax() {
         return ironMax;
     }
-
     public int getStoneMax() {
         return stoneMax;
     }
-
     public int getWoodMax() {
         return woodMax;
     }
+
 
     public void upgradeStorage(int x){
         this.foodMax = DEFAULT_FOOD_MAX_STORAGE * x;

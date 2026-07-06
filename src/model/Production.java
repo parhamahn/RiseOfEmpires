@@ -27,18 +27,16 @@ public class Production {
     public int getFoodProduction() {
         return foodProduction;
     }
-
     public int getWoodProduction() {
         return woodProduction;
     }
-
     public int getStoneProduction() {
         return stoneProduction;
     }
-
     public int getIronProduction() {
         return ironProduction;
     }
+
 
     public void recalculate(GameState gameState){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;

@@ -66,7 +66,7 @@ public class BuildingHandler {
         hex.setBuilding(building);
         gameState.getBuildings().add(building);
         gameState.getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
-        gameState.updateTownCapacity();
+        updateTownCapacity();
         gameState.getProduction().recalculate(gameState);
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
@@ -83,5 +83,15 @@ public class BuildingHandler {
         } else {
             gamePanel.getTaskListPanel().clear();
         }
+    }
+
+    public void updateTownCapacity(){
+        int townCount = 0;
+        for (Building building : gameState.getBuildings()) {
+            if (building.isTown()) {
+                townCount++;
+            }
+        }
+        gameState.setMaxUnit(GameState.DEFAULT_UNIT_CAPACITY + townCount);
     }
 }

@@ -4,9 +4,8 @@ import model.Hex;
 
 public class TownHall extends Building {
 
-    public TownHall(Hex hex){
-        super(hex, null, null, 0);
-    }
+    public TownHall(Hex hex){super(hex, null, null, 0);}
+
 
     @Override
     public int getProductionPerWorker() { return 0; }

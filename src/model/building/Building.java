@@ -2,6 +2,7 @@ package model.building;
 
 import model.Cost;
 import model.Hex;
+import model.Task;
 import model.unit.Worker;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public abstract class Building {
     private int workerCapacity;
     private int noUpkeepTurns;
 
+
     public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity){
         this.hex = hex;
         this.cost = cost;
@@ -24,6 +26,7 @@ public abstract class Building {
         this.workerCapacity = workerCapacity;
         this.noUpkeepTurns = 0;
     }
+
 
     public abstract int getProductionPerWorker();
     public Hex.ResourceType getResourceType() { return null; }
@@ -34,28 +37,34 @@ public abstract class Building {
     public Hex getHex() {
         return hex;
     }
-
     public Cost getCost(){
         return cost;
     }
-
     public Cost getUpkeep() {
         return upkeep;
     }
-
     public List<Worker> getAssignedWorkers() {
         return assignedWorkers;
     }
-
     public int getWorkerCapacity() {
         return workerCapacity;
     }
-
     public int getNoUpkeepTurns() {
         return noUpkeepTurns;
     }
-
     public void setNoUpkeepTurns(int noUpkeepTurns) {
         this.noUpkeepTurns = noUpkeepTurns;
+    }
+
+
+    public static Cost getBuildCost(Task.TASK task) {
+        return switch (task) {
+            case FARM        -> Farm.getBuildCost();
+            case LUMBER_MILL -> LumberMill.getBuildCost();
+            case STONE_MINE  -> StoneMine.getBuildCost();
+            case IRON_MINE   -> IronMine.getBuildCost();
+            case STABLE      -> Stable.getBuildCost();
+            case TOWN        -> Town.getBuildCost();
+        };
     }
 }

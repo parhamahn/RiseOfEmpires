@@ -6,6 +6,7 @@ import java.util.List;
 
 import model.GameState;
 import model.Task;
+import model.building.Building;
 import model.unit.Unit;
 
 public class TaskListPanel extends JPanel {
@@ -22,10 +23,10 @@ public class TaskListPanel extends JPanel {
             boolean enoughAP = false;
             for(Unit unit:gameState.getSelectedHex().getUnits()){
                 if(unit.isBuilder()){
-                    enoughAP = Task.getCostForTask(task).enoughAP(unit.getActionPoints());
+                    enoughAP = Building.getBuildCost(task).enoughAP(unit.getActionPoints());
                 }
             }
-            boolean canBuild = Task.getCostForTask(task).enoughResources(gameState.getStorage()) && enoughAP && gameState.getSelectedHex().isInEmpireBorder();
+            boolean canBuild = Building.getBuildCost(task).enoughResources(gameState.getStorage()) && enoughAP && gameState.getSelectedHex().isInEmpireBorder();
             TaskStat stat = new TaskStat(task, canBuild);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));

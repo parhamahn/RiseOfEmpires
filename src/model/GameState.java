@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameState {
+    public final static int DEFAULT_UNIT_CAPACITY = 6;
+
     private Storage storage;
     private Production production;
     private Hex selectedHex;
@@ -36,14 +38,79 @@ public class GameState {
         this.maxUnit = 6;
         this.storageLevel = 1;
         this.unitQueues = new ArrayList<>();
-        buildings = new ArrayList<>();
+        this.buildings = new ArrayList<>();
 
+        restartGame();
+
+    }
+
+
+    public Hex getSelectedHex() {
+        return selectedHex;
+    }
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+    public void setSelectedHex(Hex selectedHex) {
+        this.selectedHex = selectedHex;
+    }
+    public Map getMap() {
+        return map;
+    }
+    public Storage getStorage() {
+        return storage;
+    }
+    public Production getProduction() {
+        return production;
+    }
+    public List<Unit> getUnits() {
+        return units;
+    }
+    public boolean isStarving() {
+        return isStarving;
+    }
+    public void setStarving(boolean starving) {
+        isStarving = starving;
+    }
+    public int getTurnNumber() {
+        return turnNumber;
+    }
+    public int getMaxUnit() {
+        return maxUnit;
+    }
+    public void setMaxUnit(int maxUnit) {this.maxUnit = maxUnit;}
+    public Unit getSelectedUnit() {
+        return selectedUnit;
+    }
+    public void setSelectedUnit(Unit selectedUnit) {
+        this.selectedUnit = selectedUnit;
+    }
+    public boolean isUpkeepDisaster() {
+        return upkeepDisaster;
+    }
+    public void setUpkeepDisaster(boolean upkeepDisaster) {
+        this.upkeepDisaster = upkeepDisaster;
+    }
+    public int getStorageLevel() {
+        return storageLevel;
+    }
+    public void setStorageLevel(int storageLevel) {
+        this.storageLevel = storageLevel;
+    }
+    public Hex getTownHallHex() {
+        return townHallHex;
+    }
+    public List<CookQueue> getUnitQueues() {
+        return unitQueues;
+    }
+
+
+    public void restartGame(){
         Hex townHallHex = map.getHex(map.getCols()/2, map.getRows()/2);
         TownHall townHall = new TownHall(townHallHex);
         townHallHex.setBuilding(townHall);
         this.townHallHex = townHallHex;
-        buildings.add(townHall);
-
+        this.buildings.add(townHall);
 
         units = new ArrayList<>();
         units.add(new Builder());
@@ -52,104 +119,13 @@ public class GameState {
         units.add(new Worker());
         units.add(new Explorer());
 
-        for (Unit unit:units){
-            unit.setHex(townHallHex);
-        }
+        for (Unit unit:units){unit.setHex(townHallHex);}
         townHallHex.getUnits().addAll(units);
-
 
         this.production.recalculate(this);
     }
 
-
-    public Hex getSelectedHex() {
-        return selectedHex;
-    }
-
-    public List<Building> getBuildings() {
-        return buildings;
-    }
-
-    public void setSelectedHex(Hex selectedHex) {
-        this.selectedHex = selectedHex;
-    }
-
-    public Map getMap() {
-        return map;
-    }
-
-    public Storage getStorage() {
-        return storage;
-    }
-
-    public Production getProduction() {
-        return production;
-    }
-
-    public List<Unit> getUnits() {
-        return units;
-    }
-
     public void nextTurn(){
         this.turnNumber++;
-    }
-
-    public boolean isStarving() {
-        return isStarving;
-    }
-
-    public void setStarving(boolean starving) {
-        isStarving = starving;
-    }
-
-    public int getTurnNumber() {
-        return turnNumber;
-    }
-
-
-    public int getMaxUnit() {
-        return maxUnit;
-    }
-
-    public Unit getSelectedUnit() {
-        return selectedUnit;
-    }
-
-    public void setSelectedUnit(Unit selectedUnit) {
-        this.selectedUnit = selectedUnit;
-    }
-
-    public boolean isUpkeepDisaster() {
-        return upkeepDisaster;
-    }
-
-    public void setUpkeepDisaster(boolean upkeepDisaster) {
-        this.upkeepDisaster = upkeepDisaster;
-    }
-
-    public int getStorageLevel() {
-        return storageLevel;
-    }
-
-    public void setStorageLevel(int storageLevel) {
-        this.storageLevel = storageLevel;
-    }
-
-    public Hex getTownHallHex() {
-        return townHallHex;
-    }
-
-    public void updateTownCapacity(){
-        int townCount = 0;
-        for (Building building : buildings) {
-            if (building.isTown()) {
-                townCount++;
-            }
-        }
-        maxUnit = 6 + townCount;
-    }
-
-    public List<CookQueue> getUnitQueues() {
-        return unitQueues;
     }
 }

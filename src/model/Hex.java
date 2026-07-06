@@ -23,6 +23,7 @@ public class Hex {
     private Building building;
     private List<Unit> units;
 
+
     public Hex(int c, int r, TerrainType terrainType){
         this.c = c;
         this.r = r;
@@ -32,37 +33,30 @@ public class Hex {
         this.units = new ArrayList<>();
     }
 
+
     public boolean isInEmpireBorder() {
         return inEmpireBorder;
     }
-
     public void setInEmpireBorder(boolean inEmpireBorder) {
         this.inEmpireBorder = inEmpireBorder;
     }
-
     public int getC() {return c;}
-
     public int getR() {return r;}
-
     public boolean isDiscovered() {return discovered;}
     public void setDiscovered(boolean discovered) {this.discovered = discovered;}
-
     public TerrainType getTerrainType() {return terrainType;}
     public void setTerrainType(TerrainType terrainType) {this.terrainType = terrainType;}
-
     public HashMap<ResourceType, Integer> getResources() {return resources;}
-
     public Building getBuilding() {
         return building;
     }
-
     public void setBuilding(Building building) {
         this.building = building;
     }
-
     public List<Unit> getUnits() {
         return units;
     }
+
 
     public int getAPToMove(){
         return switch (this.terrainType){
@@ -71,5 +65,4 @@ public class Hex {
             case MEADOW, PLAIN -> FLAT_AP_COST;
         };
     }
-
 }

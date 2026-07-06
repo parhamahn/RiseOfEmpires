@@ -17,7 +17,7 @@ public class GameController {
         CookUnitHandler cookUnitHandler = new CookUnitHandler();
         this.unitHandler = new UnitHandler(gameState, gamePanel);
         this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler);
-        TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler);
+        TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler);
 
         gamePanel.getHudPanel().getMenuButton().addActionListener(e -> menuAction());

@@ -17,11 +17,13 @@ public class TurnHandler {
     private final GameState gameState;
     private final GamePanel gamePanel;
     private final CookUnitHandler cookUnitHandler;
+    private final BuildingHandler buildingHandler;
 
-    public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler) {
+    public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.cookUnitHandler = cookUnitHandler;
+        this.buildingHandler = buildingHandler;
     }
 
     public void endTurnAction() {
@@ -90,7 +92,7 @@ public class TurnHandler {
             }
         }
         gameState.setUpkeepDisaster(anyDamagesToBuilding);
-        gameState.updateTownCapacity();
+        buildingHandler.updateTownCapacity();
         gameState.nextTurn();
     }
 }
