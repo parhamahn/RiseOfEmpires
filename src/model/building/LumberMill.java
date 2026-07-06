@@ -14,4 +14,12 @@ public class LumberMill extends Building{
         super(hex, cost, upkeep, 2);
     }
 
+    @Override
+    public int getProductionPerWorker() { return productingPerUnit; }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return Hex.ResourceType.WOOD; }
+
+    @Override
+    public String getBuildingImageName() { return "lumbermillhex"; }
 }

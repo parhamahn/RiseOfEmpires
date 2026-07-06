@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import helpers.ImageLoader;
 import model.*;
-import model.building.*;
+import model.building.Building;
 import model.unit.Unit;
 
 public class MapPanel extends JPanel {
@@ -41,6 +41,7 @@ public class MapPanel extends JPanel {
 
     private final Polygon hexShape = new Polygon();
     private static final int[] EDGE_START_FOR_DIRECTION = {0, 3, 1, 2, 5, 4};
+    private final java.util.Map<String, BufferedImage> buildingImages = new java.util.HashMap<>();
 
     public MapPanel(Map map, GameState gameState) {
         this.gameState = gameState;
@@ -69,6 +70,14 @@ public class MapPanel extends JPanel {
             resourceIcons.put(Hex.ResourceType.RICE,  ImageIO.read(getClass().getResource("/utils/rice.png")));
             resourceIcons.put(Hex.ResourceType.COW,   ImageIO.read(getClass().getResource("/utils/cow.png")));
             resourceIcons.put(Hex.ResourceType.SHEEP, ImageIO.read(getClass().getResource("/utils/sheep.png")));
+
+            buildingImages.put("townhall",      townHallImage);
+            buildingImages.put("farmhex",       farmHexImage);
+            buildingImages.put("lumbermillhex", lumberMillHexImage);
+            buildingImages.put("stoneminehex",  stoneMineHexImage);
+            buildingImages.put("ironminehex",   ironMineHexImage);
+            buildingImages.put("stablehex",     stableHexImage);
+            buildingImages.put("townhex",       townHexImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -356,7 +365,7 @@ public class MapPanel extends JPanel {
         initUnitPositions();
 
         for (Unit unit : gameState.getUnits()) {
-            if (unit.isMoving() || (!unit.isAssigned() && !(unit.getHex().getBuilding()instanceof TownHall))) {
+            if (unit.isMoving() || (!unit.isAssigned() && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
                 int drawX = unit.getPositionX();
                 int drawY = unit.getPositionY();
                 String iconPath = "/utils/"
@@ -413,14 +422,7 @@ public class MapPanel extends JPanel {
     }
 
     private BufferedImage getBuildingImage(Building building) {
-        if (building instanceof TownHall)   return townHallImage;
-        if (building instanceof Farm)       return farmHexImage;
-        if (building instanceof LumberMill) return lumberMillHexImage;
-        if (building instanceof StoneMine)  return stoneMineHexImage;
-        if (building instanceof IronMine)   return ironMineHexImage;
-        if (building instanceof Stable)     return stableHexImage;
-        if (building instanceof Town)       return townHexImage;
-        return null;
+        return buildingImages.get(building.getBuildingImageName());
     }
 
     public GameState getGameState() {

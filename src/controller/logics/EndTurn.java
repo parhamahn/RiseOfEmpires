@@ -2,7 +2,7 @@ package controller.logics;
 
 import model.CookQueue;
 import model.GameState;
-import model.building.*;
+import model.building.Building;
 import model.unit.Unit;
 
 import java.util.Random;
@@ -37,7 +37,7 @@ public class EndTurn {
 
         boolean anyDamagesToBuilding = false;
         for(Building building:gameState.getBuildings()){
-            if (building instanceof Farm || building instanceof IronMine || building instanceof Stable || building instanceof StoneMine){
+            if (building.getUpkeep() != null){
                 if(!building.getUpkeep().enoughResources(gameState.getStorage())){
                     Random random = new Random();
                     boolean damageBuilding = random.nextDouble() <= 0.3;

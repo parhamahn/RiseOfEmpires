@@ -14,4 +14,13 @@ public class IronMine extends Building{
     public IronMine(Hex hex) {
         super(hex, cost, upkeep, 3);
     }
+
+    @Override
+    public int getProductionPerWorker() { return productingPerUnit; }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return Hex.ResourceType.IRON; }
+
+    @Override
+    public String getBuildingImageName() { return "ironminehex"; }
 }

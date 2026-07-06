@@ -19,4 +19,13 @@ public class Farm extends Building{
     public Hex.ResourceType getFarming() {
         return farming;
     }
+
+    @Override
+    public int getProductionPerWorker() { return productingPerUnit; }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return farming; }
+
+    @Override
+    public String getBuildingImageName() { return "farmhex"; }
 }

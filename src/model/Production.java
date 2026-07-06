@@ -1,6 +1,6 @@
 package model;
 
-import model.building.*;
+import model.building.Building;
 import model.unit.Unit;
 
 import java.util.ArrayList;
@@ -62,147 +62,71 @@ public class Production {
         this.stoneProduction = DEFAULT_STONE_PRODUCTION;
         this.ironProduction = DEFAULT_IRON_PRODUCTION;
 
-        for(Unit unit: gameState.getUnits()){
+        for (Unit unit : gameState.getUnits()) {
             this.foodProduction -= unit.getFoodConsumptionPerTurn();
         }
 
         List<Building> toRemove = new ArrayList<>();
 
-        for (Building building:gameState.getBuildings()){
+        for (Building building : gameState.getBuildings()) {
+            int workers = building.getAssignedWorkers().size();
+            Hex.ResourceType resourceType = building.getResourceType();
 
-            if(building instanceof LumberMill){
-                int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
+            if (workers > 0 && resourceType != null) {
+                int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
+                int storageCap = getStorageCap(gameState, resourceType);
+                int producingResource = Math.min(Math.min(workers * building.getProductionPerWorker(), resourceOnHex), storageCap);
 
-                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.WOOD, 0);
-                int producingResource = Math.min(Math.min(workingWorkers*LumberMill.productingPerUnit, resourceOnHex), gameState.getStorage().getWoodMax()-gameState.getStorage().getWoodQuantity());
-
-                if(resourceOnHex-producingResource!=0) {
-                    building.getHex().getResources().put(Hex.ResourceType.WOOD, resourceOnHex - producingResource);
-                }else{
+                if (resourceOnHex - producingResource > 0) {
+                    building.getHex().getResources().put(resourceType, resourceOnHex - producingResource);
+                } else {
                     toRemove.add(building);
-                    building.getHex().getResources().remove(Hex.ResourceType.WOOD);
-                    for(Unit unit:building.getHex().getUnits()){
+                    building.getHex().getResources().remove(resourceType);
+                    for (Unit unit : building.getHex().getUnits()) {
                         unit.setAssigned(false);
                     }
-                    building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
-                    building.getHex().setBuilding(null);
-                }
-
-                this.woodProduction += producingResource;
-
-            }
-
-            if(building instanceof StoneMine){
-                int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
-
-                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.STONE, 0);
-                int producingResource = Math.min(Math.min(workingWorkers*StoneMine.productingPerUnit, resourceOnHex), gameState.getStorage().getStoneMax()-gameState.getStorage().getStoneQuantity());
-
-                if(resourceOnHex-producingResource!=0) {
-                    building.getHex().getResources().put(Hex.ResourceType.STONE, resourceOnHex - producingResource);
-                }else{
-                    toRemove.add(building);
-                    building.getHex().getResources().remove(Hex.ResourceType.STONE);
-                    for(Unit unit:building.getHex().getUnits()){
-                        unit.setAssigned(false);
-                    }
-                    if(building.getHex().getResources().isEmpty()){
+                    if (building.getHex().getResources().isEmpty()) {
                         building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
                     building.getHex().setBuilding(null);
                 }
-                this.stoneProduction += producingResource;
 
-
+                addProduction(resourceType, producingResource);
             }
 
-            if(building instanceof IronMine){
-                int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
-
-                int resourceOnHex = building.getHex().getResources().getOrDefault(Hex.ResourceType.IRON, 0);
-                int producingResource = Math.min(Math.min(workingWorkers*IronMine.productingPerUnit, resourceOnHex), gameState.getStorage().getIronMax()-gameState.getStorage().getIronQuantity());
-
-                if(resourceOnHex-producingResource!=0) {
-                    building.getHex().getResources().put(Hex.ResourceType.IRON, resourceOnHex - producingResource);
-                }else{
-                    toRemove.add(building);
-                    building.getHex().getResources().remove(Hex.ResourceType.IRON);
-                    for(Unit unit:building.getHex().getUnits()){
-                        unit.setAssigned(false);
-                    }
-                    if(building.getHex().getResources().isEmpty()){
-                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
-                    }
-                    building.getHex().setBuilding(null);
-                }
-                this.ironProduction += producingResource;
-
-
-            }
-
-            if(building instanceof Farm){
-                int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
-
-                int resourceOnHex = building.getHex().getResources().getOrDefault(((Farm) building).getFarming(), 0);
-                int producingResource = Math.min(Math.min(workingWorkers*Farm.productingPerUnit, resourceOnHex), gameState.getStorage().getFoodMax()-gameState.getStorage().getFoodQuantity());
-
-                if(resourceOnHex-producingResource!=0) {
-                    building.getHex().getResources().put(((Farm) building).getFarming(), resourceOnHex - producingResource);
-                }else{
-                    toRemove.add(building);
-                    building.getHex().getResources().remove(((Farm) building).getFarming());
-                    for(Unit unit:building.getHex().getUnits()){
-                        unit.setAssigned(false);
-                    }
-                    if(building.getHex().getResources().isEmpty()){
-                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
-                    }
-                    building.getHex().setBuilding(null);
-                }
-                this.foodProduction += producingResource;
-            }
-
-            if(building instanceof Stable){
-                int workingWorkers = 0;
-                for (Unit unit:building.getAssignedWorkers()){workingWorkers+=1;}
-
-                int resourceOnHex = building.getHex().getResources().getOrDefault(((Stable) building).getBreeding(), 0);
-                int producingResource = Math.min(Math.min(workingWorkers*Stable.productingPerUnit, resourceOnHex), gameState.getStorage().getFoodMax()-gameState.getStorage().getFoodQuantity());
-
-                if(resourceOnHex-producingResource!=0) {
-                    building.getHex().getResources().put(((Stable) building).getBreeding(), resourceOnHex - producingResource);
-                }else{
-                    toRemove.add(building);
-                    building.getHex().getResources().remove(((Stable) building).getBreeding());
-                    for(Unit unit:building.getHex().getUnits()){
-                        unit.setAssigned(false);
-                    }
-                    if(building.getHex().getResources().isEmpty()){
-                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
-                    }
-                    building.getHex().setBuilding(null);
-                }
-                this.foodProduction += producingResource;
-            }
-
-            if(this.foodProduction<0 && gameState.getStorage().getFoodQuantity()<0) {
+            if (this.foodProduction < 0 && gameState.getStorage().getFoodQuantity() < 0) {
                 gameState.setStarving(true);
-                for(Unit unit:gameState.getUnits()){
-                    unit.setActionPoints(unit.getActionPoints()-2);
+                for (Unit unit : gameState.getUnits()) {
+                    unit.setActionPoints(unit.getActionPoints() - 2);
                 }
             }
 
-            if(building.getUpkeep()!=null){
-                this.woodProduction-=building.getUpkeep().getWoodNeeded();
-                this.stoneProduction-=building.getUpkeep().getStoneNeeded();
-                this.ironProduction-=building.getUpkeep().getIronNeeded();
+            if (building.getUpkeep() != null) {
+                this.woodProduction -= building.getUpkeep().getWoodNeeded();
+                this.stoneProduction -= building.getUpkeep().getStoneNeeded();
+                this.ironProduction -= building.getUpkeep().getIronNeeded();
             }
         }
         gameState.getBuildings().removeAll(toRemove);
+    }
+
+    private void addProduction(Hex.ResourceType resourceType, int amount) {
+        switch (resourceType) {
+            case WOOD  -> this.woodProduction += amount;
+            case STONE -> this.stoneProduction += amount;
+            case IRON  -> this.ironProduction += amount;
+            case WHEAT, RICE, COW, SHEEP -> this.foodProduction += amount;
+        }
+    }
+
+    private int getStorageCap(GameState gameState, Hex.ResourceType resourceType) {
+        return switch (resourceType) {
+            case WOOD  -> gameState.getStorage().getWoodMax()  - gameState.getStorage().getWoodQuantity();
+            case STONE -> gameState.getStorage().getStoneMax() - gameState.getStorage().getStoneQuantity();
+            case IRON  -> gameState.getStorage().getIronMax()  - gameState.getStorage().getIronQuantity();
+            case WHEAT, RICE, COW, SHEEP -> gameState.getStorage().getFoodMax() - gameState.getStorage().getFoodQuantity();
+            default -> 0;
+        };
     }
 
 }

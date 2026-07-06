@@ -25,6 +25,12 @@ public abstract class Building {
         this.noUpkeepTurns = 0;
     }
 
+    public abstract int getProductionPerWorker();
+    public Hex.ResourceType getResourceType() { return null; }
+    public abstract String getBuildingImageName();
+    public boolean isTown() { return false; }
+    public boolean isTownHall() { return false; }
+
     public Hex getHex() {
         return hex;
     }

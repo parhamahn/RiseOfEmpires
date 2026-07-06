@@ -19,4 +19,13 @@ public class Stable extends Building {
     public Hex.ResourceType getBreeding() {
         return breeding;
     }
+
+    @Override
+    public int getProductionPerWorker() { return productingPerUnit; }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return breeding; }
+
+    @Override
+    public String getBuildingImageName() { return "stablehex"; }
 }

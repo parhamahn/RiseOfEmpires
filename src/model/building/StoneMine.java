@@ -14,4 +14,12 @@ public class StoneMine extends Building{
         super(hex, cost, upkeep, 3);
     }
 
+    @Override
+    public int getProductionPerWorker() { return productingPerUnit; }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return Hex.ResourceType.STONE; }
+
+    @Override
+    public String getBuildingImageName() { return "stoneminehex"; }
 }

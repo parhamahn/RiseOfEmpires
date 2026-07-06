@@ -12,4 +12,13 @@ public class Town extends Building{
     public Town(Hex hex) {
         super(hex, cost, upkeep, 0);
     }
+
+    @Override
+    public int getProductionPerWorker() { return 0; }
+
+    @Override
+    public String getBuildingImageName() { return "townhex"; }
+
+    @Override
+    public boolean isTown() { return true; }
 }

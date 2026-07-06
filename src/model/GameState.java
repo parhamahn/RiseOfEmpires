@@ -1,7 +1,6 @@
 package model;
 
 import model.building.Building;
-import model.building.Town;
 import model.building.TownHall;
 import model.unit.*;
 
@@ -142,9 +141,9 @@ public class GameState {
 
     public void updateTownCapacity(){
         int townCount = 0;
-        for(Building building:buildings){
-            if(building instanceof Town){
-                townCount+=1;
+        for (Building building : buildings) {
+            if (building.isTown()) {
+                townCount++;
             }
         }
         maxUnit = 6 + townCount;
