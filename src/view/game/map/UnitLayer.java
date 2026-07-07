@@ -1,0 +1,42 @@
+package view.game.map;
+
+import controller.SelectionContext;
+import helpers.ImageLoader;
+import model.Map;
+import model.state.GameState;
+import model.unit.Unit;
+import view.common.UITheme;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class UnitLayer implements MapLayer {
+
+
+    @Override
+    public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
+        int unitSize = Math.max(20, camera.getHexRadius() / 2);
+
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
+            if (unit.isMoving() || (!unit.isAssigned()
+                    && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
+                int drawX = unit.getPositionX();
+                int drawY = unit.getPositionY();
+
+                ImageIcon icon = ImageLoader.getInstance().loadIcon(
+                        "/utils/" + unit.getUnitImageName() + ".png", unitSize);
+                if (icon != null) {
+                    g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2,
+                            unitSize, unitSize, null);
+                }
+
+                int barWidth = unitSize / 4 * 3;
+                int barHeight = 4;
+                int barX = drawX - barWidth / 2;
+                int barY = drawY + barWidth / 4;
+                double apf = (double) unit.getActionPoints() / unit.getActionPointsMax();
+                UITheme.drawBar(g2, barX, barY, barWidth, barHeight, apf);
+            }
+        }
+    }
+}

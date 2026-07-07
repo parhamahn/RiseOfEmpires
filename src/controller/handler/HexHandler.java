@@ -4,8 +4,8 @@ import controller.SelectionContext;
 import helpers.SoundEffects;
 import model.state.GameState;
 import model.Hex;
-import view.GamePanel;
-import view.MapPanel;
+import view.game.GamePanel;
+import view.game.map.MapPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

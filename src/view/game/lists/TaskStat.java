@@ -1,7 +1,8 @@
-package view;
+package view.game.lists;
 
 import helpers.ImageLoader;
 import model.Task;
+import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ public class TaskStat{
     private JButton button;
     private boolean canAfford;
 
+
     public TaskStat(Task.TASK task, boolean canAfford){
         this.task = task;
         this.button = new JButton();
@@ -21,13 +23,7 @@ public class TaskStat{
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 75);
 
         button.setIcon(icon);
-        button.setFocusPainted(false);
-        button.setBackground(new Color(0,0,0,0));
-        button.setMargin(new Insets(0,0,0,0));
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setOpaque(false);
+        UITheme.styleIconButton(button);
 
         if(!this.canAfford){
             Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
@@ -37,10 +33,10 @@ public class TaskStat{
 
     }
 
+
     public JButton getButton() {
         return button;
     }
-
     public Task.TASK getTask() {
         return task;
     }

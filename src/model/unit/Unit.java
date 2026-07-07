@@ -88,6 +88,10 @@ public abstract class Unit{
     public void setCharges(int charges) { }
 
 
+    public String getUnitImageName() {
+        return unitType.toString().toLowerCase().replace("_", "");
+    }
+
     public void resetActionPointsForNewTurn() {
         this.actionPoints = actionPointsMax;
     }

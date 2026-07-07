@@ -1,5 +1,5 @@
 package controller;
-import view.MenuPanel;
+import view.menu.MenuPanel;
 import javax.swing.*;
 import java.awt.*;
 

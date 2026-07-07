@@ -7,12 +7,10 @@ import model.Hex;
 import model.Task;
 import model.unit.Unit;
 import model.building.*;
-import view.GamePanel;
-import view.TaskStat;
+import view.game.GamePanel;
+import view.game.lists.TaskStat;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class BuildingHandler {
     private final GameState gameState;
@@ -80,7 +78,20 @@ public class BuildingHandler {
     public void updateTaskListPanel() {
         Hex selected = selectionContext.getSelectedHex();
         if (selected != null && selected.getBuilding() == null) {
-            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(Task.getAvailableTasks(selected), gameState, selectionContext);
+            Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
+            for (Task.TASK task : Task.getAvailableTasks(selected)) {
+                boolean enoughAP = false;
+                for (Unit unit : selected.getUnits()) {
+                    if (unit.isBuilder()) {
+                        enoughAP = Building.getBuildCost(task).enoughAP(unit.getActionPoints());
+                    }
+                }
+                boolean canBuild = Building.getBuildCost(task).enoughResources(gameState.getEmpireState().getStorage())
+                        && enoughAP
+                        && selected.isInEmpireBorder();
+                canBuildMap.put(task, canBuild);
+            }
+            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(canBuildMap);
             for (TaskStat stat : stats) {
                 stat.getButton().addActionListener(e -> handleBuildingTask(stat.getTask(), selected));
             }

@@ -4,8 +4,8 @@ import model.CookQueue;
 import model.state.GameState;
 import model.building.Building;
 import model.unit.Unit;
-import view.GamePanel;
-import view.WarningDialogs;
+import view.game.GamePanel;
+import view.common.WarningDialogs;
 
 import javax.swing.*;
 import java.util.Random;
@@ -29,7 +29,7 @@ public class TurnHandler {
     public void endTurnAction() {
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (unit.getActionPoints() != 0) {
-                int x = WarningDialogs.unitsWithActionPoints(gamePanel);
+                int x = WarningDialogs.unitsWithActionPoints();
                 if (x == JOptionPane.NO_OPTION) {
                     return;
                 } else {
@@ -43,10 +43,10 @@ public class TurnHandler {
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
         if (gameState.getEmpireState().isUpkeepDisaster()) {
-            WarningDialogs.upkeepDisaster(gamePanel);
+            WarningDialogs.upkeepDisaster();
         }
         if (gameState.getEmpireState().isStarving()) {
-            WarningDialogs.starvationDisaster(gamePanel);
+            WarningDialogs.starvationDisaster();
         }
     }
 

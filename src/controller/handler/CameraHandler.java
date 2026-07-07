@@ -1,6 +1,6 @@
 package controller.handler;
 
-import view.GamePanel;
+import view.game.GamePanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

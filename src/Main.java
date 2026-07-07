@@ -3,14 +3,20 @@ import controller.MenuController;
 import controller.SelectionContext;
 import controller.SettingsController;
 import helpers.Sound;
-import model.*;
+import model.Map;
+import model.Production;
+import model.Storage;
 import model.state.GameState;
-import view.*;
-
+import view.game.GamePanel;
+import view.game.hud.HUDPanel;
+import view.game.map.MapPanel;
+import view.menu.MenuPanel;
+import view.menu.SettingsPanel;
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
+
     private static Sound music;
 
     public static void main(String[] args) {

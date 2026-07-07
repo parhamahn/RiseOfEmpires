@@ -2,7 +2,7 @@ package controller;
 
 import controller.handler.*;
 import model.state.GameState;
-import view.GamePanel;
+import view.game.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,9 +1,11 @@
-package view;
+package view.buildingpanel;
 
 import helpers.ImageLoader;
 import model.CookQueue;
 import model.state.GameState;
 import model.unit.Unit;
+import view.common.StyledButtons;
+import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,18 +15,12 @@ import java.util.Map;
 
 public class TownHallPanel extends JPanel {
 
-    private static final Color PANEL_BG = new Color(28, 28, 28);
-    private static final Color GOLD = new Color(255, 203, 87);
-
     private GameState gameState;
-
     private JButton closeButton;
-
     private JButton upgradeStorageButton;
-
     private Map<Unit.UNIT_TYPE, JButton> cookButtons;
-
     private JPanel queuePanel;
+
 
     public TownHallPanel(GameState gameState) {
         this.gameState = gameState;
@@ -34,9 +30,9 @@ public class TownHallPanel extends JPanel {
         setVisible(false);
 
         JPanel content = new JPanel(new BorderLayout());
-        content.setBackground(PANEL_BG);
+        content.setBackground(UITheme.PANEL_BG);
         content.setPreferredSize(new Dimension(700, 460));
-        content.setBorder(BorderFactory.createLineBorder(GOLD, 3));
+        content.setBorder(BorderFactory.createLineBorder(UITheme.GOLD, 3));
 
         content.add(buildTitleBar(), BorderLayout.NORTH);
         content.add(buildBody(), BorderLayout.CENTER);
@@ -44,10 +40,25 @@ public class TownHallPanel extends JPanel {
         add(content);
     }
 
+
+    public JButton getCloseButton() {
+        return closeButton;
+    }
+    public JButton getCookButton(Unit.UNIT_TYPE type) {
+        return cookButtons.get(type);
+    }
+    public Map<Unit.UNIT_TYPE, JButton> getCookButtons() {
+        return cookButtons;
+    }
+    public JButton getUpgradeStorageButton() {
+        return upgradeStorageButton;
+    }
+
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(new Color(0, 0, 0, 200));
+        g.setColor(UITheme.OVERLAY_BG);
         g.fillRect(0, 0, getWidth(), getHeight());
     }
 
@@ -57,14 +68,14 @@ public class TownHallPanel extends JPanel {
         titleBar.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 10));
 
         JLabel title = new JLabel("Town Hall");
-        title.setFont(new Font("Pixel Game", Font.BOLD, 28));
+        title.setFont(UITheme.GAME_FONT_BOLD.deriveFont(28f));
         title.setForeground(Color.WHITE);
         titleBar.add(title, BorderLayout.WEST);
 
         closeButton = new JButton("X");
         closeButton.setFocusable(false);
-        closeButton.setFont(new Font("Pixel Game", Font.BOLD, 18));
-        closeButton.setBackground(GOLD);
+        closeButton.setFont(UITheme.GAME_FONT_BOLD.deriveFont(18f));
+        closeButton.setBackground(UITheme.GOLD);
         closeButton.setForeground(Color.BLACK);
         closeButton.setPreferredSize(new Dimension(36, 36));
         closeButton.setMaximumSize(new Dimension(36, 36));
@@ -133,7 +144,7 @@ public class TownHallPanel extends JPanel {
         section.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JLabel queueLabel = new JLabel("Queue");
-        queueLabel.setFont(new Font("Pixel Game", Font.PLAIN, 16));
+        queueLabel.setFont(UITheme.GAME_FONT.deriveFont(16f));
         queueLabel.setForeground(Color.WHITE);
         queueLabel.setAlignmentX(CENTER_ALIGNMENT);
         section.add(queueLabel);
@@ -157,8 +168,8 @@ public class TownHallPanel extends JPanel {
 
     private JLabel sectionLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Pixel Game", Font.PLAIN, 20));
-        label.setForeground(GOLD);
+        label.setFont(UITheme.GAME_FONT.deriveFont(20f));
+        label.setForeground(UITheme.GOLD);
         label.setAlignmentX(CENTER_ALIGNMENT);
         return label;
     }
@@ -168,38 +179,18 @@ public class TownHallPanel extends JPanel {
     }
 
     private JButton createIconButton(String iconPath) {
-        JButton button = new JButton();
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 64);
-        button.setIcon(icon);
+        JButton button = StyledButtons.iconButton(icon);
         if(gameState.getEmpireState().getMaxUnit() == gameState.getEmpireState().getUnits().size()){
             button.setEnabled(false);
             button.setDisabledIcon(new ImageIcon(
                     GrayFilter.createDisabledImage(icon.getImage())));
         }
-        button.setFocusPainted(false);
-        button.setBackground(new Color(0, 0, 0, 0));
-        button.setMargin(new Insets(0, 0, 0, 0));
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setOpaque(false);
         return button;
     }
 
     private JButton createRectangularButton(String iconPath, int width, int height) {
-        JButton button = new JButton();
-        ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(iconPath, -1);
-
-        Image scaled = rawIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        button.setIcon(new ImageIcon(scaled));
-
-        button.setFocusPainted(false);
-        button.setBackground(new Color(0, 0, 0, 0));
-        button.setMargin(new Insets(0, 0, 0, 0));
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setOpaque(false);
-
-        return button;
+        return StyledButtons.rectangularButton(iconPath, width, height);
     }
 
     public void setQueue(List<CookQueue> cookQueues) {
@@ -213,7 +204,7 @@ public class TownHallPanel extends JPanel {
 
 
             JLabel label = new JLabel(text);
-            label.setFont(new Font("Pixel Game", Font.PLAIN, 14));
+            label.setFont(UITheme.GAME_FONT_SMALL);
             label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
             label.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -233,30 +224,13 @@ public class TownHallPanel extends JPanel {
         setVisible(false);
     }
 
-    public JButton getCloseButton() {
-        return closeButton;
-    }
-
-    public JButton getCookButton(Unit.UNIT_TYPE type) {
-        return cookButtons.get(type);
-    }
-
-    public Map<Unit.UNIT_TYPE, JButton> getCookButtons() {
-        return cookButtons;
-    }
-
-    public JButton getUpgradeStorageButton() {
-        return upgradeStorageButton;
-    }
-
     public void refresh() {
         String upgradePath = (gameState.getEmpireState().getStorageLevel() == 1)
                 ? "/utils/upgrade_storage2.png"
                 : "/utils/upgrade_storage3.png";
         if(gameState.getEmpireState().getStorageLevel()<3){
-            ImageIcon rawIcon = ImageLoader.getInstance().loadIcon(upgradePath, -1);
-            Image scaled = rawIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
-            upgradeStorageButton.setIcon(new ImageIcon(scaled));
+            upgradeStorageButton.setIcon(
+                    ImageLoader.getInstance().loadScaledIcon(upgradePath, 200, 60));
         }else{
             upgradeStorageButton.setEnabled(false);
         }

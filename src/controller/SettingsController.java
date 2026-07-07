@@ -1,7 +1,7 @@
 package controller;
 
 import helpers.Music;
-import view.SettingsPanel;
+import view.menu.SettingsPanel;
 
 import javax.swing.*;
 import java.awt.*;

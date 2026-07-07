@@ -1,11 +1,13 @@
-package view;
+package view.game.hud;
 
 import helpers.ImageLoader;
+import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ResourceStat extends JPanel {
+
     private JLabel iconLabel;
     private JLabel countLabel;
     private JLabel changeLabel;
@@ -21,22 +23,13 @@ public class ResourceStat extends JPanel {
         iconLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         countLabel = new JLabel(count +"/"+ maximum);
-        countLabel.setFont(new Font("Pixel Game", Font.BOLD, 32));
+        countLabel.setFont(UITheme.GAME_FONT_BOLD.deriveFont(32f));
         countLabel.setForeground(Color.WHITE);
         countLabel.setAlignmentY(CENTER_ALIGNMENT);
 
         changeLabel = new JLabel();
-        changeLabel.setFont(new Font("Pixel Game", Font.BOLD, 24));
-        if (change > 0){
-            changeLabel.setText("+"+change);
-            changeLabel.setForeground(new Color(0, 175, 0));
-        } else if (change < 0) {
-            changeLabel.setText(String.valueOf(change));
-            changeLabel.setForeground(new Color(222, 0, 19));
-        } else if (change == 0) {
-            changeLabel.setText(String.valueOf(change));
-            changeLabel.setForeground(new Color(248, 178, 0));
-        }
+        changeLabel.setFont(UITheme.GAME_FONT_BOLD.deriveFont(24f));
+        updateChangeLabel(change);
 
         add(iconLabel);
         add(Box.createRigidArea(new Dimension(5, 0)));
@@ -45,19 +38,25 @@ public class ResourceStat extends JPanel {
         add(countLabel);
     }
 
+
     public void setCount(int newCount, int newMaximum) {
         countLabel.setText(newCount +"/"+ newMaximum);
     }
     public void setChange(int change) {
+        updateChangeLabel(change);
+    }
+
+
+    private void updateChangeLabel(int change) {
         if (change > 0) {
             changeLabel.setText("+" + change);
-            changeLabel.setForeground(new Color(0, 175, 0));
+            changeLabel.setForeground(UITheme.POSITIVE_CHANGE);
         } else if (change < 0) {
             changeLabel.setText(String.valueOf(change));
-            changeLabel.setForeground(new Color(222, 0, 19));
+            changeLabel.setForeground(UITheme.NEGATIVE_CHANGE);
         } else {
             changeLabel.setText("0");
-            changeLabel.setForeground(new Color(248, 178, 0));
+            changeLabel.setForeground(UITheme.ZERO_CHANGE);
         }
     }
 }

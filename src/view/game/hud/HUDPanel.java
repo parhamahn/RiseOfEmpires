@@ -1,5 +1,6 @@
-package view;
+package view.game.hud;
 import model.state.GameState;
+import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,14 +9,14 @@ public class HUDPanel extends JPanel {
 
     private JButton endTurnButton;
     private JButton menuButton;
-    public ResourceStat woodStat;
-    public ResourceStat stoneStat;
-    public ResourceStat ironStat;
-    public ResourceStat foodStat;
-    public JLabel turnLabel;
-    public JLabel unitsLabel;
-
+    private ResourceStat woodStat;
+    private ResourceStat stoneStat;
+    private ResourceStat ironStat;
+    private ResourceStat foodStat;
+    private JLabel turnLabel;
+    private JLabel unitsLabel;
     private GameState gameState;
+
 
     public HUDPanel(GameState gameState){
         this.gameState = gameState;
@@ -23,7 +24,7 @@ public class HUDPanel extends JPanel {
         this.endTurnButton = new JButton("End Turn");
         this.turnLabel = new JLabel();
         this.unitsLabel = new JLabel();
-        this.setBackground(new Color(0, 0, 0, 175));
+        this.setBackground(UITheme.HUD_BG);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -49,14 +50,14 @@ public class HUDPanel extends JPanel {
 
         unitsLabel.setText("Units : "+ gameState.getEmpireState().getUnits().size()+"/"+gameState.getEmpireState().getMaxUnit());
         unitsLabel.setForeground(Color.WHITE);
-        unitsLabel.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        unitsLabel.setFont(UITheme.GAME_FONT);
         add(unitsLabel);
 
         add(Box.createHorizontalStrut(20));
 
         turnLabel.setText("Turn : "+ gameState.getWorldState().getTurnNumber());
         turnLabel.setForeground(Color.WHITE);
-        turnLabel.setFont(new Font("Pixel Game", Font.PLAIN, 24));
+        turnLabel.setFont(UITheme.GAME_FONT);
         add(turnLabel);
 
         add(Box.createHorizontalStrut(20));
@@ -65,10 +66,10 @@ public class HUDPanel extends JPanel {
         this.endTurnButton.setFocusable(false);
         this.endTurnButton.setMaximumSize(new Dimension(200, 50));
         this.endTurnButton.setMinimumSize(new Dimension(200, 50));
-        this.endTurnButton.setFont(new Font("Pixel Game", Font.PLAIN, 32));
+        this.endTurnButton.setFont(UITheme.GAME_FONT_LARGE);
         this.endTurnButton.setMargin(new Insets(10,0,0,0));
-        this.endTurnButton.setBackground(new Color(255, 203, 87));
-        this.endTurnButton.setForeground(new Color(0,0,0));
+        this.endTurnButton.setBackground(UITheme.GOLD);
+        this.endTurnButton.setForeground(Color.BLACK);
         add(endTurnButton);
 
         add(Box.createHorizontalStrut(20));
@@ -79,18 +80,19 @@ public class HUDPanel extends JPanel {
         this.menuButton.setMaximumSize(new Dimension(50, 50));
         this.menuButton.setFont(new Font("Serif", Font.PLAIN, 32));
         this.menuButton.setMargin(new Insets(0,0,0,0));
-        this.menuButton.setBackground(new Color(255, 203, 87));
-        this.menuButton.setForeground(new Color(0,0,0));
+        this.menuButton.setBackground(UITheme.GOLD);
+        this.menuButton.setForeground(Color.BLACK);
         add(menuButton);
     }
+
 
     public JButton getMenuButton() {
         return menuButton;
     }
-
     public JButton getEndTurnButton() {
         return endTurnButton;
     }
+
 
     public void refresh() {
         woodStat.setCount(gameState.getEmpireState().getStorage().getWoodQuantity(), gameState.getEmpireState().getStorage().getWoodMax());

@@ -6,8 +6,8 @@ import model.Hex;
 import model.building.Building;
 import model.unit.Unit;
 import model.unit.Worker;
-import view.GamePanel;
-import view.UnitStat;
+import view.game.GamePanel;
+import view.game.lists.UnitStat;
 
 import java.awt.*;
 import java.util.List;
@@ -44,6 +44,11 @@ public class UnitHandler {
                 }
                 unit.setActionPoints(unit.getActionPoints() - clicked.getAPToMove());
                 unit.setTargetHex(clicked);
+                if (unit.getPositionX() == 0 && unit.getPositionY() == 0 && unit.getHex() != null) {
+                    Point p = gamePanel.getMapPanel().getHexCenter(unit.getHex());
+                    unit.setPositionX(p.x);
+                    unit.setPositionY(p.y);
+                }
                 unit.setMoving(true);
                 unit.setAssigned(false);
             }
