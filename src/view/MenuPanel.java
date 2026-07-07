@@ -1,7 +1,10 @@
 package view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MenuPanel extends JPanel {
@@ -12,6 +15,7 @@ public class MenuPanel extends JPanel {
     private JButton startButton;
     private JButton settingsButton;
     private JButton exitButton;
+    private BufferedImage backgroundImage;
 
     public MenuPanel(){
         this.titleu = new JLabel("Rise");
@@ -39,7 +43,14 @@ public class MenuPanel extends JPanel {
             button.setFocusable(false);
         }
 
-        this.setBackground(new Color(38, 38, 38));
+        try {
+            this.backgroundImage = ImageIO.read(getClass().getResource("/utils/menubackground.jpg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Resource not found on classpath: /utils/menubackground.jpg", e);
+        }
+
 
         this.titleu.setForeground(new Color(0, 175, 0));
         this.titleu.setAlignmentX(CENTER_ALIGNMENT);
@@ -64,6 +75,14 @@ public class MenuPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(0, 50)));
         add(exitButton);
         add(Box.createVerticalGlue());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 
     public JButton getStartButton() {

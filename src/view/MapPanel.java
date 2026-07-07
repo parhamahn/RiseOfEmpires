@@ -3,6 +3,8 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -52,8 +54,15 @@ public class MapPanel extends JPanel {
         setBackground(Color.BLACK);
         rebuildHexShape();
         setMap(map);
-        cameraX = map.getCols() * hexRadius / 2 + hexRadius;
-        cameraY = map.getRows() * hexRadius / 2 - hexRadius;
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (getWidth() > 0 && getHeight() > 0) {
+                    centerCameraOnTownHall();
+                    removeComponentListener(this);
+                }
+            }
+        });
         try {
             plainImage = ImageIO.read(getClass().getResource("/utils/plainhex.png"));
             forestImage = ImageIO.read(getClass().getResource("/utils/foresthex.png"));
@@ -182,6 +191,7 @@ public class MapPanel extends JPanel {
 
     public void setMap(Map map) {
         this.map = map;
+        centerCameraOnTownHall();
         repaint();
     }
 
@@ -194,6 +204,14 @@ public class MapPanel extends JPanel {
 
         cameraX = Math.max(-screenW + dx, Math.min(mapWorldW - dx, cameraX + deltaX));
         cameraY = Math.max(-screenH + dy, Math.min(mapWorldH - dy, cameraY + deltaY));
+
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
+            if (!unit.isMoving() && unit.getHex() != null) {
+                Point p = getHexCenter(unit.getHex());
+                unit.setPositionX(p.x);
+                unit.setPositionY(p.y);
+            }
+        }
     }
 
     public Hex getHexAt(int screenX, int screenY) {
@@ -343,8 +361,9 @@ public class MapPanel extends JPanel {
                 int startX  = center.x - rowWidth / 2 + spacing / 2;
                 int y       = center.y + hexRadius / 2 + badgeRadius;
 
+                Object[] resourceKeys = resources.keySet().toArray();
                 for (int i = 0; i < resources.size(); i++) {
-                    BufferedImage icon = resourceIcons.get(resources.keySet().toArray()[i]);
+                    BufferedImage icon = resourceIcons.get(resourceKeys[i]);
                     if (icon == null) continue;
 
                     int iconX  = startX + i * spacing;
@@ -366,7 +385,11 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         int unitSize = Math.max(20, hexRadius / 2);
 
-        initUnitPositions();
+        for (Unit unit : gameState.getEmpireState().getUnits()) {
+            if (unit.isMoving()) {
+                animateUnitTowardHex(unit);
+            }
+        }
 
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (unit.isMoving() || (!unit.isAssigned() && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
@@ -423,6 +446,17 @@ public class MapPanel extends JPanel {
                 }
             }
         }
+    }
+
+    public void centerCameraOnTownHall() {
+        Hex townHall = gameState.getEmpireState().getTownHallHex();
+        if (townHall == null || getWidth() == 0 || getHeight() == 0) return;
+
+        int worldX = (int) ((townHall.getC() + 0.5 * (townHall.getR() & 1)) * dx);
+        int worldY = townHall.getR() * dy;
+
+        cameraX = worldX - getWidth() / 2;
+        cameraY = worldY - getHeight() / 2;
     }
 
     private BufferedImage getBuildingImage(Building building) {

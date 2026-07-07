@@ -19,14 +19,13 @@ public class Main {
             frame.setSize(1400, 900);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
-            frame.setResizable(false);
 
             JPanel cards = new JPanel(new CardLayout());
             frame.setContentPane(cards);
 
             Storage storage = new Storage();
             Production production = new Production();
-            Map map = new Map(15, 20);
+            Map map = new Map(50, 100);
             GameState gameState = new GameState(storage, production, map);
             SelectionContext selectionContext = new SelectionContext();
 
