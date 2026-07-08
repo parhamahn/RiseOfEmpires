@@ -2,6 +2,7 @@ package view.game.lists;
 
 import helpers.ImageLoader;
 import model.unit.Unit;
+import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;
@@ -32,10 +33,11 @@ public class UnitStat {
             }
         };
 
-        ImageIcon icon = ImageLoader.getInstance().loadIcon("/utils/" + unit.getUnitImageName() + ".png", 75);
+        ImageIcon icon = ImageLoader.getInstance().loadIcon("/utils/" + unit.getUnitImageName() + ".png", 60);
 
         button.setIcon(icon);
         UITheme.styleIconButton(button);
+        StyledButtons.goldBorder(this.button);
 
     }
 

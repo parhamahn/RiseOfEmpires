@@ -3,7 +3,10 @@ package view.common;
 import helpers.ImageLoader;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StyledButtons {
 
@@ -14,15 +17,25 @@ public class StyledButtons {
         return button;
     }
 
-    public static JButton rectangularButton(String iconPath, int width, int height) {
-        ImageIcon icon = ImageLoader.getInstance().loadScaledIcon(iconPath, width, height);
-        JButton button = new JButton(icon);
-        UITheme.styleIconButton(button);
-        return button;
+    public static void goldBorder(JButton jButton){
+        Border goldenBorder = BorderFactory.createLineBorder(new Color(212, 175, 55), 1);
+        jButton.setBorder(goldenBorder);
+        jButton.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jButton.setBorderPainted(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jButton.setBorderPainted(false);
+            }
+        });
     }
 
     public static JButton textButton(String text, Icon icon, Dimension size, float fontSize, Color fg) {
         JButton button = new JButton(text, icon);
+        goldBorder(button);
         button.setPreferredSize(size);
         button.setMinimumSize(size);
         button.setMaximumSize(size);
@@ -36,7 +49,4 @@ public class StyledButtons {
         return button;
     }
 
-    public static JButton redButton(String text, Icon icon, Dimension size, float fontSize) {
-        return textButton(text, icon, size, fontSize, new Color(200, 30, 30));
-    }
 }

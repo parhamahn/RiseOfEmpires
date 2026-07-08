@@ -13,8 +13,8 @@ import java.awt.event.ComponentEvent;
 
 public class GamePanel extends JPanel {
 
-    private static final int FPS = 24;
-    private static final int SIDE_PANEL_WIDTH = 120;
+    private static final int FPS = 60;
+    private static final int SIDE_PANEL_WIDTH = 100;
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;
