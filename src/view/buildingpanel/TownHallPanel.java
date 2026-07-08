@@ -1,7 +1,7 @@
 package view.buildingpanel;
 
 import helpers.ImageLoader;
-import model.CookQueue;
+import model.queue.*;
 import model.state.GameState;
 import model.unit.Unit;
 import view.common.StyledButtons;
@@ -102,14 +102,11 @@ public class TownHallPanel extends JPanel {
         section.setLayout(new BoxLayout(section, BoxLayout.Y_AXIS));
         section.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-        section.add(sectionLabel("Upgrade Storage"));
+        section.add(sectionLabel("Upgrade TownHall"));
         section.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        String path = (gameState.getEmpireState().getStorageLevel() == 1)
-                ? "/utils/upgrade_storage2.png"
-                : "/utils/upgrade_storage3.png";
-
-        upgradeStorageButton = createRectangularButton(path, 200, 60);
+        ImageIcon upgradeIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 56);
+        upgradeStorageButton = StyledButtons.textButton("Upgrade to "+gameState.getEmpireState().getTownHallLevel().nextUpgrade(), upgradeIcon, new Dimension(200, 56), 16f, UITheme.MENU_BUTTON_FG);
 
         upgradeStorageButton.setAlignmentX(CENTER_ALIGNMENT);
         section.add(upgradeStorageButton);
@@ -189,19 +186,20 @@ public class TownHallPanel extends JPanel {
         return button;
     }
 
-    private JButton createRectangularButton(String iconPath, int width, int height) {
-        return StyledButtons.rectangularButton(iconPath, width, height);
-    }
 
-    public void setQueue(List<CookQueue> cookQueues) {
+    public void setQueue(List<Queue> queues) {
         queuePanel.removeAll();
-        for (CookQueue cq : cookQueues) {
-            String unitName = cq.getUnit().getUnitType().toString();
-            int turns = cq.getTurnToCook()-gameState.getWorldState().getTurnNumber();
+        for (Queue q : queues) {
+            int turns = q.getTurnsLeft(gameState.getWorldState().getTurnNumber());
+            String typeLabel;
+            switch (q.getQueueType()) {
+                case COOK -> typeLabel = "Cooking " + ((CookQueue) q).getUnit().getUnitType().toString();
+                case UPGRADE -> typeLabel = "Upgrading to " + ((UpgradeQueue) q).getTargetLevel();
+                case RESEARCH -> typeLabel = "Researching " + ((ResearchQueue) q).getTechnology();
+                default -> typeLabel = "Unknown";
+            }
 
-            String text;
-            text = unitName + " : " + turns + " turn" + (turns > 1 ? "s" : "") + " left";
-
+            String text = typeLabel + " : " + turns + " turn" + (turns != 1 ? "s" : "") + " left";
 
             JLabel label = new JLabel(text);
             label.setFont(UITheme.GAME_FONT_SMALL);
@@ -225,17 +223,17 @@ public class TownHallPanel extends JPanel {
     }
 
     public void refresh() {
-        String upgradePath = (gameState.getEmpireState().getStorageLevel() == 1)
-                ? "/utils/upgrade_storage2.png"
-                : "/utils/upgrade_storage3.png";
-        if(gameState.getEmpireState().getStorageLevel()<3){
-            upgradeStorageButton.setIcon(
-                    ImageLoader.getInstance().loadScaledIcon(upgradePath, 200, 60));
-        }else{
+        boolean upgradeQueued = gameState.getEmpireState().getQueues().stream()
+                .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
+
+        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null && !upgradeQueued) {
+            upgradeStorageButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
+            upgradeStorageButton.setEnabled(true);
+        } else {
             upgradeStorageButton.setEnabled(false);
         }
 
-        boolean atCap = (gameState.getEmpireState().getUnits().size() + gameState.getEmpireState().getUnitQueues().size()) >= gameState.getEmpireState().getMaxUnit();
+        boolean atCap = (gameState.getEmpireState().getUnits().size() + (int) gameState.getEmpireState().getCookQueueCount()) >= gameState.getEmpireState().getMaxUnit();
         for (Map.Entry<Unit.UNIT_TYPE, JButton> entry : cookButtons.entrySet()) {
             JButton button = entry.getValue();
             button.setEnabled(!atCap);
@@ -247,7 +245,7 @@ public class TownHallPanel extends JPanel {
                 }
             }
         }
-        setQueue(gameState.getEmpireState().getUnitQueues());
+        setQueue(gameState.getEmpireState().getQueues());
     }
 
 }

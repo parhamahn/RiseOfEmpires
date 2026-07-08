@@ -1,6 +1,6 @@
 package controller;
 
-import model.Hex;
+import model.map.Hex;
 import model.unit.Unit;
 
 public class SelectionContext {

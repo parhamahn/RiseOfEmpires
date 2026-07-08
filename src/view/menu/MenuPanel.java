@@ -2,6 +2,7 @@ package view.menu;
 
 import helpers.ImageLoader;
 import view.common.StyledButtons;
+import view.common.UITheme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,9 +24,9 @@ public class MenuPanel extends JPanel {
         buttonIcon = ImageLoader.getInstance().loadScaledIcon(
                 "/utils/menubutton.png", BUTTON_SIZE.width, BUTTON_SIZE.height);
 
-        this.startButton = StyledButtons.menuButton("Start", buttonIcon, BUTTON_SIZE);
-        this.settingsButton = StyledButtons.menuButton("Settings", buttonIcon, BUTTON_SIZE);
-        this.exitButton = StyledButtons.menuButton("Exit", buttonIcon, BUTTON_SIZE);
+        this.startButton = StyledButtons.textButton("Start", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
+        this.settingsButton = StyledButtons.textButton("Settings", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
+        this.exitButton = StyledButtons.textButton("Exit", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

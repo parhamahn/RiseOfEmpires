@@ -21,9 +21,22 @@ public class StyledButtons {
         return button;
     }
 
-    public static JButton menuButton(String text, Icon icon, Dimension size) {
+    public static JButton textButton(String text, Icon icon, Dimension size, float fontSize, Color fg) {
         JButton button = new JButton(text, icon);
-        UITheme.styleMenuButton(button, size);
+        button.setPreferredSize(size);
+        button.setMinimumSize(size);
+        button.setMaximumSize(size);
+        button.setFont(UITheme.GAME_FONT_BOLD.deriveFont(fontSize));
+        button.setForeground(fg);
+        button.setFocusable(false);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.CENTER);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
         return button;
+    }
+
+    public static JButton redButton(String text, Icon icon, Dimension size, float fontSize) {
+        return textButton(text, icon, size, fontSize, new Color(200, 30, 30));
     }
 }

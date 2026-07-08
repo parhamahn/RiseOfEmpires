@@ -1,6 +1,6 @@
 package model.state;
 
-import model.Map;
+import model.map.Map;
 
 public class WorldState {
     private Map map;

@@ -1,12 +1,14 @@
 package controller.handler;
 
 import controller.SelectionContext;
+import model.TownHallLevel;
 import model.state.EmpireState;
 import model.state.GameState;
-import model.Hex;
+import model.map.Hex;
 import model.Task;
 import model.unit.Unit;
 import model.building.*;
+import model.queue.UpgradeQueue;
 import view.game.GamePanel;
 import view.game.lists.TaskStat;
 
@@ -34,8 +36,12 @@ public class BuildingHandler {
             });
         }
         gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e -> {
-            gameState.getEmpireState().setStorageLevel(gameState.getEmpireState().getStorageLevel() + 1);
-            gameState.getEmpireState().getStorage().upgradeStorage(gameState.getEmpireState().getStorageLevel());
+            TownHallLevel next = gameState.getEmpireState().getTownHallLevel().nextUpgrade();
+            if (next != null) {
+                gameState.getEmpireState().getQueues().add(
+                        new UpgradeQueue(next, next.getNextUpgradeTurnCost(),
+                                gameState.getWorldState().getTurnNumber()));
+            }
             updateTaskListPanel();
             gamePanel.getTownHallPanel().refresh();
         });

@@ -2,7 +2,7 @@ package view.game.map;
 
 import controller.SelectionContext;
 import helpers.ImageLoader;
-import model.Map;
+import model.map.Map;
 import model.state.GameState;
 import model.unit.Unit;
 import view.common.UITheme;

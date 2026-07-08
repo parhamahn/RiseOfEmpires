@@ -3,6 +3,11 @@ package model.state;
 import model.*;
 import model.building.Building;
 import model.building.TownHall;
+import model.map.Hex;
+import model.map.Map;
+import model.queue.Queue;
+import model.queue.Technology;
+import model.storage.Storage;
 import model.unit.*;
 
 import java.util.ArrayList;
@@ -18,16 +23,18 @@ public class EmpireState {
     private boolean isStarving;
     private boolean upkeepDisaster;
     private int maxUnit;
-    private int storageLevel;
     private Hex townHallHex;
-    private List<CookQueue> unitQueues;
+    private List<Queue> queues;
+    private List<Technology> researchedTechnologies;
+    private TownHallLevel townHallLevel;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
         this.production = production;
         this.maxUnit = DEFAULT_UNIT_CAPACITY;
-        this.storageLevel = 1;
-        this.unitQueues = new ArrayList<>();
+        this.townHallLevel = TownHallLevel.BASE_CAMP;
+        this.queues = new ArrayList<>();
+        this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
     }
 
@@ -65,8 +72,13 @@ public class EmpireState {
     public void setMaxUnit(int maxUnit) { this.maxUnit = maxUnit; }
     public boolean isUpkeepDisaster() { return upkeepDisaster; }
     public void setUpkeepDisaster(boolean upkeepDisaster) { this.upkeepDisaster = upkeepDisaster; }
-    public int getStorageLevel() { return storageLevel; }
-    public void setStorageLevel(int storageLevel) { this.storageLevel = storageLevel; }
+    public TownHallLevel getTownHallLevel() {return townHallLevel;}
+    public void setTownHallLevel(TownHallLevel townHallLevel) {this.townHallLevel = townHallLevel;}
     public Hex getTownHallHex() { return townHallHex; }
-    public List<CookQueue> getUnitQueues() { return unitQueues; }
+    public List<Queue> getQueues() { return queues; }
+    public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
+
+    public long getCookQueueCount() {
+        return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();
+    }
 }

@@ -1,7 +1,7 @@
 package view.game.map;
 
 import controller.SelectionContext;
-import model.Map;
+import model.map.Map;
 import model.state.GameState;
 
 import java.awt.*;

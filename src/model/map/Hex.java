@@ -1,4 +1,4 @@
-package model;
+package model.map;
 
 import model.building.Building;
 import model.unit.Unit;

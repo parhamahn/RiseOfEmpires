@@ -1,7 +1,7 @@
 package view.game.map;
 import controller.SelectionContext;
-import model.Hex;
-import model.Map;
+import model.map.Hex;
+import model.map.Map;
 import model.state.GameState;
 import javax.swing.*;
 import java.awt.*;

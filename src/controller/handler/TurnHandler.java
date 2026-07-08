@@ -1,6 +1,6 @@
 package controller.handler;
 
-import model.CookQueue;
+import model.queue.*;
 import model.state.GameState;
 import model.building.Building;
 import model.unit.Unit;
@@ -8,6 +8,8 @@ import view.game.GamePanel;
 import view.common.WarningDialogs;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TurnHandler {
@@ -16,13 +18,11 @@ public class TurnHandler {
 
     private final GameState gameState;
     private final GamePanel gamePanel;
-    private final CookUnitHandler cookUnitHandler;
     private final BuildingHandler buildingHandler;
 
     public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
-        this.cookUnitHandler = cookUnitHandler;
         this.buildingHandler = buildingHandler;
     }
 
@@ -38,7 +38,7 @@ public class TurnHandler {
             }
         }
         endTurn();
-        cookUnitHandler.checkCooks(gameState);
+        processQueues();
         gamePanel.getTownHallPanel().refresh();
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
@@ -48,6 +48,37 @@ public class TurnHandler {
         if (gameState.getEmpireState().isStarving()) {
             WarningDialogs.starvationDisaster();
         }
+    }
+
+    private void processQueues() {
+        List<Queue> toRemove = new ArrayList<>();
+        int currentTurn = gameState.getWorldState().getTurnNumber();
+
+        for (Queue queue : gameState.getEmpireState().getQueues()) {
+            if (queue.isComplete(currentTurn)) {
+                switch (queue.getQueueType()) {
+                    case COOK -> {
+                        CookQueue cq = (CookQueue) queue;
+                        cq.getUnit().setHex(gameState.getEmpireState().getTownHallHex());
+                        gameState.getEmpireState().getTownHallHex().getUnits().add(cq.getUnit());
+                        gameState.getEmpireState().getUnits().add(cq.getUnit());
+                        toRemove.add(queue);
+                    }
+                    case UPGRADE -> {
+                        UpgradeQueue uq = (UpgradeQueue) queue;
+                        gameState.getEmpireState().setTownHallLevel(uq.getTargetLevel());
+                        toRemove.add(queue);
+                    }
+                    case RESEARCH -> {
+                        ResearchQueue rq = (ResearchQueue) queue;
+                        gameState.getEmpireState().getResearchedTechnologies().add(rq.getTechnology());
+                        toRemove.add(queue);
+                    }
+                }
+                gameState.getEmpireState().recalculateProduction();
+            }
+        }
+        gameState.getEmpireState().getQueues().removeAll(toRemove);
     }
 
     private void endTurn() {
@@ -66,8 +97,8 @@ public class TurnHandler {
             for (Unit unit : gameState.getEmpireState().getUnits()) {
                 unit.setActionPoints(Math.max(0, unit.getActionPoints() * 2 / 3));
             }
-            for (CookQueue cookQueue : gameState.getEmpireState().getUnitQueues()) {
-                cookQueue.setTurnToCook(cookQueue.getTurnToCook() + 1);
+            for (Queue queue : gameState.getEmpireState().getQueues()) {
+                queue.addDelay(1);
             }
             gameState.getEmpireState().setStarving(true);
         } else {

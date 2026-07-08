@@ -3,7 +3,7 @@ package controller.handler;
 import controller.SelectionContext;
 import helpers.SoundEffects;
 import model.state.GameState;
-import model.Hex;
+import model.map.Hex;
 import view.game.GamePanel;
 import view.game.map.MapPanel;
 

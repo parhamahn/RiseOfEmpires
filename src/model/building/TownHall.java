@@ -1,10 +1,15 @@
 package model.building;
 
-import model.Hex;
+import model.map.Hex;
 
 public class TownHall extends Building {
 
-    public TownHall(Hex hex){super(hex, null, null, 0);}
+    private int HP;
+
+    public TownHall(Hex hex){
+        super(hex, null, null, 0);
+        this.HP = 200;
+    }
 
 
     @Override
@@ -15,4 +20,7 @@ public class TownHall extends Building {
 
     @Override
     public boolean isTownHall() { return true; }
+
+    public int getHP(){return HP;}
+    public void setHP(int HP){this.HP = HP;}
 }

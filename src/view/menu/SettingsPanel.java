@@ -23,7 +23,7 @@ public class SettingsPanel extends JPanel {
 
         this.title = new JLabel("Settings");
         this.soundSlider = new JSlider(0, 100, 50);
-        this.backButton = StyledButtons.menuButton("Back", buttonIcon, BUTTON_SIZE);
+        this.backButton = StyledButtons.textButton("Back", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
         this.soundSliderTag = new JLabel("Sound");
 
         this.title.setFont(UITheme.GAME_FONT_BOLD.deriveFont(48f));

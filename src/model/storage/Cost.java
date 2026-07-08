@@ -1,4 +1,4 @@
-package model;
+package model.storage;
 
 public class Cost {
     private int woodNeeded;

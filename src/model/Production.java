@@ -1,6 +1,7 @@
 package model;
 
 import model.building.Building;
+import model.map.Hex;
 import model.state.EmpireState;
 import model.unit.Unit;
 
@@ -9,9 +10,9 @@ import java.util.List;
 
 public class Production {
     private final int DEFAULT_FOOD_PRODUCTION = 9;
-    private final int DEFAULT_WOOD_PRODUCTION = 3;
-    private final int DEFAULT_STONE_PRODUCTION = 2;
-    private final int DEFAULT_IRON_PRODUCTION = 1;
+    private final int DEFAULT_WOOD_PRODUCTION = 1;
+    private final int DEFAULT_STONE_PRODUCTION = 1;
+    private final int DEFAULT_IRON_PRODUCTION = 0;
 
     private int foodProduction;
     private int woodProduction;

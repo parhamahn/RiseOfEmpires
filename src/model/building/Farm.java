@@ -1,8 +1,7 @@
 package model.building;
 
-import model.Cost;
-import model.Hex;
-import model.Task;
+import model.storage.Cost;
+import model.map.Hex;
 
 public class Farm extends Building{
     public final static int productingPerUnit = 2;

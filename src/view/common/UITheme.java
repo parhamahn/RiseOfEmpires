@@ -37,19 +37,6 @@ public class UITheme {
         button.setOpaque(false);
     }
 
-    public static void styleMenuButton(JButton button, Dimension size) {
-        button.setPreferredSize(size);
-        button.setMinimumSize(size);
-        button.setMaximumSize(size);
-        button.setFont(GAME_FONT_BOLD);
-        button.setForeground(MENU_BUTTON_FG);
-        button.setFocusable(false);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        button.setVerticalTextPosition(SwingConstants.CENTER);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-    }
-
     public static void drawBar(Graphics g, int x, int y, int width, int height, double ratio) {
         g.setColor(BAR_BG);
         g.fillRect(x, y, width, height);

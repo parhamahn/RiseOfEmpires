@@ -1,7 +1,6 @@
 package model.unit;
 
-import model.Hex;
-import model.Storage;
+import model.map.Hex;
 
 public abstract class Unit{
     public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};

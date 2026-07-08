@@ -1,8 +1,8 @@
 package model.state;
 
-import model.Map;
+import model.map.Map;
 import model.Production;
-import model.Storage;
+import model.storage.Storage;
 
 public class GameState {
     private final EmpireState empireState;

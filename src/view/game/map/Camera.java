@@ -1,7 +1,7 @@
 package view.game.map;
 
-import model.Hex;
-import model.Map;
+import model.map.Hex;
+import model.map.Map;
 
 import java.awt.*;
 

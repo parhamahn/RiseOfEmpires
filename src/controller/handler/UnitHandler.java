@@ -2,7 +2,7 @@ package controller.handler;
 
 import controller.SelectionContext;
 import model.state.GameState;
-import model.Hex;
+import model.map.Hex;
 import model.building.Building;
 import model.unit.Unit;
 import model.unit.Worker;
