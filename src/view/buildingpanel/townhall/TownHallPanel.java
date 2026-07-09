@@ -6,8 +6,11 @@ import model.state.GameState;
 import model.unit.Unit;
 import view.common.UITheme;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ public class TownHallPanel extends JPanel {
     private CookSection cookSection;
     private QueueSection queueSection;
     private ResearchSection researchSection;
+    private BufferedImage panelBackground;
 
     public TownHallPanel(GameState gameState) {
         this.gameState = gameState;
@@ -27,9 +31,26 @@ public class TownHallPanel extends JPanel {
         setLayout(new GridBagLayout());
         setVisible(false);
 
-        JPanel content = new JPanel(new BorderLayout());
-        content.setBackground(UITheme.PANEL_BG);
-        content.setPreferredSize(new Dimension(1000, 800));
+        try {
+            this.panelBackground = ImageIO.read(getClass().getResource("/utils/townhallpanel.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        JPanel content = new JPanel(new BorderLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                if (panelBackground != null) {g2.drawImage(panelBackground, 0, 0, getWidth(), getHeight(), this);}
+                g2.setColor(new Color(0, 0, 0, 180));
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
+            }
+        };
+        content.setOpaque(false);
+        content.setPreferredSize(new Dimension(1200, 800));
         content.setBorder(BorderFactory.createLineBorder(UITheme.GOLD, 3));
 
         content.add(buildTitleBar(), BorderLayout.NORTH);

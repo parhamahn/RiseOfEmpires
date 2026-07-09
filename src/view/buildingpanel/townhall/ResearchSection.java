@@ -23,7 +23,7 @@ public class ResearchSection extends JPanel {
         techOrder = new ArrayList<>();
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
         JLabel label = new JLabel("Technology Research");
         label.setFont(UITheme.GAME_FONT.deriveFont(20f));

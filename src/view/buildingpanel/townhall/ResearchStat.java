@@ -19,7 +19,7 @@ public class ResearchStat extends JPanel {
         this.technology = technology;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
-        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 60);
         JLabel iconLabel = new JLabel(icon);

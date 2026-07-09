@@ -27,7 +27,7 @@ public class CookSection extends JPanel {
         add(label);
         add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JPanel grid = new JPanel(new GridLayout(2, 4, 5, 5));
+        JPanel grid = new JPanel(new GridLayout(2, 4, 0, 0));
         grid.setOpaque(false);
         grid.setAlignmentX(CENTER_ALIGNMENT);
 
