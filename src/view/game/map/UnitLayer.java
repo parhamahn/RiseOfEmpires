@@ -35,7 +35,9 @@ public class UnitLayer implements MapLayer {
                 int barX = drawX - barWidth / 2;
                 int barY = drawY + barWidth / 4;
                 double apf = (double) unit.getActionPoints() / unit.getActionPointsMax();
-                UITheme.drawBar(g2, barX, barY, barWidth, barHeight, apf);
+                double hpf = (double) unit.getHP()/unit.getMaxHP();
+                UITheme.drawAPBar(g2, barX, barY, barWidth, barHeight, apf);
+                UITheme.drawHPBar(g2, barX, barY+barHeight, barWidth, barHeight, hpf);
             }
         }
     }

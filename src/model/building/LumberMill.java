@@ -11,7 +11,7 @@ public class LumberMill extends Building{
 
 
     public LumberMill(Hex hex) {
-        super(hex, cost, upkeep, 2);
+        super(hex, cost, upkeep, 2, 50);
     }
 
 

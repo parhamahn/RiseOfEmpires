@@ -5,7 +5,7 @@ public class Builder extends Unit{
     private int charges;
 
     public Builder(){
-        super(UNIT_TYPE.BUILDER, 5, 2);
+        super(UNIT_TYPE.BUILDER, 5, 2, 10);
         this.charges=3;
     }
 

@@ -15,9 +15,11 @@ public abstract class Unit{
     protected int foodConsumptionPerTurn;
     protected Hex hex;
     private Hex targetHex;
+    private int maxHP;
+    private int HP;
 
 
-    protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn){
+    protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn, int maxHP){
         this.unitType = unitType;
         this.actionPointsMax = actionPointsMax;
         this.actionPoints = actionPointsMax;
@@ -25,6 +27,8 @@ public abstract class Unit{
         this.hex = null;
         this.targetHex = null;
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
+        this.maxHP = maxHP;
+        this.HP = maxHP;
     }
 
 
@@ -85,7 +89,10 @@ public abstract class Unit{
     public boolean isBorderExpander() { return false; }
     public int getCharges() { return 0; }
     public void setCharges(int charges) { }
-
+    public int getMaxHP() {return maxHP;}
+    public void setMaxHP(int maxHP) {this.maxHP = maxHP;}
+    public int getHP() {return HP;}
+    public void setHP(int HP) {this.HP = HP;}
 
     public String getUnitImageName() {
         return unitType.toString().toLowerCase().replace("_", "");

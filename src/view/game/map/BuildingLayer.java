@@ -4,6 +4,8 @@ import controller.SelectionContext;
 import model.map.Map;
 import model.building.Building;
 import model.state.GameState;
+import view.common.UITheme;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -45,10 +47,17 @@ public class BuildingLayer implements MapLayer {
             Point center = camera.getHexCenter(building.getHex());
             Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
 
+            double hpf = (double) building.getHP() /building.getMaxHP();
+            int barWidth = camera.getHexRadius() / 4 * 3;
+            int barHeight = 4;
+            int barX = center.x - barWidth / 2;
+            int barY = center.y + barWidth / 2;
+
             Shape oldClip = g2.getClip();
             g2.setClip(tile);
             g2.drawImage(img, center.x - r2, center.y - r2, r2 * 2, r2 * 2, null);
             g2.setClip(oldClip);
+            UITheme.drawHPBar(g2, barX, barY, barWidth, barHeight, hpf);
         }
     }
 }

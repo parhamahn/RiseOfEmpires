@@ -7,7 +7,7 @@ public class TownHall extends Building {
     private int HP;
 
     public TownHall(Hex hex){
-        super(hex, null, null, 0);
+        super(hex, null, null, 0, 200);
         this.HP = 200;
     }
 

@@ -3,7 +3,7 @@ package model.unit;
 public class BorderExpander extends Unit{
 
     public BorderExpander(){
-        super(UNIT_TYPE.BORDER_EXPANDER, 10, 1);
+        super(UNIT_TYPE.BORDER_EXPANDER, 10, 1, 10);
     }
 
     @Override

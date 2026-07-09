@@ -10,7 +10,7 @@ public class Town extends Building{
 
 
     public Town(Hex hex) {
-        super(hex, cost, upkeep, 0);
+        super(hex, cost, upkeep, 0, 100);
     }
 
 

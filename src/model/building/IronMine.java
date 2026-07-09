@@ -11,7 +11,7 @@ public class IronMine extends Building{
 
 
     public IronMine(Hex hex) {
-        super(hex, cost, upkeep, 3);
+        super(hex, cost, upkeep, 3, 75);
     }
 
 

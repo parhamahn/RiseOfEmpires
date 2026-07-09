@@ -17,14 +17,18 @@ public abstract class Building {
     private List<Worker> assignedWorkers = new ArrayList<>();
     private int workerCapacity;
     private int noUpkeepTurns;
+    private int maxHP;
+    private int HP;
 
 
-    public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity){
+    public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity, int maxHP){
         this.hex = hex;
         this.cost = cost;
         this.upkeep = upkeep;
         this.workerCapacity = workerCapacity;
         this.noUpkeepTurns = 0;
+        this.maxHP = maxHP;
+        this.HP = maxHP;
     }
 
 
@@ -33,7 +37,6 @@ public abstract class Building {
     public abstract String getBuildingImageName();
     public boolean isTown() { return false; }
     public boolean isTownHall() { return false; }
-
     public Hex getHex() {
         return hex;
     }
@@ -55,7 +58,10 @@ public abstract class Building {
     public void setNoUpkeepTurns(int noUpkeepTurns) {
         this.noUpkeepTurns = noUpkeepTurns;
     }
-
+    public int getHP() {return HP;}
+    public void setHP(int HP) {this.HP = HP;}
+    public int getMaxHP() {return maxHP;}
+    public void setMaxHP(int maxHP) {this.maxHP = maxHP;}
 
     public static Cost getBuildCost(Task.TASK task) {
         return switch (task) {

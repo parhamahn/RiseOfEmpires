@@ -22,8 +22,10 @@ public class UITheme {
     public static final Color NEGATIVE_CHANGE = new Color(222, 0, 19);
     public static final Color ZERO_CHANGE = new Color(248, 178, 0);
 
-    public static final Color BAR_BG = new Color(60, 60, 60);
-    public static final Color BAR_FG = new Color(50, 200, 50);
+    public static final Color AP_BAR_BG = new Color(60, 60, 60);
+    public static final Color AP_BAR_FG = new Color(50, 200, 50);
+    public static final Color HP_BAR_BG = new Color(60, 60, 60);
+    public static final Color HP_BAR_FG = new Color(255, 0, 0);
 
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
@@ -37,10 +39,17 @@ public class UITheme {
         button.setOpaque(false);
     }
 
-    public static void drawBar(Graphics g, int x, int y, int width, int height, double ratio) {
-        g.setColor(BAR_BG);
+    public static void drawAPBar(Graphics g, int x, int y, int width, int height, double ratio) {
+        g.setColor(AP_BAR_BG);
         g.fillRect(x, y, width, height);
-        g.setColor(BAR_FG);
+        g.setColor(AP_BAR_FG);
+        g.fillRect(x, y, (int) (ratio * width), height);
+    }
+
+    public static void drawHPBar(Graphics g, int x, int y, int width, int height, double ratio) {
+        g.setColor(HP_BAR_BG);
+        g.fillRect(x, y, width, height);
+        g.setColor(HP_BAR_FG);
         g.fillRect(x, y, (int) (ratio * width), height);
     }
 }

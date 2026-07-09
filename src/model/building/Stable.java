@@ -11,7 +11,7 @@ public class Stable extends Building {
     private final static Cost upkeep = new Cost(2, 1, 0, 0);
 
 
-    public Stable(Hex hex, Hex.ResourceType breeding) {super(hex, cost, upkeep, 2); this.breeding = breeding;}
+    public Stable(Hex hex, Hex.ResourceType breeding) {super(hex, cost, upkeep, 2, 50); this.breeding = breeding;}
 
 
     public Hex.ResourceType getBreeding() {
