@@ -7,8 +7,8 @@ public class Stable extends Building {
     public final static int productingPerUnit = 3;
     Hex.ResourceType breeding;
 
-    private final static Cost cost = new Cost(20, 0,  0, 2);
-    private final static Cost upkeep = new Cost(2, 1, 0, 0);
+    private final static Cost cost = new Cost(20, 0,  0, 0, 2);
+    private final static Cost upkeep = new Cost(2, 1, 0, 0, 0);
 
 
     public Stable(Hex hex, Hex.ResourceType breeding) {super(hex, cost, upkeep, 2, 50); this.breeding = breeding;}

@@ -1,9 +1,31 @@
 package model.unit;
 
 import model.map.Hex;
+import model.storage.Cost;
 
 public abstract class Unit{
-    public enum UNIT_TYPE {EXPLORER, BUILDER, BORDER_EXPANDER, WORKER};
+
+    public enum UNIT_TYPE {
+        EXPLORER(null, 3),
+        BUILDER(null, 3),
+        BORDER_EXPANDER(null, 3),
+        WORKER(null, 3),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3),
+        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3),
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3);
+
+        private final Cost cookCost;
+        private final int turnCost;
+
+        UNIT_TYPE(Cost cookCost, int turnCost) {
+            this.cookCost = cookCost;
+            this.turnCost = turnCost;
+        }
+
+        public Cost getCookCost() { return cookCost; }
+        public int getTurnCost() { return turnCost; }
+    }
 
     protected UNIT_TYPE unitType;
     protected int positionX;
@@ -17,10 +39,12 @@ public abstract class Unit{
     private Hex targetHex;
     private int maxHP;
     private int HP;
+    protected Cost cookCost;
 
 
     protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn, int maxHP){
         this.unitType = unitType;
+        this.cookCost = unitType.getCookCost();
         this.actionPointsMax = actionPointsMax;
         this.actionPoints = actionPointsMax;
         this.isAssigned = false;
@@ -93,10 +117,11 @@ public abstract class Unit{
     public void setMaxHP(int maxHP) {this.maxHP = maxHP;}
     public int getHP() {return HP;}
     public void setHP(int HP) {this.HP = HP;}
-
+    public Cost getCookCost() { return cookCost; }
     public String getUnitImageName() {
         return unitType.toString().toLowerCase().replace("_", "");
     }
+
 
     public void resetActionPointsForNewTurn() {
         this.actionPoints = actionPointsMax;

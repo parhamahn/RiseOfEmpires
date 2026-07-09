@@ -11,14 +11,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameController {
-    private JPanel cards;
     private GamePanel gamePanel;
     private UnitHandler unitHandler;
     private BuildingHandler buildingHandler;
 
     public GameController(GamePanel gamePanel, JPanel cards, GameState gameState, SelectionContext selectionContext){
         this.gamePanel = gamePanel;
-        this.cards = cards;
         CookUnitHandler cookUnitHandler = new CookUnitHandler();
         this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler, selectionContext);
         this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);

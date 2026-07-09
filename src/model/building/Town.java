@@ -5,8 +5,8 @@ import model.map.Hex;
 
 public class Town extends Building{
 
-    private final static Cost cost = new Cost(40, 20, 5, 3);
-    private final static Cost upkeep = new Cost(3, 2, 0, 0);
+    private final static Cost cost = new Cost(40, 20, 5, 0, 3);
+    private final static Cost upkeep = new Cost(3, 2, 0, 0, 0);
 
 
     public Town(Hex hex) {

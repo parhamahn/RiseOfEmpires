@@ -5,12 +5,14 @@ public class Cost {
     private int stoneNeeded;
     private int ironNeeded;
     private int APNeeded;
+    private int foodNeeded;
 
 
-    public Cost(int woodNeeded, int stoneNeeded, int ironNeeded, int APNeeded){
+    public Cost(int woodNeeded, int stoneNeeded, int ironNeeded, int foodNeeded, int APNeeded){
         this.woodNeeded = woodNeeded;
         this.stoneNeeded = stoneNeeded;
         this.ironNeeded = ironNeeded;
+        this.foodNeeded = foodNeeded;
         this.APNeeded = APNeeded;
     }
 
@@ -27,10 +29,10 @@ public class Cost {
     public int getAPNeeded() {
         return APNeeded;
     }
-
+    public int getFoodNeeded() {return foodNeeded;}
 
     public boolean enoughResources(Storage storage){
-        return storage.getWoodQuantity() >= this.getWoodNeeded() && storage.getStoneQuantity() >= this.getStoneNeeded() && storage.getIronQuantity() >= this.getIronNeeded();
+        return storage.getWoodQuantity() >= this.getWoodNeeded() && storage.getStoneQuantity() >= this.getStoneNeeded() && storage.getIronQuantity() >= this.getIronNeeded() && storage.getFoodQuantity()>=this.foodNeeded;
     }
 
     public boolean enoughAP(int AP){
@@ -38,6 +40,7 @@ public class Cost {
     }
 
     public void pay(Storage storage){
+        storage.setFoodQuantity(storage.getFoodQuantity()-this.foodNeeded);
         storage.setIronQuantity(storage.getIronQuantity()-this.getIronNeeded());
         storage.setStoneQuantity(storage.getStoneQuantity()-this.getStoneNeeded());
         storage.setWoodQuantity(storage.getWoodQuantity()-this.getWoodNeeded());
@@ -45,7 +48,7 @@ public class Cost {
 
     @Override
     public String toString(){
-        return "wood : "+woodNeeded + " | stone : "+stoneNeeded+ " | iron : "+ironNeeded;
+        return "wood : "+woodNeeded + " | stone : "+stoneNeeded+ " | iron : "+ironNeeded + " | food : "+foodNeeded;
     }
 
 }

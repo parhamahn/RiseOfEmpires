@@ -29,7 +29,7 @@ public class TownHallPanel extends JPanel {
 
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(UITheme.PANEL_BG);
-        content.setPreferredSize(new Dimension(1000, 600));
+        content.setPreferredSize(new Dimension(1000, 800));
         content.setBorder(BorderFactory.createLineBorder(UITheme.GOLD, 3));
 
         content.add(buildTitleBar(), BorderLayout.NORTH);

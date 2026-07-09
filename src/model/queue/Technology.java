@@ -5,9 +5,9 @@ import model.storage.Cost;
 
 public enum Technology {
 
-    SAILING(4, new Cost(80,0,0,0), TownHallLevel.SETTLEMENT),
-    STEEL_TOOLS(3, new Cost(0,0,40,0), TownHallLevel.SETTLEMENT),
-    DEFENSIVE_PATTERN(4, new Cost(0,100,0,0), TownHallLevel.CAPITAL);
+    SAILING(4, new Cost(80,0,0,0, 0), TownHallLevel.SETTLEMENT),
+    STEEL_TOOLS(3, new Cost(0,0,40,0, 0), TownHallLevel.SETTLEMENT),
+    DEFENSIVE_PATTERN(4, new Cost(0,100,0,0, 0), TownHallLevel.CAPITAL);
 
     private final int turnCost;
     private final Cost cost;

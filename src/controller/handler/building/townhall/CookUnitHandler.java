@@ -13,14 +13,24 @@ public class CookUnitHandler {
             case BORDER_EXPANDER -> new BorderExpander();
             case BUILDER -> new Builder();
             case EXPLORER -> new Explorer();
+            case ARCHER -> new Archer();
+            case SWORDSMAN -> new Swordsman();
+            case CAVALRY -> new Cavalry();
+            case CATAPULT -> new Catapult();
         };
+
+        if (unitType.getCookCost() != null) {
+            if (!unitType.getCookCost().enoughResources(gameState.getEmpireState().getStorage())) {
+                return;
+            }
+            unitType.getCookCost().pay(gameState.getEmpireState().getStorage());
+        }
 
         int totalUnits = gameState.getEmpireState().getUnits().size() + (int) gameState.getEmpireState().getCookQueueCount();
         if (totalUnits >= gameState.getEmpireState().getMaxUnit()) {
             return;
         }
-
         gameState.getEmpireState().getQueues().add(
-                new CookQueue(unit, COOK_DELAY, gameState.getWorldState().getTurnNumber()));
+                new CookQueue(unit, unitType.getTurnCost(), gameState.getWorldState().getTurnNumber()));
     }
 }

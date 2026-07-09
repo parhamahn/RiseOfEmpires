@@ -6,8 +6,8 @@ import model.storage.MaxStorage;
 public enum TownHallLevel {
 
     BASE_CAMP(new MaxStorage(100, 100, 100, 100), 0, null),
-    SETTLEMENT(new MaxStorage(200, 200, 200, 150), 3, new Cost(50, 50, 0, 0)),
-    CAPITAL(new MaxStorage(500, 500, 500, 300), 5, new Cost(0, 100, 50, 0));
+    SETTLEMENT(new MaxStorage(200, 200, 200, 150), 3, new Cost(50, 50, 0, 0, 0)),
+    CAPITAL(new MaxStorage(500, 500, 500, 300), 5, new Cost(0, 100, 50, 0, 0));
 
     private final MaxStorage maxStorage;
     private final int nextUpgradeTurnCost;

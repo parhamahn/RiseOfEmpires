@@ -1,9 +1,7 @@
 package view.buildingpanel.townhall;
 
-import helpers.ImageLoader;
 import model.state.GameState;
 import model.unit.Unit;
-import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;
@@ -14,7 +12,7 @@ import java.util.Map;
 public class CookSection extends JPanel {
 
     private final GameState gameState;
-    private final Map<Unit.UNIT_TYPE, JButton> cookButtons;
+    private final Map<Unit.UNIT_TYPE, CookStat> cookStats;
 
     public CookSection(GameState gameState) {
         this.gameState = gameState;
@@ -29,60 +27,51 @@ public class CookSection extends JPanel {
         add(label);
         add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JPanel buttonsRow = new JPanel();
-        buttonsRow.setOpaque(false);
-        buttonsRow.setLayout(new BoxLayout(buttonsRow, BoxLayout.X_AXIS));
-        buttonsRow.setAlignmentX(CENTER_ALIGNMENT);
+        JPanel grid = new JPanel(new GridLayout(2, 4, 5, 5));
+        grid.setOpaque(false);
+        grid.setAlignmentX(CENTER_ALIGNMENT);
 
-        cookButtons = new EnumMap<>(Unit.UNIT_TYPE.class);
+        cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
-            JButton button = createIconButton(unitIconPath(type));
-            StyledButtons.goldBorder(button);
-            cookButtons.put(type, button);
-            buttonsRow.add(button);
-            buttonsRow.add(Box.createRigidArea(new Dimension(8, 0)));
+            boolean canAfford = type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage());
+            CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
+            cookStats.put(type, stat);
+            grid.add(stat);
         }
 
-        add(buttonsRow);
+        add(grid);
         add(Box.createVerticalGlue());
     }
 
     public JButton getCookButton(Unit.UNIT_TYPE type) {
-        return cookButtons.get(type);
+        CookStat stat = cookStats.get(type);
+        return stat != null ? stat.getCookButton() : null;
     }
     public Map<Unit.UNIT_TYPE, JButton> getCookButtons() {
-        return cookButtons;
+        Map<Unit.UNIT_TYPE, JButton> buttons = new EnumMap<>(Unit.UNIT_TYPE.class);
+        for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
+            buttons.put(entry.getKey(), entry.getValue().getCookButton());
+        }
+        return buttons;
     }
 
     public void refresh() {
         boolean atCap = (gameState.getEmpireState().getUnits().size()
                 + (int) gameState.getEmpireState().getCookQueueCount())
                 >= gameState.getEmpireState().getMaxUnit();
-        for (Map.Entry<Unit.UNIT_TYPE, JButton> entry : cookButtons.entrySet()) {
-            JButton button = entry.getValue();
-            button.setEnabled(!atCap);
-            if (atCap) {
-                ImageIcon normalIcon = (ImageIcon) button.getIcon();
-                if (normalIcon != null) {
-                    button.setDisabledIcon(new ImageIcon(
-                            GrayFilter.createDisabledImage(normalIcon.getImage())));
-                }
-            }
+        for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
+            CookStat stat = entry.getValue();
+            Unit.UNIT_TYPE type = entry.getKey();
+            boolean canAfford = (type.getCookCost() == null
+                    || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
+                    && !atCap;
+            stat.refresh(canAfford);
         }
+        revalidate();
+        repaint();
     }
 
     private String unitIconPath(Unit.UNIT_TYPE type) {
         return "/utils/" + type.toString().toLowerCase().replace("_", "") + ".png";
-    }
-
-    private JButton createIconButton(String iconPath) {
-        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 64);
-        JButton button = StyledButtons.iconButton(icon);
-        if (gameState.getEmpireState().getMaxUnit() == gameState.getEmpireState().getUnits().size()) {
-            button.setEnabled(false);
-            button.setDisabledIcon(new ImageIcon(
-                    GrayFilter.createDisabledImage(icon.getImage())));
-        }
-        return button;
     }
 }

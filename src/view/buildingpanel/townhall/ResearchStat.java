@@ -21,7 +21,7 @@ public class ResearchStat extends JPanel {
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 48);
+        ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 60);
         JLabel iconLabel = new JLabel(icon);
         iconLabel.setAlignmentY(CENTER_ALIGNMENT);
         add(iconLabel);
