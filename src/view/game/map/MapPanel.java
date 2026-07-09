@@ -40,9 +40,18 @@ public class MapPanel extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (getWidth() > 0 && getHeight() > 0) {
+                    camera.setViewport(getWidth(), getHeight());
                     centerCameraOnTownHall();
                     unitAnimator.initPositions(camera);
                     removeComponentListener(this);
+                }
+            }
+        });
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (getWidth() > 0 && getHeight() > 0) {
+                    camera.setViewport(getWidth(), getHeight());
                 }
             }
         });
@@ -55,10 +64,12 @@ public class MapPanel extends JPanel {
         repaint();
     }
 
-    public void tick() {
+    public boolean tick() {
         if (unitAnimator.tick(camera)) {
             repaint();
+            return true;
         }
+        return false;
     }
 
     @Override

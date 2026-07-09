@@ -104,6 +104,7 @@ public class UnitHandler {
                 stat.getButton().addActionListener(e -> {
                     selectionContext.setSelectedUnit(stat.getUnit());
                     gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    gamePanel.repaint();
                 });
             }
             gamePanel.getTaskListPanel().clear();

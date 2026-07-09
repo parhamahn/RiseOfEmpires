@@ -38,8 +38,8 @@ public class ResourceLayer implements MapLayer {
         int badgeRadius = iconSize / 2 + 7;
         int spacing = badgeRadius * 2 + 4;
 
-        for (int r = 0; r < map.getRows(); r++) {
-            for (int c = 0; c < map.getCols(); c++) {
+        for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
+            for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
                 if (hex == null || !hex.isDiscovered() || hex.getBuilding() != null) continue;
 

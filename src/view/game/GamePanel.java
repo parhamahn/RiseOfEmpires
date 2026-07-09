@@ -13,7 +13,7 @@ import java.awt.event.ComponentEvent;
 
 public class GamePanel extends JPanel {
 
-    private static final int FPS = 60;
+    private static final int FPS = 30;
     private static final int SIDE_PANEL_WIDTH = 100;
 
     private HUDPanel hudPanel;
@@ -64,9 +64,10 @@ public class GamePanel extends JPanel {
         });
 
         new Timer(1000 / FPS, e -> {
-            mapPanel.tick();
-            repaint();
-            hudPanel.refresh();
+            if (mapPanel.tick()) {
+                repaint();
+                hudPanel.refresh();
+            }
         }).start();
     }
 

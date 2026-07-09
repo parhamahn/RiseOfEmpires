@@ -17,7 +17,10 @@ public class Camera {
     private int dy;
     private int cameraX = 0;
     private int cameraY = 0;
+    private int viewportW = 0;
+    private int viewportH = 0;
     private final Polygon hexShape = new Polygon();
+    private final Polygon reusableHex = new Polygon();
 
 
     public Camera() {
@@ -29,6 +32,16 @@ public class Camera {
     public int getDx() { return dx; }
     public int getDy() { return dy; }
     public Polygon getHexShape() { return hexShape; }
+
+    public void setViewport(int w, int h) {
+        this.viewportW = w;
+        this.viewportH = h;
+    }
+
+    public int getVisibleStartRow() { return Math.max(0, (cameraY - hexRadius * 2) / dy - 1); }
+    public int getVisibleEndRow(int rows) { return Math.min(rows, (cameraY + viewportH + hexRadius * 2) / dy + 2); }
+    public int getVisibleStartCol() { return Math.max(0, (cameraX - hexRadius * 2) / dx - 1); }
+    public int getVisibleEndCol(int cols) { return Math.min(cols, (cameraX + viewportW + hexRadius * 2) / dx + 2); }
 
 
     public void rebuildHexShape() {
@@ -53,11 +66,14 @@ public class Camera {
     }
 
     public Hex getHexAt(int screenX, int screenY, Map map) {
-        for (int r = 0; r < map.getRows(); r++) {
-            for (int c = 0; c < map.getCols(); c++) {
+        for (int r = getVisibleStartRow(); r < getVisibleEndRow(map.getRows()); r++) {
+            for (int c = getVisibleStartCol(); c < getVisibleEndCol(map.getCols()); c++) {
                 Point center = getHexCenter(c, r);
-                Polygon tile = translatePolygon(hexShape, center.x, center.y);
-                if (tile.contains(screenX, screenY)) {
+                reusableHex.reset();
+                for (int i = 0; i < hexShape.npoints; i++) {
+                    reusableHex.addPoint(hexShape.xpoints[i] + center.x, hexShape.ypoints[i] + center.y);
+                }
+                if (reusableHex.contains(screenX, screenY)) {
                     return map.getHex(c, r);
                 }
             }

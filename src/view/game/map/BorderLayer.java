@@ -20,8 +20,8 @@ public class BorderLayer implements MapLayer {
         g2.setStroke(new BasicStroke(Math.max(1f, camera.getHexRadius() / 20f),
                 BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
-        for (int r = 0; r < map.getRows(); r++) {
-            for (int c = 0; c < map.getCols(); c++) {
+        for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
+            for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
                 if (hex == null || !hex.isInEmpireBorder()) continue;
 

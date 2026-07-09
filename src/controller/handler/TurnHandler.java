@@ -40,8 +40,10 @@ public class TurnHandler {
         endTurn();
         processQueues();
         gamePanel.getTownHallPanel().refresh();
+        gamePanel.getHudPanel().refresh();
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
+        gamePanel.repaint();
         if (gameState.getEmpireState().isUpkeepDisaster()) {
             WarningDialogs.upkeepDisaster();
         }

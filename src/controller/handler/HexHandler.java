@@ -52,6 +52,7 @@ public class HexHandler {
                     unitHandler.updateUnitListPanel();
                     buildingHandler.updateTaskListPanel();
                 }
+                gamePanel.repaint();
             }
         });
     }
