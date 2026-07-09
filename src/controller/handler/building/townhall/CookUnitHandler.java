@@ -1,4 +1,4 @@
-package controller.handler;
+package controller.handler.building.townhall;
 
 import model.queue.CookQueue;
 import model.state.GameState;

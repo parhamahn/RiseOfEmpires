@@ -1,6 +1,7 @@
 package controller.handler;
 
 import controller.SelectionContext;
+import controller.handler.building.townhall.CookUnitHandler;
 import model.TownHallLevel;
 import model.state.EmpireState;
 import model.state.GameState;
@@ -25,26 +26,6 @@ public class BuildingHandler {
         this.gamePanel = gamePanel;
         this.cookUnitHandler = cookUnitHandler;
         this.selectionContext = selectionContext;
-    }
-
-    public void attachTownHallPanelListeners() {
-        gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> gamePanel.getTownHallPanel().close());
-        for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
-            gamePanel.getTownHallPanel().getCookButton(unitType).addActionListener(e -> {
-                cookUnitHandler.startCook(gameState, unitType);
-                gamePanel.getTownHallPanel().refresh();
-            });
-        }
-        gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e -> {
-            TownHallLevel next = gameState.getEmpireState().getTownHallLevel().nextUpgrade();
-            if (next != null) {
-                gameState.getEmpireState().getQueues().add(
-                        new UpgradeQueue(next, next.getNextUpgradeTurnCost(),
-                                gameState.getWorldState().getTurnNumber()));
-            }
-            updateTaskListPanel();
-            gamePanel.getTownHallPanel().refresh();
-        });
     }
 
     public void handleBuildingTask(Task.TASK task, Hex hex) {

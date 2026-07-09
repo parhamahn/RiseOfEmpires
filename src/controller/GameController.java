@@ -1,6 +1,9 @@
 package controller;
 
 import controller.handler.*;
+import controller.handler.building.townhall.CookUnitHandler;
+import controller.handler.building.townhall.ResearchHandler;
+import controller.handler.building.townhall.UpgradeHandler;
 import model.state.GameState;
 import view.game.GamePanel;
 
@@ -20,19 +23,20 @@ public class GameController {
         this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler, selectionContext);
         this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);
         TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
+        HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext);
+        UpgradeHandler upgradeHandler = new UpgradeHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
+        ResearchHandler researchHandler = new ResearchHandler(gameState, gamePanel);
 
-        gamePanel.getHudPanel().getMenuButton().addActionListener(e -> menuAction());
-        gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> turnHandler.endTurnAction());
+
         new CameraHandler(gamePanel).attachCameraListeners();
-        hexHandler.attachHexSelectionListener();
-        buildingHandler.attachTownHallPanelListeners();
-        gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
-    }
 
-    private void menuAction(){
-        CardLayout cl = (CardLayout) (cards.getLayout());
-        cl.show(cards, "menu");
+        hudHandler.attachHUDHandler();
+        hexHandler.attachHexSelectionListener();
+        upgradeHandler.attachTownHallPanelListeners();
+        researchHandler.attachTownHallPanelListeners();
+        gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
+
     }
 
     public void onArrive(){

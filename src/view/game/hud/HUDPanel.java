@@ -1,5 +1,7 @@
 package view.game.hud;
+import helpers.ImageLoader;
 import model.state.GameState;
+import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;
@@ -8,7 +10,6 @@ import java.awt.*;
 public class HUDPanel extends JPanel {
 
     private JButton endTurnButton;
-    private JButton menuButton;
     private ResourceStat woodStat;
     private ResourceStat stoneStat;
     private ResourceStat ironStat;
@@ -20,8 +21,8 @@ public class HUDPanel extends JPanel {
 
     public HUDPanel(GameState gameState){
         this.gameState = gameState;
-        this.menuButton = new JButton("\uD804\uDC54");
-        this.endTurnButton = new JButton("End Turn");
+        ImageIcon endTurnIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 50);
+        this.endTurnButton = StyledButtons.textButton("End Turn", endTurnIcon, new Dimension(200, 50), 32f, UITheme.GOLD);
         this.turnLabel = new JLabel();
         this.unitsLabel = new JLabel();
         this.setBackground(UITheme.HUD_BG);
@@ -62,33 +63,14 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalStrut(20));
 
-        this.endTurnButton.setPreferredSize(new Dimension(200, 50));
-        this.endTurnButton.setFocusable(false);
-        this.endTurnButton.setMaximumSize(new Dimension(200, 50));
-        this.endTurnButton.setMinimumSize(new Dimension(200, 50));
-        this.endTurnButton.setFont(UITheme.GAME_FONT_LARGE);
-        this.endTurnButton.setMargin(new Insets(10,0,0,0));
-        this.endTurnButton.setBackground(UITheme.GOLD);
-        this.endTurnButton.setForeground(Color.BLACK);
+
         add(endTurnButton);
 
         add(Box.createHorizontalStrut(20));
 
-        this.menuButton.setFocusable(false);
-        this.menuButton.setPreferredSize(new Dimension(50, 50));
-        this.menuButton.setMaximumSize(new Dimension(50, 50));
-        this.menuButton.setMaximumSize(new Dimension(50, 50));
-        this.menuButton.setFont(new Font("Serif", Font.PLAIN, 32));
-        this.menuButton.setMargin(new Insets(0,0,0,0));
-        this.menuButton.setBackground(UITheme.GOLD);
-        this.menuButton.setForeground(Color.BLACK);
-        add(menuButton);
     }
 
 
-    public JButton getMenuButton() {
-        return menuButton;
-    }
     public JButton getEndTurnButton() {
         return endTurnButton;
     }

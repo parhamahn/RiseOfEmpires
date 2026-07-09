@@ -1,6 +1,6 @@
 package view.game;
 
-import view.buildingpanel.TownHallPanel;
+import view.buildingpanel.townhall.TownHallPanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
