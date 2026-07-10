@@ -13,7 +13,8 @@ public class Task {
         IRON_MINE,
         TOWN,
         STABLE,
-        MONUMENT
+        MONUMENT,
+        BAZAAR
     }
 
     public static List<TASK> getAvailableTasks(Hex hex) {
@@ -26,17 +27,20 @@ public class Task {
                             || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)
                         availableTasks.add(TASK.STABLE);
                         availableTasks.add(TASK.MONUMENT);
+                        availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case MEADOW: {
                     if (hex.getResources().getOrDefault(Hex.ResourceType.WHEAT, 0) > 0
                             || hex.getResources().getOrDefault(Hex.ResourceType.RICE,  0) > 0)
                         availableTasks.add(TASK.FARM);
+                        availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case FOREST: {
                     if (hex.getResources().getOrDefault(Hex.ResourceType.WOOD,  0) > 0)
                         availableTasks.add(TASK.LUMBER_MILL);
+                        availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case MOUNTAIN: {

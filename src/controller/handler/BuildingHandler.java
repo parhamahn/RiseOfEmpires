@@ -37,6 +37,7 @@ public class BuildingHandler {
             case STABLE -> new Stable(hex, Hex.ResourceType.COW);
             case TOWN -> new Town(hex);
             case MONUMENT -> new Monument(hex);
+            case BAZAAR -> new Bazaar(hex);
         };
 
         building.getCost().pay(gameState.getEmpireState().getStorage());
