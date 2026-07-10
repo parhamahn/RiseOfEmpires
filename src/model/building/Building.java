@@ -71,6 +71,7 @@ public abstract class Building {
             case IRON_MINE   -> IronMine.getBuildCost();
             case STABLE      -> Stable.getBuildCost();
             case TOWN        -> Town.getBuildCost();
+            case MONUMENT    -> Monument.getBuildCost();
         };
     }
 }

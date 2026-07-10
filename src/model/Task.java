@@ -12,7 +12,8 @@ public class Task {
         STONE_MINE,
         IRON_MINE,
         TOWN,
-        STABLE
+        STABLE,
+        MONUMENT
     }
 
     public static List<TASK> getAvailableTasks(Hex hex) {
@@ -24,6 +25,7 @@ public class Task {
                     if (hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0
                             || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)
                         availableTasks.add(TASK.STABLE);
+                        availableTasks.add(TASK.MONUMENT);
                     break;
                 }
                 case MEADOW: {

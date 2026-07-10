@@ -2,6 +2,7 @@ package model.state;
 
 import model.*;
 import model.building.Building;
+import model.building.Monument;
 import model.building.TownHall;
 import model.map.Hex;
 import model.map.Map;
@@ -69,6 +70,7 @@ public class EmpireState {
 
         for(Building building:buildings){
             if(building.isTown()){this.happiness -= 1;}
+            if(building instanceof Monument){this.happiness += 2;}
         }
 
         if(getCombatUnitCount()==townHallLevel.getCombatUnitCap()){this.happiness -= 1;}
