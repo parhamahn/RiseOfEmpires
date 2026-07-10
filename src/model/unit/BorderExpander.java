@@ -8,4 +8,10 @@ public class BorderExpander extends Unit{
 
     @Override
     public boolean isBorderExpander() { return true; }
+
+    @Override
+    public boolean isCombatUnit(){
+        return false;
+    }
+
 }

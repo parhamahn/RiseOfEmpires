@@ -8,7 +8,7 @@ public class Storage {
     public int DEFAULT_WOOD_QUANTITY = 50;
     public int DEFAULT_STONE_QUANTITY = 25;
     public int DEFAULT_IRON_QUANTITY = 10;
-    public int DEFAULT_FOOD_QUANTITY = 15;
+    public int DEFAULT_FOOD_QUANTITY = 20;
 
     private int woodQuantity;
     private int stoneQuantity;

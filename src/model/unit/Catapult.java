@@ -6,4 +6,9 @@ public class Catapult extends Unit {
         super(UNIT_TYPE.CATAPULT, 10, 1, 50);
     }
 
+    @Override
+    public boolean isCombatUnit(){
+        return true;
+    }
+
 }

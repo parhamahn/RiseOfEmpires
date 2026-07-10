@@ -33,6 +33,11 @@ public class StyledButtons {
         });
     }
 
+    public static void setToolTip(JButton button, String reason) {
+        button.setEnabled(false);
+        button.setToolTipText(reason);
+    }
+
     public static JButton textButton(String text, Icon icon, Dimension size, float fontSize, Color fg) {
         JButton button = new JButton(text, icon);
         goldBorder(button);

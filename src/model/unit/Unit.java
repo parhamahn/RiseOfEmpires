@@ -1,30 +1,34 @@
 package model.unit;
 
+import model.TownHallLevel;
 import model.map.Hex;
 import model.storage.Cost;
 
 public abstract class Unit{
 
     public enum UNIT_TYPE {
-        EXPLORER(null, 3),
-        BUILDER(null, 3),
-        BORDER_EXPANDER(null, 3),
-        WORKER(null, 3),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3),
-        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3);
+        EXPLORER(null, 3, TownHallLevel.BASE_CAMP),
+        BUILDER(null, 3, TownHallLevel.BASE_CAMP),
+        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP),
+        WORKER(null, 3, TownHallLevel.BASE_CAMP),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT),
+        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP),
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL);
 
         private final Cost cookCost;
         private final int turnCost;
+        private final TownHallLevel level;
 
-        UNIT_TYPE(Cost cookCost, int turnCost) {
+        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level) {
             this.cookCost = cookCost;
             this.turnCost = turnCost;
+            this.level = level;
         }
 
         public Cost getCookCost() { return cookCost; }
         public int getTurnCost() { return turnCost; }
+        public TownHallLevel getLevel() { return level; }
     }
 
     protected UNIT_TYPE unitType;
@@ -121,6 +125,7 @@ public abstract class Unit{
     public String getUnitImageName() {
         return unitType.toString().toLowerCase().replace("_", "");
     }
+    public abstract boolean isCombatUnit();
 
 
     public void resetActionPointsForNewTurn() {

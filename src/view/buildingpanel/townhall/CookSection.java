@@ -33,7 +33,7 @@ public class CookSection extends JPanel {
 
         cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
-            boolean canAfford = type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage());
+            boolean canAfford = (type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal();
             CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
             cookStats.put(type, stat);
             grid.add(stat);
@@ -62,9 +62,9 @@ public class CookSection extends JPanel {
         for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
             CookStat stat = entry.getValue();
             Unit.UNIT_TYPE type = entry.getKey();
-            boolean canAfford = (type.getCookCost() == null
+            boolean canAfford = ((type.getCookCost() == null
                     || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
-                    && !atCap;
+                    && !atCap)&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal();
             stat.refresh(canAfford);
         }
         revalidate();

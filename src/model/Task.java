@@ -6,7 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Task {
-    public enum TASK {FARM, LUMBER_MILL, STONE_MINE, IRON_MINE, TOWN, STABLE}
+    public enum TASK {
+        FARM,
+        LUMBER_MILL,
+        STONE_MINE,
+        IRON_MINE,
+        TOWN,
+        STABLE
+    }
 
     public static List<TASK> getAvailableTasks(Hex hex) {
         List<TASK> availableTasks = new ArrayList<>();

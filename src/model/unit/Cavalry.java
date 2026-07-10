@@ -6,4 +6,9 @@ public class Cavalry extends Unit{
         super(UNIT_TYPE.CAVALRY, 10, 1, 35);
     }
 
+    @Override
+    public boolean isCombatUnit(){
+        return true;
+    }
+
 }

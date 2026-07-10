@@ -19,4 +19,10 @@ public class Builder extends Unit{
 
     @Override
     public boolean isBuilder() { return true; }
+
+    @Override
+    public boolean isCombatUnit(){
+        return false;
+    }
+
 }

@@ -77,8 +77,5 @@ public class EmpireState {
     public Hex getTownHallHex() { return townHallHex; }
     public List<Queue> getQueues() { return queues; }
     public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
-
-    public long getCookQueueCount() {
-        return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();
-    }
+    public long getCookQueueCount() {return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();}
 }

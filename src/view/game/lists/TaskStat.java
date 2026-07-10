@@ -2,6 +2,7 @@ package view.game.lists;
 
 import helpers.ImageLoader;
 import model.Task;
+import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;

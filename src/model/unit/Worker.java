@@ -6,4 +6,10 @@ public class Worker extends Unit{
 
     @Override
     public boolean isWorker() { return true; }
+
+    @Override
+    public boolean isCombatUnit(){
+        return false;
+    }
+
 }

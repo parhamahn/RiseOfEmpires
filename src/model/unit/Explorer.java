@@ -8,4 +8,10 @@ public class Explorer extends Unit{
 
     @Override
     public boolean isExplorer() { return true; }
+
+    @Override
+    public boolean isCombatUnit(){
+        return false;
+    }
+
 }
