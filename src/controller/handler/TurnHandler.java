@@ -51,6 +51,8 @@ public class TurnHandler {
         if (gameState.getEmpireState().isStarving()) {
             WarningDialogs.starvationDisaster();
         }
+
+        gameState.getEmpireState().recalculateHappiness();
     }
 
     private void processQueues() {

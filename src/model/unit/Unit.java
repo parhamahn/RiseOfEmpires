@@ -7,28 +7,31 @@ import model.storage.Cost;
 public abstract class Unit{
 
     public enum UNIT_TYPE {
-        EXPLORER(null, 3, TownHallLevel.BASE_CAMP),
-        BUILDER(null, 3, TownHallLevel.BASE_CAMP),
-        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP),
-        WORKER(null, 3, TownHallLevel.BASE_CAMP),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT),
-        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL);
+        EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0),
+        BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0),
+        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0),
+        WORKER(null, 3, TownHallLevel.BASE_CAMP, 0),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1),
+        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1),
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 3);
 
         private final Cost cookCost;
         private final int turnCost;
         private final TownHallLevel level;
+        private final int attackRadius;
 
-        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level) {
+        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level, int attackRadius) {
             this.cookCost = cookCost;
             this.turnCost = turnCost;
             this.level = level;
+            this.attackRadius = attackRadius;
         }
 
         public Cost getCookCost() { return cookCost; }
         public int getTurnCost() { return turnCost; }
         public TownHallLevel getLevel() { return level; }
+        public int getAttackRadius() {return attackRadius;};
     }
 
     protected UNIT_TYPE unitType;

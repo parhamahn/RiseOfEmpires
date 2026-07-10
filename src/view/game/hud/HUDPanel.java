@@ -15,7 +15,9 @@ public class HUDPanel extends JPanel {
     private ResourceStat ironStat;
     private ResourceStat foodStat;
     private JLabel turnLabel;
-    private JLabel unitsLabel;
+    private JLabel cvunitsLabel;
+    private JLabel cbunitsLabel;
+    private JLabel happinessLabel;
     private GameState gameState;
 
 
@@ -24,7 +26,9 @@ public class HUDPanel extends JPanel {
         ImageIcon endTurnIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 50);
         this.endTurnButton = StyledButtons.textButton("End Turn", endTurnIcon, new Dimension(200, 50), 32f, UITheme.GOLD);
         this.turnLabel = new JLabel();
-        this.unitsLabel = new JLabel();
+        this.cvunitsLabel = new JLabel();
+        this.cbunitsLabel = new JLabel();
+        this.happinessLabel = new JLabel();
         this.setBackground(UITheme.HUD_BG);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -49,10 +53,32 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
-        unitsLabel.setText("Units : "+ gameState.getEmpireState().getUnits().size()+"/"+gameState.getEmpireState().getMaxUnit());
-        unitsLabel.setForeground(Color.WHITE);
-        unitsLabel.setFont(UITheme.GAME_FONT);
-        add(unitsLabel);
+        if (gameState.getEmpireState().getHappiness() > 0) {
+            this.happinessLabel.setText("Happiness : +" + gameState.getEmpireState().getHappiness());
+            this.happinessLabel.setForeground(UITheme.POSITIVE_CHANGE);
+        } else if (gameState.getEmpireState().getHappiness() < 0) {
+            this.happinessLabel.setText("Happiness : "+String.valueOf(gameState.getEmpireState().getHappiness()));
+            this.happinessLabel.setForeground(UITheme.NEGATIVE_CHANGE);
+        } else {
+            this.happinessLabel.setText("Happiness : 0");
+            this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
+        }
+        this.happinessLabel.setFont(UITheme.GAME_FONT);
+        add(this.happinessLabel);
+
+        add(Box.createHorizontalGlue());
+
+        cvunitsLabel.setText("Civil Units : "+ gameState.getEmpireState().getCivilUnitCount()+"/"+gameState.getEmpireState().getMaxUnit());
+        cvunitsLabel.setForeground(Color.WHITE);
+        cvunitsLabel.setFont(UITheme.GAME_FONT);
+        add(cvunitsLabel);
+
+        add(Box.createHorizontalStrut(20));
+
+        cbunitsLabel.setText("Combat units : "+ gameState.getEmpireState().getCombatUnitCount()+"/"+gameState.getEmpireState().getTownHallLevel().getCombatUnitCap());
+        cbunitsLabel.setForeground(Color.WHITE);
+        cbunitsLabel.setFont(UITheme.GAME_FONT);
+        add(cbunitsLabel);
 
         add(Box.createHorizontalStrut(20));
 
@@ -88,7 +114,21 @@ public class HUDPanel extends JPanel {
         ironStat.setChange(gameState.getEmpireState().getProduction().getIronProduction());
 
         turnLabel.setText("Turn : "+ gameState.getWorldState().getTurnNumber());
-        unitsLabel.setText("Units : "+ gameState.getEmpireState().getUnits().size()+"/"+gameState.getEmpireState().getMaxUnit());
+        cvunitsLabel.setText("Units : "+ gameState.getEmpireState().getCivilUnitCount()+"/"+gameState.getEmpireState().getMaxUnit());
+        cbunitsLabel.setText("Combat units : "+ gameState.getEmpireState().getCombatUnitCount()+"/"+gameState.getEmpireState().getTownHallLevel().getCombatUnitCap());
+
+
+        if (gameState.getEmpireState().getHappiness() > 0) {
+            this.happinessLabel.setText("Happiness : +" + gameState.getEmpireState().getHappiness());
+            this.happinessLabel.setForeground(UITheme.POSITIVE_CHANGE);
+        } else if (gameState.getEmpireState().getHappiness() < 0) {
+            this.happinessLabel.setText("Happiness : "+String.valueOf(gameState.getEmpireState().getHappiness()));
+            this.happinessLabel.setForeground(UITheme.NEGATIVE_CHANGE);
+        } else {
+            this.happinessLabel.setText("Happiness : 0");
+            this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
+        }
+
 
         revalidate();
         repaint();

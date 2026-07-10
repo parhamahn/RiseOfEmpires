@@ -27,6 +27,7 @@ public class EmpireState {
     private List<Queue> queues;
     private List<Technology> researchedTechnologies;
     private TownHallLevel townHallLevel;
+    private int happiness;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -56,10 +57,44 @@ public class EmpireState {
         townHallHex.getUnits().addAll(units);
 
         recalculateProduction();
+        recalculateHappiness();
     }
 
     public void recalculateProduction() {
         production.recalculate(this);
+    }
+
+    public void recalculateHappiness() {
+        this.happiness = 0;
+
+        for(Building building:buildings){
+            if(building.isTown()){this.happiness -= 1;}
+        }
+
+        if(getCombatUnitCount()==townHallLevel.getCombatUnitCap()){this.happiness -= 1;}
+
+        for(Unit unit: townHallHex.getUnits()){
+            if(unit.isCombatUnit()){
+                this.happiness += 1;
+                break;
+            }
+        }
+    }
+
+    public int getCivilUnitCount(){
+        int count = 0;
+        for (Unit unit:units){
+            if (!unit.isCombatUnit()){count+=1;}
+        }
+        return count;
+    }
+
+    public int getCombatUnitCount(){
+        int count = 0;
+        for (Unit unit:units){
+            if (unit.isCombatUnit()){count+=1;}
+        }
+        return count;
     }
 
     public Storage getStorage() { return storage; }
@@ -78,4 +113,5 @@ public class EmpireState {
     public List<Queue> getQueues() { return queues; }
     public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
     public long getCookQueueCount() {return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();}
+    public int getHappiness() {return happiness;}
 }

@@ -57,6 +57,7 @@ public class BuildingHandler {
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         updateTownCapacity();
         gameState.getEmpireState().recalculateProduction();
+        gameState.getEmpireState().recalculateHappiness();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().repaint();

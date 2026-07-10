@@ -57,7 +57,9 @@ public class BuildingLayer implements MapLayer {
             g2.setClip(tile);
             g2.drawImage(img, center.x - r2, center.y - r2, r2 * 2, r2 * 2, null);
             g2.setClip(oldClip);
-            UITheme.drawHPBar(g2, barX, barY, barWidth, barHeight, hpf);
+            if(hpf!=1){
+                UITheme.drawHPBar(g2, barX, barY, barWidth, barHeight, hpf);
+            }
         }
     }
 }
