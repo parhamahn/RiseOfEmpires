@@ -20,4 +20,13 @@ public class GameState {
 
     public EmpireState getEmpireState() { return empireState; }
     public WorldState getWorldState() { return worldState; }
+
+    public void reset(){
+        Map map = new Map(50, 100);
+        empireState.getStorage().reset();
+        empireState.getProduction().reset();
+        worldState.reset(map);
+        empireState.init(map);
+    }
+
 }

@@ -7,11 +7,15 @@ public class WorldState {
     private int turnNumber;
 
     public WorldState(Map map) {
-        this.map = map;
-        this.turnNumber = 1;
+        reset(map);
     }
 
     public Map getMap() { return map; }
     public int getTurnNumber() { return turnNumber; }
     public void nextTurn() { this.turnNumber++; }
+
+    public void reset(Map map){
+        this.turnNumber = 1;
+        this.map = map;
+    }
 }

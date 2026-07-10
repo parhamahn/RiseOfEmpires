@@ -60,6 +60,7 @@ public class MapPanel extends JPanel {
 
     public void setMap(Map map) {
         this.map = map;
+        unitAnimator.initPositions(camera);
         centerCameraOnTownHall();
         repaint();
     }

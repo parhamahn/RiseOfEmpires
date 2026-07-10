@@ -58,9 +58,16 @@ public class QueueSection extends JPanel {
             label.setFont(UITheme.GAME_FONT_SMALL);
             label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
             label.setAlignmentX(CENTER_ALIGNMENT);
+            label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
 
             queuePanel.add(label);
             queuePanel.add(Box.createRigidArea(new Dimension(0, 4)));
+        }
+        if(queues.isEmpty()){
+            JLabel label = new JLabel("There are no queues");
+            label.setFont(UITheme.GAME_FONT_SMALL);
+            label.setAlignmentX(CENTER_ALIGNMENT);
+            add(label);
         }
         queuePanel.revalidate();
         queuePanel.repaint();

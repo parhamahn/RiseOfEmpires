@@ -1,4 +1,6 @@
 package controller;
+import model.state.GameState;
+import view.game.GamePanel;
 import view.menu.MenuPanel;
 import javax.swing.*;
 import java.awt.*;
@@ -6,11 +8,17 @@ import java.awt.*;
 public class MenuController {
     private MenuPanel menuPanel;
     private JPanel cards;
+    private GameState gameState;
+    private GamePanel gamePanel;
+    private SelectionContext selectionContext;
 
-    public MenuController(MenuPanel menuPanel, JPanel cards){
+    public MenuController(MenuPanel menuPanel, JPanel cards, GameState gameState, GamePanel gamePanel, SelectionContext selectionContext){
         this.menuPanel = menuPanel;
         this.cards = cards;
         this.attachListeners();
+        this.gameState = gameState;
+        this.gamePanel = gamePanel;
+        this.selectionContext = selectionContext;
     }
 
     public void attachListeners(){
@@ -20,8 +28,11 @@ public class MenuController {
     }
 
     public void startAction(){
+        gameState.reset();
+        gamePanel.reset();
+        selectionContext.reset();
+        gamePanel.getMapPanel().setMap(gameState.getWorldState().getMap());
         CardLayout cl = (CardLayout) (cards.getLayout());
-        menuPanel.getStartButton().setText("Continue");
         cl.show(cards, "game");
     }
 

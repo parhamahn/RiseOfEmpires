@@ -21,14 +21,7 @@ public class Storage {
 
 
     public Storage() {
-        this.woodQuantity = DEFAULT_WOOD_QUANTITY;
-        this.stoneQuantity = DEFAULT_STONE_QUANTITY;
-        this.ironQuantity = DEFAULT_IRON_QUANTITY;
-        this.foodQuantity = DEFAULT_FOOD_QUANTITY;
-        this.foodMax = DEFAULT_FOOD_MAX_STORAGE;
-        this.stoneMax = DEFAULT_STONE_MAX_STORAGE;
-        this.ironMax = DEFAULT_IRON_MAX_STORAGE;
-        this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
+        reset();
     }
 
 
@@ -75,5 +68,16 @@ public class Storage {
         this.woodMax = DEFAULT_WOOD_MAX_STORAGE * x;
         this.stoneMax = DEFAULT_STONE_MAX_STORAGE * x;
         this.ironMax = DEFAULT_IRON_MAX_STORAGE * x;
+    }
+
+    public void reset(){
+        this.woodQuantity = DEFAULT_WOOD_QUANTITY;
+        this.stoneQuantity = DEFAULT_STONE_QUANTITY;
+        this.ironQuantity = DEFAULT_IRON_QUANTITY;
+        this.foodQuantity = DEFAULT_FOOD_QUANTITY;
+        this.foodMax = DEFAULT_FOOD_MAX_STORAGE;
+        this.stoneMax = DEFAULT_STONE_MAX_STORAGE;
+        this.ironMax = DEFAULT_IRON_MAX_STORAGE;
+        this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
     }
 }

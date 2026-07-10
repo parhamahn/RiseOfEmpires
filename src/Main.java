@@ -35,8 +35,6 @@ public class Main {
             GameState gameState = new GameState(storage, production, map);
             SelectionContext selectionContext = new SelectionContext();
 
-            MenuPanel menuPanel = new MenuPanel();
-            MenuController menuController = new MenuController(menuPanel, cards);
 
             music = new Sound();
             music.load("/utils/music.wav");
@@ -51,6 +49,9 @@ public class Main {
             gamePanel.getMapPanel().setMap(map);
 
             GameController gameController = new GameController(gamePanel, cards, gameState, selectionContext);
+
+            MenuPanel menuPanel = new MenuPanel();
+            MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext);
 
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");

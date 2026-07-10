@@ -11,4 +11,10 @@ public class SelectionContext {
     public void setSelectedHex(Hex selectedHex) { this.selectedHex = selectedHex; }
     public Unit getSelectedUnit() { return selectedUnit; }
     public void setSelectedUnit(Unit selectedUnit) { this.selectedUnit = selectedUnit; }
+
+
+    public void reset(){
+        selectedHex = null;
+        selectedUnit = null;
+    }
 }

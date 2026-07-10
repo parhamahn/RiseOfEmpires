@@ -80,4 +80,11 @@ public class GamePanel extends JPanel {
         taskListPanel.setBounds(0, 0, size.width, size.height);
         townHallPanel.setBounds(0, 0, size.width, size.height);
     }
+
+    public void reset(){
+        townHallPanel.close();
+        unitListPanel.clear();
+        taskListPanel.clear();
+    }
+
 }

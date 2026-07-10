@@ -16,6 +16,7 @@ public class MenuPanel extends JPanel {
     private JButton startButton;
     private JButton settingsButton;
     private JButton exitButton;
+    private JButton loadButton;
     private BufferedImage backgroundImage;
     private ImageIcon buttonIcon;
 
@@ -24,13 +25,14 @@ public class MenuPanel extends JPanel {
         buttonIcon = ImageLoader.getInstance().loadScaledIcon(
                 "/utils/menubutton.png", BUTTON_SIZE.width, BUTTON_SIZE.height);
 
-        this.startButton = StyledButtons.textButton("Start", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
+        this.startButton = StyledButtons.textButton("New Game", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
         this.settingsButton = StyledButtons.textButton("Settings", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
         this.exitButton = StyledButtons.textButton("Exit", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
+        this.loadButton = StyledButtons.textButton("Load", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        for (JButton button : new JButton[]{startButton, settingsButton, exitButton}) {
+        for (JButton button : new JButton[]{startButton, settingsButton, exitButton, loadButton}) {
             button.setAlignmentX(CENTER_ALIGNMENT);
         }
 
@@ -47,6 +49,8 @@ public class MenuPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(0, 500)));
         add(startButton);
         add(Box.createRigidArea(new Dimension(0, 50)));
+        add(loadButton);
+        add(Box.createRigidArea(new Dimension(0, 50)));
         add(settingsButton);
         add(Box.createRigidArea(new Dimension(0, 50)));
         add(exitButton);
@@ -57,6 +61,7 @@ public class MenuPanel extends JPanel {
     public JButton getStartButton() {return startButton;}
     public JButton getSettingsButton() {return settingsButton;}
     public JButton getExitButton() {return exitButton;}
+    public JButton getLoadButton() {return loadButton;}
 
 
     @Override

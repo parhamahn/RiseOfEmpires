@@ -20,10 +20,7 @@ public class Production {
     private int ironProduction;
 
     public Production(){
-        this.foodProduction = DEFAULT_FOOD_PRODUCTION;
-        this.woodProduction = DEFAULT_WOOD_PRODUCTION;
-        this.stoneProduction = DEFAULT_STONE_PRODUCTION;
-        this.ironProduction = DEFAULT_IRON_PRODUCTION;
+        reset();
     }
 
     public int getFoodProduction() {
@@ -111,6 +108,13 @@ public class Production {
             case WHEAT, RICE, COW, SHEEP -> empire.getStorage().getFoodMax() - empire.getStorage().getFoodQuantity();
             default -> 0;
         };
+    }
+
+    public void reset(){
+        this.foodProduction = DEFAULT_FOOD_PRODUCTION;
+        this.woodProduction = DEFAULT_WOOD_PRODUCTION;
+        this.stoneProduction = DEFAULT_STONE_PRODUCTION;
+        this.ironProduction = DEFAULT_IRON_PRODUCTION;
     }
 
 }
