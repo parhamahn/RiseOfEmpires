@@ -1,14 +1,13 @@
 package controller;
 
 import controller.handler.*;
+import controller.handler.building.bazaar.BazaarHandler;
 import controller.handler.building.townhall.CookUnitHandler;
-import controller.handler.building.townhall.ResearchHandler;
-import controller.handler.building.townhall.UpgradeHandler;
+import controller.handler.building.townhall.TownHallHandler;
 import model.state.GameState;
 import view.game.GamePanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class GameController {
     private GamePanel gamePanel;
@@ -23,16 +22,15 @@ public class GameController {
         TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
         HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext);
-        UpgradeHandler upgradeHandler = new UpgradeHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
-        ResearchHandler researchHandler = new ResearchHandler(gameState, gamePanel);
-
+        TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
+        BazaarHandler bazaarHandler = new BazaarHandler(gamePanel);
 
         new CameraHandler(gamePanel).attachCameraListeners();
 
         hudHandler.attachHUDHandler();
         hexHandler.attachHexSelectionListener();
-        upgradeHandler.attachTownHallPanelListeners();
-        researchHandler.attachTownHallPanelListeners();
+        townHallHandler.attachHandlers();
+        bazaarHandler.attachHandlers();
         gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
 
     }

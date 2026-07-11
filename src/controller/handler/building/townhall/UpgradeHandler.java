@@ -1,6 +1,5 @@
 package controller.handler.building.townhall;
 
-import controller.SelectionContext;
 import controller.handler.BuildingHandler;
 import model.TownHallLevel;
 import model.queue.UpgradeQueue;
@@ -22,8 +21,7 @@ public class UpgradeHandler {
         this.buildingHandler = buildingHandler;
     }
 
-    public void attachTownHallPanelListeners() {
-        gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> gamePanel.getTownHallPanel().close());
+    public void attachUpgradeListeners() {
         for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
             gamePanel.getTownHallPanel().getCookButton(unitType).addActionListener(e -> {
                 cookUnitHandler.startCook(gameState, unitType);

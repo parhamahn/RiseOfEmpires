@@ -19,7 +19,7 @@ public class ResearchHandler {
         this.gamePanel = gamePanel;
     }
 
-    public void attachTownHallPanelListeners() {
+    public void attachResearchListeners() {
 
         for(Technology technology:Technology.values()){
 

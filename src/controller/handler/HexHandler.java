@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.SelectionContext;
 import helpers.SoundEffects;
+import model.building.Bazaar;
 import model.state.GameState;
 import model.map.Hex;
 import view.game.GamePanel;
@@ -46,6 +47,8 @@ public class HexHandler {
                 } else if (discoveredNeighbour) {
                     if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding().isTownHall()) {
                         gamePanel.getTownHallPanel().open();
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Bazaar) {
+                        gamePanel.getBazaarPanel().open();
                     }
                     selectionContext.setSelectedHex(clicked);
                     SoundEffects.getInstance().playSelectHexSoundEffect();

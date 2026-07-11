@@ -1,5 +1,6 @@
 package view.game;
 
+import view.buildingpanel.bazaar.BazaarPanel;
 import view.buildingpanel.townhall.TownHallPanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
@@ -21,6 +22,7 @@ public class GamePanel extends JPanel {
     private UnitListPanel unitListPanel;
     private TaskListPanel taskListPanel;
     private TownHallPanel townHallPanel;
+    private BazaarPanel bazaarPanel;
     private JPanel hudWrapper;
     private JLayeredPane layeredPane;
 
@@ -29,6 +31,7 @@ public class GamePanel extends JPanel {
     public UnitListPanel getUnitListPanel() {return unitListPanel;}
     public TaskListPanel getTaskListPanel() { return taskListPanel; }
     public TownHallPanel getTownHallPanel() { return townHallPanel; }
+    public BazaarPanel getBazaarPanel() { return bazaarPanel; }
 
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -56,6 +59,9 @@ public class GamePanel extends JPanel {
         townHallPanel = new TownHallPanel(mapPanel.getGameState());
         layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
 
+        bazaarPanel = new BazaarPanel(mapPanel.getGameState());
+        layeredPane.add(bazaarPanel, JLayeredPane.MODAL_LAYER);
+
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -79,10 +85,13 @@ public class GamePanel extends JPanel {
         unitListPanel.setBounds(size.width - SIDE_PANEL_WIDTH, 0, SIDE_PANEL_WIDTH, size.height);
         taskListPanel.setBounds(0, 0, size.width, size.height);
         townHallPanel.setBounds(0, 0, size.width, size.height);
+        bazaarPanel.setBounds(0, 0, size.width, size.height);
+        bazaarPanel.setBounds(0, 0, size.width, size.height);
     }
 
     public void reset(){
         townHallPanel.close();
+        bazaarPanel.close();
         unitListPanel.clear();
         taskListPanel.clear();
     }
