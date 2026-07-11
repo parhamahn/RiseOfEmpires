@@ -23,24 +23,23 @@ public class Task {
             availableTasks.add(TASK.TOWN);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
-                    if (hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0
-                            || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)
-                        availableTasks.add(TASK.STABLE);
-                        availableTasks.add(TASK.MONUMENT);
-                        availableTasks.add(TASK.BAZAAR);
+                    if ((hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0 || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)) {availableTasks.add(TASK.STABLE);}
+                    availableTasks.add(TASK.MONUMENT);
+                    availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case MEADOW: {
-                    if (hex.getResources().getOrDefault(Hex.ResourceType.WHEAT, 0) > 0
-                            || hex.getResources().getOrDefault(Hex.ResourceType.RICE,  0) > 0)
+                    if (hex.getResources().getOrDefault(Hex.ResourceType.WHEAT, 0) > 0 || hex.getResources().getOrDefault(Hex.ResourceType.RICE,  0) > 0) {
                         availableTasks.add(TASK.FARM);
-                        availableTasks.add(TASK.BAZAAR);
+                    }
+                    availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case FOREST: {
-                    if (hex.getResources().getOrDefault(Hex.ResourceType.WOOD,  0) > 0)
+                    if (hex.getResources().getOrDefault(Hex.ResourceType.WOOD,  0) > 0) {
                         availableTasks.add(TASK.LUMBER_MILL);
-                        availableTasks.add(TASK.BAZAAR);
+                    }
+                    availableTasks.add(TASK.BAZAAR);
                     break;
                 }
                 case MOUNTAIN: {

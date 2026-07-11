@@ -70,6 +70,33 @@ public class Storage {
         this.ironMax = DEFAULT_IRON_MAX_STORAGE * x;
     }
 
+    public int getQuantity(ResourceType type) {
+        return switch (type) {
+            case WOOD -> woodQuantity;
+            case STONE -> stoneQuantity;
+            case IRON -> ironQuantity;
+            case FOOD -> foodQuantity;
+        };
+    }
+
+    public void setQuantity(ResourceType type, int amount) {
+        switch (type) {
+            case WOOD -> woodQuantity = amount;
+            case STONE -> stoneQuantity = amount;
+            case IRON -> ironQuantity = amount;
+            case FOOD -> foodQuantity = amount;
+        }
+    }
+
+    public int getMax(ResourceType type) {
+        return switch (type) {
+            case WOOD -> woodMax;
+            case STONE -> stoneMax;
+            case IRON -> ironMax;
+            case FOOD -> foodMax;
+        };
+    }
+
     public void reset(){
         this.woodQuantity = DEFAULT_WOOD_QUANTITY;
         this.stoneQuantity = DEFAULT_STONE_QUANTITY;
