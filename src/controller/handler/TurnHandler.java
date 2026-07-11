@@ -1,6 +1,7 @@
 package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
+import model.building.Bazaar;
 import model.queue.*;
 import model.state.GameState;
 import model.building.Building;
@@ -38,6 +39,13 @@ public class TurnHandler {
                 }
             }
         }
+
+        for(Building building:gameState.getEmpireState().getBuildings()){
+            if(building instanceof Bazaar){
+                ((Bazaar) building).setUsedThisTurn(false);
+            }
+        }
+
         endTurn();
         processQueues();
         gamePanel.getTownHallPanel().refresh();

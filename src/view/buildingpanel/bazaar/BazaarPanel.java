@@ -1,10 +1,6 @@
 package view.buildingpanel.bazaar;
 
 import model.state.GameState;
-import view.buildingpanel.townhall.CookSection;
-import view.buildingpanel.townhall.QueueSection;
-import view.buildingpanel.townhall.ResearchSection;
-import view.buildingpanel.townhall.UpgradeSection;
 import view.common.UITheme;
 
 import javax.imageio.ImageIO;
@@ -18,6 +14,10 @@ public class BazaarPanel extends JPanel {
     private GameState gameState;
     private JButton closeButton;
     private BufferedImage panelBackground;
+    private ToGiveSection toGiveSection;
+    private ToGetSection toGetSection;
+    private QuantitySection quantitySection;
+    private DealSection dealSection;
 
     public BazaarPanel(GameState gameState){
         this.gameState = gameState;
@@ -64,24 +64,40 @@ public class BazaarPanel extends JPanel {
     }
 
 
-    public void open() {setVisible(true);}
+    public void open() {refresh(); setVisible(true);}
     public void close() {setVisible(false);}
+
+    public void refresh() {
+        toGiveSection.reset();
+        toGetSection.reset();
+        quantitySection.reset();
+        dealSection.setSummary(null);
+        dealSection.getDealButton().setEnabled(false);
+    }
 
 
     public GameState getGameState() {
         return gameState;
     }
 
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     public JButton getCloseButton() {
         return closeButton;
     }
 
-    public void setCloseButton(JButton closeButton) {
-        this.closeButton = closeButton;
+    public ToGiveSection getToGiveSection() {
+        return toGiveSection;
+    }
+
+    public ToGetSection getToGetSection() {
+        return toGetSection;
+    }
+
+    public QuantitySection getQuantitySection() {
+        return quantitySection;
+    }
+
+    public DealSection getDealSection() {
+        return dealSection;
     }
 
 
@@ -112,6 +128,16 @@ public class BazaarPanel extends JPanel {
         JPanel body = new JPanel(new GridLayout(2, 2, 15, 15));
         body.setOpaque(false);
         body.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
+
+        toGiveSection = new ToGiveSection();
+        toGetSection = new ToGetSection();
+        quantitySection = new QuantitySection();
+        dealSection = new DealSection();
+
+        body.add(toGiveSection);
+        body.add(toGetSection);
+        body.add(quantitySection);
+        body.add(dealSection);
 
         return body;
     }

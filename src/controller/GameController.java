@@ -20,10 +20,10 @@ public class GameController {
         this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler, selectionContext);
         this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);
         TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
+        BazaarHandler bazaarHandler = new BazaarHandler(gamePanel, gameState);
         HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
-        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext);
+        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler);
         TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
-        BazaarHandler bazaarHandler = new BazaarHandler(gamePanel);
 
         new CameraHandler(gamePanel).attachCameraListeners();
 

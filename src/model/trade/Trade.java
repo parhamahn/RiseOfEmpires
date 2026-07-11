@@ -1,6 +1,5 @@
 package model.trade;
 
-import model.map.Hex;
 import model.storage.ResourceType;
 import model.storage.Storage;
 
@@ -12,12 +11,14 @@ public class Trade {
     private int toGiveCount;
     private double multiplier;
 
+    public Trade(){}
+
     public Trade(ResourceType toGet, ResourceType toGive, int toGiveCount, double multiplier){
         this.toGet = toGet;
         this.toGive = toGive;
         this.multiplier = multiplier;
-        this.toGetCount = (int) Math.floor(toGiveCount * multiplier);
         this.toGiveCount = toGiveCount;
+        this.toGetCount = (int) Math.floor(toGiveCount * multiplier);
     }
 
     public ResourceType getToGet() {
@@ -66,6 +67,14 @@ public class Trade {
         storage.setQuantity(toGive, storage.getQuantity(toGive) - toGiveCount);
         storage.setQuantity(toGet, Math.min(storage.getMax(toGet), storage.getQuantity(toGet) + this.toGetCount));
         return true;
+    }
+
+    public boolean isAffordable(Storage storage){
+        return storage.getQuantity(toGive) >= toGiveCount;
+    }
+
+    public boolean isReady(boolean allowed){
+        return toGive != null && toGet != null && toGiveCount>0 && allowed && toGive!=toGet;
     }
 
 

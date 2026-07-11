@@ -1,5 +1,7 @@
 package view.common;
 
+import helpers.ImageLoader;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,6 +30,8 @@ public class UITheme {
     public static final Color HP_BAR_FG = new Color(255, 0, 0);
 
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+
+    public static final ImageIcon CIRCLE_BUTTON = ImageLoader.getInstance().loadIcon("/utils/circlemenubutton.png", 64);
 
 
     public static void styleIconButton(JButton button) {

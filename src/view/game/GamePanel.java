@@ -59,6 +59,7 @@ public class GamePanel extends JPanel {
         townHallPanel = new TownHallPanel(mapPanel.getGameState());
         layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
 
+
         bazaarPanel = new BazaarPanel(mapPanel.getGameState());
         layeredPane.add(bazaarPanel, JLayeredPane.MODAL_LAYER);
 

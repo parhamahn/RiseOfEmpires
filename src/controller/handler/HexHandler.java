@@ -1,8 +1,10 @@
 package controller.handler;
 
 import controller.SelectionContext;
+import controller.handler.building.bazaar.BazaarHandler;
 import helpers.SoundEffects;
 import model.building.Bazaar;
+import model.building.Building;
 import model.state.GameState;
 import model.map.Hex;
 import view.game.GamePanel;
@@ -17,13 +19,15 @@ public class HexHandler {
     private final UnitHandler unitHandler;
     private final BuildingHandler buildingHandler;
     private final SelectionContext selectionContext;
+    private final BazaarHandler bazaarHandler;
 
-    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext) {
+    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.unitHandler = unitHandler;
         this.buildingHandler = buildingHandler;
         this.selectionContext = selectionContext;
+        this.bazaarHandler = bazaarHandler;
     }
 
     public void attachHexSelectionListener() {
@@ -48,6 +52,7 @@ public class HexHandler {
                     if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding().isTownHall()) {
                         gamePanel.getTownHallPanel().open();
                     } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Bazaar) {
+                        bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
                     }
                     selectionContext.setSelectedHex(clicked);
