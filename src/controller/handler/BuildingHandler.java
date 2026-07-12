@@ -13,7 +13,11 @@ import model.queue.UpgradeQueue;
 import view.game.GamePanel;
 import view.game.lists.TaskStat;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 
 public class BuildingHandler {
     private final GameState gameState;
@@ -87,6 +91,33 @@ public class BuildingHandler {
             }
         } else {
             gamePanel.getTaskListPanel().clear();
+            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall()) {
+                for(ActionListener al:gamePanel.getTaskListPanel().getDestroyButton().getActionListeners()) {
+                    gamePanel.getTaskListPanel().getDestroyButton().removeActionListener(al);
+                }
+                gamePanel.getTaskListPanel().getDestroyButton().addActionListener(e -> {destroyBuilding(selected);});
+                gamePanel.getTaskListPanel().showDestroyButton();
+            }
+        }
+    }
+
+    public void destroyBuilding(Hex hex) {
+        int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_OPTION);
+        if(sure==JOptionPane.YES_OPTION){
+            Building building = hex.getBuilding();
+            if (building != null && !building.isTownHall()){
+                for(Unit unit : building.getAssignedWorkers()) {
+                    unit.setAssigned(false);
+                }
+                hex.setBuilding(null);
+                gameState.getEmpireState().getBuildings().remove(building);
+                updateTownCapacity();
+                gameState.getEmpireState().recalculateProduction();
+                gameState.getEmpireState().recalculateHappiness();
+                gamePanel.getTaskListPanel().clear();
+                gamePanel.getHudPanel().refresh();
+                gamePanel.getMapPanel().repaint();
+            }
         }
     }
 

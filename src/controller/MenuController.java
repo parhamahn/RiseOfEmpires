@@ -53,10 +53,13 @@ public class MenuController {
     }
 
     public void menuAction(){
-        gamePanel.setAnyPanelOpen(false);
-        gamePanel.getPausePanel().close();
-        CardLayout cl = (CardLayout) (cards.getLayout());
-        cl.show(cards, "menu");
+        int sure = JOptionPane.showConfirmDialog(menuPanel, "Are you sure ?", "Exit", JOptionPane.YES_OPTION);
+        if(sure==JOptionPane.YES_OPTION){
+            gamePanel.setAnyPanelOpen(false);
+            gamePanel.getPausePanel().close();
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            cl.show(cards, "menu");
+        }
     }
 
     public void continueAction(){
@@ -65,10 +68,7 @@ public class MenuController {
     }
 
     public void exitAction(){
-        int sure = JOptionPane.showConfirmDialog(menuPanel, "Are you sure ?", "Exit", JOptionPane.YES_OPTION);
-        if(sure==JOptionPane.YES_OPTION){
-            System.exit(0);
-        }
+        System.exit(0);
     }
 
     public void attachPauseAction(){

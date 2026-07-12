@@ -5,11 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import helpers.ImageLoader;
 import model.Task;
+import view.common.StyledButtons;
 
 public class TaskListPanel extends JPanel {
 
+    private JButton destroyButton;
+
+    public JButton getDestroyButton() {
+        return destroyButton;
+    }
+
     public TaskListPanel() {
+        Icon icon = ImageLoader.getInstance().loadIcon("/utils/destroybutton.png", 75);
+        this.destroyButton = StyledButtons.iconButton(icon);
+        StyledButtons.goldBorder(this.destroyButton);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(75, 10, 10, 10));
@@ -28,6 +39,11 @@ public class TaskListPanel extends JPanel {
         revalidate();
         repaint();
         return stats;
+    }
+
+    public void showDestroyButton() {
+        add(Box.createVerticalGlue());
+        add(this.destroyButton);
     }
 
     public void clear() {
