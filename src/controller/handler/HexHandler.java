@@ -37,6 +37,7 @@ public class HexHandler {
             public void mouseClicked(MouseEvent e) {
                 Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
                 if (clicked == null) return;
+                if(gamePanel.isAnyPanelOpen())return;
 
                 boolean discoveredNeighbour = false;
                 for (Hex hex : gameState.getWorldState().getMap().getNeighbourHexes(clicked)) {
@@ -50,8 +51,10 @@ public class HexHandler {
                     unitHandler.handleUnitMoving(clicked);
                 } else if (discoveredNeighbour) {
                     if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding().isTownHall()) {
+                        gamePanel.setAnyPanelOpen(true);
                         gamePanel.getTownHallPanel().open();
                     } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Bazaar) {
+                        gamePanel.setAnyPanelOpen(true);
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
                     }

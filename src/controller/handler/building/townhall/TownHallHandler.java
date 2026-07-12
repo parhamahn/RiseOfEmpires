@@ -19,7 +19,7 @@ public class TownHallHandler {
     }
 
     public void attachHandlers() {
-        gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> gamePanel.getTownHallPanel().close());
+        gamePanel.getTownHallPanel().getCloseButton().addActionListener(e -> {gamePanel.setAnyPanelOpen(false); gamePanel.getTownHallPanel().close();});
 
         UpgradeHandler upgradeHandler = new UpgradeHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
         upgradeHandler.attachUpgradeListeners();

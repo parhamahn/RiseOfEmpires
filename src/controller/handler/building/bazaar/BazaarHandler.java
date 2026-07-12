@@ -23,7 +23,7 @@ public class BazaarHandler {
     public void attachHandlers() {
         BazaarPanel bazaarPanel = gamePanel.getBazaarPanel();
 
-        bazaarPanel.getCloseButton().addActionListener(e -> bazaarPanel.close());
+        bazaarPanel.getCloseButton().addActionListener(e -> {gamePanel.setAnyPanelOpen(false); bazaarPanel.close();});
 
         Runnable refreshDealButton = () ->{
             Trade trade = buildTrade();

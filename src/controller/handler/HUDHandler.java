@@ -1,13 +1,9 @@
 package controller.handler;
 
-import controller.SelectionContext;
-import model.state.GameState;
 import view.game.GamePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 public class HUDHandler {
 
@@ -23,16 +19,7 @@ public class HUDHandler {
     }
 
     public void attachHUDHandler(){
-        gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> turnHandler.endTurnAction());
-
-
-        InputMap inputMap = gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = gamePanel.getActionMap();
-
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "menu");
-        actionMap.put("menu",  new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { menuAction(); }
-        });
+        gamePanel.getHudPanel().getEndTurnButton().addActionListener(e -> { if(gamePanel.isAnyPanelOpen())return; turnHandler.endTurnAction();});
 
     }
 
