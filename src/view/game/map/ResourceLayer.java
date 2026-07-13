@@ -13,6 +13,9 @@ import java.util.HashMap;
 public class ResourceLayer implements MapLayer {
 
     private final java.util.Map<Hex.ResourceType, BufferedImage> resourceIcons = new HashMap<>();
+    private static final Color BADGE_BG = new Color(0, 0, 0, 160);
+    private static final Color BADGE_BORDER = new Color(255, 255, 255, 90);
+    private static final BasicStroke BADGE_STROKE = new BasicStroke(1.5f);
 
     public ResourceLayer() {
         try {
@@ -59,10 +62,10 @@ public class ResourceLayer implements MapLayer {
                     int iconX = startX + i * spacing;
                     Polygon badge = camera.createMiniHex(iconX, y - 2 * iconSize, badgeRadius);
 
-                    g2.setColor(new Color(0, 0, 0, 160));
+                    g2.setColor(BADGE_BG);
                     g2.fillPolygon(badge);
-                    g2.setColor(new Color(255, 255, 255, 90));
-                    g2.setStroke(new BasicStroke(1.5f));
+                    g2.setColor(BADGE_BORDER);
+                    g2.setStroke(BADGE_STROKE);
                     g2.drawPolygon(badge);
 
                     g2.drawImage(icon, iconX - iconSize / 2, y - 5 * iconSize / 2, iconSize, iconSize, null);

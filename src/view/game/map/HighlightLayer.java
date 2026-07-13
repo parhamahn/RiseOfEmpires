@@ -11,6 +11,7 @@ public class HighlightLayer implements MapLayer {
 
     private static final Color HIGHLIGHT_COLOR = new Color(238, 255, 0);
     private static final float STROKE_WIDTH = 4;
+    private static final BasicStroke HIGHLIGHT_STROKE = new BasicStroke(STROKE_WIDTH);
 
 
     @Override
@@ -22,7 +23,7 @@ public class HighlightLayer implements MapLayer {
         Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
 
         g2.setColor(HIGHLIGHT_COLOR);
-        g2.setStroke(new BasicStroke(STROKE_WIDTH));
+        g2.setStroke(HIGHLIGHT_STROKE);
         g2.drawPolygon(tile);
 
         if (selection.getSelectedUnit() != null) {

@@ -80,10 +80,7 @@ public class GamePanel extends JPanel {
         layeredPane.add(pausePanel, JLayeredPane.MODAL_LAYER);
 
         new Timer(1000 / FPS, e -> {
-            if (mapPanel.tick()) {
-                repaint();
-                hudPanel.refresh();
-            }
+            mapPanel.tick();
         }).start();
     }
 

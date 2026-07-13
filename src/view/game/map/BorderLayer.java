@@ -11,14 +11,22 @@ public class BorderLayer implements MapLayer {
 
     private static final Color BORDER_COLOR = new Color(0, 31, 232);
     private static final int[] EDGE_START_FOR_DIRECTION = {0, 3, 1, 2, 5, 4};
+    private BasicStroke borderStroke;
+    private int lastStrokeRadius = -1;
 
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         if (map == null) return;
 
+        int radius = camera.getHexRadius();
+        if (borderStroke == null || radius != lastStrokeRadius) {
+            borderStroke = new BasicStroke(Math.max(1f, radius / 20f),
+                    BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            lastStrokeRadius = radius;
+        }
+
         g2.setColor(BORDER_COLOR);
-        g2.setStroke(new BasicStroke(Math.max(1f, camera.getHexRadius() / 20f),
-                BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2.setStroke(borderStroke);
 
         for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {

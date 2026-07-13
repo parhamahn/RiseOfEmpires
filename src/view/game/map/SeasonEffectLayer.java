@@ -16,8 +16,10 @@ public class SeasonEffectLayer implements MapLayer {
     private static final float WIND_ANGLE = 0;
     private static final Color RAIN_COLOR = new Color(150, 180, 255, 100);
     private static final Color RAIN_COLOR_LIGHT = new Color(180, 200, 255, 60);
+    private static final BasicStroke RAIN_STROKE = new BasicStroke(1.2f);
 
     private final ArrayList<RainDrop> rainDrops = new ArrayList<>();
+    private final Random rand = new Random();
     private boolean initialized = false;
 
     private static class RainDrop {
@@ -50,7 +52,7 @@ public class SeasonEffectLayer implements MapLayer {
 
     private void initDrops(int width, int height) {
         rainDrops.clear();
-        Random rand = new Random();
+        rand.setSeed(System.nanoTime());
         for (int i = 0; i < DROP_COUNT; i++) {
             float x = rand.nextFloat() * (width + 200) - 100;
             float y = rand.nextFloat() * (height + 100);
@@ -78,7 +80,7 @@ public class SeasonEffectLayer implements MapLayer {
         for (RainDrop drop : rainDrops) {
             drop.move();
             if (drop.y > bounds.height + 50 || drop.x > bounds.width + 100) {
-                drop.reset(bounds.width, new Random());
+                drop.reset(bounds.width, rand);
             }
         }
 
@@ -86,7 +88,7 @@ public class SeasonEffectLayer implements MapLayer {
 
         for (RainDrop drop : rainDrops) {
             g2.setColor(drop.length > 16 ? RAIN_COLOR : RAIN_COLOR_LIGHT);
-            g2.setStroke(new BasicStroke(1.2f));
+            g2.setStroke(RAIN_STROKE);
             int endX = (int) (drop.x + drop.length * WIND_ANGLE);
             int endY = (int) (drop.y + drop.length);
             g2.drawLine((int) drop.x, (int) drop.y, endX, endY);

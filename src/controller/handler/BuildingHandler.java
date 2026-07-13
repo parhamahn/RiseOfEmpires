@@ -66,6 +66,7 @@ public class BuildingHandler {
         gameState.getEmpireState().recalculateHappiness();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
+        gamePanel.getMapPanel().markStaticDirty();
         gamePanel.getMapPanel().repaint();
     }
 
@@ -116,6 +117,7 @@ public class BuildingHandler {
                 gameState.getEmpireState().recalculateHappiness();
                 gamePanel.getTaskListPanel().clear();
                 gamePanel.getHudPanel().refresh();
+                gamePanel.getMapPanel().markStaticDirty();
                 gamePanel.getMapPanel().repaint();
             }
         }

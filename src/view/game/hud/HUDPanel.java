@@ -148,8 +148,6 @@ public class HUDPanel extends JPanel {
             case WINTER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/winter.png", 50, 50));
         }
 
-
-        revalidate();
         repaint();
     }
 

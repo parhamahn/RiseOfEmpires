@@ -94,6 +94,7 @@ public class UnitHandler {
         gameState.getEmpireState().getUnits().remove(unit);
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().markStaticDirty();
     }
 
     public void updateUnitListPanel() {
@@ -116,12 +117,19 @@ public class UnitHandler {
     public void discover() {
         Hex selected = selectionContext.getSelectedHex();
         if (selected != null) {
+            boolean discoveredAny = false;
             for (Unit unit : selected.getUnits()) {
                 if (unit.isExplorer()) {
                     for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selected)) {
-                        neighbor.setDiscovered(true);
+                        if (!neighbor.isDiscovered()) {
+                            neighbor.setDiscovered(true);
+                            discoveredAny = true;
+                        }
                     }
                 }
+            }
+            if (discoveredAny) {
+                gamePanel.getMapPanel().markStaticDirty();
             }
         }
     }

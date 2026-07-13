@@ -13,6 +13,8 @@ import java.util.EnumMap;
 public class TerrainLayer implements MapLayer {
 
     private final java.util.Map<Hex.TerrainType, BufferedImage> terrainImages = new EnumMap<>(Hex.TerrainType.class);
+    private Font questionFont;
+    private int lastFontRadius = -1;
 
 
     public TerrainLayer() {
@@ -59,7 +61,11 @@ public class TerrainLayer implements MapLayer {
                     g2.setColor(Color.WHITE);
                     g2.drawPolygon(tile);
                     if (selection.getSelectedHex() != hex) {
-                        g2.setFont(new Font("Pixel Game", Font.BOLD, Math.max(12, r2 / 2)));
+                        if (questionFont == null || r2 != lastFontRadius) {
+                            questionFont = new Font("Pixel Game", Font.BOLD, Math.max(12, r2 / 2));
+                            lastFontRadius = r2;
+                        }
+                        g2.setFont(questionFont);
                         g2.drawString("?", center.x - r2 / 10, center.y + r2 / 10);
                     }
                 }

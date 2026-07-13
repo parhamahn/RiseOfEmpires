@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,11 @@ public class MapPanel extends JPanel {
     private final Camera camera;
     private final UnitAnimator unitAnimator;
     private final SeasonEffectLayer seasonEffectLayer;
-    private final List<MapLayer> layers = new ArrayList<>();
+    private final List<MapLayer> staticLayers = new ArrayList<>();
+    private final List<MapLayer> dynamicLayers = new ArrayList<>();
+
+    private BufferedImage staticBuffer;
+    private boolean staticDirty = true;
 
 
     public MapPanel(Map map, GameState gameState, SelectionContext selectionContext) {
@@ -31,13 +36,14 @@ public class MapPanel extends JPanel {
         setBackground(Color.BLACK);
         setMap(map);
 
-        layers.add(new TerrainLayer());
-        layers.add(new BuildingLayer());
-        layers.add(new HighlightLayer());
-        layers.add(new BorderLayer());
-        layers.add(new ResourceLayer());
-        layers.add(new UnitLayer());
-        layers.add(seasonEffectLayer);
+        staticLayers.add(new TerrainLayer());
+        staticLayers.add(new BuildingLayer());
+        staticLayers.add(new BorderLayer());
+        staticLayers.add(new ResourceLayer());
+
+        dynamicLayers.add(new HighlightLayer());
+        dynamicLayers.add(new UnitLayer());
+        dynamicLayers.add(seasonEffectLayer);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -46,6 +52,7 @@ public class MapPanel extends JPanel {
                     camera.setViewport(getWidth(), getHeight());
                     centerCameraOnTownHall();
                     unitAnimator.initPositions(camera);
+                    staticDirty = true;
                     removeComponentListener(this);
                 }
             }
@@ -55,6 +62,7 @@ public class MapPanel extends JPanel {
             public void componentResized(ComponentEvent e) {
                 if (getWidth() > 0 && getHeight() > 0) {
                     camera.setViewport(getWidth(), getHeight());
+                    staticDirty = true;
                 }
             }
         });
@@ -65,7 +73,12 @@ public class MapPanel extends JPanel {
         this.map = map;
         unitAnimator.initPositions(camera);
         centerCameraOnTownHall();
+        staticDirty = true;
         repaint();
+    }
+
+    public void markStaticDirty() {
+        staticDirty = true;
     }
 
     public boolean tick() {
@@ -78,13 +91,27 @@ public class MapPanel extends JPanel {
         return false;
     }
 
+    private void rebuildStaticBuffer() {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
+        staticBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = staticBuffer.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        for (MapLayer layer : staticLayers) {
+            layer.draw(g2, map, gameState, selectionContext, camera);
+        }
+        g2.dispose();
+        staticDirty = false;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (staticDirty || staticBuffer == null) rebuildStaticBuffer();
+        g.drawImage(staticBuffer, 0, 0, null);
+
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        for (MapLayer layer : layers) {
+        for (MapLayer layer : dynamicLayers) {
             layer.draw(g2, map, gameState, selectionContext, camera);
         }
     }
@@ -95,6 +122,7 @@ public class MapPanel extends JPanel {
         int mapH = map.getRows() * camera.getDy();
         if (camera.zoom(direction, mapW, mapH, getWidth(), getHeight())) {
             unitAnimator.syncPositions(camera);
+            staticDirty = true;
             repaint();
         }
     }
@@ -105,6 +133,7 @@ public class MapPanel extends JPanel {
         int mapH = map.getRows() * camera.getDy();
         camera.moveCamera(deltaX, deltaY, mapW, mapH, getWidth(), getHeight());
         unitAnimator.syncPositions(camera);
+        staticDirty = true;
         repaint();
     }
 

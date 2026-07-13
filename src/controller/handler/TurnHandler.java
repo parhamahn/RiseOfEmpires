@@ -53,6 +53,7 @@ public class TurnHandler {
         gamePanel.getHudPanel().refresh();
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().markStaticDirty();
         gamePanel.repaint();
         if (gameState.getEmpireState().isUpkeepDisaster()) {
             WarningDialogs.upkeepDisaster();
