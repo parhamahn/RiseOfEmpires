@@ -18,6 +18,7 @@ public class HUDPanel extends JPanel {
     private JLabel cvunitsLabel;
     private JLabel cbunitsLabel;
     private JLabel happinessLabel;
+    private JLabel seasonLabel;
     private GameState gameState;
 
 
@@ -29,6 +30,7 @@ public class HUDPanel extends JPanel {
         this.cvunitsLabel = new JLabel();
         this.cbunitsLabel = new JLabel();
         this.happinessLabel = new JLabel();
+        this.seasonLabel = new JLabel();
         this.setBackground(UITheme.HUD_BG);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -89,6 +91,16 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalStrut(20));
 
+        switch (gameState.getWorldState().getSeason()){
+            case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
+            case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
+            case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));
+            case WINTER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/winter.png", 50, 50));
+        }
+
+        add(this.seasonLabel);
+
+        add(Box.createHorizontalStrut(20));
 
         add(endTurnButton);
 
@@ -127,6 +139,13 @@ public class HUDPanel extends JPanel {
         } else {
             this.happinessLabel.setText("Happiness : 0");
             this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
+        }
+
+        switch (gameState.getWorldState().getSeason()){
+            case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
+            case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
+            case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));
+            case WINTER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/winter.png", 50, 50));
         }
 
 

@@ -1,6 +1,7 @@
 package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
+import model.Season;
 import model.building.Bazaar;
 import model.queue.*;
 import model.state.GameState;
@@ -135,8 +136,12 @@ public class TurnHandler {
                 }
             }
         }
+        gameState.getWorldState().nextTurn();
+        Season.processSeason(gameState);
         gameState.getEmpireState().setUpkeepDisaster(anyDamagesToBuilding);
         buildingHandler.updateTownCapacity();
-        gameState.getWorldState().nextTurn();
     }
+
+
+
 }
