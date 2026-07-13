@@ -3,6 +3,10 @@ import controller.SelectionContext;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
+import view.game.map.season.RainEffectLayer;
+import view.game.map.season.SeasonLightingLayer;
+import view.game.map.season.SnowEffectLayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -18,7 +22,9 @@ public class MapPanel extends JPanel {
     private final SelectionContext selectionContext;
     private final Camera camera;
     private final UnitAnimator unitAnimator;
-    private final SeasonEffectLayer seasonEffectLayer;
+    private final RainEffectLayer rainEffectLayer;
+    private final SnowEffectLayer snowEffectLayer;
+    private final SeasonLightingLayer seasonLightingLayer;
     private final List<MapLayer> staticLayers = new ArrayList<>();
     private final List<MapLayer> dynamicLayers = new ArrayList<>();
 
@@ -31,7 +37,9 @@ public class MapPanel extends JPanel {
         this.selectionContext = selectionContext;
         this.camera = new Camera();
         this.unitAnimator = new UnitAnimator(gameState);
-        this.seasonEffectLayer = new SeasonEffectLayer();
+        this.rainEffectLayer = new RainEffectLayer();
+        this.snowEffectLayer = new SnowEffectLayer();
+        this.seasonLightingLayer = new SeasonLightingLayer();
 
         setBackground(Color.BLACK);
         setMap(map);
@@ -43,7 +51,9 @@ public class MapPanel extends JPanel {
 
         dynamicLayers.add(new HighlightLayer());
         dynamicLayers.add(new UnitLayer());
-        dynamicLayers.add(seasonEffectLayer);
+        dynamicLayers.add(rainEffectLayer);
+        dynamicLayers.add(snowEffectLayer);
+        dynamicLayers.add(seasonLightingLayer);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -83,7 +93,7 @@ public class MapPanel extends JPanel {
 
     public boolean tick() {
         boolean unitMoving = unitAnimator.tick(camera);
-        boolean seasonActive = seasonEffectLayer.isActive(gameState);
+        boolean seasonActive = rainEffectLayer.isActive(gameState) || snowEffectLayer.isActive(gameState);
         if (unitMoving || seasonActive) {
             repaint();
             return true;
