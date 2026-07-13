@@ -26,7 +26,7 @@ public class ResearchSection extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
         JLabel label = new JLabel("Technology Research");
-        label.setFont(UITheme.GAME_FONT.deriveFont(20f));
+        label.setFont(UITheme.GAME_FONT.deriveFont(32f));
         label.setForeground(UITheme.GOLD);
         label.setAlignmentX(CENTER_ALIGNMENT);
         add(label);
@@ -46,7 +46,7 @@ public class ResearchSection extends JPanel {
             if (stat == null) continue;
 
             boolean alreadyResearched = gameState.getEmpireState().getResearchedTechnologies().contains(tech);
-            boolean canAfford = tech.getCost().enoughResources(gameState.getEmpireState().getStorage()) && tech.getTownHallLevel().ordinal()<gameState.getEmpireState().getTownHallLevel().ordinal();
+            boolean canAfford = tech.getCost().enoughResources(gameState.getEmpireState().getStorage()) && tech.getTownHallLevel().ordinal()<gameState.getEmpireState().getTownHallLevel().ordinal() && gameState.getEmpireState().getQueues().isEmpty();
             boolean alreadyQueued = gameState.getEmpireState().getQueues().stream()
                     .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.RESEARCH
                             && ((ResearchQueue) q).getTechnology() == tech);

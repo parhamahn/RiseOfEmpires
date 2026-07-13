@@ -26,5 +26,10 @@ public class TownHallHandler {
 
         ResearchHandler researchHandler = new ResearchHandler(gameState, gamePanel);
         researchHandler.attachResearchListeners();
+
+        gamePanel.getTownHallPanel().setOnCancel(queue -> {
+            gameState.getEmpireState().getQueues().remove(queue);
+            gamePanel.getTownHallPanel().refresh();
+        });
     }
 }

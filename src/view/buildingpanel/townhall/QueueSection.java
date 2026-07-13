@@ -1,17 +1,21 @@
 package view.buildingpanel.townhall;
 
-import model.queue.*;
+import model.queue.Queue;
 import model.state.GameState;
 import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class QueueSection extends JPanel {
 
     private final GameState gameState;
     private final JPanel queuePanel;
+    private final List<QueueStat> currentStats = new ArrayList<>();
+    private Consumer<Queue> onCancel;
 
     public QueueSection(GameState gameState) {
         this.gameState = gameState;
@@ -19,8 +23,8 @@ public class QueueSection extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel queueLabel = new JLabel("Queue");
-        queueLabel.setFont(UITheme.GAME_FONT.deriveFont(16f));
-        queueLabel.setForeground(Color.WHITE);
+        queueLabel.setFont(UITheme.GAME_FONT.deriveFont(32f));
+        queueLabel.setForeground(UITheme.GOLD);
         queueLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(queueLabel);
         add(Box.createRigidArea(new Dimension(0, 5)));
@@ -39,37 +43,39 @@ public class QueueSection extends JPanel {
         add(scrollPane);
     }
 
-    public void setQueue(List<Queue> queues) {
+    public void setOnCancel(Consumer<Queue> onCancel) {
+        this.onCancel = onCancel;
+    }
+
+    public List<QueueStat> setQueue(List<Queue> queues) {
         queuePanel.removeAll();
+        currentStats.clear();
         int currentTurn = gameState.getWorldState().getTurnNumber();
+
         for (Queue q : queues) {
-            int turns = q.getTurnsLeft(currentTurn);
-            String typeLabel;
-            switch (q.getQueueType()) {
-                case COOK -> typeLabel = "Cooking " + ((CookQueue) q).getUnit().getUnitType().toString();
-                case UPGRADE -> typeLabel = "Upgrading to " + ((UpgradeQueue) q).getTargetLevel();
-                case RESEARCH -> typeLabel = "Researching " + ((ResearchQueue) q).getTechnology();
-                default -> typeLabel = "Unknown";
+            QueueStat stat = new QueueStat(q, currentTurn);
+            if (onCancel != null) {
+                stat.getCancelButton().addActionListener(e -> onCancel.accept(q));
             }
-
-            String text = typeLabel + " : " + turns + " turn" + (turns != 1 ? "s" : "") + " left";
-
-            JLabel label = new JLabel(text);
-            label.setFont(UITheme.GAME_FONT_SMALL);
-            label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
-            label.setAlignmentX(CENTER_ALIGNMENT);
-            label.setForeground(turns == 0 ? Color.GREEN : Color.WHITE);
-
-            queuePanel.add(label);
-            queuePanel.add(Box.createRigidArea(new Dimension(0, 4)));
+            queuePanel.add(stat);
+            queuePanel.add(Box.createRigidArea(new Dimension(0, 2)));
+            currentStats.add(stat);
         }
-        if(queues.isEmpty()){
-            JLabel label = new JLabel("There are no queues");
-            label.setFont(UITheme.GAME_FONT_SMALL);
-            label.setAlignmentX(CENTER_ALIGNMENT);
-            add(label);
+
+        if (queues.isEmpty()) {
+            JLabel emptyLabel = new JLabel("No active queues");
+            emptyLabel.setFont(UITheme.GAME_FONT_SMALL);
+            emptyLabel.setForeground(Color.GRAY);
+            emptyLabel.setAlignmentX(CENTER_ALIGNMENT);
+            queuePanel.add(emptyLabel);
         }
+
         queuePanel.revalidate();
         queuePanel.repaint();
+        return new ArrayList<>(currentStats);
+    }
+
+    public List<QueueStat> getCurrentStats() {
+        return new ArrayList<>(currentStats);
     }
 }

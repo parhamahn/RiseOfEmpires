@@ -21,7 +21,7 @@ public class CookSection extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
         JLabel label = new JLabel("Cook Units");
-        label.setFont(UITheme.GAME_FONT.deriveFont(20f));
+        label.setFont(UITheme.GAME_FONT.deriveFont(32f));
         label.setForeground(UITheme.GOLD);
         label.setAlignmentX(CENTER_ALIGNMENT);
         add(label);
@@ -33,7 +33,7 @@ public class CookSection extends JPanel {
 
         cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
-            boolean canAfford = (type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal();
+            boolean canAfford = (type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal()&&gameState.getEmpireState().getQueues().isEmpty();
             CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
             cookStats.put(type, stat);
             grid.add(stat);

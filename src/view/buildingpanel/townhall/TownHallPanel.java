@@ -65,6 +65,8 @@ public class TownHallPanel extends JPanel {
     public JButton getUpgradeStorageButton() {return upgradeSection.getUpgradeButton();}
     public JButton getResearchButton(Technology tech) {return researchSection.getResearchButton(tech);}
     public void setQueue(List<Queue> queues) {queueSection.setQueue(queues);}
+    public void setOnCancel(java.util.function.Consumer<Queue> onCancel) {queueSection.setOnCancel(onCancel);}
+    public List<QueueStat> getQueueStats() {return queueSection.getCurrentStats();}
 
 
     @Override

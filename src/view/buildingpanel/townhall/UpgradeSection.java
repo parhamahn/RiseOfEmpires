@@ -21,7 +21,7 @@ public class UpgradeSection extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
         JLabel label = new JLabel("Upgrade TownHall");
-        label.setFont(UITheme.GAME_FONT.deriveFont(20f));
+        label.setFont(UITheme.GAME_FONT.deriveFont(32f));
         label.setForeground(UITheme.GOLD);
         label.setAlignmentX(CENTER_ALIGNMENT);
         add(label);
@@ -44,7 +44,7 @@ public class UpgradeSection extends JPanel {
         boolean upgradeQueued = gameState.getEmpireState().getQueues().stream()
                 .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
 
-        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null && !upgradeQueued) {
+        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null && !upgradeQueued && gameState.getEmpireState().getQueues().isEmpty()) {
             upgradeButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
             upgradeButton.setEnabled(true);
         } else {
