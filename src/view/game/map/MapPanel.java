@@ -17,7 +17,8 @@ public class MapPanel extends JPanel {
     private final SelectionContext selectionContext;
     private final Camera camera;
     private final UnitAnimator unitAnimator;
-    private final List<MapLayer> layers = new ArrayList<>();;
+    private final SeasonEffectLayer seasonEffectLayer;
+    private final List<MapLayer> layers = new ArrayList<>();
 
 
     public MapPanel(Map map, GameState gameState, SelectionContext selectionContext) {
@@ -25,6 +26,7 @@ public class MapPanel extends JPanel {
         this.selectionContext = selectionContext;
         this.camera = new Camera();
         this.unitAnimator = new UnitAnimator(gameState);
+        this.seasonEffectLayer = new SeasonEffectLayer();
 
         setBackground(Color.BLACK);
         setMap(map);
@@ -35,6 +37,7 @@ public class MapPanel extends JPanel {
         layers.add(new BorderLayer());
         layers.add(new ResourceLayer());
         layers.add(new UnitLayer());
+        layers.add(seasonEffectLayer);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -66,7 +69,9 @@ public class MapPanel extends JPanel {
     }
 
     public boolean tick() {
-        if (unitAnimator.tick(camera)) {
+        boolean unitMoving = unitAnimator.tick(camera);
+        boolean seasonActive = seasonEffectLayer.isActive(gameState);
+        if (unitMoving || seasonActive) {
             repaint();
             return true;
         }
