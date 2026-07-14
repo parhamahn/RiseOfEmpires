@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
+import model.TownHallLevel;
 import model.building.Bazaar;
 import model.queue.*;
 import model.state.GameState;
@@ -81,7 +82,11 @@ public class TurnHandler {
                     }
                     case UPGRADE -> {
                         UpgradeQueue uq = (UpgradeQueue) queue;
-                        gameState.getEmpireState().setTownHallLevel(uq.getTargetLevel());
+                        TownHallLevel newLevel = uq.getTargetLevel();
+                        gameState.getEmpireState().setTownHallLevel(newLevel);
+                        gameState.getEmpireState().getStorage().upgradeStorage(newLevel.getMaxStorage());
+                        gameState.getEmpireState().getTownHallHex().getBuilding().setHP(newLevel.getMaxHP());
+                        gamePanel.getHudPanel().refresh();
                         toRemove.add(queue);
                     }
                     case RESEARCH -> {

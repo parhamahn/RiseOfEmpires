@@ -64,7 +64,7 @@ public class CookSection extends JPanel {
             Unit.UNIT_TYPE type = entry.getKey();
             boolean canAfford = ((type.getCookCost() == null
                     || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
-                    && !atCap)&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal();
+                    && !atCap)&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal() && gameState.getEmpireState().getQueues().isEmpty();
             stat.refresh(canAfford);
         }
         revalidate();

@@ -63,13 +63,6 @@ public class Storage {
     }
 
 
-    public void upgradeStorage(int x){
-        this.foodMax = DEFAULT_FOOD_MAX_STORAGE * x;
-        this.woodMax = DEFAULT_WOOD_MAX_STORAGE * x;
-        this.stoneMax = DEFAULT_STONE_MAX_STORAGE * x;
-        this.ironMax = DEFAULT_IRON_MAX_STORAGE * x;
-    }
-
     public int getQuantity(ResourceType type) {
         return switch (type) {
             case WOOD -> woodQuantity;
@@ -95,6 +88,13 @@ public class Storage {
             case IRON -> ironMax;
             case FOOD -> foodMax;
         };
+    }
+
+    public void upgradeStorage(MaxStorage maxStorage) {
+        woodMax = maxStorage.getMaxWood();
+        stoneMax = maxStorage.getMaxStone();
+        ironMax = maxStorage.getMaxIron();
+        foodMax = maxStorage.getMaxFood();
     }
 
     public void reset(){
