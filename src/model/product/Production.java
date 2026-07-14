@@ -1,8 +1,9 @@
-package model;
+package model.product;
 
 import model.building.Building;
 import model.map.Hex;
 import model.state.EmpireState;
+import model.state.GameState;
 import model.unit.Unit;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Production {
         reset();
     }
 
+
     public int getFoodProduction() {
         return foodProduction;
     }
@@ -37,7 +39,7 @@ public class Production {
     }
 
 
-    public void recalculate(EmpireState empire){
+    public void recalculate(EmpireState empire, AdjacencyBonus.ExtraResources bonus){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;
         this.woodProduction = DEFAULT_WOOD_PRODUCTION;
         this.stoneProduction = DEFAULT_STONE_PRODUCTION;
@@ -89,6 +91,11 @@ public class Production {
             }
         }
         empire.getBuildings().removeAll(toRemove);
+
+        this.foodProduction += bonus.getExtraFood();
+        this.woodProduction += bonus.getExtraWood();
+        this.stoneProduction += bonus.getExtraStone();
+        this.ironProduction += bonus.getExtraIron();
     }
 
     private void addProduction(Hex.ResourceType resourceType, int amount) {

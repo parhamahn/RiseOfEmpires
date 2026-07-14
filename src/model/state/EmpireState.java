@@ -6,6 +6,8 @@ import model.building.Monument;
 import model.building.TownHall;
 import model.map.Hex;
 import model.map.Map;
+import model.product.AdjacencyBonus;
+import model.product.Production;
 import model.queue.Queue;
 import model.queue.Technology;
 import model.storage.Storage;
@@ -57,12 +59,12 @@ public class EmpireState {
         for (Unit unit : units) { unit.setHex(townHallHex); }
         townHallHex.getUnits().addAll(units);
 
-        recalculateProduction();
+        recalculateProduction(map);
         recalculateHappiness();
     }
 
-    public void recalculateProduction() {
-        production.recalculate(this);
+    public void recalculateProduction(Map map) {
+        production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map));
     }
 
     public void recalculateHappiness() {

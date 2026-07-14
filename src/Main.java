@@ -4,7 +4,7 @@ import controller.SelectionContext;
 import controller.SettingsController;
 import helpers.Sound;
 import model.map.Map;
-import model.Production;
+import model.product.Production;
 import model.storage.Storage;
 import model.state.GameState;
 import view.game.GamePanel;

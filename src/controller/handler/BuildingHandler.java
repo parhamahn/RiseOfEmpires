@@ -64,7 +64,7 @@ public class BuildingHandler {
         gameState.getEmpireState().getBuildings().add(building);
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         updateTownCapacity();
-        gameState.getEmpireState().recalculateProduction();
+        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
         gameState.getEmpireState().recalculateHappiness();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
@@ -115,7 +115,7 @@ public class BuildingHandler {
                 hex.setBuilding(null);
                 gameState.getEmpireState().getBuildings().remove(building);
                 updateTownCapacity();
-                gameState.getEmpireState().recalculateProduction();
+                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                 gameState.getEmpireState().recalculateHappiness();
                 gamePanel.getTaskListPanel().clear();
                 gamePanel.getHudPanel().refresh();

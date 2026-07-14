@@ -95,14 +95,14 @@ public class TurnHandler {
                         toRemove.add(queue);
                     }
                 }
-                gameState.getEmpireState().recalculateProduction();
+                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
             }
         }
         gameState.getEmpireState().getQueues().removeAll(toRemove);
     }
 
     private void endTurn() {
-        gameState.getEmpireState().recalculateProduction();
+        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
 
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             unit.resetActionPointsForNewTurn();

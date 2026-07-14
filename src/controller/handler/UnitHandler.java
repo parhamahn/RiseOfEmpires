@@ -39,7 +39,7 @@ public class UnitHandler {
             if (unit.getActionPoints() >= clicked.getAPToMove()) {
                 if (unit.getHex().getBuilding() != null) {
                     unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
-                    gameState.getEmpireState().recalculateProduction();
+                    gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                     gamePanel.getHudPanel().refresh();
                 }
                 unit.setActionPoints(unit.getActionPoints() - clicked.getAPToMove());
@@ -70,14 +70,14 @@ public class UnitHandler {
                         unit.setAssigned(true);
                         unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
                         selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
-                        gameState.getEmpireState().recalculateProduction();
+                        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                         gamePanel.getHudPanel().refresh();
                     }
                 }
             } else {
                 unit.setAssigned(false);
                 selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
-                gameState.getEmpireState().recalculateProduction();
+                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                 gamePanel.getHudPanel().refresh();
             }
         }

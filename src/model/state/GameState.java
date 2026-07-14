@@ -1,7 +1,7 @@
 package model.state;
 
 import model.map.Map;
-import model.Production;
+import model.product.Production;
 import model.storage.Storage;
 
 public class GameState {
