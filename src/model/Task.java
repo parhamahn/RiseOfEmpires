@@ -14,7 +14,9 @@ public class Task {
         TOWN,
         STABLE,
         MONUMENT,
-        BAZAAR
+        BAZAAR,
+        DOCK,
+        MILITARY_STABLE
     }
 
     public static List<TASK> getAvailableTasks(Hex hex) {

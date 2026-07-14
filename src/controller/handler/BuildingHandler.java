@@ -42,6 +42,8 @@ public class BuildingHandler {
             case TOWN -> new Town(hex);
             case MONUMENT -> new Monument(hex);
             case BAZAAR -> new Bazaar(hex);
+            case DOCK ->  new Dock(hex);
+            case MILITARY_STABLE ->  new MilitaryStable(hex);
         };
 
         building.getCost().pay(gameState.getEmpireState().getStorage());

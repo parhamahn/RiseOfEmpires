@@ -73,6 +73,8 @@ public abstract class Building {
             case TOWN        -> Town.getBuildCost();
             case MONUMENT    -> Monument.getBuildCost();
             case BAZAAR -> Bazaar.getBuildCost();
+            case DOCK -> Dock.getBuildCost();
+            case MILITARY_STABLE -> MilitaryStable.getBuildCost();
         };
     }
 }

@@ -7,31 +7,36 @@ import model.storage.Cost;
 public abstract class Unit{
 
     public enum UNIT_TYPE {
-        EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0),
-        BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0),
-        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0),
-        WORKER(null, 3, TownHallLevel.BASE_CAMP, 0),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1),
-        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 3);
+        EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
+        BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
+        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
+        WORKER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 5, 2),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 20, 1),
+        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1),
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 3, 50, 1);
 
         private final Cost cookCost;
         private final int turnCost;
         private final TownHallLevel level;
         private final int attackRadius;
+        private final int attackPower;
+        private final int health;
 
-        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level, int attackRadius) {
+        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level, int attackRadius, int attackPower, int health) {
             this.cookCost = cookCost;
             this.turnCost = turnCost;
             this.level = level;
             this.attackRadius = attackRadius;
+            this.attackPower = attackPower;
+            this.health = health;
         }
 
         public Cost getCookCost() { return cookCost; }
         public int getTurnCost() { return turnCost; }
         public TownHallLevel getLevel() { return level; }
         public int getAttackRadius() {return attackRadius;};
+        public int getHealth() {return health;}
     }
 
     protected UNIT_TYPE unitType;
@@ -46,6 +51,8 @@ public abstract class Unit{
     private Hex targetHex;
     private int maxHP;
     private int HP;
+    private int health;
+    private int maxHealth;
     protected Cost cookCost;
 
 
@@ -60,6 +67,8 @@ public abstract class Unit{
         this.foodConsumptionPerTurn = foodConsumptionPerTurn;
         this.maxHP = maxHP;
         this.HP = maxHP;
+        this.maxHealth = unitType.getHealth();
+        this.health = maxHealth;
     }
 
 
@@ -130,6 +139,13 @@ public abstract class Unit{
     }
     public abstract boolean isCombatUnit();
 
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
     public void resetActionPointsForNewTurn() {
         this.actionPoints = actionPointsMax;

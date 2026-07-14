@@ -11,8 +11,9 @@ public class Hex {
     private static final int FLAT_AP_COST = 1;
     private static final int FOREST_AP_COST = 2;
     private static final int MOUNTAIN_AP_COST = 4;
+    private static final int SEA_COST = 2;
 
-    public enum TerrainType {PLAIN, FOREST, MOUNTAIN, MEADOW}
+    public enum TerrainType {PLAIN, FOREST, MOUNTAIN, MEADOW, SEA, TALL_MOUNTAIN}
     public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP}
 
     private int c,r;
@@ -63,6 +64,8 @@ public class Hex {
             case MOUNTAIN -> MOUNTAIN_AP_COST;
             case FOREST -> FOREST_AP_COST;
             case MEADOW, PLAIN -> FLAT_AP_COST;
+            case SEA -> SEA_COST;
+            case TALL_MOUNTAIN -> Integer.MAX_VALUE;
         };
     }
 }

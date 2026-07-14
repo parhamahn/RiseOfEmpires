@@ -22,6 +22,8 @@ public class TerrainLayer implements MapLayer {
         terrainImages.put(Hex.TerrainType.FOREST, loadImage("/utils/foresthex.png"));
         terrainImages.put(Hex.TerrainType.MOUNTAIN, loadImage("/utils/mountainhex.png"));
         terrainImages.put(Hex.TerrainType.MEADOW, loadImage("/utils/meadowhex.png"));
+        terrainImages.put(Hex.TerrainType.SEA, loadImage("/utils/sea.png"));
+        terrainImages.put(Hex.TerrainType.TALL_MOUNTAIN, loadImage("/utils/tallmountain.png"));
     }
 
 
