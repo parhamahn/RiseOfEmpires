@@ -51,6 +51,9 @@ public class Production {
 
         List<Building> toRemove = new ArrayList<>();
 
+        int protestPenalty = 0;
+        if(empire.getHappiness()<=-3){protestPenalty = 1;}
+
         for (Building building : empire.getBuildings()) {
             int workers = building.getAssignedWorkers().size();
             Hex.ResourceType resourceType = building.getResourceType();
@@ -58,7 +61,7 @@ public class Production {
             if (workers > 0 && resourceType != null) {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
                 int storageCap = getStorageCap(empire, resourceType);
-                int producingResource = Math.min(Math.min(workers * building.getProductionPerWorker(), resourceOnHex), storageCap);
+                int producingResource = Math.min(Math.min(workers * (building.getProductionPerWorker()-protestPenalty), resourceOnHex), storageCap);
 
                 if (resourceOnHex - producingResource > 0) {
                     building.getHex().getResources().put(resourceType, resourceOnHex - producingResource);
@@ -96,6 +99,14 @@ public class Production {
         this.woodProduction += bonus.getExtraWood();
         this.stoneProduction += bonus.getExtraStone();
         this.ironProduction += bonus.getExtraIron();
+
+        if(empire.getHappiness() >= 3){
+            this.foodProduction += Math.floor(0.1*this.foodProduction);
+            this.woodProduction += Math.floor(0.1*this.woodProduction);
+            this.stoneProduction += Math.floor(0.1*this.stoneProduction);
+            this.ironProduction += Math.floor(0.1*this.ironProduction);
+        }
+
     }
 
     private void addProduction(Hex.ResourceType resourceType, int amount) {

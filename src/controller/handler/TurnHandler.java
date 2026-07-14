@@ -106,6 +106,7 @@ public class TurnHandler {
 
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             unit.resetActionPointsForNewTurn();
+            if(gameState.getEmpireState().getHappiness()<=-5){unit.setActionPoints(unit.getActionPoints() - 1);}
         }
 
         gameState.getEmpireState().getStorage().setFoodQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getFoodMax(), gameState.getEmpireState().getProduction().getFoodProduction() + gameState.getEmpireState().getStorage().getFoodQuantity()), 0));
