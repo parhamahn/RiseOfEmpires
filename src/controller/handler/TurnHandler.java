@@ -92,6 +92,9 @@ public class TurnHandler {
                     case RESEARCH -> {
                         ResearchQueue rq = (ResearchQueue) queue;
                         gameState.getEmpireState().getResearchedTechnologies().add(rq.getTechnology());
+                        if (rq.getTechnology()==Technology.DEFENSIVE_PATTERN) {
+                             ProcessTechnology.processDefensivePattern(gameState, gamePanel);
+                        }
                         toRemove.add(queue);
                     }
                 }

@@ -1,10 +1,9 @@
 package model.product;
 
 import model.Season;
-import model.building.Building;
-import model.building.Farm;
-import model.building.Stable;
+import model.building.*;
 import model.map.Hex;
+import model.queue.Technology;
 import model.state.EmpireState;
 import model.unit.Unit;
 
@@ -64,10 +63,13 @@ public class Production {
             int workers = building.getAssignedWorkers().size();
             Hex.ResourceType resourceType = building.getResourceType();
 
+            double steelToolsMultiplier = 1;
+            if(empire.getResearchedTechnologies().contains(Technology.STEEL_TOOLS) && (building instanceof StoneMine || building instanceof IronMine)){steelToolsMultiplier = 1.5;}
+
             if (workers > 0 && resourceType != null) {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
                 int storageCap = getStorageCap(empire, resourceType);
-                int producingResource = Math.min(Math.min(workers * (building.getProductionPerWorker()-protestPenalty), resourceOnHex), storageCap);
+                int producingResource = (int) Math.min(Math.min(workers * (Math.floor(building.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);
 
                 if(building instanceof Farm || building instanceof Stable){producingResource+= seasonEffect;}
 
