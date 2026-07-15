@@ -39,7 +39,7 @@ public class DealSection extends JPanel {
         return dealButton;
     }
 
-    public void setSummary(String text) {          // NEW
+    public void setSummary(String text) {
         summaryLabel.setText(text == null ? " " : text);
     }
 }

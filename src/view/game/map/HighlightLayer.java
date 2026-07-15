@@ -26,8 +26,9 @@ public class HighlightLayer implements MapLayer {
         g2.setStroke(HIGHLIGHT_STROKE);
         g2.drawPolygon(tile);
 
-        if (selection.getSelectedUnit() != null) {
+        if (selection.getSelectedUnit() != null || selection.getWallOriginHex() != null) {
             for (Hex hex : map.getNeighbourHexes(selected)) {
+                if (hex == null) continue;
                 Point nCenter = camera.getHexCenter(hex);
                 Polygon nTile = camera.translatePolygon(camera.getHexShape(), nCenter.x, nCenter.y);
                 g2.drawPolygon(nTile);

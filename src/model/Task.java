@@ -16,13 +16,15 @@ public class Task {
         MONUMENT,
         BAZAAR,
         DOCK,
-        MILITARY_STABLE
+        MILITARY_STABLE,
+        WALL
     }
 
     public static List<TASK> getAvailableTasks(Hex hex) {
         List<TASK> availableTasks = new ArrayList<>();
         if (hex.isDiscovered()) {
             availableTasks.add(TASK.TOWN);
+            availableTasks.add(TASK.WALL);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
                     if ((hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0 || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)) {availableTasks.add(TASK.STABLE);}

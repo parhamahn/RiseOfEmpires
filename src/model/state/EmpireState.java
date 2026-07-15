@@ -4,6 +4,7 @@ import model.*;
 import model.building.Building;
 import model.building.Monument;
 import model.building.TownHall;
+import model.building.Wall;
 import model.map.Hex;
 import model.map.Map;
 import model.product.AdjacencyBonus;
@@ -32,6 +33,7 @@ public class EmpireState {
     private TownHallLevel townHallLevel;
     private int happiness;
     private Season.SeasonType season;
+    private List<Wall> walls;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -42,6 +44,7 @@ public class EmpireState {
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.season = Season.SeasonType.SPRING;
+        this.walls = new ArrayList<>();
     }
 
     public Season.SeasonType getSeason() {
@@ -75,6 +78,15 @@ public class EmpireState {
 
     public void recalculateProduction(Map map) {
         production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map));
+    }
+
+    public List<Wall> getWalls() { return walls; }
+
+    public boolean hasWall(Hex hex1, Hex hex2) {
+        for (Wall wall : walls) {
+            if (wall.connects(hex1, hex2)) return true;
+        }
+        return false;
     }
 
     public void recalculateHappiness() {

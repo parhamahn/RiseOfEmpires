@@ -44,6 +44,7 @@ public class BuildingHandler {
             case BAZAAR -> new Bazaar(hex);
             case DOCK ->  new Dock(hex);
             case MILITARY_STABLE ->  new MilitaryStable(hex);
+            case WALL -> null;
         };
 
         building.getCost().pay(gameState.getEmpireState().getStorage());
@@ -90,7 +91,13 @@ public class BuildingHandler {
             }
             List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(canBuildMap);
             for (TaskStat stat : stats) {
-                stat.getButton().addActionListener(e -> handleBuildingTask(stat.getTask(), selected));
+                stat.getButton().addActionListener(e -> {
+                    if (stat.getTask() == Task.TASK.WALL) {
+                        startWallPlacement(selected);
+                    } else {
+                        handleBuildingTask(stat.getTask(), selected);
+                    }
+                });
             }
         } else {
             gamePanel.getTaskListPanel().clear();
@@ -133,5 +140,51 @@ public class BuildingHandler {
             }
         }
         gameState.getEmpireState().setMaxUnit(EmpireState.DEFAULT_UNIT_CAPACITY + townCount);
+    }
+
+    public void startWallPlacement(Hex origin) {
+        selectionContext.setSelectedUnit(null);
+        selectionContext.setWallOriginHex(origin);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().repaint();
+    }
+
+    public void handleWallTask(Hex origin, Hex edgeHex) {
+        model.map.Map map = gameState.getWorldState().getMap();
+
+        if (edgeHex == null || !map.getNeighbourHexes(origin).contains(edgeHex)
+                || gameState.getEmpireState().hasWall(origin, edgeHex)) {
+            selectionContext.setWallOriginHex(null);
+            return;
+        }
+
+        Wall wall = new Wall(origin, edgeHex, map);
+        if (!wall.isValid()) {
+            selectionContext.setWallOriginHex(null);
+            return;
+        }
+
+        Wall.getBuildCost().pay(gameState.getEmpireState().getStorage());
+        List<Unit> toRemove = new ArrayList<>();
+        for (Unit unit : origin.getUnits()) {
+            if (unit.isBuilder() && unit.getActionPoints() >= Wall.getBuildCost().getAPNeeded()) {
+                unit.setActionPoints(unit.getActionPoints() - Wall.getBuildCost().getAPNeeded());
+                unit.setCharges(unit.getCharges() - 1);
+                if (unit.getCharges() == 0) {
+                    gameState.getEmpireState().getUnits().remove(unit);
+                    toRemove.add(unit);
+                }
+                break;
+            }
+        }
+        origin.getUnits().removeAll(toRemove);
+
+        gameState.getEmpireState().getWalls().add(wall);
+
+        selectionContext.setWallOriginHex(null);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getHudPanel().refresh();
+        gamePanel.getMapPanel().markStaticDirty();
+        gamePanel.getMapPanel().repaint();
     }
 }

@@ -39,6 +39,12 @@ public class HexHandler {
                 if (clicked == null) return;
                 if(gamePanel.isAnyPanelOpen())return;
 
+                if (selectionContext.getWallOriginHex() != null) {
+                    buildingHandler.handleWallTask(selectionContext.getWallOriginHex(), clicked);
+                    gamePanel.repaint();
+                    return;
+                }
+
                 boolean discoveredNeighbour = false;
                 for (Hex hex : gameState.getWorldState().getMap().getNeighbourHexes(clicked)) {
                     if (hex != null && hex.isDiscovered()) {

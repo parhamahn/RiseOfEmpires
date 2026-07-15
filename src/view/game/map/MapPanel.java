@@ -55,6 +55,8 @@ public class MapPanel extends JPanel {
         dynamicLayers.add(snowEffectLayer);
         dynamicLayers.add(seasonLightingLayer);
 
+        staticLayers.add(new WallLayer());
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
