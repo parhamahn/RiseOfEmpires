@@ -91,7 +91,7 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalStrut(20));
 
-        switch (gameState.getWorldState().getSeason()){
+        switch (gameState.getEmpireState().getSeason()){
             case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
             case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
             case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));
@@ -141,7 +141,7 @@ public class HUDPanel extends JPanel {
             this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
         }
 
-        switch (gameState.getWorldState().getSeason()){
+        switch (gameState.getEmpireState().getSeason()){
             case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
             case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
             case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));

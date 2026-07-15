@@ -31,6 +31,7 @@ public class EmpireState {
     private List<Technology> researchedTechnologies;
     private TownHallLevel townHallLevel;
     private int happiness;
+    private Season.SeasonType season;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -40,6 +41,15 @@ public class EmpireState {
         this.queues = new ArrayList<>();
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
+        this.season = Season.SeasonType.SPRING;
+    }
+
+    public Season.SeasonType getSeason() {
+        return season;
+    }
+
+    public void setSeason(Season.SeasonType season) {
+        this.season = season;
     }
 
     public void init(Map map) {

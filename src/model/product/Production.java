@@ -1,9 +1,11 @@
 package model.product;
 
+import model.Season;
 import model.building.Building;
+import model.building.Farm;
+import model.building.Stable;
 import model.map.Hex;
 import model.state.EmpireState;
-import model.state.GameState;
 import model.unit.Unit;
 
 import java.util.ArrayList;
@@ -54,6 +56,10 @@ public class Production {
         int protestPenalty = 0;
         if(empire.getHappiness()<=-3){protestPenalty = 1;}
 
+        int seasonEffect = 0;
+        if(empire.getSeason()== Season.SeasonType.SPRING){seasonEffect = 1;}
+        if(empire.getSeason()== Season.SeasonType.WINTER){seasonEffect = -1;}
+
         for (Building building : empire.getBuildings()) {
             int workers = building.getAssignedWorkers().size();
             Hex.ResourceType resourceType = building.getResourceType();
@@ -62,6 +68,8 @@ public class Production {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
                 int storageCap = getStorageCap(empire, resourceType);
                 int producingResource = Math.min(Math.min(workers * (building.getProductionPerWorker()-protestPenalty), resourceOnHex), storageCap);
+
+                if(building instanceof Farm || building instanceof Stable){producingResource+= seasonEffect;}
 
                 if (resourceOnHex - producingResource > 0) {
                     building.getHex().getResources().put(resourceType, resourceOnHex - producingResource);

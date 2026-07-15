@@ -15,7 +15,7 @@ public class SeasonLightingLayer implements MapLayer {
 
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
-        Color tint = switch (gameState.getWorldState().getSeason()) {
+        Color tint = switch (gameState.getEmpireState().getSeason()) {
             case FALL -> FALL_TINT;
             case WINTER -> WINTER_TINT;
             default -> null;
