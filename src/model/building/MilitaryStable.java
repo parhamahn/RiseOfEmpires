@@ -1,5 +1,6 @@
 package model.building;
 
+import model.TownHallLevel;
 import model.map.Hex;
 import model.storage.Cost;
 
@@ -11,6 +12,8 @@ public class MilitaryStable extends Building {
     public MilitaryStable(Hex hex) {
         super(hex, cost, upkeep, 0, 100);
     }
+
+    public static TownHallLevel getLevel() { return TownHallLevel.SETTLEMENT; }
 
     public static Cost getBuildCost() { return cost; }
 

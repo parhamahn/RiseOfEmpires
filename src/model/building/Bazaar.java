@@ -1,5 +1,6 @@
 package model.building;
 
+import model.TownHallLevel;
 import model.map.Hex;
 import model.storage.Cost;
 
@@ -16,6 +17,8 @@ public class Bazaar extends Building{
     }
 
     public static Cost getBuildCost() { return cost; }
+
+    public static TownHallLevel getLevel() { return TownHallLevel.SETTLEMENT; }
 
     @Override
     public int getProductionPerWorker() {

@@ -77,7 +77,7 @@ public class BuildingHandler {
         Hex selected = selectionContext.getSelectedHex();
         if (selected != null && selected.getBuilding() == null) {
             Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
-            for (Task.TASK task : Task.getAvailableTasks(selected)) {
+            for (Task.TASK task : Task.getAvailableTasks(selected, gameState)) {
                 boolean enoughAP = false;
                 for (Unit unit : selected.getUnits()) {
                     if (unit.isBuilder()) {
@@ -112,22 +112,27 @@ public class BuildingHandler {
     }
 
     public void destroyBuilding(Hex hex) {
-        int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_OPTION);
-        if(sure==JOptionPane.YES_OPTION){
-            Building building = hex.getBuilding();
-            if (building != null && !building.isTownHall()){
-                for(Unit unit : building.getAssignedWorkers()) {
-                    unit.setAssigned(false);
+        for(Unit unit : hex.getUnits()) {
+            if(unit.isBuilder() && unit.getActionPoints() >= 1) {
+                int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_OPTION);
+                if (sure == JOptionPane.YES_OPTION) {
+                    Building building = hex.getBuilding();
+                    if (building != null && !building.isTownHall()) {
+                        for (Unit tunit : building.getAssignedWorkers()) {
+                            tunit.setAssigned(false);
+                        }
+                        hex.setBuilding(null);
+                        gameState.getEmpireState().getBuildings().remove(building);
+                        updateTownCapacity();
+                        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
+                        gameState.getEmpireState().recalculateHappiness();
+                        gamePanel.getTaskListPanel().clear();
+                        gamePanel.getHudPanel().refresh();
+                        gamePanel.getMapPanel().markStaticDirty();
+                        gamePanel.getMapPanel().repaint();
+                    }
                 }
-                hex.setBuilding(null);
-                gameState.getEmpireState().getBuildings().remove(building);
-                updateTownCapacity();
-                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
-                gameState.getEmpireState().recalculateHappiness();
-                gamePanel.getTaskListPanel().clear();
-                gamePanel.getHudPanel().refresh();
-                gamePanel.getMapPanel().markStaticDirty();
-                gamePanel.getMapPanel().repaint();
+                break;
             }
         }
     }
