@@ -152,4 +152,17 @@ public class Map {
         }
         return neighboursTiles;
     }
+
+    public List<Hex> getAllHexes(){
+        List<Hex> allHexes = new ArrayList<>();
+
+        for(int x=0; x<cols; x++){
+            for(int y=0; y<rows; y++){
+                Hex hex = getHex(x, y);
+                allHexes.add(hex);
+            }
+        }
+
+        return  allHexes;
+    }
 }

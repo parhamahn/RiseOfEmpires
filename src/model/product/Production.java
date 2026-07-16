@@ -66,7 +66,7 @@ public class Production {
             double steelToolsMultiplier = 1;
             if(empire.getResearchedTechnologies().contains(Technology.STEEL_TOOLS) && (building instanceof StoneMine || building instanceof IronMine)){steelToolsMultiplier = 1.5;}
 
-            if (workers > 0 && resourceType != null) {
+            if (workers > 0 && resourceType != null && !building.isProducingStopped()) {
                 int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
                 int storageCap = getStorageCap(empire, resourceType);
                 int producingResource = (int) Math.min(Math.min(workers * (Math.floor(building.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);

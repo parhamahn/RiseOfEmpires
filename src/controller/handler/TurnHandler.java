@@ -86,6 +86,7 @@ public class TurnHandler {
                         gameState.getEmpireState().setTownHallLevel(newLevel);
                         gameState.getEmpireState().getStorage().upgradeStorage(newLevel.getMaxStorage());
                         gameState.getEmpireState().getTownHallHex().getBuilding().setHP(newLevel.getMaxHP());
+                        gameState.getEmpireState().getTownHallHex().getBuilding().setMaxHP(newLevel.getMaxHP());
                         gamePanel.getHudPanel().refresh();
                         toRemove.add(queue);
                     }
@@ -105,6 +106,7 @@ public class TurnHandler {
     }
 
     private void endTurn() {
+        for(Building building:gameState.getEmpireState().getBuildings()){building.setProducingStopped(false);}
         gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
 
         for (Unit unit : gameState.getEmpireState().getUnits()) {

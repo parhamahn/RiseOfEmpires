@@ -19,6 +19,7 @@ public abstract class Building {
     private int noUpkeepTurns;
     private int maxHP;
     private int HP;
+    private boolean producingStopped;
 
 
     public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity, int maxHP){
@@ -62,6 +63,10 @@ public abstract class Building {
     public void setHP(int HP) {this.HP = HP;}
     public int getMaxHP() {return maxHP;}
     public void setMaxHP(int maxHP) {this.maxHP = maxHP;}
+    public boolean isProducingStopped() {
+        return producingStopped;
+    }
+    public void setProducingStopped(boolean producingStopped) {}
 
     public static Cost getBuildCost(Task.TASK task) {
         return switch (task) {
