@@ -19,7 +19,7 @@ public class WallLayer implements MapLayer {
     private final BufferedImage wallImage;
 
     public WallLayer() {
-        wallImage = loadImage("/utils/wall.png");
+        wallImage = loadImage("/utils/wallmap.png");
     }
 
     private BufferedImage loadImage(String path) {

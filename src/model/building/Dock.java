@@ -24,6 +24,6 @@ public class Dock extends Building {
 
     @Override
     public String getBuildingImageName() {
-        return "";
+        return "dockhex";
     }
 }

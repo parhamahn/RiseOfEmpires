@@ -1,5 +1,6 @@
 package view.buildingpanel.townhall;
 
+import model.Task;
 import model.building.Building;
 import model.building.MilitaryStable;
 import model.state.GameState;
@@ -66,8 +67,10 @@ public class CookSection extends JPanel {
             Unit.UNIT_TYPE type = entry.getKey();
             boolean canAfford = ((type.getCookCost() == null
                     || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
-                    && !atCap)&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal() && gameState.getEmpireState().getQueues().isEmpty()
-                    && gameState.getEmpireState().getBuildings().stream().anyMatch(b->b instanceof MilitaryStable);
+                    && !atCap)
+                    && type.getLevel().ordinal() <= gameState.getEmpireState().getTownHallLevel().ordinal()
+                    && gameState.getEmpireState().getQueues().isEmpty()
+                    && (type!= Unit.UNIT_TYPE.CAVALRY || gameState.getEmpireState().getBuildings().stream().anyMatch(b -> b instanceof MilitaryStable));
             stat.refresh(canAfford);
         }
         revalidate();

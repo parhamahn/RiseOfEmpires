@@ -24,6 +24,6 @@ public class MilitaryStable extends Building {
 
     @Override
     public String getBuildingImageName() {
-        return "";
+        return "militarystablehex";
     }
 }
