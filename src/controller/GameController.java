@@ -17,9 +17,10 @@ public class GameController {
     public GameController(GamePanel gamePanel, JPanel cards, GameState gameState, SelectionContext selectionContext){
         this.gamePanel = gamePanel;
         CookUnitHandler cookUnitHandler = new CookUnitHandler();
+        DisasterHandler disasterHandler = new DisasterHandler(gameState, gamePanel);
         this.buildingHandler = new BuildingHandler(gameState, gamePanel, cookUnitHandler, selectionContext);
         this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);
-        TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler);
+        TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler, disasterHandler);
         BazaarHandler bazaarHandler = new BazaarHandler(gamePanel, gameState);
         HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler);

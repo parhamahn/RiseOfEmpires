@@ -3,6 +3,8 @@ import controller.SelectionContext;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
+import view.game.map.disasters.earthquake.CrackEffectLayer;
+import view.game.map.disasters.earthquake.ScreenShake;
 import view.game.map.season.RainEffectLayer;
 import view.game.map.season.SeasonLightingLayer;
 import view.game.map.season.SnowEffectLayer;
@@ -25,6 +27,8 @@ public class MapPanel extends JPanel {
     private final RainEffectLayer rainEffectLayer;
     private final SnowEffectLayer snowEffectLayer;
     private final SeasonLightingLayer seasonLightingLayer;
+    private final ScreenShake screenShake = new ScreenShake();
+    private final CrackEffectLayer crackEffectLayer = new CrackEffectLayer();
     private final List<MapLayer> staticLayers = new ArrayList<>();
     private final List<MapLayer> dynamicLayers = new ArrayList<>();
 
@@ -53,6 +57,7 @@ public class MapPanel extends JPanel {
         dynamicLayers.add(new UnitLayer());
         dynamicLayers.add(rainEffectLayer);
         dynamicLayers.add(snowEffectLayer);
+        dynamicLayers.add(crackEffectLayer);
         dynamicLayers.add(seasonLightingLayer);
 
         staticLayers.add(new WallLayer());
@@ -96,7 +101,10 @@ public class MapPanel extends JPanel {
     public boolean tick() {
         boolean unitMoving = unitAnimator.tick(camera);
         boolean seasonActive = rainEffectLayer.isActive(gameState) || snowEffectLayer.isActive(gameState);
-        if (unitMoving || seasonActive) {
+        boolean isShakinng = screenShake.tick();
+        boolean cracksActive = crackEffectLayer.tick();
+
+        if (unitMoving || seasonActive || isShakinng || cracksActive) {
             repaint();
             return true;
         }
@@ -119,6 +127,7 @@ public class MapPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (staticDirty || staticBuffer == null) rebuildStaticBuffer();
+        g.translate(screenShake.getOffsetX(), screenShake.getOffsetY());
         g.drawImage(staticBuffer, 0, 0, null);
 
         Graphics2D g2 = (Graphics2D) g;
@@ -157,6 +166,13 @@ public class MapPanel extends JPanel {
         return camera.getHexCenter(hex);
     }
 
+    public void centerCameraOnHex(Hex hex) {
+        if (hex == null || getWidth() == 0 || getHeight() == 0) return;
+        int worldX = (int) ((hex.getC() + 0.5 * (hex.getR() & 1)) * camera.getDx());
+        int worldY = hex.getR() * camera.getDy();
+        camera.centerOn(worldX, worldY, getWidth(), getHeight());
+    }
+
     public void centerCameraOnTownHall() {
         Hex townHall = gameState.getEmpireState().getTownHallHex();
         if (townHall == null || getWidth() == 0 || getHeight() == 0) return;
@@ -171,5 +187,12 @@ public class MapPanel extends JPanel {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void startShake(){
+        screenShake.start();
+    }
+    public void showCracks(List<Hex> hexes) {
+        crackEffectLayer.addCracks(hexes);
     }
 }

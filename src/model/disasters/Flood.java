@@ -92,4 +92,12 @@ public class Flood {
             hex.setBuilding(null);
         }
     }
+
+    public Hex getCenter() {
+        return center;
+    }
+
+    public List<Hex> getInvolvedHexes() {
+        return involvedHexes;
+    }
 }

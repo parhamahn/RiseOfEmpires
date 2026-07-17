@@ -23,11 +23,13 @@ public class TurnHandler {
     private final GameState gameState;
     private final GamePanel gamePanel;
     private final BuildingHandler buildingHandler;
+    private final DisasterHandler disasterHandler;
 
-    public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler) {
+    public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler, DisasterHandler disasterHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.buildingHandler = buildingHandler;
+        this.disasterHandler = disasterHandler;
     }
 
     public void endTurnAction() {
@@ -106,6 +108,9 @@ public class TurnHandler {
     }
 
     private void endTurn() {
+
+        disasterHandler.handle();
+
         for(Building building:gameState.getEmpireState().getBuildings()){building.setProducingStopped(false);}
         gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
 
