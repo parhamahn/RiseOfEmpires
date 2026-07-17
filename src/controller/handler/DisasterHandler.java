@@ -1,5 +1,6 @@
 package controller.handler;
 
+import model.Season;
 import model.disasters.Earthquake;
 import model.disasters.Flood;
 import model.disasters.NaturalDisaster;
@@ -23,6 +24,9 @@ public class DisasterHandler {
 
     public void handle() {
         List<NaturalDisaster.DisasterType> disasters = NaturalDisaster.getRandomDisasters();
+        if(gameState.getEmpireState().getSeason()!= Season.SeasonType.FALL && disasters.contains(NaturalDisaster.DisasterType.FLOOD)){
+            disasters.remove(NaturalDisaster.DisasterType.FLOOD);
+        }
         for (NaturalDisaster.DisasterType disaster : disasters) {
             switch (disaster) {
                 case EARTHQUAKE -> {
@@ -43,10 +47,28 @@ public class DisasterHandler {
                 }
                 case FLOOD -> {
                     Flood flood = new Flood(gameState.getWorldState().getMap());
+                    List<Hex> visibleHexes = new ArrayList<>();
+                    for (Hex involved : flood.getInvolvedHexes()) {
+                        if (involved.isDiscovered()) {
+                            visibleHexes.add(involved);
+                        }
+                    }
+                    if (!visibleHexes.isEmpty()) {
+                        gamePanel.getMapPanel().showFlood(flood.getCenter(), visibleHexes);
+                    }
                     flood.effect(gameState);
                 }
                 case TSUNAMI -> {
                     Tsunami ts = new Tsunami(gameState.getWorldState().getMap());
+                    List<Hex> visibleHexes = new ArrayList<>();
+                    for (Hex involved : ts.getInvolvedHexes()) {
+                        if (involved.isDiscovered()) {
+                            visibleHexes.add(involved);
+                        }
+                    }
+                    if (!visibleHexes.isEmpty()) {
+                        gamePanel.getMapPanel().showTsunami(ts.getCenter(), visibleHexes);
+                    }
                     ts.effect(gameState);
                 }
             }

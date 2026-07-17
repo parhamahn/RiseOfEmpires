@@ -5,6 +5,8 @@ import model.map.Map;
 import model.state.GameState;
 import view.game.map.disasters.earthquake.CrackEffectLayer;
 import view.game.map.disasters.earthquake.ScreenShake;
+import view.game.map.disasters.flood.FloodEffectLayer;
+import view.game.map.disasters.tsunami.TsunamiEffectLayer;
 import view.game.map.season.RainEffectLayer;
 import view.game.map.season.SeasonLightingLayer;
 import view.game.map.season.SnowEffectLayer;
@@ -29,6 +31,8 @@ public class MapPanel extends JPanel {
     private final SeasonLightingLayer seasonLightingLayer;
     private final ScreenShake screenShake = new ScreenShake();
     private final CrackEffectLayer crackEffectLayer = new CrackEffectLayer();
+    private final FloodEffectLayer floodEffectLayer = new FloodEffectLayer();
+    private final TsunamiEffectLayer tsunamiEffectLayer = new TsunamiEffectLayer();
     private final List<MapLayer> staticLayers = new ArrayList<>();
     private final List<MapLayer> dynamicLayers = new ArrayList<>();
 
@@ -59,6 +63,8 @@ public class MapPanel extends JPanel {
         dynamicLayers.add(snowEffectLayer);
         dynamicLayers.add(crackEffectLayer);
         dynamicLayers.add(seasonLightingLayer);
+        dynamicLayers.add(floodEffectLayer);
+        dynamicLayers.add(tsunamiEffectLayer);
 
         staticLayers.add(new WallLayer());
 
@@ -103,8 +109,11 @@ public class MapPanel extends JPanel {
         boolean seasonActive = rainEffectLayer.isActive(gameState) || snowEffectLayer.isActive(gameState);
         boolean isShakinng = screenShake.tick();
         boolean cracksActive = crackEffectLayer.tick();
+        boolean floodActive = floodEffectLayer.tick();
+        boolean tsunamiActive = tsunamiEffectLayer.tick();
 
-        if (unitMoving || seasonActive || isShakinng || cracksActive) {
+        if (unitMoving || seasonActive || isShakinng || cracksActive || floodActive || tsunamiActive) {
+
             repaint();
             return true;
         }
@@ -194,5 +203,12 @@ public class MapPanel extends JPanel {
     }
     public void showCracks(List<Hex> hexes) {
         crackEffectLayer.addCracks(hexes);
+    }
+    public void showFlood(Hex center, List<Hex> hexes) {
+        floodEffectLayer.addWater(center, hexes);
+    }
+
+    public void showTsunami(Hex center, List<Hex> hexes) {
+        tsunamiEffectLayer.addWater(center, hexes);
     }
 }
