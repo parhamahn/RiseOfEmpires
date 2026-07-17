@@ -2,9 +2,11 @@ package controller.handler;
 
 import controller.SelectionContext;
 import controller.handler.building.bazaar.BazaarHandler;
+import controller.handler.building.tradingcenter.TradingCenterHandler;
 import helpers.SoundEffects;
 import model.building.Bazaar;
 import model.building.Building;
+import model.building.TradingCenter;
 import model.state.GameState;
 import model.map.Hex;
 import view.game.GamePanel;
@@ -20,14 +22,16 @@ public class HexHandler {
     private final BuildingHandler buildingHandler;
     private final SelectionContext selectionContext;
     private final BazaarHandler bazaarHandler;
+    private final TradingCenterHandler tradingCenterHandler;
 
-    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler) {
+    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler, TradingCenterHandler tradingCenterHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.unitHandler = unitHandler;
         this.buildingHandler = buildingHandler;
         this.selectionContext = selectionContext;
         this.bazaarHandler = bazaarHandler;
+        this.tradingCenterHandler = tradingCenterHandler;
     }
 
     public void attachHexSelectionListener() {
@@ -63,6 +67,10 @@ public class HexHandler {
                         gamePanel.setAnyPanelOpen(true);
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isInEmpireBorder()) {
+                        gamePanel.setAnyPanelOpen(true);
+                        tradingCenterHandler.setTradingCenter((TradingCenter) clicked.getBuilding());
+                        gamePanel.getTradingCenterPanel().open();
                     }
                     selectionContext.setSelectedHex(clicked);
                     SoundEffects.getInstance().playSelectHexSoundEffect();

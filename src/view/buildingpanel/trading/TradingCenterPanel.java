@@ -1,6 +1,7 @@
-package view.buildingpanel.bazaar;
+package view.buildingpanel.trading;
 
 import model.state.GameState;
+
 import view.common.UITheme;
 
 import javax.imageio.ImageIO;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class BazaarPanel extends JPanel {
+public class TradingCenterPanel extends JPanel {
 
     private GameState gameState;
     private JButton closeButton;
@@ -19,7 +20,7 @@ public class BazaarPanel extends JPanel {
     private QuantitySection quantitySection;
     private DealSection dealSection;
 
-    public BazaarPanel(GameState gameState){
+    public TradingCenterPanel(GameState gameState){
         this.gameState = gameState;
 
         setOpaque(false);
@@ -27,7 +28,7 @@ public class BazaarPanel extends JPanel {
         setVisible(false);
 
         try {
-            this.panelBackground = ImageIO.read(getClass().getResource("/utils/bazaarpanel.png"));
+            this.panelBackground = ImageIO.read(getClass().getResource("/utils/tradingcenterpanel.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +54,6 @@ public class BazaarPanel extends JPanel {
         content.add(buildBody(), BorderLayout.CENTER);
 
         add(content);
-
     }
 
     @Override
@@ -62,7 +62,6 @@ public class BazaarPanel extends JPanel {
         g.setColor(UITheme.OVERLAY_BG);
         g.fillRect(0, 0, getWidth(), getHeight());
     }
-
 
     public void open() {refresh(); setVisible(true);}
     public void close() {setVisible(false);}
@@ -74,7 +73,6 @@ public class BazaarPanel extends JPanel {
         dealSection.setSummary(null);
         dealSection.getDealButton().setEnabled(false);
     }
-
 
     public GameState getGameState() {
         return gameState;
@@ -100,13 +98,12 @@ public class BazaarPanel extends JPanel {
         return dealSection;
     }
 
-
     private JPanel buildTitleBar() {
         JPanel titleBar = new JPanel(new BorderLayout());
         titleBar.setOpaque(false);
         titleBar.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 10));
 
-        JLabel title = new JLabel("Bazaar");
+        JLabel title = new JLabel("Trading Center");
         title.setFont(UITheme.GAME_FONT_BOLD.deriveFont(28f));
         title.setForeground(Color.WHITE);
         titleBar.add(title, BorderLayout.WEST);
@@ -141,5 +138,4 @@ public class BazaarPanel extends JPanel {
 
         return body;
     }
-
 }

@@ -25,6 +25,7 @@ public class Task {
 
     public static List<TASK> getAvailableTasks(Hex hex, GameState gameState) {
         List<TASK> availableTasks = new ArrayList<>();
+        if(hex.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || hex.getTerrainType()== Hex.TerrainType.SEA) {return availableTasks;}
         if (hex.isDiscovered() && hex.getBuilding()==null) {
             availableTasks.add(TASK.TOWN);
             availableTasks.add(TASK.WALL);
@@ -59,7 +60,7 @@ public class Task {
                 }
             }
             for(Hex neighhex:gameState.getWorldState().getMap().getNeighbourHexes(hex)){
-                if(neighhex.isDiscovered() && neighhex.getTerrainType()== Hex.TerrainType.SEA){availableTasks.add(TASK.DOCK);}
+                if(neighhex!=null &&neighhex.isDiscovered() && neighhex.getTerrainType()== Hex.TerrainType.SEA){availableTasks.add(TASK.DOCK);}
             }
         }
         return availableTasks;

@@ -1,4 +1,4 @@
-package view.buildingpanel.bazaar;
+package view.buildingpanel.trading;
 
 import java.awt.*;
 

@@ -1,7 +1,6 @@
-package view.buildingpanel.bazaar;
+package view.buildingpanel.trading;
 
 import helpers.ImageLoader;
-import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;

@@ -42,11 +42,12 @@ public class GameState {
 
     public void reset(){
         Map map = new Map(50, 100);
-        randomTradingCenters(15, map);
         empireState.getStorage().reset();
         empireState.getProduction().reset();
+        empireState.getBuildings().clear();
         worldState.reset(map);
         empireState.init(map);
+        randomTradingCenters(15, map);
     }
 
 }

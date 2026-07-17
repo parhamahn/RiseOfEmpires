@@ -1,7 +1,8 @@
 package view.game;
 
-import view.buildingpanel.bazaar.BazaarPanel;
+import view.buildingpanel.trading.BazaarPanel;
 import view.buildingpanel.townhall.TownHallPanel;
+import view.buildingpanel.trading.TradingCenterPanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
@@ -24,6 +25,7 @@ public class GamePanel extends JPanel {
     private TaskListPanel taskListPanel;
     private TownHallPanel townHallPanel;
     private BazaarPanel bazaarPanel;
+    private TradingCenterPanel tradingCenterPanel;
     private JPanel hudWrapper;
     private JLayeredPane layeredPane;
     private PausePanel pausePanel;
@@ -35,6 +37,7 @@ public class GamePanel extends JPanel {
     public TaskListPanel getTaskListPanel() { return taskListPanel; }
     public TownHallPanel getTownHallPanel() { return townHallPanel; }
     public BazaarPanel getBazaarPanel() { return bazaarPanel; }
+    public TradingCenterPanel getTradingCenterPanel() { return tradingCenterPanel; }
     public PausePanel getPausePanel() { return pausePanel; }
     public boolean isAnyPanelOpen() { return anyPanelOpen; }
     public void setAnyPanelOpen(boolean anyPanelOpen) { this.anyPanelOpen = anyPanelOpen; }
@@ -65,6 +68,8 @@ public class GamePanel extends JPanel {
         townHallPanel = new TownHallPanel(mapPanel.getGameState());
         layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
 
+        tradingCenterPanel = new TradingCenterPanel(mapPanel.getGameState());
+        layeredPane.add(tradingCenterPanel, JLayeredPane.MODAL_LAYER);
 
         bazaarPanel = new BazaarPanel(mapPanel.getGameState());
         layeredPane.add(bazaarPanel, JLayeredPane.MODAL_LAYER);
@@ -93,6 +98,7 @@ public class GamePanel extends JPanel {
         taskListPanel.setBounds(0, 0, size.width, size.height);
         townHallPanel.setBounds(0, 0, size.width, size.height);
         bazaarPanel.setBounds(0, 0, size.width, size.height);
+        tradingCenterPanel.setBounds(0, 0, size.width, size.height);
         pausePanel.setBounds(0, 0, size.width, size.height);
     }
 

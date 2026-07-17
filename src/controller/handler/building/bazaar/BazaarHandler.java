@@ -4,7 +4,7 @@ import model.building.Bazaar;
 import model.state.GameState;
 import model.storage.ResourceType;
 import model.trade.Trade;
-import view.buildingpanel.bazaar.BazaarPanel;
+import view.buildingpanel.trading.BazaarPanel;
 import view.game.GamePanel;
 
 public class BazaarHandler {

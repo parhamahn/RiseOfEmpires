@@ -4,6 +4,7 @@ import controller.handler.*;
 import controller.handler.building.bazaar.BazaarHandler;
 import controller.handler.building.townhall.CookUnitHandler;
 import controller.handler.building.townhall.TownHallHandler;
+import controller.handler.building.tradingcenter.TradingCenterHandler;
 import model.state.GameState;
 import view.game.GamePanel;
 
@@ -22,8 +23,9 @@ public class GameController {
         this.unitHandler = new UnitHandler(gameState, gamePanel, selectionContext, buildingHandler);
         TurnHandler turnHandler = new TurnHandler(gameState, gamePanel, cookUnitHandler, buildingHandler, disasterHandler);
         BazaarHandler bazaarHandler = new BazaarHandler(gamePanel, gameState);
+        TradingCenterHandler tradingCenterHandler = new TradingCenterHandler(gamePanel, gameState);
         HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
-        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler);
+        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler, tradingCenterHandler);
         TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
 
         new CameraHandler(gamePanel).attachCameraListeners();
@@ -32,6 +34,7 @@ public class GameController {
         hexHandler.attachHexSelectionListener();
         townHallHandler.attachHandlers();
         bazaarHandler.attachHandlers();
+        tradingCenterHandler.attachHandlers();
         gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
 
     }
