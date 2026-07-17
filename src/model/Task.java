@@ -20,12 +20,12 @@ public class Task {
         BAZAAR,
         DOCK,
         MILITARY_STABLE,
-        WALL
+        WALL,
     }
 
     public static List<TASK> getAvailableTasks(Hex hex, GameState gameState) {
         List<TASK> availableTasks = new ArrayList<>();
-        if (hex.isDiscovered()) {
+        if (hex.isDiscovered() && hex.getBuilding()==null) {
             availableTasks.add(TASK.TOWN);
             availableTasks.add(TASK.WALL);
             switch (hex.getTerrainType()) {

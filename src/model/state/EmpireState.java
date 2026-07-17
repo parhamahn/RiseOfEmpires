@@ -1,10 +1,7 @@
 package model.state;
 
 import model.*;
-import model.building.Building;
-import model.building.Monument;
-import model.building.TownHall;
-import model.building.Wall;
+import model.building.*;
 import model.map.Hex;
 import model.map.Map;
 import model.product.AdjacencyBonus;
@@ -16,6 +13,7 @@ import model.unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class EmpireState {
     public final static int DEFAULT_UNIT_CAPACITY = 6;
@@ -122,6 +120,7 @@ public class EmpireState {
         }
         return count;
     }
+
 
     public Storage getStorage() { return storage; }
     public Production getProduction() { return production; }

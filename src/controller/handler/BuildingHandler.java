@@ -33,6 +33,8 @@ public class BuildingHandler {
     }
 
     public void handleBuildingTask(Task.TASK task, Hex hex) {
+        if (hex.getBuilding() != null) return;
+
         Building building = switch (task) {
             case FARM -> new Farm(hex, hex.getResources().containsKey(Hex.ResourceType.WHEAT) ? Hex.ResourceType.WHEAT : Hex.ResourceType.RICE);
             case LUMBER_MILL -> new LumberMill(hex);
@@ -101,7 +103,7 @@ public class BuildingHandler {
             }
         } else {
             gamePanel.getTaskListPanel().clear();
-            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall()) {
+            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter)) {
                 for(ActionListener al:gamePanel.getTaskListPanel().getDestroyButton().getActionListeners()) {
                     gamePanel.getTaskListPanel().getDestroyButton().removeActionListener(al);
                 }

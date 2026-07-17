@@ -27,6 +27,7 @@ public class BuildingLayer implements MapLayer {
         buildingImages.put("monumenthex", loadImage("/utils/monumenthex.png"));
         buildingImages.put("bazaarhex", loadImage("/utils/bazaarhex.png"));
         buildingImages.put("dockhex", loadImage("/utils/dockhex.png"));
+        buildingImages.put("tradingcenterhex", loadImage("/utils/tradingcenterhex.png"));
         buildingImages.put("militarystablehex", loadImage("/utils/militarystablehex.png"));
     }
 
