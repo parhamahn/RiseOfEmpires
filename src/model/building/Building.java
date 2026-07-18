@@ -81,6 +81,7 @@ public abstract class Building {
             case DOCK -> Dock.getBuildCost();
             case MILITARY_STABLE -> MilitaryStable.getBuildCost();
             case WALL -> Wall.getBuildCost();
+            case ROAD -> Road.getBuildCost();
         };
     }
 }

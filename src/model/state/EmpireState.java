@@ -32,6 +32,7 @@ public class EmpireState {
     private int happiness;
     private Season.SeasonType season;
     private List<Wall> walls;
+    private List<Road> roads;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -43,6 +44,7 @@ public class EmpireState {
         this.buildings = new ArrayList<>();
         this.season = Season.SeasonType.SPRING;
         this.walls = new ArrayList<>();
+        this.roads = new ArrayList<>();
     }
 
     public Season.SeasonType getSeason() {
@@ -79,10 +81,18 @@ public class EmpireState {
     }
 
     public List<Wall> getWalls() { return walls; }
+    public List<Road> getRoads() { return roads; }
 
     public boolean hasWall(Hex hex1, Hex hex2) {
         for (Wall wall : walls) {
             if (wall.connects(hex1, hex2)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasRoad(Hex hex1, Hex hex2) {
+        for (Road road : roads) {
+            if (road.connects(hex1, hex2)) return true;
         }
         return false;
     }

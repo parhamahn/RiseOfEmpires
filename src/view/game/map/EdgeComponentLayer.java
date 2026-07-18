@@ -2,6 +2,7 @@ package view.game.map;
 
 import controller.SelectionContext;
 import model.building.EdgeComponent;
+import model.building.Road;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
@@ -38,6 +39,7 @@ public class EdgeComponentLayer implements MapLayer {
         if (map == null) return;
 
         List<EdgeComponent> allComponents = new ArrayList<>(gameState.getEmpireState().getWalls());
+        allComponents.addAll(gameState.getEmpireState().getRoads());
         allComponents.addAll(map.getRivers());
 
         int thickness = Math.max(6, camera.getHexRadius() / 6);
@@ -46,29 +48,42 @@ public class EdgeComponentLayer implements MapLayer {
             BufferedImage image = getImage(component.getImageName());
             if (image == null) continue;
 
-            Hex hexA = component.getHexA();
-            List<Hex> neighbours = map.getNeighbourHexes(hexA);
-            int dir = neighbours.indexOf(component.getHexB());
-            if (dir < 0) continue;
+            int midX, midY;
+            double angle;
+            double length;
 
-            Point center = camera.getHexCenter(hexA);
-            Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
+            if (component instanceof Road) {
+                Point centerA = camera.getHexCenter(component.getHexA());
+                Point centerB = camera.getHexCenter(component.getHexB());
+                midX = (centerA.x + centerB.x) / 2;
+                midY = (centerA.y + centerB.y) / 2;
+                angle = Math.atan2(centerB.y - centerA.y, centerB.x - centerA.x);
+                length = Math.hypot(centerB.x - centerA.x, centerB.y - centerA.y)/2;
+            } else {
+                Hex hexA = component.getHexA();
+                List<Hex> neighbours = map.getNeighbourHexes(hexA);
+                int dir = neighbours.indexOf(component.getHexB());
+                if (dir < 0) continue;
 
-            int v1 = EDGE_START_FOR_DIRECTION[dir];
-            int v2 = (v1 + 1) % 6;
+                Point center = camera.getHexCenter(hexA);
+                Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
 
-            int x1 = tile.xpoints[v1], y1 = tile.ypoints[v1];
-            int x2 = tile.xpoints[v2], y2 = tile.ypoints[v2];
+                int v1 = EDGE_START_FOR_DIRECTION[dir];
+                int v2 = (v1 + 1) % 6;
 
-            int midX = (x1 + x2) / 2;
-            int midY = (y1 + y2) / 2;
-            double angle = Math.atan2(y2 - y1, x2 - x1);
-            double edgeLength = Math.hypot(x2 - x1, y2 - y1);
+                int x1 = tile.xpoints[v1], y1 = tile.ypoints[v1];
+                int x2 = tile.xpoints[v2], y2 = tile.ypoints[v2];
+
+                midX = (x1 + x2) / 2;
+                midY = (y1 + y2) / 2;
+                angle = Math.atan2(y2 - y1, x2 - x1);
+                length = Math.hypot(x2 - x1, y2 - y1);
+            }
 
             AffineTransform old = g2.getTransform();
             g2.translate(midX, midY);
             g2.rotate(angle);
-            g2.drawImage(image, (int) (-edgeLength / 2), -thickness / 2, (int) edgeLength, thickness, null);
+            g2.drawImage(image, (int) (-length / 2), -thickness / 2, (int) length, thickness, null);
             g2.setTransform(old);
         }
     }

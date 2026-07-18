@@ -21,6 +21,7 @@ public class Task {
         DOCK,
         MILITARY_STABLE,
         WALL,
+        ROAD,
     }
 
     public static List<TASK> getAvailableTasks(Hex hex, GameState gameState) {
@@ -29,6 +30,7 @@ public class Task {
         if (hex.isDiscovered() && hex.getBuilding()==null) {
             availableTasks.add(TASK.TOWN);
             availableTasks.add(TASK.WALL);
+            availableTasks.add(TASK.ROAD);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
                     if ((hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0 || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)) {availableTasks.add(TASK.STABLE);}

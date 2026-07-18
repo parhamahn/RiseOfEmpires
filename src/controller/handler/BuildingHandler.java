@@ -47,6 +47,7 @@ public class BuildingHandler {
             case DOCK ->  new Dock(hex);
             case MILITARY_STABLE ->  new MilitaryStable(hex);
             case WALL -> null;
+            case ROAD -> null;
         };
 
         building.getCost().pay(gameState.getEmpireState().getStorage());
@@ -96,6 +97,8 @@ public class BuildingHandler {
                 stat.getButton().addActionListener(e -> {
                     if (stat.getTask() == Task.TASK.WALL) {
                         startWallPlacement(selected);
+                    } else if (stat.getTask() == Task.TASK.ROAD) {
+                        startRoadPlacement(selected);
                     } else {
                         handleBuildingTask(stat.getTask(), selected);
                     }
@@ -189,6 +192,52 @@ public class BuildingHandler {
         gameState.getEmpireState().getWalls().add(wall);
 
         selectionContext.setWallOriginHex(null);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getHudPanel().refresh();
+        gamePanel.getMapPanel().markStaticDirty();
+        gamePanel.getMapPanel().repaint();
+    }
+
+    public void startRoadPlacement(Hex origin) {
+        selectionContext.setSelectedUnit(null);
+        selectionContext.setRoadOriginHex(origin);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().repaint();
+    }
+
+    public void handleRoadTask(Hex origin, Hex edgeHex) {
+        model.map.Map map = gameState.getWorldState().getMap();
+
+        if (edgeHex == null || !map.getNeighbourHexes(origin).contains(edgeHex)
+                || gameState.getEmpireState().hasRoad(origin, edgeHex)) {
+            selectionContext.setRoadOriginHex(null);
+            return;
+        }
+
+        Road road = new Road(origin, edgeHex, map);
+        if (!road.isValid()) {
+            selectionContext.setRoadOriginHex(null);
+            return;
+        }
+
+        Road.getBuildCost().pay(gameState.getEmpireState().getStorage());
+        List<Unit> toRemove = new ArrayList<>();
+        for (Unit unit : origin.getUnits()) {
+            if (unit.isBuilder() && unit.getActionPoints() >= Road.getBuildCost().getAPNeeded()) {
+                unit.setActionPoints(unit.getActionPoints() - Road.getBuildCost().getAPNeeded());
+                unit.setCharges(unit.getCharges() - 1);
+                if (unit.getCharges() == 0) {
+                    gameState.getEmpireState().getUnits().remove(unit);
+                    toRemove.add(unit);
+                }
+                break;
+            }
+        }
+        origin.getUnits().removeAll(toRemove);
+
+        gameState.getEmpireState().getRoads().add(road);
+
+        selectionContext.setRoadOriginHex(null);
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().markStaticDirty();

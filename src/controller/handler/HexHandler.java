@@ -49,6 +49,12 @@ public class HexHandler {
                     return;
                 }
 
+                if (selectionContext.getRoadOriginHex() != null) {
+                    buildingHandler.handleRoadTask(selectionContext.getRoadOriginHex(), clicked);
+                    gamePanel.repaint();
+                    return;
+                }
+
                 boolean discoveredNeighbour = false;
                 for (Hex hex : gameState.getWorldState().getMap().getNeighbourHexes(clicked)) {
                     if (hex != null && hex.isDiscovered()) {
