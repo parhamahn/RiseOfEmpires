@@ -66,7 +66,7 @@ public class MapPanel extends JPanel {
         dynamicLayers.add(floodEffectLayer);
         dynamicLayers.add(tsunamiEffectLayer);
 
-        staticLayers.add(new WallLayer());
+        staticLayers.add(new EdgeComponentLayer());
 
         addComponentListener(new ComponentAdapter() {
             @Override

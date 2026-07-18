@@ -1,15 +1,21 @@
 package model.map;
 
+import model.building.EdgeComponent;
+import model.building.River;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class Map {
     private final Hex[][] grid;
     private final int rows;
     private final int cols;
     private final Random RANDOM = new Random();
+    private final List<EdgeComponent> rivers = new ArrayList<>();
 
     public Map(int rows, int cols) {
         this.rows = rows;
@@ -17,6 +23,7 @@ public class Map {
         this.grid = new Hex[rows][cols];
         generateMap();
         setResources();
+        generateRivers();
     }
 
 
@@ -123,6 +130,81 @@ public class Map {
         }
     }
 
+
+    private void generateRivers() {
+        int townC = cols / 2;
+        int townR = rows / 2;
+        int safeRadius = 3;
+        int numRivers = 30 + RANDOM.nextInt(20);
+
+        Set<String> usedEdges = new HashSet<>();
+
+        for (int i = 0; i < numRivers; i++) {
+            Hex start = findRandomRiverStart(townC, townR, safeRadius);
+            if (start == null) continue;
+
+            List<Hex> path = new ArrayList<>();
+            path.add(start);
+
+            int length = 2 + RANDOM.nextInt(4);
+            Hex current = start;
+
+            for (int s = 0; s < length; s++) {
+                List<Hex> neighbours = getNeighbourHexes(current);
+                List<Hex> candidates = new ArrayList<>();
+                for (Hex n : neighbours) {
+                    if (n == null) continue;
+                    if (n.getTerrainType() == Hex.TerrainType.SEA
+                            || n.getTerrainType() == Hex.TerrainType.TALL_MOUNTAIN) continue;
+                    int dc = Math.abs(n.getC() - townC);
+                    int dr = Math.abs(n.getR() - townR);
+                    if (dc < safeRadius && dr < safeRadius) continue;
+                    if (path.contains(n)) continue;
+                    String edgeKey = edgeKey(current, n);
+                    if (usedEdges.contains(edgeKey)) continue;
+                    candidates.add(n);
+                }
+                if (candidates.isEmpty()) break;
+                Hex next = candidates.get(RANDOM.nextInt(candidates.size()));
+                usedEdges.add(edgeKey(current, next));
+                path.add(next);
+                current = next;
+            }
+
+            for (int j = 0; j < path.size() - 1; j++) {
+                River river = new River(path.get(j), path.get(j + 1), this);
+                if (river.isValid()) {
+                    rivers.add(river);
+                }
+            }
+        }
+    }
+
+    private Hex findRandomRiverStart(int townC, int townR, int safeRadius) {
+        for (int attempt = 0; attempt < 300; attempt++) {
+            int c = RANDOM.nextInt(cols);
+            int r = RANDOM.nextInt(rows);
+            Hex hex = getHex(c, r);
+            if (hex == null) continue;
+            if (hex.getTerrainType() == Hex.TerrainType.SEA
+                    || hex.getTerrainType() == Hex.TerrainType.TALL_MOUNTAIN) continue;
+            int dc = Math.abs(c - townC);
+            int dr = Math.abs(r - townR);
+            if (dc < safeRadius && dr < safeRadius) continue;
+            return hex;
+        }
+        return null;
+    }
+
+    private String edgeKey(Hex a, Hex b) {
+        int minC = Math.min(a.getC(), b.getC());
+        int maxC = Math.max(a.getC(), b.getC());
+        int minR = Math.min(a.getR(), b.getR());
+        int maxR = Math.max(a.getR(), b.getR());
+        return minC + "," + minR + "-" + maxC + "," + maxR;
+    }
+
+    public List<EdgeComponent> getRivers() { return rivers; }
 
     public List<Hex> getNeighbourHexes(Hex hex){
         List<Hex> neighboursTiles = new ArrayList<>();
