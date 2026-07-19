@@ -132,7 +132,7 @@ public class Map {
     private void generateRivers() {
         int townC = cols / 2;
         int townR = rows / 2;
-        int safeRadius = 3;
+        int safeRadius = 0;
         int numRivers = 30 + RANDOM.nextInt(20);
 
         Set<String> usedEdges = new HashSet<>();
