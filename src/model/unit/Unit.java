@@ -11,10 +11,10 @@ public abstract class Unit{
         BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
         BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
         WORKER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 5, 2),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 20, 1),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 5, 1),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 20, 2),
         SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 3, 50, 1);
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 50, 1);
 
         private final Cost cookCost;
         private final int turnCost;

@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.SelectionContext;
 import model.Season;
+import model.building.Road;
 import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
@@ -40,13 +41,20 @@ public class UnitHandler {
         if (gameState.getEmpireState().getSeason()== Season.SeasonType.WINTER){frozenRoads+=1;}
 
         if (gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex()).contains(clicked)) {
-            if (unit.getActionPoints() >= (clicked.getAPToMove()+frozenRoads)) {
+            int APNeeded = clicked.getAPToMove()+frozenRoads;
+            for(Road road:unit.getHex().getRoadsTo()){
+                if(road.connects(unit.getHex(), clicked)){
+                    APNeeded = (int) Math.max(1,  Math.floor(APNeeded/2));
+                    break;
+                }
+            }
+            if (unit.getActionPoints() >= APNeeded) {
                 if (unit.getHex().getBuilding() != null) {
                     unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
                     gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                     gamePanel.getHudPanel().refresh();
                 }
-                unit.setActionPoints(unit.getActionPoints() - (clicked.getAPToMove()+frozenRoads));
+                unit.setActionPoints(unit.getActionPoints() - APNeeded);
                 unit.setTargetHex(clicked);
                 if (unit.getPositionX() == 0 && unit.getPositionY() == 0 && unit.getHex() != null) {
                     Point p = gamePanel.getMapPanel().getHexCenter(unit.getHex());

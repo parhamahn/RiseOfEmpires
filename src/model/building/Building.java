@@ -66,7 +66,9 @@ public abstract class Building {
     public boolean isProducingStopped() {
         return producingStopped;
     }
-    public void setProducingStopped(boolean producingStopped) {}
+    public void setProducingStopped(boolean producingStopped) {
+        producingStopped = producingStopped;
+    }
 
     public static Cost getBuildCost(Task.TASK task) {
         return switch (task) {

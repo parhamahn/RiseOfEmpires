@@ -11,9 +11,10 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EdgeComponentLayer implements MapLayer {
 
@@ -38,9 +39,12 @@ public class EdgeComponentLayer implements MapLayer {
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         if (map == null) return;
 
-        List<EdgeComponent> allComponents = new ArrayList<>(gameState.getEmpireState().getWalls());
-        allComponents.addAll(gameState.getEmpireState().getRoads());
-        allComponents.addAll(map.getRivers());
+        Set<EdgeComponent> allComponents = new HashSet<>();
+        for (Hex hex : map.getAllHexes()) {
+            allComponents.addAll(hex.getWallsWith());
+            allComponents.addAll(hex.getRoadsTo());
+            allComponents.addAll(hex.getRiversWith());
+        }
 
         int thickness = Math.max(6, camera.getHexRadius() / 6);
 

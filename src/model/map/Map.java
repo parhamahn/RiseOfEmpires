@@ -1,6 +1,5 @@
 package model.map;
 
-import model.building.EdgeComponent;
 import model.building.River;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ public class Map {
     private final int rows;
     private final int cols;
     private final Random RANDOM = new Random();
-    private final List<EdgeComponent> rivers = new ArrayList<>();
 
     public Map(int rows, int cols) {
         this.rows = rows;
@@ -174,7 +172,8 @@ public class Map {
             for (int j = 0; j < path.size() - 1; j++) {
                 River river = new River(path.get(j), path.get(j + 1), this);
                 if (river.isValid()) {
-                    rivers.add(river);
+                    path.get(j).getRiversWith().add(river);
+                    path.get(j + 1).getRiversWith().add(river);
                 }
             }
         }
@@ -203,8 +202,6 @@ public class Map {
         int maxR = Math.max(a.getR(), b.getR());
         return minC + "," + minR + "-" + maxC + "," + maxR;
     }
-
-    public List<EdgeComponent> getRivers() { return rivers; }
 
     public List<Hex> getNeighbourHexes(Hex hex){
         List<Hex> neighboursTiles = new ArrayList<>();

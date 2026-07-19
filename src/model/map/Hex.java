@@ -1,6 +1,9 @@
 package model.map;
 
 import model.building.Building;
+import model.building.Road;
+import model.building.River;
+import model.building.Wall;
 import model.unit.Unit;
 
 import java.util.ArrayList;
@@ -23,6 +26,9 @@ public class Hex {
     private HashMap<ResourceType, Integer> resources;
     private Building building;
     private List<Unit> units;
+    private List<Road> roadsTo;
+    private List<River> riversWith;
+    private List<Wall> wallsWith;
 
 
     public Hex(int c, int r, TerrainType terrainType){
@@ -32,6 +38,9 @@ public class Hex {
         this.resources = new HashMap<>();
         this.building = null;
         this.units = new ArrayList<>();
+        this.roadsTo = new ArrayList<>();
+        this.riversWith = new ArrayList<>();
+        this.wallsWith = new ArrayList<>();
     }
 
 
@@ -56,6 +65,31 @@ public class Hex {
     }
     public List<Unit> getUnits() {
         return units;
+    }
+
+    public List<Road> getRoadsTo() { return roadsTo; }
+    public List<River> getRiversWith() { return riversWith; }
+    public List<Wall> getWallsWith() { return wallsWith; }
+
+    public boolean hasRoadTo(Hex other) {
+        for (Road road : roadsTo) {
+            if (road.connects(this, other)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasWallTo(Hex other) {
+        for (Wall wall : wallsWith) {
+            if (wall.connects(this, other)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasRiverTo(Hex other) {
+        for (River river : riversWith) {
+            if (river.connects(this, other)) return true;
+        }
+        return false;
     }
 
 

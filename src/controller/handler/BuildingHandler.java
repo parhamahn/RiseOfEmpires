@@ -163,7 +163,7 @@ public class BuildingHandler {
         model.map.Map map = gameState.getWorldState().getMap();
 
         if (edgeHex == null || !map.getNeighbourHexes(origin).contains(edgeHex)
-                || gameState.getEmpireState().hasWall(origin, edgeHex)) {
+                || origin.hasWallTo(edgeHex)) {
             selectionContext.setWallOriginHex(null);
             return;
         }
@@ -189,7 +189,8 @@ public class BuildingHandler {
         }
         origin.getUnits().removeAll(toRemove);
 
-        gameState.getEmpireState().getWalls().add(wall);
+        origin.getWallsWith().add(wall);
+        edgeHex.getWallsWith().add(wall);
 
         selectionContext.setWallOriginHex(null);
         gamePanel.getTaskListPanel().clear();
@@ -209,7 +210,7 @@ public class BuildingHandler {
         model.map.Map map = gameState.getWorldState().getMap();
 
         if (edgeHex == null || !map.getNeighbourHexes(origin).contains(edgeHex)
-                || gameState.getEmpireState().hasRoad(origin, edgeHex)) {
+                || origin.hasRoadTo(edgeHex)) {
             selectionContext.setRoadOriginHex(null);
             return;
         }
@@ -235,7 +236,8 @@ public class BuildingHandler {
         }
         origin.getUnits().removeAll(toRemove);
 
-        gameState.getEmpireState().getRoads().add(road);
+        origin.getRoadsTo().add(road);
+        edgeHex.getRoadsTo().add(road);
 
         selectionContext.setRoadOriginHex(null);
         gamePanel.getTaskListPanel().clear();

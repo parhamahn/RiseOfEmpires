@@ -13,7 +13,6 @@ import model.unit.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class EmpireState {
     public final static int DEFAULT_UNIT_CAPACITY = 6;
@@ -31,8 +30,6 @@ public class EmpireState {
     private TownHallLevel townHallLevel;
     private int happiness;
     private Season.SeasonType season;
-    private List<Wall> walls;
-    private List<Road> roads;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -43,8 +40,6 @@ public class EmpireState {
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.season = Season.SeasonType.SPRING;
-        this.walls = new ArrayList<>();
-        this.roads = new ArrayList<>();
     }
 
     public Season.SeasonType getSeason() {
@@ -78,23 +73,6 @@ public class EmpireState {
 
     public void recalculateProduction(Map map) {
         production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map));
-    }
-
-    public List<Wall> getWalls() { return walls; }
-    public List<Road> getRoads() { return roads; }
-
-    public boolean hasWall(Hex hex1, Hex hex2) {
-        for (Wall wall : walls) {
-            if (wall.connects(hex1, hex2)) return true;
-        }
-        return false;
-    }
-
-    public boolean hasRoad(Hex hex1, Hex hex2) {
-        for (Road road : roads) {
-            if (road.connects(hex1, hex2)) return true;
-        }
-        return false;
     }
 
     public void recalculateHappiness() {
