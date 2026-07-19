@@ -4,6 +4,7 @@ import controller.SelectionContext;
 import model.Season;
 import model.building.River;
 import model.building.Road;
+import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
@@ -38,6 +39,8 @@ public class UnitHandler {
             }
         }
 
+        if(clicked.getTerrainType()== Hex.TerrainType.SEA && !gameState.getEmpireState().getResearchedTechnologies().contains(Technology.SAILING)){return;}
+
         int frozenRoads = 0;
         if (gameState.getEmpireState().getSeason()== Season.SeasonType.WINTER){frozenRoads+=1;}
 
@@ -56,6 +59,9 @@ public class UnitHandler {
                     break;
                 }
             }
+
+            if(gameState.getEmpireState().getSeason() == Season.SeasonType.FALL && clicked.getTerrainType()== Hex.TerrainType.SEA){APNeeded+=1;}
+
             if (unit.getActionPoints() >= APNeeded) {
                 if (unit.getHex().getBuilding() != null) {
                     unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
