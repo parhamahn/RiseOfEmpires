@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Attack{
+public class AttackUnit {
 
     private GameState gameState;
     private final Hex attackerHex;
@@ -19,7 +19,7 @@ public class Attack{
     private int attackerPower;
     private int defenderPower;
 
-    public Attack(GameState gameState, Hex attackerHex, Hex defenderHex){
+    public AttackUnit(GameState gameState, Hex attackerHex, Hex defenderHex){
         this.attackerHex = attackerHex;
         this.defenderHex = defenderHex;
         this.gameState = gameState;
@@ -76,8 +76,10 @@ public class Attack{
 
     private int getAttackerDiceCount(){
         int diceCount = 0;
-        for(Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()){
-            if(unitType!= Unit.UNIT_TYPE.CATAPULT && attackerHex.getUnits().stream().anyMatch(unit -> unitType.equals(unit) && unit.isCombatUnit())){
+        for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
+            if (unitType != Unit.UNIT_TYPE.CATAPULT &&
+                    attackerHex.getUnits().stream()
+                            .anyMatch(unit -> unit.getUnitType() == unitType && unit.isCombatUnit())) {
                 diceCount += 1;
             }
         }
@@ -86,8 +88,10 @@ public class Attack{
 
     private int getDefenderDiceCount(){
         int diceCount = 0;
-        for(Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()){
-            if(unitType!= Unit.UNIT_TYPE.CATAPULT && defenderHex.getUnits().stream().anyMatch(unit -> unitType.equals(unit) && unit.isCombatUnit())){
+        for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
+            if (unitType != Unit.UNIT_TYPE.CATAPULT &&
+                    defenderHex.getUnits().stream()
+                            .anyMatch(unit -> unit.getUnitType() == unitType && unit.isCombatUnit())) {
                 diceCount += 1;
             }
         }

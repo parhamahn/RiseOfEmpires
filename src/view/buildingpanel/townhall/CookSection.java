@@ -4,6 +4,7 @@ import model.Task;
 import model.building.Building;
 import model.building.MilitaryStable;
 import model.state.GameState;
+import model.unit.Archer;
 import model.unit.Unit;
 import view.common.UITheme;
 
@@ -59,12 +60,19 @@ public class CookSection extends JPanel {
     }
 
     public void refresh() {
-        boolean atCap = (gameState.getEmpireState().getUnits().size()
-                + (int) gameState.getEmpireState().getCookQueueCount())
-                >= gameState.getEmpireState().getMaxUnit();
         for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
             CookStat stat = entry.getValue();
             Unit.UNIT_TYPE type = entry.getKey();
+
+            boolean atCap;
+            if (type.getAttackPower() > 0) {
+                atCap = (gameState.getEmpireState().getCombatUnitCount()
+                        >= gameState.getEmpireState().getTownHallLevel().getCombatUnitCap());
+            } else {
+                atCap = (gameState.getEmpireState().getCivilUnitCount()
+                        >= gameState.getEmpireState().getMaxUnit());
+            }
+
             boolean canAfford = ((type.getCookCost() == null
                     || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
                     && !atCap)

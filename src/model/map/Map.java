@@ -1,13 +1,9 @@
 package model.map;
 
-import model.building.River;
+import model.building.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Map {
     private final Hex[][] grid;
@@ -22,6 +18,7 @@ public class Map {
         generateMap();
         setResources();
         generateRivers();
+        generateTribes();
     }
 
 
@@ -88,6 +85,75 @@ public class Map {
             return grid[y][x];
         }
         return null;
+    }
+
+    public void generateTribes(){
+        int farmerTribeCount = 3;
+        int traderTribeCount = 3;
+        int warriorTribeCount = 3;
+        int mountainTribeCount = 3;
+        int beachTribeCount = 3;
+
+
+        List<Hex> plainHexes = new ArrayList<>();
+        List<Hex> meadowHexes = new ArrayList<>();
+        List<Hex> mountainHexes = new ArrayList<>();
+        List<Hex> beachHexes = new ArrayList<>();
+        for(Hex hex:getAllHexes()){
+            switch (hex.getTerrainType()){
+                case PLAIN -> plainHexes.add(hex);
+                case MOUNTAIN -> mountainHexes.add(hex);
+                case MEADOW -> meadowHexes.add(hex);
+            }
+            for(Hex neighbour:getNeighbourHexes(hex)){
+                if(neighbour!=null&&neighbour.getTerrainType()== Hex.TerrainType.SEA){
+                    beachHexes.add(neighbour);
+                }
+            }
+        }
+        List<Hex> plainAndMeadowHexes = Stream.concat(plainHexes.stream(), meadowHexes.stream()).toList();;
+        Random rand = new Random();
+        for(int i=0;i<farmerTribeCount;i++){
+            Hex hex = plainAndMeadowHexes.get(rand.nextInt(plainAndMeadowHexes.size()));
+            if(hex.getBuilding()!=null){
+                i-=1;
+            }else{
+                hex.setBuilding(new FarmerTribe(hex));
+            }
+        }
+        for(int i=0;i<mountainTribeCount;i++){
+            Hex hex = mountainHexes.get(rand.nextInt(mountainHexes.size()));
+            if(hex.getBuilding()!=null){
+                i-=1;
+            }else{
+                hex.setBuilding(new MountainTribe(hex));
+            }
+        }
+        for(int i=0;i<beachTribeCount;i++){
+            Hex hex = beachHexes.get(rand.nextInt(beachHexes.size()));
+            if(hex.getBuilding()!=null){
+                i-=1;
+            }else{
+                hex.setBuilding(new BeachTribe(hex));
+            }
+        }
+        for(int i=0;i<warriorTribeCount;i++){
+            Hex hex = getAllHexes().get(rand.nextInt(getAllHexes().size()));
+            if(hex.getBuilding()!=null){
+                i-=1;
+            }else{
+                hex.setBuilding(new WarriorTribe(hex));
+            }
+        }
+        for(int i=0;i<traderTribeCount;i++){
+            Hex hex = getAllHexes().get(rand.nextInt(getAllHexes().size()));
+            if(hex.getBuilding()!=null){
+                i-=1;
+            }else{
+                hex.setBuilding(new TraderTribe(hex));
+            }
+        }
+
     }
 
     public void setResources(){

@@ -37,6 +37,7 @@ public abstract class Unit{
         public TownHallLevel getLevel() { return level; }
         public int getAttackRadius() {return attackRadius;};
         public int getHealth() {return health;}
+        public int getAttackPower(){return attackPower;}
     }
 
     protected UNIT_TYPE unitType;
@@ -138,6 +139,12 @@ public abstract class Unit{
         return unitType.toString().toLowerCase().replace("_", "");
     }
     public abstract boolean isCombatUnit();
+    public int getAttackRadius(){
+        return unitType.getAttackRadius();
+    }
+    public int getAttackPower(){
+        return unitType.getAttackPower();
+    }
 
     public int getHealth() {
         return health;
