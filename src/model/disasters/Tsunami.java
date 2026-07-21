@@ -72,15 +72,11 @@ public class Tsunami {
 
 
         for(Unit unit : dead){
-            Hex hex = unit.getHex();
-            gameState.getEmpireState().getUnits().remove(unit);
-            hex.getUnits().remove(unit);
+            gameState.getEmpireState().removeUnit(unit);
         }
 
         for(Building building : destroyed){
-            Hex hex = building.getHex();
-            gameState.getEmpireState().getBuildings().remove(building);
-            hex.setBuilding(null);
+            gameState.getEmpireState().removeBuilding(building);
         }
     }
 

@@ -3,7 +3,6 @@ package model.combat;
 import model.building.Building;
 import model.building.Wall;
 import model.map.Hex;
-import model.map.Map;
 import model.state.GameState;
 import model.unit.Unit;
 
@@ -23,12 +22,7 @@ public class AttackBuilding {
     }
 
     public int getDistance() {
-        Map map = gameState.getWorldState().getMap();
-        if (map.getNeighbourHexes(attackerHex).contains(defenderHex)) return 1;
-        for (Hex n : map.getNeighbourHexes(attackerHex)) {
-            if (map.getNeighbourHexes(n).contains(defenderHex)) return 2;
-        }
-        return -1;
+        return gameState.getWorldState().getMap().getDistance(attackerHex, defenderHex);
     }
 
     public void setAttackerPower(){
@@ -56,11 +50,7 @@ public class AttackBuilding {
             Building building = defenderHex.getBuilding();
             building.setHP(building.getHP()-attackerPower);
             if(building.getHP()<=0){
-                defenderHex.setBuilding(null);
-                gameState.getEmpireState().getBuildings().remove(building);
-                for(Unit unit:defenderHex.getUnits()){
-                    unit.setAssigned(false);
-                }
+                gameState.getEmpireState().removeBuilding(building);
             }
         }
     }

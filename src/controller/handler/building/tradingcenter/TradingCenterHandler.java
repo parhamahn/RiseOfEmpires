@@ -55,7 +55,7 @@ public class TradingCenterHandler {
         ResourceType get = tradingCenterPanel.getToGetSection().getSelectedResource();
         int qty = tradingCenterPanel.getQuantitySection().getSelectedQuantity();
 
-        Trade trade = new Trade(get, give, qty, TradingCenter.getMultiplier());
+        Trade trade = new Trade(get, give, qty, tradingCenter.getMultiplier(qty));
 
         if (!trade.isReady(!tradingCenter.isUsedThisTurn())) return null;
 

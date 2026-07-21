@@ -1,5 +1,7 @@
 package model.storage;
 
+import model.product.Production;
+
 public class Storage {
     public int DEFAULT_WOOD_MAX_STORAGE = 100;
     public int DEFAULT_STONE_MAX_STORAGE = 100;
@@ -106,5 +108,19 @@ public class Storage {
         this.stoneMax = DEFAULT_STONE_MAX_STORAGE;
         this.ironMax = DEFAULT_IRON_MAX_STORAGE;
         this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
+    }
+
+    public void applyProduction(Production production) {
+        for (ResourceType type : ResourceType.values()) {
+            int current = getQuantity(type);
+            int produced = switch (type) {
+                case WOOD -> production.getWoodProduction();
+                case STONE -> production.getStoneProduction();
+                case IRON -> production.getIronProduction();
+                case FOOD -> production.getFoodProduction();
+            };
+            int max = getMax(type);
+            setQuantity(type, Math.max(Math.min(max, current + produced), 0));
+        }
     }
 }

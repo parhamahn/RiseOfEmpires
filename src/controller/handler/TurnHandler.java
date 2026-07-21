@@ -3,10 +3,10 @@ package controller.handler;
 import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
 import model.TownHallLevel;
-import model.building.Bazaar;
+import model.building.Building;
+import model.building.TradingBuilding;
 import model.queue.*;
 import model.state.GameState;
-import model.building.Building;
 import model.unit.Unit;
 import view.game.GamePanel;
 import view.common.WarningDialogs;
@@ -22,13 +22,11 @@ public class TurnHandler {
 
     private final GameState gameState;
     private final GamePanel gamePanel;
-    private final BuildingHandler buildingHandler;
     private final DisasterHandler disasterHandler;
 
     public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler, DisasterHandler disasterHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
-        this.buildingHandler = buildingHandler;
         this.disasterHandler = disasterHandler;
     }
 
@@ -45,8 +43,8 @@ public class TurnHandler {
         }
 
         for(Building building:gameState.getEmpireState().getBuildings()){
-            if(building instanceof Bazaar){
-                ((Bazaar) building).setUsedThisTurn(false);
+            if(building instanceof TradingBuilding){
+                ((TradingBuilding) building).setUsedThisTurn(false);
             }
         }
 
@@ -95,8 +93,10 @@ public class TurnHandler {
                     case RESEARCH -> {
                         ResearchQueue rq = (ResearchQueue) queue;
                         gameState.getEmpireState().getResearchedTechnologies().add(rq.getTechnology());
-                        if (rq.getTechnology()==Technology.DEFENSIVE_PATTERN) {
-                             ProcessTechnology.processDefensivePattern(gameState, gamePanel);
+                        if (rq.getTechnology() == Technology.DEFENSIVE_PATTERN) {
+                            ProcessTechnology.processDefensivePattern(gameState);
+                            gamePanel.getMapPanel().markStaticDirty();
+                            gamePanel.getMapPanel().repaint();
                         }
                         toRemove.add(queue);
                     }
@@ -119,10 +119,7 @@ public class TurnHandler {
             if(gameState.getEmpireState().getHappiness()<=-5){unit.setActionPoints(unit.getActionPoints() - 1);}
         }
 
-        gameState.getEmpireState().getStorage().setFoodQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getFoodMax(), gameState.getEmpireState().getProduction().getFoodProduction() + gameState.getEmpireState().getStorage().getFoodQuantity()), 0));
-        gameState.getEmpireState().getStorage().setWoodQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getWoodMax(), gameState.getEmpireState().getProduction().getWoodProduction() + gameState.getEmpireState().getStorage().getWoodQuantity()), 0));
-        gameState.getEmpireState().getStorage().setStoneQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getStoneMax(), gameState.getEmpireState().getProduction().getStoneProduction() + gameState.getEmpireState().getStorage().getStoneQuantity()), 0));
-        gameState.getEmpireState().getStorage().setIronQuantity(Math.max(Math.min(gameState.getEmpireState().getStorage().getIronMax(), gameState.getEmpireState().getProduction().getIronProduction() + gameState.getEmpireState().getStorage().getIronQuantity()), 0));
+        gameState.getEmpireState().getStorage().applyProduction(gameState.getEmpireState().getProduction());
 
         if (gameState.getEmpireState().getStorage().getFoodQuantity() == 0 && gameState.getEmpireState().getProduction().getFoodProduction() < 0) {
             for (Unit unit : gameState.getEmpireState().getUnits()) {
@@ -145,10 +142,7 @@ public class TurnHandler {
                     anyDamagesToBuilding = true;
                     building.setNoUpkeepTurns(building.getNoUpkeepTurns() + 1);
                     if (building.getNoUpkeepTurns() == MAX_UPKEEP_TURNS) {
-                        building.getHex().setBuilding(null);
-                        for (Unit unit : building.getAssignedWorkers()) unit.setAssigned(false);
-                        building.getAssignedWorkers().clear();
-                        gameState.getEmpireState().getBuildings().remove(building);
+                        gameState.getEmpireState().removeBuilding(building);
                     }
                 }
             }
@@ -156,7 +150,7 @@ public class TurnHandler {
         gameState.getWorldState().nextTurn();
         Season.processSeason(gameState);
         gameState.getEmpireState().setUpkeepDisaster(anyDamagesToBuilding);
-        buildingHandler.updateTownCapacity();
+        gameState.getEmpireState().updateTownCapacity();
     }
 
 

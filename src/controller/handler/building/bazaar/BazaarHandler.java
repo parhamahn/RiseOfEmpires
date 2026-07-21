@@ -55,7 +55,7 @@ public class BazaarHandler {
         ResourceType get = bazaarPanel.getToGetSection().getSelectedResource();
         int qty = bazaarPanel.getQuantitySection().getSelectedQuantity();
 
-        Trade trade = new Trade(get, give, qty, Bazaar.multiplierFor(qty));
+        Trade trade = new Trade(get, give, qty, bazaar.getMultiplier(qty));
 
         if (!trade.isReady(!bazaar.isUsedThisTurn())) return null;
 

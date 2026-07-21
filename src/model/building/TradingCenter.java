@@ -1,21 +1,10 @@
 package model.building;
 
-import model.TownHallLevel;
 import model.map.Hex;
-import model.storage.Cost;
 
-public class TradingCenter extends  Building {
-
-    private boolean usedThisTurn;
-
-    public TradingCenter(Hex hex){
-        super(hex, null, null, 0, 50);
-        this.usedThisTurn = false;
-    }
-
-    @Override
-    public int getProductionPerWorker() {
-        return 0;
+public class TradingCenter extends TradingBuilding {
+    public TradingCenter(Hex hex) {
+        super(hex, null, null, 50);
     }
 
     @Override
@@ -23,14 +12,8 @@ public class TradingCenter extends  Building {
         return "tradingcenterhex";
     }
 
-    public static double getMultiplier() {return 0.8;}
-
-    public boolean isUsedThisTurn() {
-        return usedThisTurn;
+    @Override
+    public double getMultiplier(int quantity) {
+        return 0.8;
     }
-
-    public void setUsedThisTurn(boolean usedThisTurn) {
-        this.usedThisTurn = usedThisTurn;
-    }
-
 }

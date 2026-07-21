@@ -12,6 +12,11 @@ import java.awt.*;
 
 public class UnitLayer implements MapLayer {
 
+    private final UnitAnimator unitAnimator;
+
+    public UnitLayer(UnitAnimator unitAnimator) {
+        this.unitAnimator = unitAnimator;
+    }
 
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
@@ -20,8 +25,10 @@ public class UnitLayer implements MapLayer {
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
-                int drawX = unit.getPositionX();
-                int drawY = unit.getPositionY();
+                Point pos = unitAnimator.getPosition(unit);
+                if (pos == null) continue;
+                int drawX = pos.x;
+                int drawY = pos.y;
 
                 ImageIcon icon = ImageLoader.getInstance().loadIcon(
                         "/utils/" + unit.getUnitImageName() + ".png", unitSize);

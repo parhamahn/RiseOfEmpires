@@ -41,8 +41,6 @@ public abstract class Unit{
     }
 
     protected UNIT_TYPE unitType;
-    protected int positionX;
-    protected int positionY;
     protected int actionPoints;
     protected int actionPointsMax;
     protected boolean isAssigned;
@@ -73,18 +71,6 @@ public abstract class Unit{
     }
 
 
-    public int getPositionX() {
-        return positionX;
-    }
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
-    }
-    public int getPositionY() {
-        return positionY;
-    }
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
-    }
     public UNIT_TYPE getUnitType(){
         return unitType;
     }

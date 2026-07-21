@@ -78,13 +78,9 @@ public class Production {
                 } else {
                     toRemove.add(building);
                     building.getHex().getResources().remove(resourceType);
-                    for (Unit unit : building.getHex().getUnits()) {
-                        unit.setAssigned(false);
-                    }
                     if (building.getHex().getResources().isEmpty()) {
                         building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
                     }
-                    building.getHex().setBuilding(null);
                 }
 
                 addProduction(resourceType, producingResource);
@@ -103,7 +99,9 @@ public class Production {
                 this.ironProduction -= building.getUpkeep().getIronNeeded();
             }
         }
-        empire.getBuildings().removeAll(toRemove);
+        for (Building building : toRemove) {
+            empire.removeBuilding(building);
+        }
 
         this.foodProduction += bonus.getExtraFood();
         this.woodProduction += bonus.getExtraWood();

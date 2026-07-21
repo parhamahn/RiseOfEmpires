@@ -1,11 +1,11 @@
 package model.combat;
 
 import model.map.Hex;
-import model.map.Map;
 import model.state.GameState;
 import model.unit.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -48,12 +48,7 @@ public class AttackUnit {
     }
 
     public int getDistance() {
-        Map map = gameState.getWorldState().getMap();
-        if (map.getNeighbourHexes(attackerHex).contains(defenderHex)) return 1;
-        for (Hex n : map.getNeighbourHexes(attackerHex)) {
-            if (map.getNeighbourHexes(n).contains(defenderHex)) return 2;
-        }
-        return -1;
+        return gameState.getWorldState().getMap().getDistance(attackerHex, defenderHex);
     }
 
     private List<Integer> getAttackerDices(){
@@ -99,49 +94,26 @@ public class AttackUnit {
     }
 
     public void attack(){
-        List<Swordsman> attackerSwordmen = new ArrayList<>();
-        List<Archer> attackerArchers = new ArrayList<>();
-        List<Cavalry> attackerCavalry = new ArrayList<>();
-        List<Catapult> attackerCatapults = new ArrayList<>();
-        for (Unit unit: defenderHex.getUnits()) {
-            if(unit instanceof Swordsman){attackerSwordmen.add((Swordsman) unit);}
-            if(unit instanceof Archer){attackerArchers.add((Archer) unit);}
-            if(unit instanceof Cavalry){attackerCavalry.add((Cavalry) unit);}
-            if(unit instanceof Catapult){attackerCatapults.add((Catapult) unit);}
+        List<Unit> defenders = new ArrayList<>();
+        for (Unit unit : defenderHex.getUnits()) {
+            if (unit.isCombatUnit()) defenders.add(unit);
         }
+        defenders.sort(Comparator.comparingInt(u -> switch (u.getUnitType()) {
+            case SWORDSMAN -> 0;
+            case ARCHER -> 1;
+            case CAVALRY -> 2;
+            case CATAPULT -> 3;
+            default -> 4;
+        }));
 
-        for(int i = 0; i < this.defenderPower; i++){
-            if(!attackerSwordmen.isEmpty()){
-                attackerSwordmen.get(0).setHealth(attackerSwordmen.get(0).getHealth()-1);
-                if(attackerSwordmen.get(0).getHealth() == 0){
-                    Swordsman dead = attackerSwordmen.remove(0);
-                    gameState.getEmpireState().getUnits().remove(dead);
-                    attackerHex.getUnits().remove(dead);
-                }
-            }else if(!attackerArchers.isEmpty()){
-                attackerArchers.get(0).setHealth(attackerArchers.get(0).getHealth()-1);
-                if(attackerArchers.get(0).getHealth() == 0){
-                    Archer dead = attackerArchers.remove(0);
-                    gameState.getEmpireState().getUnits().remove(dead);
-                    attackerHex.getUnits().remove(dead);
-                }
-            }else if(!attackerCavalry.isEmpty()){
-                attackerCavalry.get(0).setHealth(attackerCavalry.get(0).getHealth()-1);
-                if(attackerCavalry.get(0).getHealth() == 0){
-                    Cavalry dead = attackerCavalry.remove(0);
-                    gameState.getEmpireState().getUnits().remove(dead);
-                    attackerHex.getUnits().remove(dead);
-                }
-            }else if(!attackerCatapults.isEmpty()){
-                attackerCatapults.get(0).setHealth(attackerCatapults.get(0).getHealth()-1);
-                if(attackerCatapults.get(0).getHealth() == 0){
-                    Catapult dead = attackerCatapults.remove(0);
-                    gameState.getEmpireState().getUnits().remove(dead);
-                    attackerHex.getUnits().remove(dead);
-                }
+        for (int i = 0; i < this.defenderPower && !defenders.isEmpty(); i++) {
+            Unit target = defenders.get(0);
+            target.setHealth(target.getHealth() - 1);
+            if (target.getHealth() <= 0) {
+                defenders.remove(0);
+                gameState.getEmpireState().removeUnit(target);
             }
         }
-
     }
 
 }

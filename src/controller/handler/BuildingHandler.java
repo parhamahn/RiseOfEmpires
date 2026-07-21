@@ -2,22 +2,17 @@ package controller.handler;
 
 import controller.SelectionContext;
 import controller.handler.building.townhall.CookUnitHandler;
-import model.TownHallLevel;
-import model.state.EmpireState;
 import model.state.GameState;
 import model.map.Hex;
 import model.Task;
 import model.unit.Unit;
 import model.building.*;
-import model.queue.UpgradeQueue;
 import view.game.GamePanel;
 import view.game.lists.TaskStat;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.List;
 
 public class BuildingHandler {
     private final GameState gameState;
@@ -51,23 +46,20 @@ public class BuildingHandler {
         };
 
         building.getCost().pay(gameState.getEmpireState().getStorage());
-        List<Unit> toRemove = new ArrayList<>();
         for (Unit unit : hex.getUnits()) {
             if (unit.isBuilder() && unit.getActionPoints() >= building.getCost().getAPNeeded()) {
                 unit.setActionPoints(unit.getActionPoints() - building.getCost().getAPNeeded());
                 unit.setCharges(unit.getCharges() - 1);
                 if (unit.getCharges() == 0) {
-                    gameState.getEmpireState().getUnits().remove(unit);
-                    toRemove.add(unit);
+                    gameState.getEmpireState().removeUnit(unit);
                 }
                 break;
             }
         }
-        hex.getUnits().removeAll(toRemove);
         hex.setBuilding(building);
         gameState.getEmpireState().getBuildings().add(building);
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
-        updateTownCapacity();
+        gameState.getEmpireState().updateTownCapacity();
         gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
         gameState.getEmpireState().recalculateHappiness();
         gamePanel.getTaskListPanel().clear();
@@ -123,12 +115,8 @@ public class BuildingHandler {
                 if (sure == JOptionPane.YES_OPTION) {
                     Building building = hex.getBuilding();
                     if (building != null && !building.isTownHall()) {
-                        for (Unit tunit : building.getAssignedWorkers()) {
-                            tunit.setAssigned(false);
-                        }
-                        hex.setBuilding(null);
-                        gameState.getEmpireState().getBuildings().remove(building);
-                        updateTownCapacity();
+                        gameState.getEmpireState().removeBuilding(building);
+                        gameState.getEmpireState().updateTownCapacity();
                         gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                         gameState.getEmpireState().recalculateHappiness();
                         gamePanel.getTaskListPanel().clear();
@@ -140,16 +128,6 @@ public class BuildingHandler {
                 break;
             }
         }
-    }
-
-    public void updateTownCapacity(){
-        int townCount = 0;
-        for (Building building : gameState.getEmpireState().getBuildings()) {
-            if (building.isTown()) {
-                townCount++;
-            }
-        }
-        gameState.getEmpireState().setMaxUnit(EmpireState.DEFAULT_UNIT_CAPACITY + townCount);
     }
 
     public void startWallPlacement(Hex origin) {
@@ -175,19 +153,16 @@ public class BuildingHandler {
         }
 
         Wall.getBuildCost().pay(gameState.getEmpireState().getStorage());
-        List<Unit> toRemove = new ArrayList<>();
         for (Unit unit : origin.getUnits()) {
             if (unit.isBuilder() && unit.getActionPoints() >= Wall.getBuildCost().getAPNeeded()) {
                 unit.setActionPoints(unit.getActionPoints() - Wall.getBuildCost().getAPNeeded());
                 unit.setCharges(unit.getCharges() - 1);
                 if (unit.getCharges() == 0) {
-                    gameState.getEmpireState().getUnits().remove(unit);
-                    toRemove.add(unit);
+                    gameState.getEmpireState().removeUnit(unit);
                 }
                 break;
             }
         }
-        origin.getUnits().removeAll(toRemove);
 
         origin.getWallsWith().add(wall);
         edgeHex.getWallsWith().add(wall);
@@ -222,19 +197,16 @@ public class BuildingHandler {
         }
 
         Road.getBuildCost().pay(gameState.getEmpireState().getStorage());
-        List<Unit> toRemove = new ArrayList<>();
         for (Unit unit : origin.getUnits()) {
             if (unit.isBuilder() && unit.getActionPoints() >= Road.getBuildCost().getAPNeeded()) {
                 unit.setActionPoints(unit.getActionPoints() - Road.getBuildCost().getAPNeeded());
                 unit.setCharges(unit.getCharges() - 1);
                 if (unit.getCharges() == 0) {
-                    gameState.getEmpireState().getUnits().remove(unit);
-                    toRemove.add(unit);
+                    gameState.getEmpireState().removeUnit(unit);
                 }
                 break;
             }
         }
-        origin.getUnits().removeAll(toRemove);
 
         origin.getRoadsTo().add(road);
         edgeHex.getRoadsTo().add(road);

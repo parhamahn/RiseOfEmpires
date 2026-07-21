@@ -58,7 +58,7 @@ public class MapPanel extends JPanel {
         staticLayers.add(new ResourceLayer());
 
         dynamicLayers.add(new HighlightLayer());
-        dynamicLayers.add(new UnitLayer());
+        dynamicLayers.add(new UnitLayer(unitAnimator));
         dynamicLayers.add(rainEffectLayer);
         dynamicLayers.add(snowEffectLayer);
         dynamicLayers.add(crackEffectLayer);
@@ -173,6 +173,10 @@ public class MapPanel extends JPanel {
 
     public Point getHexCenter(Hex hex) {
         return camera.getHexCenter(hex);
+    }
+
+    public UnitAnimator getUnitAnimator() {
+        return unitAnimator;
     }
 
     public void centerCameraOnHex(Hex hex) {

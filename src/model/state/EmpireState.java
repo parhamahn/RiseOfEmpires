@@ -71,6 +71,25 @@ public class EmpireState {
         recalculateHappiness();
     }
 
+    public void removeBuilding(Building building) {
+        for (Unit unit : building.getAssignedWorkers()) {
+            unit.setAssigned(false);
+        }
+        building.getAssignedWorkers().clear();
+        building.getHex().setBuilding(null);
+        buildings.remove(building);
+    }
+
+    public void removeUnit(Unit unit) {
+        unit.getHex().getUnits().remove(unit);
+        units.remove(unit);
+    }
+
+    public void updateTownCapacity() {
+        long townCount = buildings.stream().filter(Building::isTown).count();
+        this.maxUnit = DEFAULT_UNIT_CAPACITY + (int) townCount;
+    }
+
     public void recalculateProduction(Map map) {
         production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map));
     }

@@ -2,22 +2,8 @@ package model.building;
 
 import model.map.Hex;
 
-public class FarmerTribe extends Building {
-
-
+public class FarmerTribe extends TribeBuilding {
     public FarmerTribe(Hex hex) {
-        super(hex, null, null, 0, 200);
+        super(hex, "farmertribe");
     }
-
-    @Override
-    public int getProductionPerWorker() {
-        return 0;
-    }
-
-    @Override
-    public String getBuildingImageName() {
-        return "farmertribe";
-    }
-
-
 }

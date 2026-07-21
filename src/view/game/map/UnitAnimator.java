@@ -4,15 +4,30 @@ import model.state.GameState;
 import model.unit.Unit;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UnitAnimator {
 
     private final GameState gameState;
+    private final Map<Unit, Point> positions = new HashMap<>();
     private Runnable onUnitArrived;
 
 
     public UnitAnimator(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public Point getPosition(Unit unit) {
+        return positions.get(unit);
+    }
+
+    public void setPosition(Unit unit, Point point) {
+        positions.put(unit, point);
+    }
+
+    public void removePosition(Unit unit) {
+        positions.remove(unit);
     }
 
 
@@ -24,18 +39,17 @@ public class UnitAnimator {
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (!unit.isMoving()) {
                 Point p = camera.getHexCenter(unit.getHex());
-                unit.setPositionX(p.x);
-                unit.setPositionY(p.y);
+                positions.put(unit, p);
             }
         }
     }
 
     public void syncPositions(Camera camera) {
+        positions.keySet().retainAll(gameState.getEmpireState().getUnits());
         for (Unit unit : gameState.getEmpireState().getUnits()) {
             if (!unit.isMoving() && unit.getHex() != null) {
                 Point p = camera.getHexCenter(unit.getHex());
-                unit.setPositionX(p.x);
-                unit.setPositionY(p.y);
+                positions.put(unit, p);
             }
         }
     }
@@ -52,9 +66,10 @@ public class UnitAnimator {
     }
 
     private void animateStep(Unit unit, Camera camera) {
+        Point current = positions.getOrDefault(unit, new Point(0, 0));
         Point target = camera.getHexCenter(unit.getTargetHex());
-        int dx = target.x - unit.getPositionX();
-        int dy = target.y - unit.getPositionY();
+        int dx = target.x - current.x;
+        int dy = target.y - current.y;
         double distance = Math.hypot(dx, dy);
 
         int speed = Math.max(2, camera.getHexRadius() / 15);
@@ -67,13 +82,13 @@ public class UnitAnimator {
             unit.setMoving(false);
 
             Point finalPos = camera.getHexCenter(unit.getHex());
-            unit.setPositionX(finalPos.x);
-            unit.setPositionY(finalPos.y);
+            positions.put(unit, finalPos);
 
             if (onUnitArrived != null) onUnitArrived.run();
         } else {
-            unit.setPositionX(unit.getPositionX() + (int) Math.round(speed * dx / distance));
-            unit.setPositionY(unit.getPositionY() + (int) Math.round(speed * dy / distance));
+            positions.put(unit, new Point(
+                    current.x + (int) Math.round(speed * dx / distance),
+                    current.y + (int) Math.round(speed * dy / distance)));
         }
     }
 }

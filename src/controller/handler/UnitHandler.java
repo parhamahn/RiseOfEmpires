@@ -12,6 +12,7 @@ import model.unit.Unit;
 import model.unit.Worker;
 import view.game.GamePanel;
 import view.game.lists.UnitStat;
+import view.game.map.UnitAnimator;
 
 import java.awt.*;
 import java.util.List;
@@ -70,10 +71,10 @@ public class UnitHandler {
                 }
                 unit.setActionPoints(unit.getActionPoints() - APNeeded);
                 unit.setTargetHex(clicked);
-                if (unit.getPositionX() == 0 && unit.getPositionY() == 0 && unit.getHex() != null) {
+                UnitAnimator animator = gamePanel.getMapPanel().getUnitAnimator();
+                if (animator.getPosition(unit) == null && unit.getHex() != null) {
                     Point p = gamePanel.getMapPanel().getHexCenter(unit.getHex());
-                    unit.setPositionX(p.x);
-                    unit.setPositionY(p.y);
+                    animator.setPosition(unit, p);
                 }
                 unit.setMoving(true);
                 unit.setAssigned(false);
@@ -116,8 +117,7 @@ public class UnitHandler {
             }
         }
         clicked.setInEmpireBorder(true);
-        selectionContext.getSelectedHex().getUnits().remove(unit);
-        gameState.getEmpireState().getUnits().remove(unit);
+        gameState.getEmpireState().removeUnit(unit);
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getMapPanel().markStaticDirty();

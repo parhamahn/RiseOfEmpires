@@ -310,4 +310,12 @@ public class Map {
 
         return  allHexes;
     }
+
+    public int getDistance(Hex a, Hex b) {
+        if (getNeighbourHexes(a).contains(b)) return 1;
+        for (Hex n : getNeighbourHexes(a)) {
+            if (n != null && getNeighbourHexes(n).contains(b)) return 2;
+        }
+        return -1;
+    }
 }
