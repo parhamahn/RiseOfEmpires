@@ -1,9 +1,9 @@
 package model.map;
 
 import model.building.Building;
-import model.building.Road;
-import model.building.River;
-import model.building.Wall;
+import model.building.edge.Road;
+import model.building.edge.River;
+import model.building.edge.Wall;
 import model.unit.Unit;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package model.disasters;
 
 import model.building.Building;
-import model.building.Farm;
+import model.building.empire.Farm;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;

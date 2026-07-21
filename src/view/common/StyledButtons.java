@@ -38,6 +38,90 @@ public class StyledButtons {
         button.setToolTipText(reason);
     }
 
+    public static JButton circularButton(Icon overlayIcon, int size) {
+        JButton button = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int w = getWidth();
+                int h = getHeight();
+
+                g2.drawImage(UITheme.CIRCLE_BUTTON.getImage(), 0, 0, w, h, this);
+
+                if (overlayIcon != null) {
+                    int iw = overlayIcon.getIconWidth();
+                    int ih = overlayIcon.getIconHeight();
+                    g2.drawImage(((ImageIcon) overlayIcon).getImage(), (w - iw) / 2, (h - ih) / 2, this);
+                }
+
+                if (isBorderPainted()) {
+                    g2.setColor(UITheme.GOLD);
+                    g2.setStroke(new BasicStroke(5));
+                    g2.drawOval(1, 1, w - 3, h - 3);
+                }
+
+                g2.dispose();
+            }
+        };
+
+        Dimension d = new Dimension(size, size);
+        button.setPreferredSize(d);
+        button.setMinimumSize(d);
+        button.setMaximumSize(d);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusable(false);
+        button.setOpaque(false);
+
+        return button;
+    }
+
+    public static JButton circularTextButton(String text, Dimension size) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int w = getWidth();
+                int h = getHeight();
+
+                g2.drawImage(UITheme.CIRCLE_BUTTON.getImage(), 0, 0, w, h, this);
+
+                g2.setFont(getFont());
+                g2.setColor(isBorderPainted() ? UITheme.GOLD : UITheme.MENU_BUTTON_FG);
+                FontMetrics fm = g2.getFontMetrics();
+                String label = getText();
+                int tx = (w - fm.stringWidth(label)) / 2;
+                int ty = (h - fm.getHeight()) / 2 + fm.getAscent();
+                g2.drawString(label, tx, ty);
+
+                if (isBorderPainted()) {
+                    g2.setColor(UITheme.GOLD);
+                    g2.setStroke(new BasicStroke(5));
+                    g2.drawOval(1, 1, w - 3, h - 3);
+                }
+
+                g2.dispose();
+            }
+        };
+
+        button.setPreferredSize(size);
+        button.setMinimumSize(size);
+        button.setMaximumSize(size);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusable(false);
+        button.setOpaque(false);
+        button.setFont(UITheme.GAME_FONT_BOLD.deriveFont(24f));
+
+        return button;
+    }
+
     public static JButton textButton(String text, Icon icon, Dimension size, float fontSize, Color fg) {
         JButton button = new JButton(text, icon);
         goldBorder(button);

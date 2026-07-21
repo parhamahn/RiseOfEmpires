@@ -1,11 +1,11 @@
 package view.game.map;
 
 import controller.SelectionContext;
+import helpers.ImageLoader;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -18,17 +18,14 @@ public class ResourceLayer implements MapLayer {
     private static final BasicStroke BADGE_STROKE = new BasicStroke(1.5f);
 
     public ResourceLayer() {
-        try {
-            resourceIcons.put(Hex.ResourceType.WOOD, ImageIO.read(getClass().getResource("/utils/wood.png")));
-            resourceIcons.put(Hex.ResourceType.STONE, ImageIO.read(getClass().getResource("/utils/stone.png")));
-            resourceIcons.put(Hex.ResourceType.IRON, ImageIO.read(getClass().getResource("/utils/iron.png")));
-            resourceIcons.put(Hex.ResourceType.WHEAT, ImageIO.read(getClass().getResource("/utils/wheat.png")));
-            resourceIcons.put(Hex.ResourceType.RICE, ImageIO.read(getClass().getResource("/utils/rice.png")));
-            resourceIcons.put(Hex.ResourceType.COW, ImageIO.read(getClass().getResource("/utils/cow.png")));
-            resourceIcons.put(Hex.ResourceType.SHEEP, ImageIO.read(getClass().getResource("/utils/sheep.png")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ImageLoader loader = ImageLoader.getInstance();
+        resourceIcons.put(Hex.ResourceType.WOOD, loader.loadImage("/utils/wood.png"));
+        resourceIcons.put(Hex.ResourceType.STONE, loader.loadImage("/utils/stone.png"));
+        resourceIcons.put(Hex.ResourceType.IRON, loader.loadImage("/utils/iron.png"));
+        resourceIcons.put(Hex.ResourceType.WHEAT, loader.loadImage("/utils/wheat.png"));
+        resourceIcons.put(Hex.ResourceType.RICE, loader.loadImage("/utils/rice.png"));
+        resourceIcons.put(Hex.ResourceType.COW, loader.loadImage("/utils/cow.png"));
+        resourceIcons.put(Hex.ResourceType.SHEEP, loader.loadImage("/utils/sheep.png"));
     }
 
 

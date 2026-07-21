@@ -55,16 +55,7 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
-        if (gameState.getEmpireState().getHappiness() > 0) {
-            this.happinessLabel.setText("Happiness : +" + gameState.getEmpireState().getHappiness());
-            this.happinessLabel.setForeground(UITheme.POSITIVE_CHANGE);
-        } else if (gameState.getEmpireState().getHappiness() < 0) {
-            this.happinessLabel.setText("Happiness : "+String.valueOf(gameState.getEmpireState().getHappiness()));
-            this.happinessLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-        } else {
-            this.happinessLabel.setText("Happiness : 0");
-            this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
-        }
+        UITheme.formatChangeLabel(happinessLabel, gameState.getEmpireState().getHappiness(), "Happiness : ");
         this.happinessLabel.setFont(UITheme.GAME_FONT);
         add(this.happinessLabel);
 
@@ -91,12 +82,7 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalStrut(20));
 
-        switch (gameState.getEmpireState().getSeason()){
-            case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
-            case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
-            case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));
-            case WINTER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/winter.png", 50, 50));
-        }
+        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getEmpireState().getSeason()));
 
         add(this.seasonLabel);
 
@@ -129,24 +115,9 @@ public class HUDPanel extends JPanel {
         cvunitsLabel.setText("Units : "+ gameState.getEmpireState().getCivilUnitCount()+"/"+gameState.getEmpireState().getMaxUnit());
         cbunitsLabel.setText("Combat units : "+ gameState.getEmpireState().getCombatUnitCount()+"/"+gameState.getEmpireState().getTownHallLevel().getCombatUnitCap());
 
+        UITheme.formatChangeLabel(happinessLabel, gameState.getEmpireState().getHappiness(), "Happiness : ");
 
-        if (gameState.getEmpireState().getHappiness() > 0) {
-            this.happinessLabel.setText("Happiness : +" + gameState.getEmpireState().getHappiness());
-            this.happinessLabel.setForeground(UITheme.POSITIVE_CHANGE);
-        } else if (gameState.getEmpireState().getHappiness() < 0) {
-            this.happinessLabel.setText("Happiness : "+String.valueOf(gameState.getEmpireState().getHappiness()));
-            this.happinessLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-        } else {
-            this.happinessLabel.setText("Happiness : 0");
-            this.happinessLabel.setForeground(UITheme.ZERO_CHANGE);
-        }
-
-        switch (gameState.getEmpireState().getSeason()){
-            case SPRING -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/spring.png", 50, 50));
-            case SUMMER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/summer.png", 50, 50));
-            case FALL -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/fall.png", 50, 50));
-            case WINTER -> seasonLabel.setIcon(ImageLoader.getInstance().loadScaledIcon("/utils/winter.png", 50, 50));
-        }
+        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getEmpireState().getSeason()));
 
         repaint();
     }

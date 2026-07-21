@@ -1,9 +1,11 @@
 package view.common;
 
 import helpers.ImageLoader;
+import model.Season;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class UITheme {
 
@@ -18,6 +20,7 @@ public class UITheme {
     public static final Color MENU_BUTTON_FG = new Color(178, 178, 178);
 
     public static final Color OVERLAY_BG = new Color(0, 0, 0, 200);
+    public static final Color PANEL_OVERLAY = new Color(0, 0, 0, 180);
     public static final Color HUD_BG = new Color(0, 0, 0, 175);
 
     public static final Color POSITIVE_CHANGE = new Color(0, 175, 0);
@@ -33,6 +36,39 @@ public class UITheme {
 
     public static final ImageIcon CIRCLE_BUTTON = ImageLoader.getInstance().loadIcon("/utils/circlemenubutton.png", 64);
 
+    public static ImageIcon createDisabledIcon(ImageIcon icon) {
+        return new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
+    }
+
+    public static ImageIcon getSeasonIcon(Season.SeasonType season) {
+        return ImageLoader.getInstance().loadScaledIcon(
+                "/utils/" + season.name().toLowerCase() + ".png", 50, 50);
+    }
+
+    public static void formatChangeLabel(JLabel label, int value, String prefix) {
+        if (value > 0) {
+            label.setText(prefix + "+" + value);
+            label.setForeground(POSITIVE_CHANGE);
+        } else if (value < 0) {
+            label.setText(prefix + value);
+            label.setForeground(NEGATIVE_CHANGE);
+        } else {
+            label.setText(prefix + "0");
+            label.setForeground(ZERO_CHANGE);
+        }
+    }
+
+    public static void formatChangeLabel(JLabel label, int value) {
+        formatChangeLabel(label, value, "");
+    }
+
+    public static JLabel createSectionTitle(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(GAME_FONT.deriveFont(32f));
+        label.setForeground(GOLD);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return label;
+    }
 
     public static void styleIconButton(JButton button) {
         button.setFocusPainted(false);

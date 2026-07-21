@@ -1,6 +1,7 @@
-package model.building;
+package model.building.empire;
 
 import model.TownHallLevel;
+import model.building.Building;
 import model.map.Hex;
 import model.storage.Cost;
 

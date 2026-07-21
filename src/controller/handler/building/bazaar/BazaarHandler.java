@@ -1,10 +1,9 @@
 package controller.handler.building.bazaar;
 
-import model.building.Bazaar;
+import model.building.empire.Bazaar;
 import model.building.TradingBuilding;
 import model.state.GameState;
 import controller.handler.building.trading.TradingHandler;
-import view.buildingpanel.trading.BazaarPanel;
 import view.buildingpanel.trading.TradingPanel;
 import view.game.GamePanel;
 

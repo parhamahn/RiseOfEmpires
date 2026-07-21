@@ -1,7 +1,7 @@
 package model.state;
 
 import model.building.Building;
-import model.building.TradingCenter;
+import model.building.other.TradingCenter;
 import model.map.Hex;
 import model.map.Map;
 import model.product.Production;

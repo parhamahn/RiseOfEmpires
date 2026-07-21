@@ -2,8 +2,8 @@ package controller.handler;
 
 import controller.SelectionContext;
 import model.Season;
-import model.building.River;
-import model.building.Road;
+import model.building.edge.River;
+import model.building.edge.Road;
 import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;

@@ -1,5 +1,6 @@
-package model.building;
+package model.building.empire;
 
+import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 

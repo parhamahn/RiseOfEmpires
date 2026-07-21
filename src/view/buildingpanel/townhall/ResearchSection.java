@@ -4,33 +4,25 @@ import model.queue.Queue;
 import model.queue.ResearchQueue;
 import model.queue.Technology;
 import model.state.GameState;
-import view.common.UITheme;
+import view.common.BaseSection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ResearchSection extends JPanel {
+public class ResearchSection extends BaseSection {
 
     private final GameState gameState;
     private final Map<Technology, ResearchStat> researchStatMap;
     private final List<Technology> techOrder;
 
     public ResearchSection(GameState gameState) {
+        super("Technology Research");
         this.gameState = gameState;
         researchStatMap = new EnumMap<>(Technology.class);
         techOrder = new ArrayList<>();
-        setOpaque(false);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-
-        JLabel label = new JLabel("Technology Research");
-        label.setFont(UITheme.GAME_FONT.deriveFont(32f));
-        label.setForeground(UITheme.GOLD);
-        label.setAlignmentX(CENTER_ALIGNMENT);
-        add(label);
-        add(Box.createRigidArea(new Dimension(0, 15)));
 
         buildInitial();
     }

@@ -1,6 +1,8 @@
 package model.map;
 
 import model.building.*;
+import model.building.edge.River;
+import model.building.tribes.*;
 
 import java.util.*;
 import java.util.stream.Stream;

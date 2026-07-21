@@ -1,6 +1,9 @@
 package model.building;
 
 import model.Task;
+import model.building.edge.Road;
+import model.building.edge.Wall;
+import model.building.empire.*;
 import model.map.Hex;
 import model.storage.Cost;
 

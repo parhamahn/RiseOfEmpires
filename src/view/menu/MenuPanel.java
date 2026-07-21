@@ -4,11 +4,9 @@ import helpers.ImageLoader;
 import view.common.StyledButtons;
 import view.common.UITheme;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class MenuPanel extends JPanel {
 
@@ -36,13 +34,7 @@ public class MenuPanel extends JPanel {
             button.setAlignmentX(CENTER_ALIGNMENT);
         }
 
-        try {
-            this.backgroundImage = ImageIO.read(getClass().getResource("/utils/menubackground.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Resource not found on classpath", e);
-        }
+        this.backgroundImage = ImageLoader.getInstance().loadImage("/utils/menubackground.png");
 
 
 

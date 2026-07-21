@@ -2,30 +2,22 @@ package view.buildingpanel.townhall;
 
 import model.state.GameState;
 import model.unit.Unit;
-import view.common.UITheme;
+import view.common.BaseSection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class CookSection extends JPanel {
+public class CookSection extends BaseSection {
 
     private final GameState gameState;
     private final Map<Unit.UNIT_TYPE, CookStat> cookStats;
 
     public CookSection(GameState gameState) {
+        super("Cook Units");
         this.gameState = gameState;
-        setOpaque(false);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-
-        JLabel label = new JLabel("Cook Units");
-        label.setFont(UITheme.GAME_FONT.deriveFont(32f));
-        label.setForeground(UITheme.GOLD);
-        label.setAlignmentX(CENTER_ALIGNMENT);
-        add(label);
-        add(Box.createRigidArea(new Dimension(0, 15)));
 
         JPanel grid = new JPanel(new GridLayout(2, 4, 0, 0));
         grid.setOpaque(false);

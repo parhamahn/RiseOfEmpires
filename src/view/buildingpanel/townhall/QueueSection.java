@@ -2,6 +2,7 @@ package view.buildingpanel.townhall;
 
 import model.queue.Queue;
 import model.state.GameState;
+import view.common.BaseSection;
 import view.common.UITheme;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class QueueSection extends JPanel {
+public class QueueSection extends BaseSection {
 
     private final GameState gameState;
     private final JPanel queuePanel;
@@ -18,16 +19,8 @@ public class QueueSection extends JPanel {
     private Consumer<Queue> onCancel;
 
     public QueueSection(GameState gameState) {
+        super("Queue", 5);
         this.gameState = gameState;
-        setOpaque(false);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JLabel queueLabel = new JLabel("Queue");
-        queueLabel.setFont(UITheme.GAME_FONT.deriveFont(32f));
-        queueLabel.setForeground(UITheme.GOLD);
-        queueLabel.setAlignmentX(CENTER_ALIGNMENT);
-        add(queueLabel);
-        add(Box.createRigidArea(new Dimension(0, 5)));
 
         queuePanel = new JPanel();
         queuePanel.setOpaque(false);

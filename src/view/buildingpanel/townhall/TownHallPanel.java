@@ -4,110 +4,34 @@ import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
 import model.unit.Unit;
-import view.common.UITheme;
+import view.common.BaseModalPanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class TownHallPanel extends JPanel {
+public class TownHallPanel extends BaseModalPanel {
 
-    private GameState gameState;
-    private JButton closeButton;
     private UpgradeSection upgradeSection;
     private CookSection cookSection;
     private QueueSection queueSection;
     private ResearchSection researchSection;
-    private BufferedImage panelBackground;
 
     public TownHallPanel(GameState gameState) {
-        this.gameState = gameState;
-
-        setOpaque(false);
-        setLayout(new GridBagLayout());
-        setVisible(false);
-
-        try {
-            this.panelBackground = ImageIO.read(getClass().getResource("/utils/townhallpanel.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        JPanel content = new JPanel(new BorderLayout()){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g.create();
-
-                if (panelBackground != null) {g2.drawImage(panelBackground, 0, 0, getWidth(), getHeight(), this);}
-                g2.setColor(new Color(0, 0, 0, 180));
-                g2.fillRect(0, 0, getWidth(), getHeight());
-                g2.dispose();
-            }
-        };
-        content.setOpaque(false);
-        content.setPreferredSize(new Dimension(1200, 800));
-        content.setBorder(BorderFactory.createLineBorder(UITheme.GOLD, 3));
-
-        content.add(buildTitleBar(), BorderLayout.NORTH);
-        content.add(buildBody(), BorderLayout.CENTER);
-
-        add(content);
+        super(gameState, "Town Hall", "/utils/townhallpanel.png");
     }
-
-    public JButton getCloseButton() {return closeButton;}
-    public JButton getCookButton(Unit.UNIT_TYPE type) {return cookSection.getCookButton(type);}
-    public Map<Unit.UNIT_TYPE, JButton> getCookButtons() {return cookSection.getCookButtons();}
-    public JButton getUpgradeStorageButton() {return upgradeSection.getUpgradeButton();}
-    public JButton getResearchButton(Technology tech) {return researchSection.getResearchButton(tech);}
-    public void setQueue(List<Queue> queues) {queueSection.setQueue(queues);}
-    public void setOnCancel(java.util.function.Consumer<Queue> onCancel) {queueSection.setOnCancel(onCancel);}
-    public List<QueueStat> getQueueStats() {return queueSection.getCurrentStats();}
-
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(UITheme.OVERLAY_BG);
-        g.fillRect(0, 0, getWidth(), getHeight());
-    }
-
-    private JPanel buildTitleBar() {
-        JPanel titleBar = new JPanel(new BorderLayout());
-        titleBar.setOpaque(false);
-        titleBar.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 10));
-
-        JLabel title = new JLabel("Town Hall");
-        title.setFont(UITheme.GAME_FONT_BOLD.deriveFont(28f));
-        title.setForeground(Color.WHITE);
-        titleBar.add(title, BorderLayout.WEST);
-
-        closeButton = new JButton("X");
-        closeButton.setFocusable(false);
-        closeButton.setFont(UITheme.GAME_FONT_BOLD.deriveFont(18f));
-        closeButton.setBackground(UITheme.GOLD);
-        closeButton.setForeground(Color.BLACK);
-        closeButton.setPreferredSize(new Dimension(36, 36));
-        closeButton.setMaximumSize(new Dimension(36, 36));
-        closeButton.setMargin(new Insets(0, 0, 0, 0));
-        titleBar.add(closeButton, BorderLayout.EAST);
-
-        return titleBar;
-    }
-
-    private JPanel buildBody() {
+    protected JPanel buildBody() {
         JPanel body = new JPanel(new GridLayout(2, 2, 15, 15));
         body.setOpaque(false);
         body.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
 
-        upgradeSection = new UpgradeSection(gameState);
-        cookSection = new CookSection(gameState);
-        researchSection = new ResearchSection(gameState);
-        queueSection = new QueueSection(gameState);
+        upgradeSection = new UpgradeSection(getGameState());
+        cookSection = new CookSection(getGameState());
+        researchSection = new ResearchSection(getGameState());
+        queueSection = new QueueSection(getGameState());
 
         body.add(upgradeSection);
         body.add(cookSection);
@@ -117,13 +41,19 @@ public class TownHallPanel extends JPanel {
         return body;
     }
 
-    public void open() {refresh();setVisible(true);}
-    public void close() {setVisible(false);}
+    public JButton getCookButton(Unit.UNIT_TYPE type) {return cookSection.getCookButton(type);}
+    public Map<Unit.UNIT_TYPE, JButton> getCookButtons() {return cookSection.getCookButtons();}
+    public JButton getUpgradeStorageButton() {return upgradeSection.getUpgradeButton();}
+    public JButton getResearchButton(Technology tech) {return researchSection.getResearchButton(tech);}
+    public void setQueue(List<Queue> queues) {queueSection.setQueue(queues);}
+    public void setOnCancel(java.util.function.Consumer<Queue> onCancel) {queueSection.setOnCancel(onCancel);}
+    public List<QueueStat> getQueueStats() {return queueSection.getCurrentStats();}
 
+    @Override
     public void refresh() {
         upgradeSection.refresh();
         cookSection.refresh();
         researchSection.refresh();
-        setQueue(gameState.getEmpireState().getQueues());
+        setQueue(getGameState().getEmpireState().getQueues());
     }
 }

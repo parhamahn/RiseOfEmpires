@@ -2,6 +2,9 @@ package model.state;
 
 import model.*;
 import model.building.*;
+import model.building.empire.MilitaryStable;
+import model.building.empire.Monument;
+import model.building.empire.TownHall;
 import model.map.Hex;
 import model.map.Map;
 import model.product.AdjacencyBonus;

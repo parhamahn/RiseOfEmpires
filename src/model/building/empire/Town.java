@@ -1,9 +1,10 @@
-package model.building;
+package model.building.empire;
 
+import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 
-public class Town extends Building{
+public class Town extends Building {
 
     private final static Cost cost = new Cost(40, 20, 5, 0, 3);
     private final static Cost upkeep = new Cost(3, 2, 0, 0, 0);

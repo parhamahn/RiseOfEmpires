@@ -1,7 +1,7 @@
 package model;
 
-import model.building.Bazaar;
-import model.building.MilitaryStable;
+import model.building.empire.Bazaar;
+import model.building.empire.MilitaryStable;
 import model.map.Hex;
 import model.state.GameState;
 

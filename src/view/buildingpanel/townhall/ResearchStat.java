@@ -69,8 +69,7 @@ public class ResearchStat extends JPanel {
         boolean disabled = !canAfford || alreadyResearched;
         researchButton.setEnabled(!disabled);
         if (disabled) {
-            researchButton.setDisabledIcon(new ImageIcon(
-                    GrayFilter.createDisabledImage(buttonBg.getImage())));
+            researchButton.setDisabledIcon(UITheme.createDisabledIcon(buttonBg));
             researchButton.setBorder(null);
         } else {
             StyledButtons.goldBorder(researchButton);

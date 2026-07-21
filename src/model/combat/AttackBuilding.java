@@ -1,7 +1,7 @@
 package model.combat;
 
 import model.building.Building;
-import model.building.Wall;
+import model.building.edge.Wall;
 import model.map.Hex;
 import model.state.GameState;
 import model.unit.Unit;

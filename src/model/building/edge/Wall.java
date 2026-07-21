@@ -1,4 +1,4 @@
-package model.building;
+package model.building.edge;
 
 import model.map.Hex;
 import model.map.Map;

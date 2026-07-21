@@ -1,10 +1,10 @@
 package model.product;
 
 import model.building.Building;
-import model.building.Farm;
-import model.building.IronMine;
-import model.building.LumberMill;
-import model.building.StoneMine;
+import model.building.empire.Farm;
+import model.building.empire.IronMine;
+import model.building.empire.LumberMill;
+import model.building.empire.StoneMine;
 import model.map.Hex;
 import model.map.Map;
 

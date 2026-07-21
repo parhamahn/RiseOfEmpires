@@ -1,5 +1,6 @@
-package model.building;
+package model.building.other;
 
+import model.building.TradingBuilding;
 import model.map.Hex;
 
 public class TradingCenter extends TradingBuilding {

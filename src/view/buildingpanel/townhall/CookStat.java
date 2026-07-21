@@ -59,8 +59,7 @@ public class CookStat extends JPanel {
         if (!canAfford) {
             ImageIcon icon = (ImageIcon) cookButton.getIcon();
             if (icon != null) {
-                cookButton.setDisabledIcon(new ImageIcon(
-                        GrayFilter.createDisabledImage(icon.getImage())));
+                cookButton.setDisabledIcon(UITheme.createDisabledIcon(icon));
             }
         }
     }

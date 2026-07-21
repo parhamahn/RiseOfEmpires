@@ -1,9 +1,10 @@
-package model.building;
+package model.building.empire;
 
+import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 
-public class Farm extends Building{
+public class Farm extends Building {
     public final static int productingPerUnit = 2;
 
     private Hex.ResourceType farming;

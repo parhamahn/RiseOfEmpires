@@ -6,7 +6,6 @@ import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class TaskStat{
 
@@ -27,8 +26,7 @@ public class TaskStat{
         UITheme.styleIconButton(button);
 
         if(!this.canAfford){
-            Image grayImage = GrayFilter.createDisabledImage(icon.getImage());
-            button.setDisabledIcon(new ImageIcon(grayImage));
+            button.setDisabledIcon(UITheme.createDisabledIcon(icon));
             button.setEnabled(false);
         }
 

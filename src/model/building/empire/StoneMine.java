@@ -1,9 +1,10 @@
-package model.building;
+package model.building.empire;
 
+import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 
-public class StoneMine extends Building{
+public class StoneMine extends Building {
     public final static int productingPerUnit = 2;
 
     private final static Cost cost = new Cost(25, 0,  0, 0, 3);

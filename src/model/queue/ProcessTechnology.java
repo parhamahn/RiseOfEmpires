@@ -1,6 +1,6 @@
 package model.queue;
 
-import model.building.Wall;
+import model.building.edge.Wall;
 import model.map.Hex;
 import model.state.GameState;
 

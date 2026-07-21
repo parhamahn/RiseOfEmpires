@@ -2,6 +2,10 @@ package model.product;
 
 import model.Season;
 import model.building.*;
+import model.building.empire.Farm;
+import model.building.empire.IronMine;
+import model.building.empire.Stable;
+import model.building.empire.StoneMine;
 import model.map.Hex;
 import model.queue.Technology;
 import model.state.EmpireState;

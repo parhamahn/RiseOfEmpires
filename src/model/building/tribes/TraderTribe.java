@@ -1,8 +1,8 @@
-package model.building;
+package model.building.tribes;
 
 import model.map.Hex;
 
-public class TraderTribe extends TribeBuilding {
+public class TraderTribe extends Tribe {
     public TraderTribe(Hex hex) {
         super(hex, "tradertribe");
     }
