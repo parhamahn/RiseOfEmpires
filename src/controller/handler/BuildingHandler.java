@@ -6,7 +6,11 @@ import model.state.GameState;
 import model.map.Hex;
 import model.Task;
 import model.unit.Unit;
-import model.building.*;
+import model.building.BuildingFactory;
+import model.building.TradingCenter;
+import model.building.Wall;
+import model.building.Road;
+import model.building.Building;
 import view.game.GamePanel;
 import view.game.lists.TaskStat;
 
@@ -30,20 +34,7 @@ public class BuildingHandler {
     public void handleBuildingTask(Task.TASK task, Hex hex) {
         if (hex.getBuilding() != null) return;
 
-        Building building = switch (task) {
-            case FARM -> new Farm(hex, hex.getResources().containsKey(Hex.ResourceType.WHEAT) ? Hex.ResourceType.WHEAT : Hex.ResourceType.RICE);
-            case LUMBER_MILL -> new LumberMill(hex);
-            case STONE_MINE -> new StoneMine(hex);
-            case IRON_MINE -> new IronMine(hex);
-            case STABLE -> new Stable(hex, Hex.ResourceType.COW);
-            case TOWN -> new Town(hex);
-            case MONUMENT -> new Monument(hex);
-            case BAZAAR -> new Bazaar(hex);
-            case DOCK ->  new Dock(hex);
-            case MILITARY_STABLE ->  new MilitaryStable(hex);
-            case WALL -> null;
-            case ROAD -> null;
-        };
+        Building building = BuildingFactory.createBuilding(task, hex);
 
         deductBuilderCost(building.getCost(), hex);
         hex.setBuilding(building);

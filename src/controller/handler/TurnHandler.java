@@ -2,10 +2,10 @@ package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
-import model.TownHallLevel;
 import model.building.Building;
 import model.building.TradingBuilding;
-import model.queue.*;
+import model.queue.Queue;
+import model.queue.Technology;
 import model.state.GameState;
 import model.unit.Unit;
 import view.game.GamePanel;
@@ -69,42 +69,23 @@ public class TurnHandler {
     private void processQueues() {
         List<Queue> toRemove = new ArrayList<>();
         int currentTurn = gameState.getWorldState().getTurnNumber();
+        boolean mapNeedsRefresh = false;
 
         for (Queue queue : gameState.getEmpireState().getQueues()) {
             if (queue.isComplete(currentTurn)) {
-                switch (queue.getQueueType()) {
-                    case COOK -> {
-                        CookQueue cq = (CookQueue) queue;
-                        cq.getUnit().setHex(gameState.getEmpireState().getTownHallHex());
-                        gameState.getEmpireState().getTownHallHex().getUnits().add(cq.getUnit());
-                        gameState.getEmpireState().getUnits().add(cq.getUnit());
-                        toRemove.add(queue);
-                    }
-                    case UPGRADE -> {
-                        UpgradeQueue uq = (UpgradeQueue) queue;
-                        TownHallLevel newLevel = uq.getTargetLevel();
-                        gameState.getEmpireState().setTownHallLevel(newLevel);
-                        gameState.getEmpireState().getStorage().upgradeStorage(newLevel.getMaxStorage());
-                        gameState.getEmpireState().getTownHallHex().getBuilding().setHP(newLevel.getMaxHP());
-                        gameState.getEmpireState().getTownHallHex().getBuilding().setMaxHP(newLevel.getMaxHP());
-                        gamePanel.getHudPanel().refresh();
-                        toRemove.add(queue);
-                    }
-                    case RESEARCH -> {
-                        ResearchQueue rq = (ResearchQueue) queue;
-                        gameState.getEmpireState().getResearchedTechnologies().add(rq.getTechnology());
-                        if (rq.getTechnology() == Technology.DEFENSIVE_PATTERN) {
-                            ProcessTechnology.processDefensivePattern(gameState);
-                            gamePanel.getMapPanel().markStaticDirty();
-                            gamePanel.getMapPanel().repaint();
-                        }
-                        toRemove.add(queue);
-                    }
+                if (queue.execute(gameState)) {
+                    mapNeedsRefresh = true;
                 }
+                toRemove.add(queue);
                 gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
             }
         }
         gameState.getEmpireState().getQueues().removeAll(toRemove);
+
+        if (mapNeedsRefresh) {
+            gamePanel.getMapPanel().markStaticDirty();
+            gamePanel.getMapPanel().repaint();
+        }
     }
 
     private void endTurn() {

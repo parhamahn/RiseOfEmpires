@@ -1,5 +1,7 @@
 package model.queue;
 
+import model.state.GameState;
+
 public abstract class Queue {
 
     public enum QUEUE_TYPE {UPGRADE, RESEARCH, COOK};
@@ -41,4 +43,7 @@ public abstract class Queue {
     public void addDelay(int turns) {
         this.delay += turns;
     }
+
+
+    public abstract boolean execute(GameState gameState);
 }

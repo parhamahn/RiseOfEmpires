@@ -69,19 +69,6 @@ public abstract class Building {
     public void setProducingStopped(boolean producingStopped) {this.producingStopped = producingStopped;}
 
     public static Cost getBuildCost(Task.TASK task) {
-        return switch (task) {
-            case FARM        -> Farm.getBuildCost();
-            case LUMBER_MILL -> LumberMill.getBuildCost();
-            case STONE_MINE  -> StoneMine.getBuildCost();
-            case IRON_MINE   -> IronMine.getBuildCost();
-            case STABLE      -> Stable.getBuildCost();
-            case TOWN        -> Town.getBuildCost();
-            case MONUMENT    -> Monument.getBuildCost();
-            case BAZAAR -> Bazaar.getBuildCost();
-            case DOCK -> Dock.getBuildCost();
-            case MILITARY_STABLE -> MilitaryStable.getBuildCost();
-            case WALL -> Wall.getBuildCost();
-            case ROAD -> Road.getBuildCost();
-        };
+        return BuildingFactory.getBuildCost(task);
     }
 }

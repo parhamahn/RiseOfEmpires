@@ -2,10 +2,9 @@ package model.combat;
 
 import model.map.Hex;
 import model.state.GameState;
-import model.unit.*;
+import model.unit.Unit;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -98,22 +97,13 @@ public class AttackUnit {
         for (Unit unit : defenderHex.getUnits()) {
             if (unit.isCombatUnit()) defenders.add(unit);
         }
-        defenders.sort(Comparator.comparingInt(u -> switch (u.getUnitType()) {
-            case SWORDSMAN -> 0;
-            case ARCHER -> 1;
-            case CAVALRY -> 2;
-            case CATAPULT -> 3;
-            default -> 4;
-        }));
 
-        for (int i = 0; i < this.defenderPower && !defenders.isEmpty(); i++) {
-            Unit target = defenders.get(0);
-            target.setHealth(target.getHealth() - 1);
-            if (target.getHealth() <= 0) {
-                defenders.remove(0);
-                gameState.getEmpireState().removeUnit(target);
-            }
-        }
+        DamageHandler chain = new SwordsmanDamageHandler();
+        chain.setNext(new ArcherDamageHandler())
+             .setNext(new CavalryDamageHandler())
+             .setNext(new CatapultDamageHandler());
+
+        chain.handle(defenders, this.defenderPower, gameState);
     }
 
 }
