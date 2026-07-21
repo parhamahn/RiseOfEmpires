@@ -3,6 +3,7 @@ package view.buildingpanel.townhall;
 import helpers.ImageLoader;
 import model.queue.Technology;
 import model.storage.Cost;
+import view.common.FormatUtils;
 import view.common.StyledButtons;
 import view.common.UITheme;
 
@@ -32,13 +33,13 @@ public class ResearchStat extends JPanel {
         descPanel.setLayout(new BoxLayout(descPanel, BoxLayout.Y_AXIS));
         descPanel.setAlignmentY(CENTER_ALIGNMENT);
 
-        JLabel nameLabel = new JLabel(formatName(technology));
+        JLabel nameLabel = new JLabel(FormatUtils.formatEnum(technology.toString()));
         nameLabel.setFont(UITheme.GAME_FONT.deriveFont(16f));
         nameLabel.setForeground(Color.WHITE);
         descPanel.add(nameLabel);
 
         Cost cost = technology.getCost();
-        JLabel costLabel = new JLabel(formatCost(cost));
+        JLabel costLabel = new JLabel(FormatUtils.formatCost(cost, false));
         costLabel.setFont(UITheme.GAME_FONT_SMALL);
         costLabel.setForeground(Color.LIGHT_GRAY);
         descPanel.add(costLabel);
@@ -82,44 +83,5 @@ public class ResearchStat extends JPanel {
 
     public Technology getTechnology() {
         return technology;
-    }
-
-
-    private String formatName(Technology technology) {
-        String name = technology.toString();
-        StringBuilder formatted = new StringBuilder();
-        boolean nextUpper = true;
-        for (char c : name.toCharArray()) {
-            if (c == '_') {
-                formatted.append(' ');
-                nextUpper = true;
-            } else if (nextUpper) {
-                formatted.append(Character.toUpperCase(c));
-                nextUpper = false;
-            } else {
-                formatted.append(Character.toLowerCase(c));
-            }
-        }
-        return formatted.toString();
-    }
-
-    private String formatCost(Cost cost) {
-        StringBuilder sb = new StringBuilder("Cost: ");
-        boolean first = true;
-        if (cost.getWoodNeeded() > 0) {
-            sb.append(cost.getWoodNeeded()).append(" Wood");
-            first = false;
-        }
-        if (cost.getStoneNeeded() > 0) {
-            if (!first) sb.append(", ");
-            sb.append(cost.getStoneNeeded()).append(" Stone");
-            first = false;
-        }
-        if (cost.getIronNeeded() > 0) {
-            if (!first) sb.append(", ");
-            sb.append(cost.getIronNeeded()).append(" Iron");
-        }
-        if (first) sb.append("None");
-        return sb.toString();
     }
 }

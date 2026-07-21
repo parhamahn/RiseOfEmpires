@@ -1,7 +1,6 @@
 package view.buildingpanel.townhall;
 
 import helpers.ImageLoader;
-import model.queue.Queue;
 import model.state.GameState;
 import view.common.StyledButtons;
 import view.common.UITheme;
@@ -41,10 +40,9 @@ public class UpgradeSection extends JPanel {
     }
 
     public void refresh() {
-        boolean upgradeQueued = gameState.getEmpireState().getQueues().stream()
-                .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
-
-        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null && !upgradeQueued && gameState.getEmpireState().getQueues().isEmpty()) {
+        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null
+                && !gameState.getEmpireState().hasUpgradeQueued()
+                && gameState.getEmpireState().getQueues().isEmpty()) {
             upgradeButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
             upgradeButton.setEnabled(true);
         } else {

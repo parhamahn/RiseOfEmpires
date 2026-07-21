@@ -1,13 +1,13 @@
 package view.game.map.disasters.earthquake;
 
 import controller.SelectionContext;
+import helpers.ImageLoader;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 import view.game.map.Camera;
 import view.game.map.MapLayer;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -23,9 +23,9 @@ public class CrackEffectLayer implements MapLayer {
     private static final int TOTAL_TICKS = FADE_IN_TICKS + HOLD_TICKS + FADE_OUT_TICKS;
 
     private static final BufferedImage[] CRACK_IMAGES = {
-            loadImage("/utils/crack1.png"),
-            loadImage("/utils/crack2.png"),
-            loadImage("/utils/crack3.png")
+            ImageLoader.getInstance().loadImage("/utils/crack1.png"),
+            ImageLoader.getInstance().loadImage("/utils/crack2.png"),
+            ImageLoader.getInstance().loadImage("/utils/crack3.png")
     };
 
     private final List<HexCrack> activeCracks = new ArrayList<>();
@@ -37,15 +37,6 @@ public class CrackEffectLayer implements MapLayer {
         double rotation;
         double scale;
         int ticksRemaining;
-    }
-
-    private static BufferedImage loadImage(String path) {
-        try {
-            return ImageIO.read(CrackEffectLayer.class.getResource(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public void addCracks(List<Hex> hexes) {

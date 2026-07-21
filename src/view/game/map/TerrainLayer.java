@@ -1,11 +1,11 @@
 package view.game.map;
 
 import controller.SelectionContext;
+import helpers.ImageLoader;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
@@ -18,23 +18,14 @@ public class TerrainLayer implements MapLayer {
 
 
     public TerrainLayer() {
-        terrainImages.put(Hex.TerrainType.PLAIN, loadImage("/utils/plainhex.png"));
-        terrainImages.put(Hex.TerrainType.FOREST, loadImage("/utils/foresthex.png"));
-        terrainImages.put(Hex.TerrainType.MOUNTAIN, loadImage("/utils/mountainhex.png"));
-        terrainImages.put(Hex.TerrainType.MEADOW, loadImage("/utils/meadowhex.png"));
-        terrainImages.put(Hex.TerrainType.SEA, loadImage("/utils/sea.png"));
-        terrainImages.put(Hex.TerrainType.TALL_MOUNTAIN, loadImage("/utils/tallmountain.png"));
+        terrainImages.put(Hex.TerrainType.PLAIN, ImageLoader.getInstance().loadImage("/utils/plainhex.png"));
+        terrainImages.put(Hex.TerrainType.FOREST, ImageLoader.getInstance().loadImage("/utils/foresthex.png"));
+        terrainImages.put(Hex.TerrainType.MOUNTAIN, ImageLoader.getInstance().loadImage("/utils/mountainhex.png"));
+        terrainImages.put(Hex.TerrainType.MEADOW, ImageLoader.getInstance().loadImage("/utils/meadowhex.png"));
+        terrainImages.put(Hex.TerrainType.SEA, ImageLoader.getInstance().loadImage("/utils/sea.png"));
+        terrainImages.put(Hex.TerrainType.TALL_MOUNTAIN, ImageLoader.getInstance().loadImage("/utils/tallmountain.png"));
     }
 
-
-    private BufferedImage loadImage(String path) {
-        try {
-            return ImageIO.read(getClass().getResource(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {

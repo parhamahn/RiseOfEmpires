@@ -46,12 +46,8 @@ public class ResearchSection extends JPanel {
             if (stat == null) continue;
 
             boolean alreadyResearched = gameState.getEmpireState().getResearchedTechnologies().contains(tech);
-            boolean canAfford = tech.getCost().enoughResources(gameState.getEmpireState().getStorage()) && tech.getTownHallLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal() && gameState.getEmpireState().getQueues().isEmpty();
-            boolean alreadyQueued = gameState.getEmpireState().getQueues().stream()
-                    .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.RESEARCH
-                            && ((ResearchQueue) q).getTechnology() == tech);
-
-            stat.refresh(canAfford, alreadyResearched || alreadyQueued);
+            boolean canAfford = !alreadyResearched && gameState.getEmpireState().canResearch(tech);
+            stat.refresh(canAfford, alreadyResearched);
         }
         revalidate();
         repaint();

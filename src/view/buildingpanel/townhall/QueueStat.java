@@ -2,6 +2,7 @@ package view.buildingpanel.townhall;
 
 import helpers.ImageLoader;
 import model.queue.*;
+import view.common.FormatUtils;
 import view.common.StyledButtons;
 import view.common.UITheme;
 
@@ -56,9 +57,9 @@ public class QueueStat extends JPanel {
 
     private String descriptionFor(Queue queue) {
         return switch (queue.getQueueType()) {
-            case COOK -> "Cooking " + formatEnum(((CookQueue) queue).getUnit().getUnitType().toString());
-            case UPGRADE -> "Upgrading to " + formatEnum(((UpgradeQueue) queue).getTargetLevel().toString());
-            case RESEARCH -> "Researching " + formatEnum(((ResearchQueue) queue).getTechnology().toString());
+            case COOK -> "Cooking " + FormatUtils.formatEnum(((CookQueue) queue).getUnit().getUnitType().toString());
+            case UPGRADE -> "Upgrading to " + FormatUtils.formatEnum(((UpgradeQueue) queue).getTargetLevel().toString());
+            case RESEARCH -> "Researching " + FormatUtils.formatEnum(((ResearchQueue) queue).getTechnology().toString());
         };
     }
 
@@ -72,23 +73,6 @@ public class QueueStat extends JPanel {
                 case DEFENSIVE_PATTERN -> "/utils/defensivepatternresearch.png";
             };
         };
-    }
-
-    private String formatEnum(String name) {
-        StringBuilder formatted = new StringBuilder();
-        boolean nextUpper = true;
-        for (char c : name.toCharArray()) {
-            if (c == '_') {
-                formatted.append(' ');
-                nextUpper = true;
-            } else if (nextUpper) {
-                formatted.append(Character.toUpperCase(c));
-                nextUpper = false;
-            } else {
-                formatted.append(Character.toLowerCase(c));
-            }
-        }
-        return formatted.toString();
     }
 
     public Queue getQueue() {

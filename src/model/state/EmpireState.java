@@ -6,8 +6,7 @@ import model.map.Hex;
 import model.map.Map;
 import model.product.AdjacencyBonus;
 import model.product.Production;
-import model.queue.Queue;
-import model.queue.Technology;
+import model.queue.*;
 import model.storage.Storage;
 import model.unit.*;
 
@@ -146,4 +145,31 @@ public class EmpireState {
     public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
     public long getCookQueueCount() {return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();}
     public int getHappiness() {return happiness;}
+
+    public boolean canCookUnit(Unit.UNIT_TYPE type) {
+        if (!queues.isEmpty()) return false;
+        if (type.getLevel().ordinal() > townHallLevel.ordinal()) return false;
+        if (type.getCookCost() != null && !type.getCookCost().enoughResources(storage)) return false;
+        if (type.getAttackPower() > 0) {
+            if (getCombatUnitCount() >= townHallLevel.getCombatUnitCap()) return false;
+        } else {
+            if (getCivilUnitCount() >= maxUnit) return false;
+        }
+        if (type == Unit.UNIT_TYPE.CAVALRY && buildings.stream().noneMatch(b -> b instanceof MilitaryStable)) return false;
+        return true;
+    }
+
+    public boolean canResearch(Technology tech) {
+        if (researchedTechnologies.contains(tech)) return false;
+        if (queues.stream().anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.RESEARCH
+                && ((ResearchQueue) q).getTechnology() == tech)) return false;
+        if (!tech.getCost().enoughResources(storage)) return false;
+        if (tech.getTownHallLevel().ordinal() > townHallLevel.ordinal()) return false;
+        if (!queues.isEmpty()) return false;
+        return true;
+    }
+
+    public boolean hasUpgradeQueued() {
+        return queues.stream().anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
+    }
 }

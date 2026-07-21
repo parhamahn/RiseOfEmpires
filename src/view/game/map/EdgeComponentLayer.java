@@ -1,13 +1,13 @@
 package view.game.map;
 
 import controller.SelectionContext;
+import helpers.ImageLoader;
 import model.building.EdgeComponent;
 import model.building.Road;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -22,17 +22,8 @@ public class EdgeComponentLayer implements MapLayer {
 
     private final HashMap<String, BufferedImage> imageCache = new HashMap<>();
 
-    private BufferedImage loadImage(String path) {
-        try {
-            return ImageIO.read(getClass().getResource(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     private BufferedImage getImage(String imageName) {
-        return imageCache.computeIfAbsent(imageName, this::loadImage);
+        return imageCache.computeIfAbsent(imageName, path -> ImageLoader.getInstance().loadImage(path));
     }
 
     @Override

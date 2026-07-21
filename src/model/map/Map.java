@@ -111,49 +111,28 @@ public class Map {
                 }
             }
         }
-        List<Hex> plainAndMeadowHexes = Stream.concat(plainHexes.stream(), meadowHexes.stream()).toList();;
+        List<Hex> plainAndMeadowHexes = Stream.concat(plainHexes.stream(), meadowHexes.stream()).toList();
         Random rand = new Random();
-        for(int i=0;i<farmerTribeCount;i++){
-            Hex hex = plainAndMeadowHexes.get(rand.nextInt(plainAndMeadowHexes.size()));
-            if(hex.getBuilding()!=null){
-                i-=1;
-            }else{
-                hex.setBuilding(new FarmerTribe(hex));
-            }
-        }
-        for(int i=0;i<mountainTribeCount;i++){
-            Hex hex = mountainHexes.get(rand.nextInt(mountainHexes.size()));
-            if(hex.getBuilding()!=null){
-                i-=1;
-            }else{
-                hex.setBuilding(new MountainTribe(hex));
-            }
-        }
-        for(int i=0;i<beachTribeCount;i++){
-            Hex hex = beachHexes.get(rand.nextInt(beachHexes.size()));
-            if(hex.getBuilding()!=null){
-                i-=1;
-            }else{
-                hex.setBuilding(new BeachTribe(hex));
-            }
-        }
-        for(int i=0;i<warriorTribeCount;i++){
-            Hex hex = getAllHexes().get(rand.nextInt(getAllHexes().size()));
-            if(hex.getBuilding()!=null){
-                i-=1;
-            }else{
-                hex.setBuilding(new WarriorTribe(hex));
-            }
-        }
-        for(int i=0;i<traderTribeCount;i++){
-            Hex hex = getAllHexes().get(rand.nextInt(getAllHexes().size()));
-            if(hex.getBuilding()!=null){
-                i-=1;
-            }else{
-                hex.setBuilding(new TraderTribe(hex));
-            }
-        }
+        placeTribes(farmerTribeCount, plainAndMeadowHexes, hex -> new FarmerTribe(hex), rand);
+        placeTribes(mountainTribeCount, mountainHexes, hex -> new MountainTribe(hex), rand);
+        placeTribes(beachTribeCount, beachHexes, hex -> new BeachTribe(hex), rand);
+        placeTribes(warriorTribeCount, getAllHexes(), hex -> new WarriorTribe(hex), rand);
+        placeTribes(traderTribeCount, getAllHexes(), hex -> new TraderTribe(hex), rand);
 
+    }
+
+    private void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, Building> factory, Random rand) {
+        int placed = 0;
+        int maxAttempts = count * 100;
+        int attempts = 0;
+        while (placed < count && attempts < maxAttempts) {
+            Hex hex = candidates.get(rand.nextInt(candidates.size()));
+            attempts++;
+            if (hex.getBuilding() == null) {
+                hex.setBuilding(factory.apply(hex));
+                placed++;
+            }
+        }
     }
 
     public void setResources(){

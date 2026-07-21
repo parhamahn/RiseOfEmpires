@@ -1,64 +1,33 @@
 package controller.handler.building.tradingcenter;
 
+import model.building.TradingBuilding;
 import model.building.TradingCenter;
 import model.state.GameState;
-import model.storage.ResourceType;
-import model.trade.Trade;
+import controller.handler.building.trading.TradingHandler;
 import view.buildingpanel.trading.TradingCenterPanel;
+import view.buildingpanel.trading.TradingPanel;
 import view.game.GamePanel;
 
-public class TradingCenterHandler {
+public class TradingCenterHandler extends TradingHandler {
 
-    private final GamePanel gamePanel;
-    private final GameState gameState;
     private TradingCenter tradingCenter;
 
     public TradingCenterHandler(GamePanel gamePanel, GameState gameState) {
-        this.gamePanel = gamePanel;
-        this.gameState = gameState;
+        super(gamePanel, gameState);
     }
 
-    public void setTradingCenter(TradingCenter tradingCenter){this.tradingCenter = tradingCenter;}
-
-    public void attachHandlers() {
-        TradingCenterPanel tradingCenterPanel = gamePanel.getTradingCenterPanel();
-
-        tradingCenterPanel.getCloseButton().addActionListener(e -> {gamePanel.setAnyPanelOpen(false); tradingCenterPanel.close();});
-
-        Runnable refreshDealButton = () ->{
-            Trade trade = buildTrade();
-            tradingCenterPanel.getDealSection().getDealButton().setEnabled(trade != null);
-            tradingCenterPanel.getDealSection().setSummary(trade == null ? null :
-                    trade.getToGiveCount() + " " + trade.getToGive() +
-                            "  ->  " + trade.getToGetCount() + " " + trade.getToGet());
-        };
-
-        tradingCenterPanel.getToGiveSection().setOnChange(refreshDealButton);
-        tradingCenterPanel.getToGetSection().setOnChange(refreshDealButton);
-        tradingCenterPanel.getQuantitySection().setOnChange(refreshDealButton);
-
-        tradingCenterPanel.getDealSection().getDealButton().addActionListener(e -> {
-            Trade trade = buildTrade();
-            if (trade == null || !trade.isAffordable(gameState.getEmpireState().getStorage())) return;
-
-            trade.deal(gameState.getEmpireState().getStorage());
-            tradingCenter.setUsedThisTurn(true);
-
-            gamePanel.getHudPanel().refresh();
-            tradingCenterPanel.refresh();
-        });
+    @Override
+    protected TradingPanel getPanel() {
+        return gamePanel.getTradingCenterPanel();
     }
 
-    private Trade buildTrade() {
-        TradingCenterPanel tradingCenterPanel = gamePanel.getTradingCenterPanel();
-        ResourceType give = tradingCenterPanel.getToGiveSection().getSelectedResource();
-        ResourceType get = tradingCenterPanel.getToGetSection().getSelectedResource();
-        int qty = tradingCenterPanel.getQuantitySection().getSelectedQuantity();
+    @Override
+    protected void setBuildingInstance(TradingBuilding building) {
+        this.tradingCenter = (TradingCenter) building;
+    }
 
-        Trade trade = new Trade(get, give, qty, tradingCenter.getMultiplier(qty));
-
-        if (!trade.isReady(!tradingCenter.isUsedThisTurn())) return null;
-
-        return trade;
+    public void setTradingCenter(TradingCenter tradingCenter) {
+        this.tradingCenter = tradingCenter;
+        super.setTradingBuilding(tradingCenter);
     }
 }

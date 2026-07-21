@@ -1,10 +1,6 @@
 package view.buildingpanel.townhall;
 
-import model.Task;
-import model.building.Building;
-import model.building.MilitaryStable;
 import model.state.GameState;
-import model.unit.Archer;
 import model.unit.Unit;
 import view.common.UITheme;
 
@@ -37,7 +33,7 @@ public class CookSection extends JPanel {
 
         cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
-            boolean canAfford = (type.getCookCost()==null || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))&&type.getLevel().ordinal()<=gameState.getEmpireState().getTownHallLevel().ordinal()&&gameState.getEmpireState().getQueues().isEmpty();
+            boolean canAfford = gameState.getEmpireState().canCookUnit(type);
             CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
             cookStats.put(type, stat);
             grid.add(stat);
@@ -63,22 +59,7 @@ public class CookSection extends JPanel {
         for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
             CookStat stat = entry.getValue();
             Unit.UNIT_TYPE type = entry.getKey();
-
-            boolean atCap;
-            if (type.getAttackPower() > 0) {
-                atCap = (gameState.getEmpireState().getCombatUnitCount()
-                        >= gameState.getEmpireState().getTownHallLevel().getCombatUnitCap());
-            } else {
-                atCap = (gameState.getEmpireState().getCivilUnitCount()
-                        >= gameState.getEmpireState().getMaxUnit());
-            }
-
-            boolean canAfford = ((type.getCookCost() == null
-                    || type.getCookCost().enoughResources(gameState.getEmpireState().getStorage()))
-                    && !atCap)
-                    && type.getLevel().ordinal() <= gameState.getEmpireState().getTownHallLevel().ordinal()
-                    && gameState.getEmpireState().getQueues().isEmpty()
-                    && (type!= Unit.UNIT_TYPE.CAVALRY || gameState.getEmpireState().getBuildings().stream().anyMatch(b -> b instanceof MilitaryStable));
+            boolean canAfford = gameState.getEmpireState().canCookUnit(type);
             stat.refresh(canAfford);
         }
         revalidate();

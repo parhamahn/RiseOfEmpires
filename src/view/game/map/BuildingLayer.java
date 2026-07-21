@@ -1,13 +1,13 @@
 package view.game.map;
 
 import controller.SelectionContext;
+import helpers.ImageLoader;
 import model.map.Hex;
 import model.map.Map;
 import model.building.Building;
 import model.state.GameState;
 import view.common.UITheme;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -18,34 +18,26 @@ public class BuildingLayer implements MapLayer {
 
 
     public BuildingLayer() {
-        buildingImages.put("townhall", loadImage("/utils/townhall.png"));
-        buildingImages.put("farmhex", loadImage("/utils/farmhex.png"));
-        buildingImages.put("lumbermillhex", loadImage("/utils/lumbermillhex.png"));
-        buildingImages.put("stoneminehex", loadImage("/utils/stoneminehex.png"));
-        buildingImages.put("ironminehex", loadImage("/utils/ironminehex.png"));
-        buildingImages.put("stablehex", loadImage("/utils/stablehex.png"));
-        buildingImages.put("townhex", loadImage("/utils/townhex.png"));
-        buildingImages.put("monumenthex", loadImage("/utils/monumenthex.png"));
-        buildingImages.put("bazaarhex", loadImage("/utils/bazaarhex.png"));
-        buildingImages.put("dockhex", loadImage("/utils/dockhex.png"));
-        buildingImages.put("tradingcenterhex", loadImage("/utils/tradingcenterhex.png"));
-        buildingImages.put("militarystablehex", loadImage("/utils/militarystablehex.png"));
-        buildingImages.put("farmertribe", loadImage("/utils/farmertribe.png"));
-        buildingImages.put("mountaintribe", loadImage("/utils/mountaintribe.png"));
-        buildingImages.put("warriortribe", loadImage("/utils/warriortribe.png"));
-        buildingImages.put("tradertribe", loadImage("/utils/tradertribe.png"));
-        buildingImages.put("beachtribe", loadImage("/utils/beachtribe.png"));
+        ImageLoader loader = ImageLoader.getInstance();
+        buildingImages.put("townhall", loader.loadImage("/utils/townhall.png"));
+        buildingImages.put("farmhex", loader.loadImage("/utils/farmhex.png"));
+        buildingImages.put("lumbermillhex", loader.loadImage("/utils/lumbermillhex.png"));
+        buildingImages.put("stoneminehex", loader.loadImage("/utils/stoneminehex.png"));
+        buildingImages.put("ironminehex", loader.loadImage("/utils/ironminehex.png"));
+        buildingImages.put("stablehex", loader.loadImage("/utils/stablehex.png"));
+        buildingImages.put("townhex", loader.loadImage("/utils/townhex.png"));
+        buildingImages.put("monumenthex", loader.loadImage("/utils/monumenthex.png"));
+        buildingImages.put("bazaarhex", loader.loadImage("/utils/bazaarhex.png"));
+        buildingImages.put("dockhex", loader.loadImage("/utils/dockhex.png"));
+        buildingImages.put("tradingcenterhex", loader.loadImage("/utils/tradingcenterhex.png"));
+        buildingImages.put("militarystablehex", loader.loadImage("/utils/militarystablehex.png"));
+        buildingImages.put("farmertribe", loader.loadImage("/utils/farmertribe.png"));
+        buildingImages.put("mountaintribe", loader.loadImage("/utils/mountaintribe.png"));
+        buildingImages.put("warriortribe", loader.loadImage("/utils/warriortribe.png"));
+        buildingImages.put("tradertribe", loader.loadImage("/utils/tradertribe.png"));
+        buildingImages.put("beachtribe", loader.loadImage("/utils/beachtribe.png"));
     }
 
-
-    private BufferedImage loadImage(String path) {
-        try {
-            return ImageIO.read(getClass().getResource(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
