@@ -6,7 +6,7 @@ import model.storage.Cost;
 
 public class MountainMission extends Mission {
 
-    Cost cost = new Cost(15, 0, 10, 0, 0);
+    private final Cost cost = new Cost(15, 0, 10, 0, 0);
 
     public MountainMission(Tribe tribe) {
         super(tribe, 6);

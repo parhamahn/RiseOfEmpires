@@ -20,11 +20,9 @@ public class TribeMainPanel extends BaseModalPanel{
     private JButton askAlliance;
 
     protected TribeMainPanel(GameState gameState, String title, String backgroundP) {
-        super(gameState, title, backgroundPath);
+        super(gameState, title, backgroundP);
         ImageIcon upgradeIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 56);
-        upgradeButton = StyledButtons.textButton(
-                "Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade(),
-                upgradeIcon, new Dimension(200, 56), 16f, UITheme.MENU_BUTTON_FG);
+
     }
 
     @Override
