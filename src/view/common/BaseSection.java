@@ -14,6 +14,15 @@ public abstract class BaseSection extends JPanel {
         add(Box.createRigidArea(new Dimension(0, gapAfterTitle)));
     }
 
+    protected BaseSection(String title, int gapAfterTitle, int Layout) {
+        setOpaque(false);
+        setLayout(new BoxLayout(this, Layout));
+
+        JLabel label = UITheme.createSectionTitle(title);
+        add(label);
+        add(Box.createRigidArea(new Dimension(0, gapAfterTitle)));
+    }
+
     protected BaseSection(String title) {
         this(title, 15);
     }

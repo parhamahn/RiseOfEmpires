@@ -1,37 +1,57 @@
 package view.buildingpanel.tribe;
 
-import helpers.ImageLoader;
+import model.building.tribes.Tribe;
 import model.state.GameState;
 import view.common.BaseModalPanel;
-import view.common.StyledButtons;
-import view.common.UITheme;
+
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TribeMainPanel extends BaseModalPanel{
 
-    private JButton sendGiftButton;
-    private JButton startTrade;
-    private JButton getMission;
-    private JButton doMission;
-    private JButton declareWar;
-    private JButton askPeace;
-    private JButton askAlliance;
+    private TribeInfoSection tribeInfoSection;
+    private TribeActionSection tribeActionSection;
+    private Tribe tribe;
 
-    protected TribeMainPanel(GameState gameState, String title, String backgroundP) {
-        super(gameState, title, backgroundP);
-        ImageIcon upgradeIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 56);
-
+    public TribeMainPanel(GameState gameState) {
+        super(gameState, "Tribe", "/utils/bazaarpanel.png");
     }
 
     @Override
     protected JPanel buildBody() {
-        return null;
+        JPanel body = new JPanel(new BorderLayout(0, 15));
+        body.setOpaque(false);
+        body.setBorder(BorderFactory.createEmptyBorder(0, 50, 40, 50));
+
+        tribeInfoSection = new TribeInfoSection();
+        tribeActionSection = new TribeActionSection();
+
+        body.add(tribeInfoSection, BorderLayout.WEST);
+        body.add(tribeActionSection, BorderLayout.EAST);
+
+        return body;
     }
 
     @Override
     public void refresh() {
+        tribeActionSection.reset(tribe);
+        tribeInfoSection.reset(tribe);
+    }
 
+    public TribeInfoSection getTribeInfoSection() {
+        return tribeInfoSection;
+    }
+
+    public TribeActionSection getTribeActionSection() {
+        return tribeActionSection;
+    }
+
+    public Tribe getTribe() {
+        return tribe;
+    }
+
+    public void setTribe(Tribe tribe) {
+        this.tribe = tribe;
     }
 }

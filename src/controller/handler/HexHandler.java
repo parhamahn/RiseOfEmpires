@@ -3,9 +3,11 @@ package controller.handler;
 import controller.SelectionContext;
 import controller.handler.building.bazaar.BazaarHandler;
 import controller.handler.building.tradingcenter.TradingCenterHandler;
+import controller.handler.building.tribe.TribeHandler;
 import helpers.SoundEffects;
 import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
+import model.building.tribes.Tribe;
 import model.state.GameState;
 import model.map.Hex;
 import view.game.GamePanel;
@@ -22,8 +24,9 @@ public class HexHandler {
     private final SelectionContext selectionContext;
     private final BazaarHandler bazaarHandler;
     private final TradingCenterHandler tradingCenterHandler;
+    private final TribeHandler tribeHandler;
 
-    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler, TradingCenterHandler tradingCenterHandler) {
+    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler, TradingCenterHandler tradingCenterHandler, TribeHandler tribeHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.unitHandler = unitHandler;
@@ -31,6 +34,7 @@ public class HexHandler {
         this.selectionContext = selectionContext;
         this.bazaarHandler = bazaarHandler;
         this.tradingCenterHandler = tradingCenterHandler;
+        this.tribeHandler = tribeHandler;
     }
 
     public void attachHexSelectionListener() {
@@ -76,7 +80,13 @@ public class HexHandler {
                         gamePanel.setAnyPanelOpen(true);
                         tradingCenterHandler.setTradingCenter((TradingCenter) clicked.getBuilding());
                         gamePanel.getTradingCenterPanel().open();
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe) {
+                        gamePanel.setAnyPanelOpen(true);
+                        tribeHandler.setTribe((Tribe) clicked.getBuilding());
+                        gamePanel.getTribeMainPanel().open();
                     }
+
+
                     selectionContext.setSelectedHex(clicked);
                     SoundEffects.getInstance().playSelectHexSoundEffect();
                     unitHandler.updateUnitListPanel();

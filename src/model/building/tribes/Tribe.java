@@ -1,5 +1,6 @@
 package model.building.tribes;
 
+import helpers.RandomNameGenerator;
 import model.building.Building;
 import model.map.Hex;
 
@@ -15,12 +16,14 @@ public abstract class Tribe extends Building {
     private boolean canRequestPeace;
     private boolean canDeclareWar;
     private boolean canGift;
+    private String name;
 
     private final String imageName;
 
     public Tribe(Hex hex, String imageName) {
         super(hex, null, null, 0, 200);
         this.imageName = imageName;
+        this.name = RandomNameGenerator.generateRandomName();
         changeRelation(0);
     }
 
@@ -35,6 +38,8 @@ public abstract class Tribe extends Building {
     }
 
     public void changeRelation(int newRelation) {
+        newRelation = Math.min(100, newRelation);
+        newRelation = Math.max(-100, newRelation);
         this.relation = newRelation;
 
         if(newRelation>=70 && newRelation<=100) {
@@ -100,5 +105,9 @@ public abstract class Tribe extends Building {
 
     public int getRelation() {
         return relation;
+    }
+
+    public String getName() {
+        return name;
     }
 }

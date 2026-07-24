@@ -3,6 +3,7 @@ package view.game;
 import view.buildingpanel.trading.BazaarPanel;
 import view.buildingpanel.townhall.TownHallPanel;
 import view.buildingpanel.trading.TradingCenterPanel;
+import view.buildingpanel.tribe.TribeMainPanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel {
     private TownHallPanel townHallPanel;
     private BazaarPanel bazaarPanel;
     private TradingCenterPanel tradingCenterPanel;
+    private TribeMainPanel tribeMainPanel;
     private JPanel hudWrapper;
     private JLayeredPane layeredPane;
     private PausePanel pausePanel;
@@ -41,6 +43,7 @@ public class GamePanel extends JPanel {
     public PausePanel getPausePanel() { return pausePanel; }
     public boolean isAnyPanelOpen() { return anyPanelOpen; }
     public void setAnyPanelOpen(boolean anyPanelOpen) { this.anyPanelOpen = anyPanelOpen; }
+    public TribeMainPanel getTribeMainPanel() { return tribeMainPanel; }
 
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -74,6 +77,9 @@ public class GamePanel extends JPanel {
         bazaarPanel = new BazaarPanel(mapPanel.getGameState());
         layeredPane.add(bazaarPanel, JLayeredPane.MODAL_LAYER);
 
+        tribeMainPanel = new TribeMainPanel(mapPanel.getGameState());
+        layeredPane.add(tribeMainPanel, JLayeredPane.MODAL_LAYER);
+
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -98,6 +104,7 @@ public class GamePanel extends JPanel {
         taskListPanel.setBounds(0, 0, size.width, size.height);
         townHallPanel.setBounds(0, 0, size.width, size.height);
         bazaarPanel.setBounds(0, 0, size.width, size.height);
+        tribeMainPanel.setBounds(0, 0, size.width, size.height);
         tradingCenterPanel.setBounds(0, 0, size.width, size.height);
         pausePanel.setBounds(0, 0, size.width, size.height);
     }
@@ -105,6 +112,7 @@ public class GamePanel extends JPanel {
     public void reset(){
         townHallPanel.close();
         bazaarPanel.close();
+        tribeMainPanel.close();
         unitListPanel.clear();
         taskListPanel.clear();
     }
