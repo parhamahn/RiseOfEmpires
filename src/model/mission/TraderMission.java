@@ -26,7 +26,7 @@ public class TraderMission extends  Mission{
     @Override
     public void processDone(GameState gameState) {
         if(super.getStatus().equals(MissionStatus.DONE)) {
-            super.getTribe().changeRelation(super.getTribe().getRelation()+20);
+            super.getTribe().changeRelation(super.getTribe().getRelation()+20, gameState.getEmpireState().getAllies());
             TraderTribe traderTribe = (TraderTribe)super.getTribe();
             TraderTrade tradingStrategy = (TraderTrade) traderTribe.getTradeStrategy();
             tradingStrategy.setMissionBonus(0.1);

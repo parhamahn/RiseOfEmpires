@@ -27,7 +27,7 @@ public class WarriorMission extends Mission{
     @Override
     public void processDone(GameState gameState) {
         if(super.getStatus().equals(MissionStatus.DONE)){
-            super.getTribe().changeRelation(super.getTribe().getRelation()+20);
+            super.getTribe().changeRelation(super.getTribe().getRelation()+20, gameState.getEmpireState().getAllies());
             for(int i=0;i<3;i++){
                 Unit unit = new Swordsman();
                 gameState.getEmpireState().getUnits().add(unit);

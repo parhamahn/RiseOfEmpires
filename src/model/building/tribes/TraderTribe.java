@@ -29,7 +29,4 @@ public class TraderTribe extends Tribe {
         return missions;
     }
 
-    public static double getMultiplier() {
-        return 0.8;
-    }
 }

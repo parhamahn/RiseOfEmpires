@@ -1,6 +1,7 @@
 package view.buildingpanel.trading;
 
 import model.state.GameState;
+import model.storage.ResourceType;
 import view.common.BaseModalPanel;
 
 import javax.swing.*;
@@ -23,8 +24,8 @@ public abstract class TradingPanel extends BaseModalPanel {
         body.setOpaque(false);
         body.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
 
-        toGiveSection = new ToGiveSection();
-        toGetSection = new ToGetSection();
+        toGiveSection = new ToGiveSection(ResourceType.values());
+        toGetSection = new ToGetSection(ResourceType.values());
         quantitySection = new QuantitySection();
         dealSection = new DealSection();
 

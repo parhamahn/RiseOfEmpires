@@ -29,7 +29,7 @@ public class MountainMission extends Mission {
     public void processDone(GameState gameState) {
         if(super.getStatus()==MissionStatus.DONE) {
             gameState.getEmpireState().getStorage().setStoneQuantity(gameState.getEmpireState().getStorage().getStoneQuantity() + 20);
-            super.getTribe().changeRelation(super.getTribe().getRelation()+15);
+            super.getTribe().changeRelation(super.getTribe().getRelation()+15, gameState.getEmpireState().getAllies());
             super.setStatus(MissionStatus.REWARDED);
         }
     }

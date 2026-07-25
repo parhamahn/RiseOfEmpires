@@ -5,6 +5,7 @@ import model.building.*;
 import model.building.empire.MilitaryStable;
 import model.building.empire.Monument;
 import model.building.empire.TownHall;
+import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.map.Map;
 import model.product.AdjacencyBonus;
@@ -32,6 +33,8 @@ public class EmpireState {
     private TownHallLevel townHallLevel;
     private int happiness;
     private Season.SeasonType season;
+    private List<Tribe> allies;
+    private int warHappinessEffect;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -42,6 +45,8 @@ public class EmpireState {
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.season = Season.SeasonType.SPRING;
+        this.allies = new  ArrayList<>();
+        this.warHappinessEffect = 0;
     }
 
     public Season.SeasonType getSeason() {
@@ -97,7 +102,7 @@ public class EmpireState {
     }
 
     public void recalculateHappiness() {
-        this.happiness = 0;
+        this.happiness = this.warHappinessEffect;
 
         for(Building building:buildings){
             if(building.isTown()){this.happiness -= 1;}
@@ -174,5 +179,17 @@ public class EmpireState {
 
     public boolean hasUpgradeQueued() {
         return queues.stream().anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
+    }
+
+    public List<Tribe> getAllies() {
+        return allies;
+    }
+
+    public int getWarHappinessEffect() {
+        return warHappinessEffect;
+    }
+
+    public void setWarHappinessEffect(int warHappinessEffect) {
+        this.warHappinessEffect = warHappinessEffect;
     }
 }

@@ -3,7 +3,9 @@ package view.game;
 import view.buildingpanel.trading.BazaarPanel;
 import view.buildingpanel.townhall.TownHallPanel;
 import view.buildingpanel.trading.TradingCenterPanel;
+import view.buildingpanel.tribe.GiftPanel;
 import view.buildingpanel.tribe.TribeMainPanel;
+import view.buildingpanel.tribe.TribeTradePanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
@@ -28,6 +30,8 @@ public class GamePanel extends JPanel {
     private BazaarPanel bazaarPanel;
     private TradingCenterPanel tradingCenterPanel;
     private TribeMainPanel tribeMainPanel;
+    private GiftPanel giftPanel;
+    private TribeTradePanel tribeTradePanel;
     private JPanel hudWrapper;
     private JLayeredPane layeredPane;
     private PausePanel pausePanel;
@@ -44,6 +48,8 @@ public class GamePanel extends JPanel {
     public boolean isAnyPanelOpen() { return anyPanelOpen; }
     public void setAnyPanelOpen(boolean anyPanelOpen) { this.anyPanelOpen = anyPanelOpen; }
     public TribeMainPanel getTribeMainPanel() { return tribeMainPanel; }
+    public GiftPanel getGiftPanel() { return giftPanel; }
+    public TribeTradePanel getTribeTradePanel() { return tribeTradePanel; }
 
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -80,6 +86,12 @@ public class GamePanel extends JPanel {
         tribeMainPanel = new TribeMainPanel(mapPanel.getGameState());
         layeredPane.add(tribeMainPanel, JLayeredPane.MODAL_LAYER);
 
+        giftPanel = new GiftPanel(mapPanel.getGameState());
+        layeredPane.add(giftPanel, JLayeredPane.MODAL_LAYER);
+
+        tribeTradePanel = new TribeTradePanel(mapPanel.getGameState());
+        layeredPane.add(tribeTradePanel, JLayeredPane.MODAL_LAYER);
+
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -105,6 +117,8 @@ public class GamePanel extends JPanel {
         townHallPanel.setBounds(0, 0, size.width, size.height);
         bazaarPanel.setBounds(0, 0, size.width, size.height);
         tribeMainPanel.setBounds(0, 0, size.width, size.height);
+        giftPanel.setBounds(0, 0, size.width, size.height);
+        tribeTradePanel.setBounds(0, 0, size.width, size.height);
         tradingCenterPanel.setBounds(0, 0, size.width, size.height);
         pausePanel.setBounds(0, 0, size.width, size.height);
     }
@@ -113,6 +127,8 @@ public class GamePanel extends JPanel {
         townHallPanel.close();
         bazaarPanel.close();
         tribeMainPanel.close();
+        giftPanel.close();
+        tribeTradePanel.close();
         unitListPanel.clear();
         taskListPanel.clear();
     }

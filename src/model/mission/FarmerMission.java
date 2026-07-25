@@ -29,7 +29,7 @@ public class FarmerMission extends Mission {
     public void processDone(GameState gameState) {
         if(super.getStatus()==MissionStatus.DONE) {
             gameState.getEmpireState().getStorage().setFoodQuantity(gameState.getEmpireState().getStorage().getFoodQuantity() + 30);
-            super.getTribe().changeRelation(super.getTribe().getRelation()+15);
+            super.getTribe().changeRelation(super.getTribe().getRelation()+15, gameState.getEmpireState().getAllies());
             super.setStatus(MissionStatus.REWARDED);
         }
     }

@@ -1,7 +1,14 @@
 package controller.handler.building.tribe;
 
 import model.building.tribes.Tribe;
+import model.mission.Mission;
+import model.mission.MissionStatus;
 import model.state.GameState;
+import model.storage.ResourceType;
+import model.storage.Storage;
+import model.trade.tribe.TribeTrade;
+import view.buildingpanel.tribe.GiftPanel;
+import view.buildingpanel.tribe.TribeTradePanel;
 import view.game.GamePanel;
 
 public class TribeHandler {
@@ -10,18 +17,138 @@ public class TribeHandler {
     private GameState gameState;
     private GamePanel gamePanel;
 
-    public TribeHandler(GameState gameState, GamePanel gamePanel){
+    public TribeHandler(GameState gameState, GamePanel gamePanel) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
     }
 
-    public void attachHandlers(){
+    public void attachHandlers() {
 
         gamePanel.getTribeMainPanel().getCloseButton().addActionListener(e -> {
             gamePanel.getTribeMainPanel().close();
             gamePanel.setAnyPanelOpen(false);
         });
 
+        gamePanel.getTribeMainPanel().getTribeActionSection().getDeclareWar().addActionListener(e -> {
+            declareWar(gamePanel.getTribeMainPanel().getTribe());
+            gamePanel.getTribeMainPanel().refresh();
+        });
+
+        attachGiftHandlers();
+        attachTradeHandlers();
+    }
+
+    private void attachGiftHandlers() {
+        GiftPanel giftPanel = gamePanel.getGiftPanel();
+        Storage storage = gameState.getEmpireState().getStorage();
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getSendGiftButton().addActionListener(e -> {
+            gamePanel.getTribeMainPanel().close();
+            giftPanel.refresh();
+            giftPanel.open();
+        });
+
+        giftPanel.getCloseButton().addActionListener(e -> {
+            giftPanel.close();
+            gamePanel.setAnyPanelOpen(false);
+        });
+
+        giftPanel.getResourceSection().setOnChange(() -> giftPanel.updateSliderMax(storage));
+        giftPanel.getQuantitySection().setOnChange(() -> giftPanel.updateSummary(storage));
+
+        giftPanel.getSendButton().addActionListener(e -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            ResourceType resource = giftPanel.getSelectedResource();
+            int qty = giftPanel.getQuantity();
+
+            if (resource == null || qty <= 0 || storage.getQuantity(resource) < qty) return;
+
+            sendGift(current, resource, qty);
+            gamePanel.getHudPanel().refresh();
+            giftPanel.updateSliderMax(storage);
+            gamePanel.getTribeMainPanel().refresh();
+        });
+    }
+
+    private void attachTradeHandlers() {
+        TribeTradePanel tradePanel = gamePanel.getTribeTradePanel();
+        Storage storage = gameState.getEmpireState().getStorage();
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getStartTrade().addActionListener(e -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            gamePanel.getTribeMainPanel().close();
+            TribeTrade trade = current.getTradeStrategy();
+            ResourceType[] provided = trade != null
+                    ? trade.getResourceTypes().toArray(ResourceType[]::new)
+                    : ResourceType.values();
+            tradePanel.setProvidedTypes(provided);
+            tradePanel.refresh();
+            tradePanel.open();
+        });
+
+        tradePanel.getCloseButton().addActionListener(e -> {
+            tradePanel.close();
+            gamePanel.setAnyPanelOpen(false);
+        });
+
+        Runnable onResourceChange = () -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            tradePanel.updateSliderMax(storage);
+            tradePanel.updateSummary(storage, current);
+        };
+        tradePanel.getToGiveSection().setOnChange(onResourceChange);
+        tradePanel.getToGetSection().setOnChange(onResourceChange);
+        tradePanel.getQuantitySection().setOnChange(() -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            tradePanel.updateSummary(storage, current);
+        });
+
+        tradePanel.getDealButton().addActionListener(e -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            ResourceType giveResource = tradePanel.getSelectedGiveResource();
+            ResourceType getResource = tradePanel.getSelectedGetResource();
+            int qty = tradePanel.getQuantity();
+
+            if (giveResource == null || getResource == null || qty <= 0) return;
+            if (storage.getQuantity(giveResource) < qty) return;
+
+            executeTrade(current, giveResource, getResource, qty);
+            gamePanel.getHudPanel().refresh();
+            tradePanel.updateSliderMax(storage);
+            tradePanel.updateSummary(storage, current);
+            gamePanel.getTribeMainPanel().refresh();
+        });
+    }
+
+    public void sendGift(Tribe tribe, ResourceType resourceType, int amount) {
+        gameState.getEmpireState().getStorage().setQuantity(resourceType,
+                gameState.getEmpireState().getStorage().getQuantity(resourceType) - amount);
+        int relation = GiftPanel.computeRelationGain(resourceType, amount);
+        tribe.changeRelation(tribe.getRelation() + relation, gameState.getEmpireState().getAllies());
+    }
+
+    public void executeTrade(Tribe tribe, ResourceType giveType, ResourceType getType, int amount) {
+        Storage storage = gameState.getEmpireState().getStorage();
+        TribeTrade trade = tribe.getTradeStrategy();
+        if (trade == null) return;
+
+        int received = (int) Math.floor(amount * trade.getRate());
+        storage.setQuantity(giveType, storage.getQuantity(giveType) - amount);
+        storage.setQuantity(getType, storage.getQuantity(getType) + received);
+    }
+
+    public void declareWar(Tribe tribe) {
+        int happinessChange = 0;
+        if (tribe.getRelationStatus() == Tribe.RelationStatus.ALLY) happinessChange = -15;
+        if (tribe.getRelationStatus() == Tribe.RelationStatus.FRIEND) happinessChange = -5;
+
+        gameState.getEmpireState().setWarHappinessEffect(
+                gameState.getEmpireState().getWarHappinessEffect() + happinessChange);
+
+        tribe.changeRelation(-100, gameState.getEmpireState().getAllies());
+        for (Mission mission : tribe.getMissions()) {
+            mission.setStatus(MissionStatus.CANCELED);
+        }
     }
 
     public Tribe getTribe() {
@@ -37,15 +164,7 @@ public class TribeHandler {
         return gameState;
     }
 
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     public GamePanel getGamePanel() {
         return gamePanel;
-    }
-
-    public void setGamePanel(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
     }
 }

@@ -67,7 +67,11 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.goldBorder(getMission);
             getMission.setEnabled(true);
         }
-        if(!tribe.isCanTrade()){startTrade.setEnabled(false);   startTrade.setBorder(null);}else{
+        if(tribe.getActiveMission()==null){ doMission.setEnabled(false); }else {
+            StyledButtons.goldBorder(doMission);
+            doMission.setEnabled(true);
+        }
+        if(!tribe.isCanTrade() || tribe.getTradeStrategy() == null){startTrade.setEnabled(false);   startTrade.setBorder(null);}else{
             StyledButtons.goldBorder(startTrade);
             startTrade.setEnabled(true);
         }

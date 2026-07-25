@@ -1,7 +1,9 @@
 package model.trade.tribe;
 
 import model.storage.ResourceType;
-import model.trade.Trade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BeachTrade implements TribeTrade{
     @Override
@@ -10,7 +12,14 @@ public class BeachTrade implements TribeTrade{
     }
 
     @Override
-    public boolean canReceive(ResourceType type) {
+    public boolean canProvide(ResourceType type) {
         return type==ResourceType.FOOD;
+    }
+
+    @Override
+    public List<ResourceType> getResourceTypes() {
+        List<ResourceType> providedResources =  new ArrayList<>();
+        providedResources.add(ResourceType.FOOD);
+        return providedResources;
     }
 }

@@ -79,10 +79,15 @@ public class OptionSection extends JPanel {
         return selectedIndex;
     }
 
+    public void setItemEnabled(int index, boolean enabled) {
+        buttons[index].setEnabled(enabled);
+    }
+
     public void reset() {
         selectedIndex = -1;
         for (JButton b : buttons) {
             b.setBorderPainted(false);
+            b.setEnabled(true);
         }
     }
 }

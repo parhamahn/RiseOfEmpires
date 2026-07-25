@@ -2,6 +2,9 @@ package model.trade.tribe;
 
 import model.storage.ResourceType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TraderTrade implements TribeTrade {
     private double missionBonus = 0.0;
 
@@ -11,8 +14,18 @@ public class TraderTrade implements TribeTrade {
     }
 
     @Override
-    public boolean canReceive(ResourceType type) {
+    public boolean canProvide(ResourceType type) {
         return true;
+    }
+
+    @Override
+    public List<ResourceType> getResourceTypes() {
+        List<ResourceType> providedResources =  new ArrayList<>();
+        providedResources.add(ResourceType.FOOD);
+        providedResources.add(ResourceType.WOOD);
+        providedResources.add(ResourceType.STONE);
+        providedResources.add(ResourceType.IRON);
+        return providedResources;
     }
 
     public double getMissionBonus() {
