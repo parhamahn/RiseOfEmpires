@@ -1,6 +1,7 @@
 package model;
 
 import model.building.empire.Bazaar;
+import model.building.empire.Dock;
 import model.building.empire.MilitaryStable;
 import model.map.Hex;
 import model.state.GameState;
@@ -29,8 +30,6 @@ public class Task {
         if(hex.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || hex.getTerrainType()== Hex.TerrainType.SEA) {return availableTasks;}
         if (hex.isDiscovered() && hex.getBuilding()==null) {
             availableTasks.add(TASK.TOWN);
-            availableTasks.add(TASK.WALL);
-            availableTasks.add(TASK.ROAD);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
                     if ((hex.getResources().getOrDefault(Hex.ResourceType.COW,   0) > 0 || hex.getResources().getOrDefault(Hex.ResourceType.SHEEP,  0) > 0)) {availableTasks.add(TASK.STABLE);}
@@ -62,8 +61,12 @@ public class Task {
                 }
             }
             for(Hex neighhex:gameState.getWorldState().getMap().getNeighbourHexes(hex)){
-                if(neighhex!=null &&neighhex.isDiscovered() && neighhex.getTerrainType()== Hex.TerrainType.SEA){availableTasks.add(TASK.DOCK);}
+                if(neighhex!=null &&neighhex.isDiscovered() && neighhex.getTerrainType()== Hex.TerrainType.SEA && gameState.getEmpireState().getTownHallLevel().ordinal()>= Dock.getLevel().ordinal()){availableTasks.add(TASK.DOCK);}
             }
+        }
+        if (hex.isDiscovered()) {
+            availableTasks.add(TASK.WALL);
+            availableTasks.add(TASK.ROAD);
         }
         return availableTasks;
     }

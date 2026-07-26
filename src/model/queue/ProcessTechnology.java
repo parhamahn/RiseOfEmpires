@@ -13,6 +13,7 @@ public class ProcessTechnology {
             townHallHex.getWallsWith().add(wall);
             neigh.getWallsWith().add(wall);
         }
+        townHallHex.getBuilding().setMaxHP(350);
     }
 
 }

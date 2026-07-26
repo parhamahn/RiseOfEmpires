@@ -25,6 +25,7 @@ public abstract class Tribe extends Building {
     private String name;
     private Mission activeMission;
     private boolean isPermanentReward;
+    private boolean usedThisTurn;
 
     private final String imageName;
 
@@ -126,7 +127,7 @@ public abstract class Tribe extends Building {
 
 
     public boolean isCanTrade() {
-        return canTrade;
+        return canTrade && !usedThisTurn;
     }
 
     public boolean isCanGetMission() {
@@ -217,5 +218,13 @@ public abstract class Tribe extends Building {
 
     public void setPermanentReward(boolean permanentReward) {
         isPermanentReward = permanentReward;
+    }
+
+    public boolean isUsedThisTurn() {
+        return usedThisTurn;
+    }
+
+    public void setUsedThisTurn(boolean usedThisTurn) {
+        this.usedThisTurn = usedThisTurn;
     }
 }

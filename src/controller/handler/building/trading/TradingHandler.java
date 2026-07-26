@@ -42,9 +42,14 @@ public abstract class TradingHandler {
                             "  ->  " + trade.getToGetCount() + " " + trade.getToGet());
         };
 
-        panel.getToGiveSection().setOnChange(refreshDealButton);
+        Runnable onResourceChange = () -> {
+            onGiveResourceChanged();
+            refreshDealButton.run();
+        };
+
+        panel.getToGiveSection().setOnChange(onResourceChange);
         panel.getToGetSection().setOnChange(refreshDealButton);
-        panel.getQuantitySection().setOnChange(refreshDealButton);
+        panel.wireQuantityOnChange(refreshDealButton);
 
         panel.getDealSection().getDealButton().addActionListener(e -> {
             Trade trade = buildTrade();
@@ -58,11 +63,14 @@ public abstract class TradingHandler {
         });
     }
 
-    private Trade buildTrade() {
+    public void onGiveResourceChanged() {
+    }
+
+    protected Trade buildTrade() {
         TradingPanel panel = getPanel();
         ResourceType give = panel.getToGiveSection().getSelectedResource();
         ResourceType get = panel.getToGetSection().getSelectedResource();
-        int qty = panel.getQuantitySection().getSelectedQuantity();
+        int qty = panel.getQuantityValue();
 
         Trade trade = new Trade(get, give, qty, tradingBuilding.getMultiplier(qty));
 

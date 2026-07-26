@@ -31,7 +31,7 @@ public class Main {
 
             Storage storage = new Storage();
             Production production = new Production();
-            Map map = new Map(50, 100);
+            Map map = new Map(32, 50);
             GameState gameState = new GameState(storage, production, map);
             SelectionContext selectionContext = new SelectionContext();
 

@@ -45,7 +45,7 @@ public class BuildingHandler {
 
     public void updateTaskListPanel() {
         Hex selected = selectionContext.getSelectedHex();
-        if (selected != null && selected.getBuilding() == null) {
+        if (selected != null) {
             Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
             for (Task.TASK task : Task.getAvailableTasks(selected, gameState)) {
                 boolean enoughAP = false;
@@ -71,14 +71,26 @@ public class BuildingHandler {
                     }
                 });
             }
-        } else {
-            gamePanel.getTaskListPanel().clear();
             if(selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter)) {
                 for(ActionListener al:gamePanel.getTaskListPanel().getDestroyButton().getActionListeners()) {
                     gamePanel.getTaskListPanel().getDestroyButton().removeActionListener(al);
                 }
                 gamePanel.getTaskListPanel().getDestroyButton().addActionListener(e -> {destroyBuilding(selected);});
                 gamePanel.getTaskListPanel().showDestroyButton();
+            }
+            if (!selected.getWallsWith().isEmpty()) {
+                for(ActionListener al:gamePanel.getTaskListPanel().getWallDestroyButton().getActionListeners()) {
+                    gamePanel.getTaskListPanel().getWallDestroyButton().removeActionListener(al);
+                }
+                gamePanel.getTaskListPanel().getWallDestroyButton().addActionListener(e -> {startWallDestroy(selected);});
+                gamePanel.getTaskListPanel().showWallDestroyButton();
+            }
+            if (!selected.getRoadsTo().isEmpty()) {
+                for(ActionListener al:gamePanel.getTaskListPanel().getRoadDestroyButton().getActionListeners()) {
+                    gamePanel.getTaskListPanel().getRoadDestroyButton().removeActionListener(al);
+                }
+                gamePanel.getTaskListPanel().getRoadDestroyButton().addActionListener(e -> {startRoadDestroy(selected);});
+                gamePanel.getTaskListPanel().showRoadDestroyButton();
             }
         }
     }
@@ -91,6 +103,7 @@ public class BuildingHandler {
                     Building building = hex.getBuilding();
                     if (building != null && !building.isTownHall()) {
                         gameState.getEmpireState().removeBuilding(building);
+                        unit.setActionPoints(unit.getActionPoints() - 1);
                         afterBuildingChange();
                     }
                 }
@@ -158,6 +171,68 @@ public class BuildingHandler {
         edgeHex.getRoadsTo().add(road);
 
         selectionContext.setRoadOriginHex(null);
+        afterBuildingChange();
+    }
+
+    public void startWallDestroy(Hex origin) {
+        selectionContext.setSelectedUnit(null);
+        selectionContext.setDestroyWallOriginHex(origin);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().repaint();
+    }
+
+    public void handleWallDestroy(Hex origin, Hex edgeHex) {
+        if (edgeHex == null || !origin.hasWallTo(edgeHex)) {
+            selectionContext.setDestroyWallOriginHex(null);
+            return;
+        }
+
+        Wall wallToRemove = null;
+        for (Wall wall : origin.getWallsWith()) {
+            if (wall.connects(origin, edgeHex)) {
+                wallToRemove = wall;
+                break;
+            }
+        }
+
+        if (wallToRemove != null) {
+            deductBuilderCost(new model.storage.Cost(0, 0, 0, 0, 1), origin);
+            origin.getWallsWith().remove(wallToRemove);
+            edgeHex.getWallsWith().remove(wallToRemove);
+        }
+
+        selectionContext.setDestroyWallOriginHex(null);
+        afterBuildingChange();
+    }
+
+    public void startRoadDestroy(Hex origin) {
+        selectionContext.setSelectedUnit(null);
+        selectionContext.setDestroyRoadOriginHex(origin);
+        gamePanel.getTaskListPanel().clear();
+        gamePanel.getMapPanel().repaint();
+    }
+
+    public void handleRoadDestroy(Hex origin, Hex edgeHex) {
+        if (edgeHex == null || !origin.hasRoadTo(edgeHex)) {
+            selectionContext.setDestroyRoadOriginHex(null);
+            return;
+        }
+
+        Road roadToRemove = null;
+        for (Road road : origin.getRoadsTo()) {
+            if (road.connects(origin, edgeHex)) {
+                roadToRemove = road;
+                break;
+            }
+        }
+
+        if (roadToRemove != null) {
+            deductBuilderCost(new model.storage.Cost(0, 0, 0, 0, 1), origin);
+            origin.getRoadsTo().remove(roadToRemove);
+            edgeHex.getRoadsTo().remove(roadToRemove);
+        }
+
+        selectionContext.setDestroyRoadOriginHex(null);
         afterBuildingChange();
     }
 

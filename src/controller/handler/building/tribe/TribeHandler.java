@@ -77,7 +77,8 @@ public class TribeHandler {
 
             sendGift(current, resource, qty);
             gamePanel.getHudPanel().refresh();
-            giftPanel.updateSliderMax(storage);
+            giftPanel.close();
+            gamePanel.getTribeMainPanel().open();
             gamePanel.getTribeMainPanel().refresh();
         });
     }
@@ -126,8 +127,8 @@ public class TribeHandler {
 
             executeTrade(current, giveResource, getResource, qty);
             gamePanel.getHudPanel().refresh();
-            tradePanel.updateSliderMax(storage);
-            tradePanel.updateSummary(storage, current);
+            tradePanel.close();
+            gamePanel.getTribeMainPanel().open();
             gamePanel.getTribeMainPanel().refresh();
         });
     }
@@ -147,6 +148,7 @@ public class TribeHandler {
         int received = (int) Math.floor(amount * trade.getRate());
         storage.setQuantity(giveType, storage.getQuantity(giveType) - amount);
         storage.setQuantity(getType, storage.getQuantity(getType) + received);
+        tribe.setUsedThisTurn(true);
     }
 
     public void declareWar(Tribe tribe) {

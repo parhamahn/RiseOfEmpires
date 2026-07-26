@@ -9,10 +9,10 @@ import java.awt.*;
 
 public abstract class TradingPanel extends BaseModalPanel {
 
-    private ToGiveSection toGiveSection;
-    private ToGetSection toGetSection;
-    private QuantitySection quantitySection;
-    private DealSection dealSection;
+    protected ToGiveSection toGiveSection;
+    protected ToGetSection toGetSection;
+    protected QuantitySection quantitySection;
+    protected DealSection dealSection;
 
     protected TradingPanel(GameState gameState, String title, String backgroundPath) {
         super(gameState, title, backgroundPath);
@@ -50,4 +50,12 @@ public abstract class TradingPanel extends BaseModalPanel {
     public ToGetSection getToGetSection() { return toGetSection; }
     public QuantitySection getQuantitySection() { return quantitySection; }
     public DealSection getDealSection() { return dealSection; }
+
+    public int getQuantityValue() {
+        return quantitySection.getSelectedQuantity();
+    }
+
+    public void wireQuantityOnChange(Runnable r) {
+        quantitySection.setOnChange(r);
+    }
 }

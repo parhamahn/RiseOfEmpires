@@ -4,6 +4,7 @@ import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
 import model.building.Building;
 import model.building.TradingBuilding;
+import model.building.tribes.Tribe;
 import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
@@ -126,6 +127,10 @@ public class TurnHandler {
                         gameState.getEmpireState().removeBuilding(building);
                     }
                 }
+            }
+            if(building instanceof Tribe){
+                Tribe  tribe = (Tribe) building;
+                tribe.setUsedThisTurn(false);
             }
         }
         gameState.getWorldState().nextTurn();

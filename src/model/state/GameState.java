@@ -41,7 +41,7 @@ public class GameState {
     }
 
     public void reset(){
-        Map map = new Map(50, 100);
+        Map map = new Map(32, 50);
         empireState.getStorage().reset();
         empireState.getProduction().reset();
         empireState.getBuildings().clear();

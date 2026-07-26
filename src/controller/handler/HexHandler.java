@@ -58,6 +58,18 @@ public class HexHandler {
                     return;
                 }
 
+                if (selectionContext.getDestroyWallOriginHex() != null) {
+                    buildingHandler.handleWallDestroy(selectionContext.getDestroyWallOriginHex(), clicked);
+                    gamePanel.repaint();
+                    return;
+                }
+
+                if (selectionContext.getDestroyRoadOriginHex() != null) {
+                    buildingHandler.handleRoadDestroy(selectionContext.getDestroyRoadOriginHex(), clicked);
+                    gamePanel.repaint();
+                    return;
+                }
+
                 boolean discoveredNeighbour = false;
                 for (Hex hex : gameState.getWorldState().getMap().getNeighbourHexes(clicked)) {
                     if (hex != null && hex.isDiscovered()) {

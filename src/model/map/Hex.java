@@ -17,7 +17,7 @@ public class Hex {
     private static final int SEA_COST = 2;
 
     public enum TerrainType {PLAIN, FOREST, MOUNTAIN, MEADOW, SEA, TALL_MOUNTAIN}
-    public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP}
+    public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP, FISH}
 
     private int c,r;
     private boolean discovered;
