@@ -24,6 +24,7 @@ public abstract class Tribe extends Building {
     private boolean canGift;
     private String name;
     private Mission activeMission;
+    private boolean isPermanentReward;
 
     private final String imageName;
 
@@ -31,6 +32,7 @@ public abstract class Tribe extends Building {
         super(hex, null, null, 0, 200);
         this.imageName = imageName;
         this.name = RandomNameGenerator.generateRandomName();
+        this.isPermanentReward = false;
         changeRelation(0, Collections.emptyList());
         activeMission = null;
     }
@@ -53,6 +55,7 @@ public abstract class Tribe extends Building {
         if(newRelation>=70 && newRelation<=100) {
             this.relationStatus = RelationStatus.ALLY;
             setOptions(true, true, true,false, true, true);
+            isPermanentReward = true;
 
         }else if(newRelation>=20 && newRelation<=69) {
             this.relationStatus = RelationStatus.FRIEND;
@@ -69,6 +72,7 @@ public abstract class Tribe extends Building {
         }else if(newRelation>=-100 && newRelation<=-50) {
             this.relationStatus = RelationStatus.ENEMY;
             setOptions(false, false, false, true, false, false);
+            isPermanentReward = false;
         }
 
 
@@ -205,5 +209,13 @@ public abstract class Tribe extends Building {
 
     public void setActiveMission(Mission activeMission) {
         this.activeMission = activeMission;
+    }
+
+    public boolean isPermanentReward() {
+        return isPermanentReward;
+    }
+
+    public void setPermanentReward(boolean permanentReward) {
+        isPermanentReward = permanentReward;
     }
 }

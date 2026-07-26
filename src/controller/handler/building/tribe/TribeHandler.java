@@ -34,6 +34,18 @@ public class TribeHandler {
             gamePanel.getTribeMainPanel().refresh();
         });
 
+        gamePanel.getTribeMainPanel().getTribeActionSection().getAskAlliance().addActionListener(e -> {
+           askAlliance(gamePanel.getTribeMainPanel().getTribe());
+        });
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getAskPeace().addActionListener(e -> {
+            askPeace(gamePanel.getTribeMainPanel().getTribe());
+        });
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getGetMission().addActionListener(e -> {
+           getMission(gamePanel.getTribeMainPanel().getTribe());
+        });
+
         attachGiftHandlers();
         attachTradeHandlers();
     }
@@ -148,6 +160,32 @@ public class TribeHandler {
         tribe.changeRelation(-100, gameState.getEmpireState().getAllies());
         for (Mission mission : tribe.getMissions()) {
             mission.setStatus(MissionStatus.CANCELED);
+        }
+    }
+
+    public void askAlliance(Tribe tribe) {
+        tribe.setPermanentReward(true);
+        gameState.getEmpireState().getAllies().add(gamePanel.getTribeMainPanel().getTribe());
+    }
+
+
+    public void askPeace(Tribe tribe) {
+        for(ResourceType type : ResourceType.values()){
+            if(type==ResourceType.STONE){continue;}
+            Storage storage = gameState.getEmpireState().getStorage();
+            boolean canAfford = storage.getFoodQuantity() >= 30 && storage.getWoodQuantity() >= 30 && storage.getIronQuantity() >= 30;
+            if (!canAfford) return;
+            gameState.getEmpireState().getStorage().setQuantity(type, gameState.getEmpireState().getStorage().getQuantity(type)-30);
+        }
+        tribe.changeRelation(-10, gameState.getEmpireState().getAllies());
+    }
+
+    public void getMission(Tribe tribe) {
+        for (Mission mission : tribe.getMissions()) {
+            if(mission.getStatus() == MissionStatus.AVAILABLE){
+                mission.setStatus(MissionStatus.ACTIVE);
+                gameState.getEmpireState().getMissions().add(mission);
+            }
         }
     }
 

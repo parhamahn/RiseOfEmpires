@@ -8,6 +8,7 @@ import model.building.empire.TownHall;
 import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.map.Map;
+import model.mission.Mission;
 import model.product.AdjacencyBonus;
 import model.product.Production;
 import model.queue.*;
@@ -35,6 +36,7 @@ public class EmpireState {
     private Season.SeasonType season;
     private List<Tribe> allies;
     private int warHappinessEffect;
+    private List<Mission> missions;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -192,4 +194,9 @@ public class EmpireState {
     public void setWarHappinessEffect(int warHappinessEffect) {
         this.warHappinessEffect = warHappinessEffect;
     }
+
+    public List<Mission> getMissions() {
+        return missions;
+    }
+
 }
