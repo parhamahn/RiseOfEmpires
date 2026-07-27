@@ -20,9 +20,12 @@ public class CookQueue extends Queue {
 
     @Override
     public boolean execute(GameState gameState) {
-        unit.setHex(gameState.getEmpireState().getTownHallHex());
-        gameState.getEmpireState().getTownHallHex().getUnits().add(unit);
-        gameState.getEmpireState().getUnits().add(unit);
+        model.map.Hex townHallHex = gameState.getEmpireState().getTownHallHex();
+        if (townHallHex.canAddUnitType(unit.getUnitType())) {
+            unit.setHex(townHallHex);
+            townHallHex.getUnits().add(unit);
+            gameState.getEmpireState().getUnits().add(unit);
+        }
         return false;
     }
 }

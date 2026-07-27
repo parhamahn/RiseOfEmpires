@@ -23,6 +23,7 @@ public class UpgradeHandler {
 
     public void attachUpgradeListeners() {
         for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
+            if(unitType == Unit.UNIT_TYPE.BEAR || unitType== Unit.UNIT_TYPE.BARBARIAN){continue;}
             gamePanel.getTownHallPanel().getCookButton(unitType).addActionListener(e -> {
                 cookUnitHandler.startCook(gameState, unitType);
                 gamePanel.getTownHallPanel().refresh();

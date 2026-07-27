@@ -2,7 +2,7 @@ package model.mission;
 
 import model.building.tribes.Tribe;
 import model.state.GameState;
-import model.unit.Swordsman;
+import model.unit.combat.Swordsman;
 import model.unit.Unit;
 
 

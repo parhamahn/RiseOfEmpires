@@ -1,4 +1,6 @@
-package model.unit;
+package model.unit.combat;
+
+import model.unit.Unit;
 
 public class Catapult extends Unit {
 

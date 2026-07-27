@@ -15,7 +15,7 @@ public class MountainTribe extends Tribe {
     private TribeTrade tradeStrategy;
 
     public MountainTribe(Hex hex) {
-        super(hex, "mountaintribe");
+        super(hex, "mountaintribe", 50);
         this.missions = new ArrayList<>();
         this.missions.add(new MountainMission(this));
         this.tradeStrategy = new MountainTrade();

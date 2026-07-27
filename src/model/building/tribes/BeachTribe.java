@@ -15,7 +15,7 @@ public class BeachTribe extends Tribe {
     private TribeTrade tradeStrategy;
 
     public BeachTribe(Hex hex) {
-        super(hex, "beachtribe");
+        super(hex, "beachtribe", 50);
         this.missions = new ArrayList<>();
         this.missions.add(new BeachMission(this));
         this.tradeStrategy = new BeachTrade();

@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.civilian;
 
-public class Worker extends Unit{
+import model.unit.Unit;
+
+public class Worker extends Unit {
 
     public Worker(){super(UNIT_TYPE.WORKER, 5, 2, 10);}
 

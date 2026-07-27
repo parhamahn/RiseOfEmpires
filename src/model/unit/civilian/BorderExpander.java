@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.civilian;
 
-public class BorderExpander extends Unit{
+import model.unit.Unit;
+
+public class BorderExpander extends Unit {
 
     public BorderExpander(){
         super(UNIT_TYPE.BORDER_EXPANDER, 10, 1, 10);

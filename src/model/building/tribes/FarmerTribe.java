@@ -15,7 +15,7 @@ public class FarmerTribe extends Tribe {
     private TribeTrade tradeStrategy;
 
     public FarmerTribe(Hex hex) {
-        super(hex, "farmertribe");
+        super(hex, "farmertribe", 40);
         this.missions = new ArrayList<>();
         this.missions.add(new FarmerMission(this));
         this.tradeStrategy = new FarmerTrade();

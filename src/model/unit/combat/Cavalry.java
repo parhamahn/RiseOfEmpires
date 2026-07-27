@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.combat;
 
-public class Cavalry extends Unit{
+import model.unit.Unit;
+
+public class Cavalry extends Unit {
 
     public Cavalry(){
         super(UNIT_TYPE.CAVALRY, 15, 1, 35);

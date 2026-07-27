@@ -14,6 +14,9 @@ import model.product.Production;
 import model.queue.*;
 import model.storage.Storage;
 import model.unit.*;
+import model.unit.civilian.Builder;
+import model.unit.civilian.Explorer;
+import model.unit.civilian.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,11 +160,13 @@ public class EmpireState {
     public int getHappiness() {return happiness;}
 
     public boolean canCookUnit(Unit.UNIT_TYPE type) {
+        if (type.isEnemy()) return false;
         if (!queues.isEmpty()) return false;
         if (type.getLevel().ordinal() > townHallLevel.ordinal()) return false;
         if (type.getCookCost() != null && !type.getCookCost().enoughResources(storage)) return false;
         if (type.getAttackPower() > 0) {
             if (getCombatUnitCount() >= townHallLevel.getCombatUnitCap()) return false;
+            if (townHallHex != null && !townHallHex.canAddUnitType(type)) return false;
         } else {
             if (getCivilUnitCount() >= maxUnit) return false;
         }

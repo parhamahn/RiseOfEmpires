@@ -9,7 +9,7 @@ import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
 import model.unit.Unit;
-import model.unit.Worker;
+import model.unit.civilian.Worker;
 import view.game.GamePanel;
 import view.game.lists.UnitStat;
 import view.game.map.UnitAnimator;

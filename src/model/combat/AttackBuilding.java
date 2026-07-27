@@ -25,33 +25,47 @@ public class AttackBuilding {
         return gameState.getWorldState().getMap().getDistance(attackerHex, defenderHex);
     }
 
+    public boolean canTargetStructure() {
+        for (Unit u : defenderHex.getUnits()) if (u.isCombatUnit()) return false;
+        return true;
+    }
+
     public void setAttackerPower(){
         int power = 0;
-        for(Unit unit:attackerHex.getUnits()){
-            if(unit.isCombatUnit() && getDistance()<=unit.getAttackRadius()){
-                power+=unit.getAttackPower();
+        for (Unit u : attackerHex.getUnits()) {
+            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius()) {
+                power += u.getAttackPower();
             }
         }
         this.attackerPower = power;
     }
 
-    public void attack(){
-        for(Wall wall:defenderHex.getWallsWith()){
-            if(wall.connects(defenderHex, attackerHex)){
-                wall.setHP(wall.getHP()-attackerPower);
-                attackerPower-=Math.max(0,attackerPower-wall.getHP());
-                if(wall.getHP()<=0){
-                    defenderHex.getUnits().remove(wall);
+    public void attack() {
+        if (!canTargetStructure()) return;
+
+        for (Unit u : attackerHex.getUnits()) {
+            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius()) {
+                u.setActionPoints(u.getActionPoints() - 1);
+            }
+        }
+
+        for (Wall wall : defenderHex.getWallsWith()) {
+            if (wall.connects(defenderHex, attackerHex)) {
+                int before = wall.getHP();
+                wall.setHP(before - attackerPower);
+                attackerPower -= Math.min(attackerPower, before);
+                if (wall.getHP() <= 0) {
+                    defenderHex.getWallsWith().remove(wall);
+                    attackerHex.getWallsWith().remove(wall);
                 }
                 break;
             }
         }
-        if(attackerPower != 0){
+
+        if (attackerPower > 0 && defenderHex.getBuilding() != null) {
             Building building = defenderHex.getBuilding();
-            building.setHP(building.getHP()-attackerPower);
-            if(building.getHP()<=0){
-                gameState.getEmpireState().removeBuilding(building);
-            }
+            building.setHP(building.getHP() - attackerPower);
+            if (building.getHP() <= 0) gameState.getEmpireState().removeBuilding(building);
         }
     }
 

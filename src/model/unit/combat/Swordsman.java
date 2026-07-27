@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.combat;
 
-public class Swordsman extends Unit{
+import model.unit.Unit;
+
+public class Swordsman extends Unit {
 
     public Swordsman(){
         super(UNIT_TYPE.SWORDSMAN, 10, 1, 40);

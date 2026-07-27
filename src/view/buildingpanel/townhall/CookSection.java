@@ -25,6 +25,7 @@ public class CookSection extends BaseSection {
 
         cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
+            if(type== Unit.UNIT_TYPE.BEAR || type== Unit.UNIT_TYPE.BARBARIAN){continue;}
             boolean canAfford = gameState.getEmpireState().canCookUnit(type);
             CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
             cookStats.put(type, stat);

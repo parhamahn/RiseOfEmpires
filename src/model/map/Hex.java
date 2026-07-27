@@ -102,4 +102,22 @@ public class Hex {
             case TALL_MOUNTAIN -> Integer.MAX_VALUE;
         };
     }
+
+    public int getUnitTypeCount(Unit.UNIT_TYPE type) {
+        int count = 0;
+        for (Unit u : units) {
+            if (u.getUnitType() == type) count++;
+        }
+        return count;
+    }
+
+    public boolean canAddUnitType(Unit.UNIT_TYPE type) {
+        return switch (type) {
+            case SWORDSMAN -> getUnitTypeCount(type) < 2;
+            case ARCHER -> getUnitTypeCount(type) < 2;
+            case CAVALRY -> getUnitTypeCount(type) < 1;
+            case CATAPULT -> getUnitTypeCount(type) < 1;
+            default -> true;
+        };
+    }
 }

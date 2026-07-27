@@ -2,7 +2,6 @@ package model.combat;
 
 import model.state.GameState;
 import model.unit.Unit;
-
 import java.util.List;
 
 public abstract class DamageHandler {
@@ -23,14 +22,17 @@ public abstract class DamageHandler {
 
     protected abstract int applyDamage(List<Unit> defenders, int damage, GameState gameState);
 
-    protected static int damageUnit(List<Unit> defenders, Unit target, int damage, GameState gameState) {
+
+
+
+    protected static int damageUnit(Unit target, int damage) {
         int remaining = damage;
         target.setHealth(target.getHealth() - 1);
         remaining--;
-        if (target.getHealth() <= 0) {
-            defenders.remove(target);
-            gameState.getEmpireState().removeUnit(target);
-        }
         return remaining;
+    }
+
+    protected static boolean isDead(Unit target) {
+        return target.getHealth() <= 0;
     }
 }

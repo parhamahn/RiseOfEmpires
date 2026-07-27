@@ -3,7 +3,7 @@ package model.building;
 import model.storage.Cost;
 import model.map.Hex;
 import model.Task;
-import model.unit.Worker;
+import model.unit.civilian.Worker;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -75,9 +75,11 @@ public class UnitAnimator {
         int speed = Math.max(2, camera.getHexRadius() / 15);
 
         if (distance <= speed) {
-            unit.getHex().getUnits().remove(unit);
-            unit.getTargetHex().getUnits().add(unit);
-            unit.setHex(unit.getTargetHex());
+            if (unit.getTargetHex().canAddUnitType(unit.getUnitType())) {
+                unit.getHex().getUnits().remove(unit);
+                unit.getTargetHex().getUnits().add(unit);
+                unit.setHex(unit.getTargetHex());
+            }
             unit.setTargetHex(null);
             unit.setMoving(false);
 

@@ -29,8 +29,8 @@ public abstract class Tribe extends Building {
 
     private final String imageName;
 
-    public Tribe(Hex hex, String imageName) {
-        super(hex, null, null, 0, 200);
+    public Tribe(Hex hex, String imageName, int maxHP) {
+        super(hex, null, null, 0, maxHP);
         this.imageName = imageName;
         this.name = RandomNameGenerator.generateRandomName();
         this.isPermanentReward = false;

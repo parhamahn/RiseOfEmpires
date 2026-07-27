@@ -12,7 +12,7 @@ public class WarriorTribe extends Tribe {
     private List<Mission> missions;
 
     public WarriorTribe(Hex hex) {
-        super(hex, "warriortribe");
+        super(hex, "warriortribe", 70);
         this.missions = new ArrayList<>();
         this.missions.add(new WarriorMission(this));
     }

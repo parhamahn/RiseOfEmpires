@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.civilian;
 
-public class Builder extends Unit{
+import model.unit.Unit;
+
+public class Builder extends Unit {
 
     private int charges;
 

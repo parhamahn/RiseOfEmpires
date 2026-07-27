@@ -15,7 +15,7 @@ public class TraderTribe extends Tribe {
     private TribeTrade tradeStrategy;
 
     public TraderTribe(Hex hex) {
-        super(hex, "tradertribe");
+        super(hex, "tradertribe", 50);
         missions = new ArrayList<>();
         missions.add(new TraderMission(this));
         tradeStrategy = new TraderTrade();

@@ -7,14 +7,16 @@ import model.storage.Cost;
 public abstract class Unit{
 
     public enum UNIT_TYPE {
-        EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
-        BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
-        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
-        WORKER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 5, 1),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 20, 2),
-        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 50, 1);
+        EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
+        BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
+        BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
+        WORKER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
+        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 5, 1, false),
+        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 20, 2, false),
+        SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1, false),
+        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 50, 1, false),
+        BARBARIAN(null, 0, TownHallLevel.BASE_CAMP, 1, 8, 2, true),
+        BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 12, true);
 
         private final Cost cookCost;
         private final int turnCost;
@@ -22,14 +24,16 @@ public abstract class Unit{
         private final int attackRadius;
         private final int attackPower;
         private final int health;
+        private final boolean isEnemy;
 
-        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level, int attackRadius, int attackPower, int health) {
+        UNIT_TYPE(Cost cookCost, int turnCost, TownHallLevel level, int attackRadius, int attackPower, int health, boolean isEnemy) {
             this.cookCost = cookCost;
             this.turnCost = turnCost;
             this.level = level;
             this.attackRadius = attackRadius;
             this.attackPower = attackPower;
             this.health = health;
+            this.isEnemy = isEnemy;
         }
 
         public Cost getCookCost() { return cookCost; }
@@ -38,6 +42,7 @@ public abstract class Unit{
         public int getAttackRadius() {return attackRadius;};
         public int getHealth() {return health;}
         public int getAttackPower(){return attackPower;}
+        public boolean isEnemy() {return isEnemy;}
     }
 
     protected UNIT_TYPE unitType;

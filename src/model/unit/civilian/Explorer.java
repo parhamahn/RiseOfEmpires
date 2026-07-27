@@ -1,6 +1,8 @@
-package model.unit;
+package model.unit.civilian;
 
-public class Explorer extends Unit{
+import model.unit.Unit;
+
+public class Explorer extends Unit {
 
     public Explorer(){
         super(UNIT_TYPE.EXPLORER, 5, 1, 10);
