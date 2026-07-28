@@ -6,6 +6,7 @@ import model.map.Hex;
 import model.map.Map;
 import model.product.Production;
 import model.storage.Storage;
+import model.unit.enemy.Bear;
 
 import java.util.Random;
 
@@ -40,6 +41,14 @@ public class GameState {
         }
     }
 
+    public void randomEnemies(Map map){
+        Bear testBear = new Bear();
+        Hex townHallnei = map.getHex(map.getCols()/ 2 - 3, map.getRows() / 2);
+        testBear.setHex(townHallnei);
+        townHallnei.getUnits().add(testBear);
+        worldState.getEnemies().add(testBear);
+    }
+
     public void reset(){
         Map map = new Map(32, 50);
         empireState.getStorage().reset();
@@ -48,6 +57,7 @@ public class GameState {
         worldState.reset(map);
         empireState.init(map);
         randomTradingCenters(15, map);
+        randomEnemies(map);
     }
 
 }

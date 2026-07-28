@@ -9,6 +9,9 @@ import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UnitLayer implements MapLayer {
 
@@ -22,7 +25,11 @@ public class UnitLayer implements MapLayer {
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         int unitSize = Math.max(20, camera.getHexRadius() / 2);
 
-        for (Unit unit : gameState.getEmpireState().getUnits()) {
+        List<Unit> units = new ArrayList<>();
+        for(Unit unit:gameState.getWorldState().getEnemies())units.add(unit);
+        for(Unit unit:gameState.getEmpireState().getUnits())units.add(unit);{}
+
+        for (Unit unit : units) {
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
                 Point pos = unitAnimator.getPosition(unit);

@@ -4,6 +4,7 @@ import controller.SelectionContext;
 import controller.handler.building.bazaar.BazaarHandler;
 import controller.handler.building.tradingcenter.TradingCenterHandler;
 import controller.handler.building.tribe.TribeHandler;
+import controller.handler.combat.CombatHandler;
 import helpers.SoundEffects;
 import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
@@ -25,8 +26,9 @@ public class HexHandler {
     private final BazaarHandler bazaarHandler;
     private final TradingCenterHandler tradingCenterHandler;
     private final TribeHandler tribeHandler;
+    private final CombatHandler combatHandler;
 
-    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler, TradingCenterHandler tradingCenterHandler, TribeHandler tribeHandler) {
+    public HexHandler(GameState gameState, GamePanel gamePanel, UnitHandler unitHandler, BuildingHandler buildingHandler, SelectionContext selectionContext, BazaarHandler bazaarHandler, TradingCenterHandler tradingCenterHandler, TribeHandler tribeHandler, CombatHandler combatHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.unitHandler = unitHandler;
@@ -35,6 +37,7 @@ public class HexHandler {
         this.bazaarHandler = bazaarHandler;
         this.tradingCenterHandler = tradingCenterHandler;
         this.tribeHandler = tribeHandler;
+        this.combatHandler = combatHandler;
     }
 
     public void attachHexSelectionListener() {
@@ -66,6 +69,12 @@ public class HexHandler {
 
                 if (selectionContext.getDestroyRoadOriginHex() != null) {
                     buildingHandler.handleRoadDestroy(selectionContext.getDestroyRoadOriginHex(), clicked);
+                    gamePanel.repaint();
+                    return;
+                }
+
+                if (selectionContext.getAttackerHex() != null) {
+                    combatHandler.handleAttackTarget(selectionContext.getAttackerHex(), clicked);
                     gamePanel.repaint();
                     return;
                 }

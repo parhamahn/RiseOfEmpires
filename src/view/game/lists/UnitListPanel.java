@@ -31,14 +31,18 @@ public class UnitListPanel extends JPanel {
     public List<UnitStat> updateUnits(List<Unit> units) {
         removeAll();
         List<UnitStat> stats = new ArrayList<>();
+        boolean showAttackButton = false;
         for (Unit unit : units) {
             UnitStat stat = new UnitStat(unit);
             stats.add(stat);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));
+            if(unit.isCombatUnit()) showAttackButton=true;
         }
-        add(Box.createVerticalGlue());
-        add(attackButton);
+        if(showAttackButton){
+            add(Box.createVerticalGlue());
+            add(attackButton);
+        }
         revalidate();
         repaint();
         return stats;

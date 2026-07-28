@@ -54,7 +54,7 @@ public class Sound {
         if (volumeControl == null) return;
         percent = Math.max(0f, Math.min(1f, percent));
         float dB = (percent == 0f) ? volumeControl.getMinimum()
-                : (float) (Math.log10(percent) * 20.0);
+                : (float) (Math.log10(percent) * 10.0);
         dB = Math.max(volumeControl.getMinimum(), Math.min(volumeControl.getMaximum(), dB));
         volumeControl.setValue(dB);
     }

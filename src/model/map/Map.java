@@ -3,6 +3,7 @@ package model.map;
 import model.building.*;
 import model.building.edge.River;
 import model.building.tribes.*;
+import model.unit.enemy.Bear;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -75,6 +76,7 @@ public class Map {
                 jungleInNeighbour = true;
             }
         }
+
 
         if(!jungleInNeighbour){
             getHex(townHallHex.getC(), townHallHex.getR()+1).setTerrainType(Hex.TerrainType.FOREST);
@@ -293,6 +295,7 @@ public class Map {
     }
 
     public int getDistance(Hex a, Hex b) {
+        if(a.equals(b)) return 0;
         if (getNeighbourHexes(a).contains(b)) return 1;
         for (Hex n : getNeighbourHexes(a)) {
             if (n != null && getNeighbourHexes(n).contains(b)) return 2;

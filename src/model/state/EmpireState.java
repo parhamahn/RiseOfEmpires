@@ -17,6 +17,7 @@ import model.unit.*;
 import model.unit.civilian.Builder;
 import model.unit.civilian.Explorer;
 import model.unit.civilian.Worker;
+import model.unit.combat.Swordsman;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,7 @@ public class EmpireState {
         units.add(new Worker());
         units.add(new Worker());
         units.add(new Explorer());
+        units.add(new Swordsman());
 
         for (Unit unit : units) { unit.setHex(townHallHex); }
         townHallHex.getUnits().addAll(units);

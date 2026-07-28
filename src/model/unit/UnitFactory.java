@@ -8,8 +8,8 @@ import model.unit.combat.Archer;
 import model.unit.combat.Catapult;
 import model.unit.combat.Cavalry;
 import model.unit.combat.Swordsman;
-import model.combat.enemy.Barbarian;
-import model.combat.enemy.Bear;
+import model.unit.enemy.Barbarian;
+import model.unit.enemy.Bear;
 
 public class UnitFactory {
 

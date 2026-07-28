@@ -10,6 +10,7 @@ public class SelectionContext {
     private Hex roadOriginHex;
     private Hex destroyWallOriginHex;
     private Hex destroyRoadOriginHex;
+    private Hex attackerHex;
 
     public Hex getSelectedHex() { return selectedHex; }
     public void setSelectedHex(Hex selectedHex) { this.selectedHex = selectedHex; }
@@ -23,6 +24,9 @@ public class SelectionContext {
     public void setDestroyWallOriginHex(Hex destroyWallOriginHex) { this.destroyWallOriginHex = destroyWallOriginHex; }
     public Hex getDestroyRoadOriginHex() { return destroyRoadOriginHex; }
     public void setDestroyRoadOriginHex(Hex destroyRoadOriginHex) { this.destroyRoadOriginHex = destroyRoadOriginHex; }
+    public Hex getAttackerHex() { return attackerHex; }
+    public void setAttackerHex(Hex attacker) { this.attackerHex = attacker; }
+
 
     public void reset(){
         selectedHex = null;
@@ -31,5 +35,6 @@ public class SelectionContext {
         roadOriginHex = null;
         destroyWallOriginHex = null;
         destroyRoadOriginHex = null;
+        attackerHex = null;
     }
 }

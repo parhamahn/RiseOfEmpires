@@ -42,11 +42,25 @@ public class UnitAnimator {
                 positions.put(unit, p);
             }
         }
+        for (Unit unit : gameState.getWorldState().getEnemies()) {
+            if (!unit.isMoving() && unit.getHex() != null) {
+                Point p = camera.getHexCenter(unit.getHex());
+                positions.put(unit, p);
+            }
+        }
     }
 
     public void syncPositions(Camera camera) {
-        positions.keySet().retainAll(gameState.getEmpireState().getUnits());
+        java.util.Set<Unit> allUnits = new java.util.HashSet<>(gameState.getEmpireState().getUnits());
+        allUnits.addAll(gameState.getWorldState().getEnemies());
+        positions.keySet().retainAll(allUnits);
         for (Unit unit : gameState.getEmpireState().getUnits()) {
+            if (!unit.isMoving() && unit.getHex() != null) {
+                Point p = camera.getHexCenter(unit.getHex());
+                positions.put(unit, p);
+            }
+        }
+        for (Unit unit : gameState.getWorldState().getEnemies()) {
             if (!unit.isMoving() && unit.getHex() != null) {
                 Point p = camera.getHexCenter(unit.getHex());
                 positions.put(unit, p);
@@ -57,6 +71,12 @@ public class UnitAnimator {
     public boolean tick(Camera camera) {
         boolean anyMoving = false;
         for (Unit unit : gameState.getEmpireState().getUnits()) {
+            if (unit.isMoving()) {
+                animateStep(unit, camera);
+                anyMoving = true;
+            }
+        }
+        for (Unit unit : gameState.getWorldState().getEnemies()) {
             if (unit.isMoving()) {
                 animateStep(unit, camera);
                 anyMoving = true;

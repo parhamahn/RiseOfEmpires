@@ -6,6 +6,7 @@ import view.buildingpanel.trading.TradingCenterPanel;
 import view.buildingpanel.tribe.GiftPanel;
 import view.buildingpanel.tribe.TribeMainPanel;
 import view.buildingpanel.tribe.TribeTradePanel;
+import view.combat.CombatMainPanel;
 import view.game.hud.HUDPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel {
     private JPanel hudWrapper;
     private JLayeredPane layeredPane;
     private PausePanel pausePanel;
+    private CombatMainPanel combatMainPanel;
     private boolean anyPanelOpen;
 
     public HUDPanel getHudPanel() { return hudPanel; }
@@ -50,6 +52,7 @@ public class GamePanel extends JPanel {
     public TribeMainPanel getTribeMainPanel() { return tribeMainPanel; }
     public GiftPanel getGiftPanel() { return giftPanel; }
     public TribeTradePanel getTribeTradePanel() { return tribeTradePanel; }
+    public CombatMainPanel getCombatMainPanel() { return combatMainPanel; }
 
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -89,6 +92,9 @@ public class GamePanel extends JPanel {
         giftPanel = new GiftPanel(mapPanel.getGameState());
         layeredPane.add(giftPanel, JLayeredPane.MODAL_LAYER);
 
+        combatMainPanel = new CombatMainPanel(mapPanel.getGameState());
+        layeredPane.add(combatMainPanel, JLayeredPane.MODAL_LAYER);
+
         tribeTradePanel = new TribeTradePanel(mapPanel.getGameState());
         layeredPane.add(tribeTradePanel, JLayeredPane.MODAL_LAYER);
 
@@ -120,6 +126,7 @@ public class GamePanel extends JPanel {
         giftPanel.setBounds(0, 0, size.width, size.height);
         tribeTradePanel.setBounds(0, 0, size.width, size.height);
         tradingCenterPanel.setBounds(0, 0, size.width, size.height);
+        combatMainPanel.setBounds(0, 0, size.width, size.height);
         pausePanel.setBounds(0, 0, size.width, size.height);
     }
 

@@ -1,4 +1,4 @@
-package model.combat.enemy;
+package model.unit.enemy;
 
 import model.unit.Unit;
 

@@ -6,6 +6,7 @@ import controller.handler.building.townhall.CookUnitHandler;
 import controller.handler.building.townhall.TownHallHandler;
 import controller.handler.building.tradingcenter.TradingCenterHandler;
 import controller.handler.building.tribe.TribeHandler;
+import controller.handler.combat.CombatHandler;
 import model.state.GameState;
 import view.game.GamePanel;
 
@@ -27,7 +28,8 @@ public class GameController {
         TradingCenterHandler tradingCenterHandler = new TradingCenterHandler(gamePanel, gameState);
         TribeHandler tribeHandler = new TribeHandler(gameState, gamePanel);
         HUDHandler hudHandler = new HUDHandler(gamePanel, cards, turnHandler);
-        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler, tradingCenterHandler, tribeHandler);
+        CombatHandler combatHandler = new CombatHandler(gameState, gamePanel, selectionContext);
+        HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler, tradingCenterHandler, tribeHandler, combatHandler);
         TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
 
         new CameraHandler(gamePanel).attachCameraListeners();
@@ -39,6 +41,7 @@ public class GameController {
         tradingCenterHandler.attachHandlers();
         tribeHandler.attachHandlers();
         gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
+        combatHandler.attachHandlers();
 
     }
 
