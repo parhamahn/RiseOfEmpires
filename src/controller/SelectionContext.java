@@ -28,13 +28,17 @@ public class SelectionContext {
     public void setAttackerHex(Hex attacker) { this.attackerHex = attacker; }
 
 
-    public void reset(){
-        selectedHex = null;
-        selectedUnit = null;
+    public void clearAllModes() {
         wallOriginHex = null;
         roadOriginHex = null;
         destroyWallOriginHex = null;
         destroyRoadOriginHex = null;
         attackerHex = null;
+    }
+
+    public void reset(){
+        clearAllModes();
+        selectedHex = null;
+        selectedUnit = null;
     }
 }

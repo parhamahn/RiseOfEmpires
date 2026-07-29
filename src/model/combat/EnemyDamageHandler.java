@@ -17,7 +17,8 @@ public class EnemyDamageHandler extends DamageHandler {
                 remaining = damageUnit(u, remaining);
                 if (isDead(u)) {
                     it.remove();
-                    gameState.getEmpireState().removeUnit(u);
+                    gameState.getWorldState().getEnemies().remove(u);
+                    u.getHex().getUnits().remove(u);
                 }
             }
         }

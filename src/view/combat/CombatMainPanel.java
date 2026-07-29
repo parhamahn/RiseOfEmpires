@@ -57,8 +57,14 @@ public class CombatMainPanel extends BaseModalPanel {
 
     @Override
     public void refresh() {
+        attackButton.setEnabled(true);
         attackerSideSection.refresh(attackerHex);
         defenderSideSection.refresh(defenderHex);
+    }
+
+    public void setHexes(Hex attackerHex, Hex defenderHex) {
+        this.attackerHex = attackerHex;
+        this.defenderHex = defenderHex;
     }
 
     public Hex getAttackerHex() {
@@ -67,11 +73,6 @@ public class CombatMainPanel extends BaseModalPanel {
 
     public Hex getDefenderHex() {
         return defenderHex;
-    }
-
-    public void setHexes(Hex attackerHex, Hex defenderHex) {
-        this.defenderHex = defenderHex;
-        this.attackerHex = attackerHex;
     }
 
     public JButton getAttackButton() {

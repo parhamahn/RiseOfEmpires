@@ -32,7 +32,7 @@ public class AttackUnit {
     public Hex getDefenderHex() {return defenderHex;}
 
     private boolean hasCombatType(Hex hex, Unit.UNIT_TYPE type) {
-        return hex.getUnits().stream().anyMatch(u -> u.getUnitType() == type && u.isCombatUnit());
+        return hex.getUnits().stream().anyMatch(u -> u.getUnitType() == type && u.isCombatUnit() && u.getActionPoints()>0);
     }
 
     private int countCombatTypes(Hex hex) {
@@ -62,7 +62,7 @@ public class AttackUnit {
     public boolean isLegal() {
         int d = getDistance();
         if (d == 1) return true;
-        if (d == 2) return hasCombatType(attackerHex, Unit.UNIT_TYPE.ARCHER);
+        if (d == 2) return attackerHex.getUnits().stream().anyMatch(u -> u.isCombatUnit() && u.getAttackRadius()>=2);
         return false;
     }
 
@@ -104,7 +104,7 @@ public class AttackUnit {
 
     public void attack() {
         for (Unit u : attackerHex.getUnits()) {
-            if (u.isCombatUnit()) u.setActionPoints(u.getActionPoints() - 1);
+            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius() && u.getActionPoints()>0) u.setActionPoints(u.getActionPoints() - 1);
         }
         applyDamage(defenderHex, attackerPower);
         applyDamage(attackerHex, defenderPower);

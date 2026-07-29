@@ -21,6 +21,7 @@ public class CombatMain {
 
             gamePanel.getCombatMainPanel().close();
             gamePanel.setAnyPanelOpen(false);
+            selectionContext.setAttackerHex(null);
 
         });
     }

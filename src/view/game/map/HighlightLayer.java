@@ -41,15 +41,17 @@ public class HighlightLayer implements MapLayer {
 
         if(selection.getAttackerHex()!=null){
             List<Hex> hexes = new ArrayList<>();
+            boolean anyArcher = selection.getAttackerHex().getUnits().stream()
+                    .anyMatch(unit -> unit.getUnitType() == Unit.UNIT_TYPE.ARCHER);
             for (Hex hex : map.getNeighbourHexes(selected)) {
                 if (hex == null) continue;
-                if(hex.getUnits().stream().anyMatch(unit -> unit.getUnitType()== Unit.UNIT_TYPE.ARCHER)) {
+                hexes.add(hex);
+                if(anyArcher) {
                     for (Hex hex2 : map.getNeighbourHexes(hex)) {
                         if (hex2 == null) continue;
-                        hexes.add(hex2);
+                        if(!hexes.contains(hex2)) hexes.add(hex2);
                     }
                 }
-                if(!hexes.contains(hex)){hexes.add(hex);}
             }
             hexes.remove(selected);
             for(Hex hex : hexes){

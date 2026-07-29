@@ -44,7 +44,7 @@ public class AttackBuilding {
         if (!canTargetStructure()) return;
 
         for (Unit u : attackerHex.getUnits()) {
-            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius()) {
+            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius() && u.getActionPoints()>0) {
                 u.setActionPoints(u.getActionPoints() - 1);
             }
         }

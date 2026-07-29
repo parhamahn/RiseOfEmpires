@@ -113,6 +113,7 @@ public class BuildingHandler {
     }
 
     public void startWallPlacement(Hex origin) {
+        selectionContext.clearAllModes();
         selectionContext.setSelectedUnit(null);
         selectionContext.setWallOriginHex(origin);
         gamePanel.getTaskListPanel().clear();
@@ -144,6 +145,7 @@ public class BuildingHandler {
     }
 
     public void startRoadPlacement(Hex origin) {
+        selectionContext.clearAllModes();
         selectionContext.setSelectedUnit(null);
         selectionContext.setRoadOriginHex(origin);
         gamePanel.getTaskListPanel().clear();
@@ -175,6 +177,7 @@ public class BuildingHandler {
     }
 
     public void startWallDestroy(Hex origin) {
+        selectionContext.clearAllModes();
         selectionContext.setSelectedUnit(null);
         selectionContext.setDestroyWallOriginHex(origin);
         gamePanel.getTaskListPanel().clear();
@@ -206,6 +209,7 @@ public class BuildingHandler {
     }
 
     public void startRoadDestroy(Hex origin) {
+        selectionContext.clearAllModes();
         selectionContext.setSelectedUnit(null);
         selectionContext.setDestroyRoadOriginHex(origin);
         gamePanel.getTaskListPanel().clear();

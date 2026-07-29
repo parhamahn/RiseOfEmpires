@@ -16,7 +16,7 @@ public abstract class Unit{
         SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1, false),
         CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 50, 1, false),
         BARBARIAN(null, 0, TownHallLevel.BASE_CAMP, 1, 8, 2, true),
-        BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 12, true);
+        BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 2, true);
 
         private final Cost cookCost;
         private final int turnCost;

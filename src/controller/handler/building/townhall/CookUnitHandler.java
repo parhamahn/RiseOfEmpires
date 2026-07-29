@@ -18,10 +18,9 @@ public class CookUnitHandler {
             unitType.getCookCost().pay(gameState.getEmpireState().getStorage());
         }
 
-        int totalUnits = gameState.getEmpireState().getUnits().size() + (int) gameState.getEmpireState().getCookQueueCount();
-        if (totalUnits >= gameState.getEmpireState().getMaxUnit()) {
-            return;
-        }
+        if (unitType.getAttackPower() == 0 && (gameState.getEmpireState().getCivilUnitCount() >= gameState.getEmpireState().getMaxUnit())) return;
+        if (unitType.getAttackPower()>0 && (gameState.getEmpireState().getCombatUnitCount() >= gameState.getEmpireState().getTownHallLevel().getCombatUnitCap())) return;
+
         gameState.getEmpireState().getQueues().add(
                 new CookQueue(unit, unitType.getTurnCost(), gameState.getWorldState().getTurnNumber()));
     }
