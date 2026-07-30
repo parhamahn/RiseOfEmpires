@@ -128,10 +128,9 @@ public class TurnHandler {
                     }
                 }
             }
-            if(building instanceof Tribe){
-                Tribe  tribe = (Tribe) building;
-                tribe.setUsedThisTurn(false);
-            }
+        }
+        for (Tribe tribe : gameState.getWorldState().getTribes()) {
+            tribe.setUsedThisTurn(false);
         }
         gameState.getWorldState().nextTurn();
         Season.processSeason(gameState);

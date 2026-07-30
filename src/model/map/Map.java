@@ -1,12 +1,6 @@
 package model.map;
 
-import model.building.*;
-import model.building.edge.River;
-import model.building.tribes.*;
-import model.unit.enemy.Bear;
-
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Map {
     private final Hex[][] grid;
@@ -20,8 +14,6 @@ public class Map {
         this.grid = new Hex[rows][cols];
         generateMap();
         setResources();
-        generateRivers();
-        generateTribes();
     }
 
 
@@ -91,54 +83,6 @@ public class Map {
         return null;
     }
 
-    public void generateTribes(){
-        int farmerTribeCount = 3;
-        int traderTribeCount = 3;
-        int warriorTribeCount = 3;
-        int mountainTribeCount = 3;
-        int beachTribeCount = 3;
-
-
-        List<Hex> plainHexes = new ArrayList<>();
-        List<Hex> meadowHexes = new ArrayList<>();
-        List<Hex> mountainHexes = new ArrayList<>();
-        List<Hex> beachHexes = new ArrayList<>();
-        for(Hex hex:getAllHexes()){
-            switch (hex.getTerrainType()){
-                case PLAIN -> plainHexes.add(hex);
-                case MOUNTAIN -> mountainHexes.add(hex);
-                case MEADOW -> meadowHexes.add(hex);
-            }
-            for(Hex neighbour:getNeighbourHexes(hex)){
-                if(neighbour!=null&&neighbour.getTerrainType()== Hex.TerrainType.SEA){
-                    beachHexes.add(neighbour);
-                }
-            }
-        }
-        List<Hex> plainAndMeadowHexes = Stream.concat(plainHexes.stream(), meadowHexes.stream()).toList();
-        Random rand = new Random();
-        placeTribes(farmerTribeCount, plainAndMeadowHexes, hex -> new FarmerTribe(hex), rand);
-        placeTribes(mountainTribeCount, mountainHexes, hex -> new MountainTribe(hex), rand);
-        placeTribes(beachTribeCount, beachHexes, hex -> new BeachTribe(hex), rand);
-        placeTribes(warriorTribeCount, getAllHexes(), hex -> new WarriorTribe(hex), rand);
-        placeTribes(traderTribeCount, getAllHexes(), hex -> new TraderTribe(hex), rand);
-
-    }
-
-    private void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, Building> factory, Random rand) {
-        int placed = 0;
-        int maxAttempts = count * 100;
-        int attempts = 0;
-        while (placed < count && attempts < maxAttempts) {
-            Hex hex = candidates.get(rand.nextInt(candidates.size()));
-            attempts++;
-            if (hex.getBuilding() == null) {
-                hex.setBuilding(factory.apply(hex));
-                placed++;
-            }
-        }
-    }
-
     public void setResources(){
         for (int i=0; i<cols; i++){
             for (int j=0; j<rows;j++){
@@ -177,74 +121,7 @@ public class Map {
         }
     }
 
-
-    private void generateRivers() {
-        int townC = cols / 2;
-        int townR = rows / 2;
-        int safeRadius = 0;
-        int numRivers = 30 + RANDOM.nextInt(20);
-
-        Set<String> usedEdges = new HashSet<>();
-
-        for (int i = 0; i < numRivers; i++) {
-            Hex start = findRandomRiverStart(townC, townR, safeRadius);
-            if (start == null) continue;
-
-            List<Hex> path = new ArrayList<>();
-            path.add(start);
-
-            int length = 2 + RANDOM.nextInt(4);
-            Hex current = start;
-
-            for (int s = 0; s < length; s++) {
-                List<Hex> neighbours = getNeighbourHexes(current);
-                List<Hex> candidates = new ArrayList<>();
-                for (Hex n : neighbours) {
-                    if (n == null) continue;
-                    if (n.getTerrainType() == Hex.TerrainType.SEA
-                            || n.getTerrainType() == Hex.TerrainType.TALL_MOUNTAIN) continue;
-                    int dc = Math.abs(n.getC() - townC);
-                    int dr = Math.abs(n.getR() - townR);
-                    if (dc < safeRadius && dr < safeRadius) continue;
-                    if (path.contains(n)) continue;
-                    String edgeKey = edgeKey(current, n);
-                    if (usedEdges.contains(edgeKey)) continue;
-                    candidates.add(n);
-                }
-                if (candidates.isEmpty()) break;
-                Hex next = candidates.get(RANDOM.nextInt(candidates.size()));
-                usedEdges.add(edgeKey(current, next));
-                path.add(next);
-                current = next;
-            }
-
-            for (int j = 0; j < path.size() - 1; j++) {
-                River river = new River(path.get(j), path.get(j + 1), this);
-                if (river.isValid()) {
-                    path.get(j).getRiversWith().add(river);
-                    path.get(j + 1).getRiversWith().add(river);
-                }
-            }
-        }
-    }
-
-    private Hex findRandomRiverStart(int townC, int townR, int safeRadius) {
-        for (int attempt = 0; attempt < 300; attempt++) {
-            int c = RANDOM.nextInt(cols);
-            int r = RANDOM.nextInt(rows);
-            Hex hex = getHex(c, r);
-            if (hex == null) continue;
-            if (hex.getTerrainType() == Hex.TerrainType.SEA
-                    || hex.getTerrainType() == Hex.TerrainType.TALL_MOUNTAIN) continue;
-            int dc = Math.abs(c - townC);
-            int dr = Math.abs(r - townR);
-            if (dc < safeRadius && dr < safeRadius) continue;
-            return hex;
-        }
-        return null;
-    }
-
-    private String edgeKey(Hex a, Hex b) {
+    public String edgeKey(Hex a, Hex b) {
         int minC = Math.min(a.getC(), b.getC());
         int maxC = Math.max(a.getC(), b.getC());
         int minR = Math.min(a.getR(), b.getR());

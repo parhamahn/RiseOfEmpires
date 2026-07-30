@@ -40,7 +40,7 @@ public class EmpireState {
     private Season.SeasonType season;
     private List<Tribe> allies;
     private int warHappinessEffect;
-    private List<Mission> missions;
+    private List<Mission> missions = new ArrayList<>();
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;

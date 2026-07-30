@@ -1,15 +1,9 @@
 package model.state;
 
-import model.building.Building;
-import model.building.other.TradingCenter;
-import model.map.Hex;
 import model.map.Map;
+import model.map.generator.*;
 import model.product.Production;
 import model.storage.Storage;
-import model.unit.enemy.Barbarian;
-import model.unit.enemy.Bear;
-
-import java.util.Random;
 
 public class GameState {
     private final EmpireState empireState;
@@ -22,33 +16,13 @@ public class GameState {
     }
 
     public void restartGame() {
-        empireState.init(worldState.getMap());
+        Map map = worldState.getMap();
+        empireState.init(map);
+        Generator.generate(this);
     }
 
     public EmpireState getEmpireState() { return empireState; }
     public WorldState getWorldState() { return worldState; }
-
-    public void randomTradingCenters(int n, Map map){
-        Random rand = new Random();
-        for(int i=0;i<n;i++){
-            Hex x = map.getAllHexes().get(rand.nextInt(map.getAllHexes().size()));
-            if(x.getBuilding()==null){
-                Building y = new TradingCenter(x);
-                x.setBuilding(y);
-                empireState.getBuildings().add(y);
-            }else{
-                i-=1;
-            }
-        }
-    }
-
-    public void randomEnemies(Map map){
-        Barbarian testBear = new Barbarian();
-        Hex townHallnei = map.getHex(map.getCols()/ 2 - 3, map.getRows() / 2);
-        testBear.setHex(townHallnei);
-        townHallnei.getUnits().add(testBear);
-        worldState.getEnemies().add(testBear);
-    }
 
     public void reset(){
         Map map = new Map(32, 50);
@@ -57,8 +31,7 @@ public class GameState {
         empireState.getBuildings().clear();
         worldState.reset(map);
         empireState.init(map);
-        randomTradingCenters(15, map);
-        randomEnemies(map);
+        Generator.generate(this);
     }
 
 }
