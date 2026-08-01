@@ -1,6 +1,6 @@
 package view.combat;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.map.Hex;
 import model.state.GameState;
 import view.common.BaseModalPanel;

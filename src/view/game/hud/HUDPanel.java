@@ -1,5 +1,5 @@
 package view.game.hud;
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.state.GameState;
 import view.common.StyledButtons;
 import view.common.UITheme;

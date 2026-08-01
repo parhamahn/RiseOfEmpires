@@ -1,6 +1,6 @@
 package view.common;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.state.GameState;
 
 import javax.swing.*;

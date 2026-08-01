@@ -1,6 +1,6 @@
 package model.building.tribes;
 
-import helpers.RandomNameGenerator;
+import helpers.other.RandomNameGenerator;
 import model.building.Building;
 import model.map.Hex;
 import model.mission.Mission;

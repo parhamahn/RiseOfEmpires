@@ -1,6 +1,6 @@
 package view.buildingpanel.townhall;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.queue.*;
 import view.common.FormatUtils;
 import view.common.StyledButtons;

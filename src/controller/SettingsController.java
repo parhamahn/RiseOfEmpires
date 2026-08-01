@@ -1,6 +1,6 @@
 package controller;
 
-import helpers.Music;
+import helpers.sound.Music;
 import view.menu.SettingsPanel;
 
 import javax.swing.*;

@@ -1,7 +1,7 @@
 package view.game.map;
 
 import controller.SelectionContext;
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;

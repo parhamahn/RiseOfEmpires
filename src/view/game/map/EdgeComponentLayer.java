@@ -1,7 +1,7 @@
 package view.game.map;
 
 import controller.SelectionContext;
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.building.edge.EdgeComponent;
 import model.building.edge.Road;
 import model.map.Hex;

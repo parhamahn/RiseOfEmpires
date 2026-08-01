@@ -1,6 +1,5 @@
-package helpers;
+package helpers.other;
 
-import java.util.List;
 import java.util.Random;
 
 public class RandomNameGenerator {

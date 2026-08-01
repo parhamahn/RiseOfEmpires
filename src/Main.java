@@ -2,7 +2,7 @@ import controller.GameController;
 import controller.MenuController;
 import controller.SelectionContext;
 import controller.SettingsController;
-import helpers.Sound;
+import helpers.sound.Sound;
 import model.map.Map;
 import model.product.Production;
 import model.storage.Storage;

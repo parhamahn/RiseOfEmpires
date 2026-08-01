@@ -1,11 +1,10 @@
 package view.common;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.Season;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class UITheme {
 

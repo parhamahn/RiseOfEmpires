@@ -1,4 +1,4 @@
-package helpers;
+package helpers.image;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

@@ -5,7 +5,7 @@ import controller.handler.building.bazaar.BazaarHandler;
 import controller.handler.building.tradingcenter.TradingCenterHandler;
 import controller.handler.building.tribe.TribeHandler;
 import controller.handler.combat.CombatHandler;
-import helpers.SoundEffects;
+import helpers.sound.SoundEffects;
 import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
 import model.building.tribes.Tribe;

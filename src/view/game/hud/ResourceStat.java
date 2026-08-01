@@ -1,6 +1,6 @@
 package view.game.hud;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import view.common.UITheme;
 
 import javax.swing.*;

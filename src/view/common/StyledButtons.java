@@ -1,7 +1,5 @@
 package view.common;
 
-import helpers.ImageLoader;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

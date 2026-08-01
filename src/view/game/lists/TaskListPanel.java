@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.Task;
 import view.common.StyledButtons;
 

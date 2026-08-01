@@ -1,6 +1,6 @@
 package view.buildingpanel.townhall;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.queue.Technology;
 import model.storage.Cost;
 import view.common.FormatUtils;

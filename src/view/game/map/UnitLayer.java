@@ -1,7 +1,7 @@
 package view.game.map;
 
 import controller.SelectionContext;
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.map.Map;
 import model.state.GameState;
 import model.unit.Unit;
@@ -10,7 +10,6 @@ import view.common.UITheme;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UnitLayer implements MapLayer {

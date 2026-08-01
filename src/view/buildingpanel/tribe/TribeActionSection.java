@@ -1,6 +1,6 @@
 package view.buildingpanel.tribe;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.building.tribes.Tribe;
 import view.common.BaseSection;
 import view.common.StyledButtons;

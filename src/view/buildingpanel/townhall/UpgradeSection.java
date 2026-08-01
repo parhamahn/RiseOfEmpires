@@ -1,6 +1,6 @@
 package view.buildingpanel.townhall;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.state.GameState;
 import view.common.BaseSection;
 import view.common.StyledButtons;

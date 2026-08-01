@@ -1,6 +1,6 @@
 package view.menu;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import view.common.StyledButtons;
 import view.common.UITheme;
 

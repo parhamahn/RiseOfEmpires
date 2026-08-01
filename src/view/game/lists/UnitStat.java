@@ -1,6 +1,6 @@
 package view.game.lists;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.unit.Unit;
 import view.common.StyledButtons;
 import view.common.UITheme;

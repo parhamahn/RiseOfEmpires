@@ -1,11 +1,10 @@
 package view.game.lists;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import helpers.ImageLoader;
+import helpers.image.ImageLoader;
 import model.unit.Unit;
 
 import view.common.StyledButtons;
