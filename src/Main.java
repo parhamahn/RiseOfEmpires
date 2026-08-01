@@ -1,7 +1,4 @@
-import controller.GameController;
-import controller.MenuController;
-import controller.SelectionContext;
-import controller.SettingsController;
+import controller.*;
 import helpers.sound.Sound;
 import model.map.Map;
 import model.product.Production;
@@ -10,6 +7,7 @@ import model.state.GameState;
 import view.game.GamePanel;
 import view.game.hud.HUDPanel;
 import view.game.map.MapPanel;
+import view.menu.LoadPanel;
 import view.menu.MenuPanel;
 import view.menu.SettingsPanel;
 import javax.swing.*;
@@ -53,9 +51,13 @@ public class Main {
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext);
 
+            LoadPanel loadPanel = new LoadPanel();
+            LoadController loadController = new LoadController(loadPanel, cards, menuPanel);
+
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");
             cards.add(gamePanel, "game");
+            cards.add(loadPanel, "load");
 
             frame.setVisible(true);
         });

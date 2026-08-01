@@ -10,7 +10,7 @@ import java.nio.file.*;
 public class SaveManager {
 
     public static final int VERSION = 1;
-    private static final Path SAVE_DIR = Paths.get(System.getProperty("user.dir"), "saves");
+    public static final Path SAVE_DIR = Paths.get(System.getProperty("user.dir"), "saves");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static void writeMetadata(MetaDataSave metaDataSave) throws Exception {

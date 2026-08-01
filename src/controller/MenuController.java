@@ -1,6 +1,7 @@
 package controller;
 import model.state.GameState;
 import permanency.SlotID;
+import permanency.load.LoadManager;
 import permanency.save.MetaDataSave;
 import permanency.save.SaveManager;
 import view.game.GamePanel;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.time.Instant;
+import java.util.List;
 
 public class MenuController {
     private MenuPanel menuPanel;
@@ -76,6 +78,11 @@ public class MenuController {
     public void continueAction(){
         gamePanel.setAnyPanelOpen(false);
         gamePanel.getPausePanel().changeVisible();
+    }
+
+    public void backAction(){
+        CardLayout cl = (CardLayout) (cards.getLayout());
+        cl.show(cards, "menu");
     }
 
     public void saveAction() throws Exception {
