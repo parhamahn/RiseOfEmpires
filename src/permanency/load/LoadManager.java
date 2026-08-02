@@ -1,11 +1,14 @@
 package permanency.load;
 
 import com.google.gson.Gson;
+import model.state.GameState;
 import permanency.save.MetaDataSave;
 import permanency.save.SaveManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,5 +43,24 @@ public class LoadManager {
         return metaDataSaves;
     }
 
+    public static GameState loadData(MetaDataSave metaDataSave) throws Exception{
+        Path source = SaveManager.SAVE_DIR.resolve(metaDataSave.getDataFileName());
+        try(InputStream inputStream = Files.newInputStream(source);){
+            ObjectInputStream reader = new ObjectInputStream(inputStream);
+            Object readObject = reader.readObject();
+            if(!(readObject instanceof GameState)){
+                System.out.println("Failed to load gamestate from "+ source);
+            }
+            return (GameState) readObject;
+        }catch(IOException e){
+            throw new Exception("Failed to load gamestate from "+ source, e);
+        }
+    }
+
+    public static void deleteData(MetaDataSave metaDataSave) throws Exception{
+        Path source = SaveManager.SAVE_DIR.resolve(metaDataSave.getDataFileName());
+        Files.deleteIfExists(source);
+        Files.deleteIfExists(SaveManager.SAVE_DIR.resolve(metaDataSave.getSlotId()+".meta.json"));
+    }
 
 }

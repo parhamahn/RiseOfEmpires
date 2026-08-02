@@ -38,4 +38,9 @@ private static final long serialVersionUID = 1L;
         Generator.generate(this);
     }
 
+    public void loadFrom(GameState loaded) {
+        this.worldState.loadFrom(loaded.getWorldState());
+        this.empireState.loadFrom(loaded.getEmpireState());
+    }
+
 }

@@ -208,4 +208,23 @@ private static final long serialVersionUID = 1L;
         return missions;
     }
 
+    public void loadFrom(EmpireState loaded){
+        this.storage = loaded.getStorage();
+        this.production = loaded.getProduction();
+        this.townHallLevel = loaded.getTownHallLevel();
+        this.townHallHex = loaded.getTownHallHex();
+        this.maxUnit = loaded.getMaxUnit();
+        this.upkeepDisaster = loaded.isUpkeepDisaster();
+        this.happiness = loaded.getHappiness();
+        this.buildings = loaded.getBuildings();
+        this.units = loaded.getUnits();
+        this.isStarving = loaded.isStarving();
+        this.queues = loaded.getQueues();
+        this.researchedTechnologies = loaded.getResearchedTechnologies();
+        this.season = loaded.getSeason();
+        this.allies = loaded.getAllies();
+        this.warHappinessEffect = loaded.getWarHappinessEffect();
+        this.missions = loaded.getMissions();
+    }
+
 }

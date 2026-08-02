@@ -52,7 +52,7 @@ public class Main {
             MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext);
 
             LoadPanel loadPanel = new LoadPanel();
-            LoadController loadController = new LoadController(loadPanel, cards, menuPanel);
+            LoadController loadController = new LoadController(gameState, gamePanel, selectionContext, loadPanel, cards, menuPanel);
 
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");

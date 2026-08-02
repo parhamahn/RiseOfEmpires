@@ -39,4 +39,12 @@ private static final long serialVersionUID = 1L;
     }
     public List<Tribe> getTribes() { return tribes; }
     public List<TradingCenter> getTradingCenters() { return tradingCenters; }
+
+    public void loadFrom(WorldState loaded){
+        this.map = loaded.getMap();
+        this.turnNumber = loaded.getTurnNumber();
+        this.enemies = loaded.getEnemies();
+        this.tribes = loaded.getTribes();
+        this.tradingCenters = loaded.getTradingCenters();
+    }
 }
