@@ -9,6 +9,7 @@ import view.game.hud.HUDPanel;
 import view.game.map.MapPanel;
 import view.menu.LoadPanel;
 import view.menu.MenuPanel;
+import view.menu.SavePanel;
 import view.menu.SettingsPanel;
 import javax.swing.*;
 import java.awt.*;
@@ -54,10 +55,14 @@ public class Main {
             LoadPanel loadPanel = new LoadPanel();
             LoadController loadController = new LoadController(gameState, gamePanel, selectionContext, loadPanel, cards, menuPanel);
 
+            SavePanel savePanel = new SavePanel();
+            SaveController saveController = new SaveController(gameState, gamePanel, savePanel, cards);
+
             cards.add(menuPanel, "menu");
             cards.add(settingsPanel, "settings");
             cards.add(gamePanel, "game");
             cards.add(loadPanel, "load");
+            cards.add(savePanel, "save");
 
             frame.setVisible(true);
         });
