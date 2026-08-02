@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import model.state.GameState;
 import permanency.SlotID;
+import view.common.FormatUtils;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.nio.file.*;
+import java.time.Instant;
 
 public class SaveManager {
 
@@ -47,5 +49,15 @@ public class SaveManager {
         }catch (IOException e) {
             throw new Exception("Failed to write save data for slot " + metaDataSave.getDataFileName(), e);
         }
+    }
+
+    public static void writeSave(GameState gameState, SlotID slotID, String saveName) throws Exception {
+        String summary = saveName
+                + " | Turn " + gameState.getWorldState().getTurnNumber()
+                + " | " + gameState.getEmpireState().getSeason().toString()
+                + " | " + gameState.getEmpireState().getTownHallLevel().toString();
+        MetaDataSave metaDataSave = new MetaDataSave(slotID, VERSION, saveName, gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), summary, slotID.toString()+".roe", Instant.now().toString());
+        writeMetadata(metaDataSave);
+        writeData(gameState, metaDataSave);
     }
 }

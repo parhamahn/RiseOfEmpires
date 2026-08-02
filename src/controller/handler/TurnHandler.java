@@ -9,6 +9,8 @@ import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
 import model.unit.Unit;
+import permanency.SlotID;
+import permanency.save.SaveManager;
 import view.game.GamePanel;
 import view.common.WarningDialogs;
 
@@ -65,6 +67,13 @@ public class TurnHandler {
         }
 
         gameState.getEmpireState().recalculateHappiness();
+
+        try {
+            SaveManager.writeSave(gameState, SlotID.AUTO_SAVE, "Auto_Save");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void processQueues() {

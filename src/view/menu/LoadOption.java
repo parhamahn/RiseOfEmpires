@@ -60,10 +60,7 @@ public class LoadOption extends JPanel {
         if (metaData == null) {
             return FormatUtils.formatEnum(slotId.name());
         }
-        return FormatUtils.formatEnum(slotId.name()) + " - " + metaData.getSaveName()
-                + " | Turn " + metaData.getTurnNumber()
-                + " | " + FormatUtils.formatEnum(metaData.getSeason())
-                + " | " + FormatUtils.formatEnum(metaData.getTownHallLevel());
+        return metaData.getSummary();
     }
 
     public SlotID getSlotId() {
