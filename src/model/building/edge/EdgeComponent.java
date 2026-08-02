@@ -3,7 +3,10 @@ package model.building.edge;
 import model.map.Hex;
 import model.map.Map;
 
-public abstract class EdgeComponent {
+import java.io.Serializable;
+
+public abstract class EdgeComponent implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private final Hex hexA;
     private final Hex hexB;

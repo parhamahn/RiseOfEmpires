@@ -87,7 +87,9 @@ public class MenuController {
 
     public void saveAction() throws Exception {
         gamePanel.setAnyPanelOpen(false);
-        SaveManager.writeMetadata(new MetaDataSave(SlotID.SLOT_1, 1, "test", gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), "Just a test", "test", Instant.now().toString()));
+        MetaDataSave metaDataSave = new MetaDataSave(SlotID.SLOT_1, 1, "test", gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), "Just a test", "test.roe", Instant.now().toString());
+        SaveManager.writeMetadata(metaDataSave);
+        SaveManager.writeData(gameState, metaDataSave);
     }
 
     public void exitAction(){

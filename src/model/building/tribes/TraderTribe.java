@@ -6,10 +6,12 @@ import model.mission.TraderMission;
 import model.trade.tribe.TraderTrade;
 import model.trade.tribe.TribeTrade;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraderTribe extends Tribe {
+public class TraderTribe extends Tribe implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private List<Mission> missions;
     private TribeTrade tradeStrategy;

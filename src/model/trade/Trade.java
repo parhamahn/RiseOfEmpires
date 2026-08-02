@@ -3,7 +3,10 @@ package model.trade;
 import model.storage.ResourceType;
 import model.storage.Storage;
 
-public class Trade {
+import java.io.Serializable;
+
+public class Trade implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private ResourceType toGet;
     private int toGetCount;

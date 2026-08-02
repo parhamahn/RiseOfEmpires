@@ -5,10 +5,12 @@ import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.state.GameState;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeachMission extends Mission{
+public class BeachMission extends Mission implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public BeachMission(Tribe tribe) {
         super(tribe, 10);

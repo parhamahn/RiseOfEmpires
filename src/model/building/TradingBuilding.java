@@ -3,7 +3,10 @@ package model.building;
 import model.map.Hex;
 import model.storage.Cost;
 
-public abstract class TradingBuilding extends Building {
+import java.io.Serializable;
+
+public abstract class TradingBuilding extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
     private boolean usedThisTurn;
 
     protected TradingBuilding(Hex hex, Cost cost, Cost upkeep, int maxHP) {

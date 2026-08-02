@@ -5,8 +5,11 @@ import model.state.GameState;
 import model.unit.combat.Swordsman;
 import model.unit.Unit;
 
+import java.io.Serializable;
 
-public class WarriorMission extends Mission{
+
+public class WarriorMission extends Mission implements Serializable {
+private static final long serialVersionUID = 1L;
     public WarriorMission(Tribe tribe) {
 
         super(tribe, 8);

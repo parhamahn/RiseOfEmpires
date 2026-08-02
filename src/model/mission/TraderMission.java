@@ -7,12 +7,14 @@ import model.map.Hex;
 import model.state.GameState;
 import model.trade.tribe.TraderTrade;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TraderMission extends Mission {
+public class TraderMission extends Mission implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public TraderMission(Tribe tribe) {
         super(tribe, 10);

@@ -4,10 +4,12 @@ import model.map.Hex;
 import model.mission.Mission;
 import model.mission.WarriorMission;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarriorTribe extends Tribe {
+public class WarriorTribe extends Tribe implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private List<Mission> missions;
 

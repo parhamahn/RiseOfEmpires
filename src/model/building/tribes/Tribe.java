@@ -6,10 +6,12 @@ import model.map.Hex;
 import model.mission.Mission;
 import model.trade.tribe.TribeTrade;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Tribe extends Building {
+public abstract class Tribe extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public enum RelationStatus {ENEMY, UNSATISFIED, NEUTRAL, FRIEND, ALLY}
 

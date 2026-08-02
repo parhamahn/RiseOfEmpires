@@ -4,7 +4,10 @@ import model.building.Building;
 import model.map.Hex;
 import model.storage.Cost;
 
-public class Monument extends Building {
+import java.io.Serializable;
+
+public class Monument extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private final static Cost cost = new Cost(20, 10,  0, 0, 2);
     private final static Cost upkeep = new Cost(2, 1, 0, 0, 0);

@@ -2,7 +2,10 @@ package model.queue;
 
 import model.state.GameState;
 
-public abstract class Queue {
+import java.io.Serializable;
+
+public abstract class Queue implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public enum QUEUE_TYPE {UPGRADE, RESEARCH, COOK};
 

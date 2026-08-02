@@ -4,7 +4,10 @@ import model.TownHallLevel;
 import model.map.Hex;
 import model.storage.Cost;
 
-public abstract class Unit{
+import java.io.Serializable;
+
+public abstract class Unit implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public enum UNIT_TYPE {
         EXPLORER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),

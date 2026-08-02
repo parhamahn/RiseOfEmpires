@@ -2,7 +2,10 @@ package model.queue;
 
 import model.state.GameState;
 
-public class ResearchQueue extends Queue {
+import java.io.Serializable;
+
+public class ResearchQueue extends Queue implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private Technology technology;
 

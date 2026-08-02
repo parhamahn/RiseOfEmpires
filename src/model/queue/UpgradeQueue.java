@@ -3,7 +3,10 @@ package model.queue;
 import model.TownHallLevel;
 import model.state.GameState;
 
-public class UpgradeQueue extends Queue {
+import java.io.Serializable;
+
+public class UpgradeQueue extends Queue implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private TownHallLevel targetLevel;
 

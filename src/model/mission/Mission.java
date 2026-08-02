@@ -3,7 +3,10 @@ package model.mission;
 import model.building.tribes.Tribe;
 import model.state.GameState;
 
-public abstract class Mission {
+import java.io.Serializable;
+
+public abstract class Mission implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private final Tribe tribe;
     private int deadline;

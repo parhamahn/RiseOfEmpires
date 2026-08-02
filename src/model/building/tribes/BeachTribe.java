@@ -6,10 +6,12 @@ import model.mission.Mission;
 import model.trade.tribe.BeachTrade;
 import model.trade.tribe.TribeTrade;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeachTribe extends Tribe {
+public class BeachTribe extends Tribe implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private List<Mission> missions;
     private TribeTrade tradeStrategy;

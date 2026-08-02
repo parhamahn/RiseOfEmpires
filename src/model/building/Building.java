@@ -5,10 +5,12 @@ import model.map.Hex;
 import model.Task;
 import model.unit.civilian.Worker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Building {
+public abstract class Building implements Serializable {
+private static final long serialVersionUID = 1L;
     public static int actionPointToAssign = 1;
 
     private Hex hex;

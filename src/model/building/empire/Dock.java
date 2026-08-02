@@ -5,7 +5,10 @@ import model.building.Building;
 import model.map.Hex;
 import model.storage.Cost;
 
-public class Dock extends Building {
+import java.io.Serializable;
+
+public class Dock extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private static Cost cost = new Cost(20, 0,  0, 0, 2);
     private final static Cost upkeep = new Cost(2, 1, 0, 0, 0);

@@ -4,7 +4,10 @@ import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 
-public class LumberMill extends Building {
+import java.io.Serializable;
+
+public class LumberMill extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
     public final static int productingPerUnit = 3;
 
     private final static Cost cost = new Cost(5,  0,  0, 0, 2);

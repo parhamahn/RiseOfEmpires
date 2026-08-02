@@ -1,6 +1,9 @@
 package model.storage;
 
-public class Cost {
+import java.io.Serializable;
+
+public class Cost implements Serializable {
+private static final long serialVersionUID = 1L;
     private int woodNeeded;
     private int stoneNeeded;
     private int ironNeeded;

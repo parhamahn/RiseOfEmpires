@@ -4,7 +4,10 @@ import model.building.Building;
 import model.storage.Cost;
 import model.map.Hex;
 
-public class Stable extends Building {
+import java.io.Serializable;
+
+public class Stable extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
     public final static int productingPerUnit = 3;
     Hex.ResourceType breeding;
 

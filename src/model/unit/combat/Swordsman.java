@@ -2,7 +2,10 @@ package model.unit.combat;
 
 import model.unit.Unit;
 
-public class Swordsman extends Unit {
+import java.io.Serializable;
+
+public class Swordsman extends Unit  implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public Swordsman(){
         super(UNIT_TYPE.SWORDSMAN, 10, 1, 40);

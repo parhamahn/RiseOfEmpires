@@ -6,11 +6,13 @@ import model.building.edge.River;
 import model.building.edge.Wall;
 import model.unit.Unit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Hex {
+public class Hex implements Serializable {
+private static final long serialVersionUID = 1L;
     private static final int FLAT_AP_COST = 1;
     private static final int FOREST_AP_COST = 2;
     private static final int MOUNTAIN_AP_COST = 4;

@@ -6,10 +6,12 @@ import model.building.tribes.Tribe;
 import model.map.Map;
 import model.unit.Unit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldState {
+public class WorldState implements Serializable {
+private static final long serialVersionUID = 1L;
     private Map map;
     private int turnNumber;
     private List<Unit> enemies = new ArrayList<>();

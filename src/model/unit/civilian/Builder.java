@@ -2,7 +2,10 @@ package model.unit.civilian;
 
 import model.unit.Unit;
 
-public class Builder extends Unit {
+import java.io.Serializable;
+
+public class Builder extends Unit implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private int charges;
 

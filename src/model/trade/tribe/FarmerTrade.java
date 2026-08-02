@@ -2,10 +2,11 @@ package model.trade.tribe;
 
 import model.storage.ResourceType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FarmerTrade implements TribeTrade {
+public class FarmerTrade implements TribeTrade, Serializable {
     @Override
     public double getRate() {
         return 0.75;

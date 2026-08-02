@@ -3,7 +3,10 @@ package model.queue;
 import model.state.GameState;
 import model.unit.Unit;
 
-public class CookQueue extends Queue {
+import java.io.Serializable;
+
+public class CookQueue extends Queue implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private Unit unit;
 

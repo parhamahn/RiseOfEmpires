@@ -4,7 +4,10 @@ import model.map.Hex;
 import model.map.Map;
 import model.storage.Cost;
 
-public class Road extends EdgeComponent {
+import java.io.Serializable;
+
+public class Road extends EdgeComponent implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final static Cost cost = new Cost(1, 2, 0, 0, 1);
 

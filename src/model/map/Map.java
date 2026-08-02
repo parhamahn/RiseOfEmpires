@@ -1,8 +1,10 @@
 package model.map;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Map {
+public class Map implements Serializable {
+private static final long serialVersionUID = 1L;
     private final Hex[][] grid;
     private final int rows;
     private final int cols;

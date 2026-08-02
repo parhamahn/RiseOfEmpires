@@ -2,7 +2,10 @@ package model.unit.combat;
 
 import model.unit.Unit;
 
-public class Archer extends Unit {
+import java.io.Serializable;
+
+public class Archer extends Unit  implements Serializable {
+private static final long serialVersionUID = 1L;
 
     public Archer(){
         super(UNIT_TYPE.ARCHER, 10, 1, 20);

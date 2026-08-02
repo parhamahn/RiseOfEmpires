@@ -6,10 +6,12 @@ import model.mission.MountainMission;
 import model.trade.tribe.MountainTrade;
 import model.trade.tribe.TribeTrade;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MountainTribe extends Tribe {
+public class MountainTribe extends Tribe implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private List<Mission> missions;
     private TribeTrade tradeStrategy;

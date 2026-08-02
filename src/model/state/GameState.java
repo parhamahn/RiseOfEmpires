@@ -5,7 +5,11 @@ import model.map.generator.*;
 import model.product.Production;
 import model.storage.Storage;
 
-public class GameState {
+import java.io.Serializable;
+
+public class GameState implements Serializable {
+private static final long serialVersionUID = 1L;
+
     private final EmpireState empireState;
     private final WorldState worldState;
 

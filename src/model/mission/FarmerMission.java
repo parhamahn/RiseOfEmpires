@@ -4,7 +4,10 @@ import model.building.tribes.Tribe;
 import model.state.GameState;
 import model.storage.Cost;
 
-public class FarmerMission extends Mission {
+import java.io.Serializable;
+
+public class FarmerMission extends Mission implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private final Cost cost = new Cost(20, 10, 0, 0, 0);
 

@@ -19,10 +19,12 @@ import model.unit.civilian.Explorer;
 import model.unit.civilian.Worker;
 import model.unit.combat.Swordsman;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmpireState {
+public class EmpireState  implements Serializable {
+private static final long serialVersionUID = 1L;
     public final static int DEFAULT_UNIT_CAPACITY = 6;
 
     private Storage storage;

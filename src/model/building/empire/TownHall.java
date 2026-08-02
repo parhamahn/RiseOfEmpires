@@ -3,7 +3,10 @@ package model.building.empire;
 import model.building.Building;
 import model.map.Hex;
 
-public class TownHall extends Building {
+import java.io.Serializable;
+
+public class TownHall extends Building implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private int HP;
 

@@ -2,7 +2,10 @@ package model.storage;
 
 import model.product.Production;
 
-public class Storage {
+import java.io.Serializable;
+
+public class Storage implements Serializable {
+private static final long serialVersionUID = 1L;
     public int DEFAULT_WOOD_MAX_STORAGE = 100;
     public int DEFAULT_STONE_MAX_STORAGE = 100;
     public int DEFAULT_IRON_MAX_STORAGE = 100;

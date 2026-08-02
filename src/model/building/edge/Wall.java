@@ -4,7 +4,10 @@ import model.map.Hex;
 import model.map.Map;
 import model.storage.Cost;
 
-public class Wall extends EdgeComponent {
+import java.io.Serializable;
+
+public class Wall extends EdgeComponent implements Serializable {
+private static final long serialVersionUID = 1L;
 
     private final int MaxHP = 30;
     private int HP;

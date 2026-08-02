@@ -2,10 +2,11 @@ package model.trade.tribe;
 
 import model.storage.ResourceType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraderTrade implements TribeTrade {
+public class TraderTrade  implements TribeTrade, Serializable {
     private double missionBonus = 0.0;
 
     @Override
