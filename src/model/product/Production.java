@@ -17,9 +17,9 @@ import java.util.List;
 
 public class Production implements Serializable {
 private static final long serialVersionUID = 1L;
-    private final int DEFAULT_FOOD_PRODUCTION = 9;
+    private final int DEFAULT_FOOD_PRODUCTION = 6;
     private final int DEFAULT_WOOD_PRODUCTION = 1;
-    private final int DEFAULT_STONE_PRODUCTION = 1;
+    private final int DEFAULT_STONE_PRODUCTION = 0;
     private final int DEFAULT_IRON_PRODUCTION = 0;
 
     private int foodProduction;

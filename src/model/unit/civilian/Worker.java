@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Worker extends Unit  implements Serializable {
 private static final long serialVersionUID = 1L;
 
-    public Worker(){super(UNIT_TYPE.WORKER, 5, 2, 10);}
+    public Worker(){super(UNIT_TYPE.WORKER, 5, 1, 10);}
 
     @Override
     public boolean isWorker() { return true; }

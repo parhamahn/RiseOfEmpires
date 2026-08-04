@@ -10,7 +10,7 @@ private static final long serialVersionUID = 1L;
     private int charges;
 
     public Builder(){
-        super(UNIT_TYPE.BUILDER, 5, 2, 10);
+        super(UNIT_TYPE.BUILDER, 5, 1, 10);
         this.charges=3;
     }
 

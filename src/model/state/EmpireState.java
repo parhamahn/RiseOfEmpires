@@ -78,7 +78,6 @@ private static final long serialVersionUID = 1L;
         units.add(new Worker());
         units.add(new Worker());
         units.add(new Explorer());
-        units.add(new Swordsman());
 
         for (Unit unit : units) { unit.setHex(townHallHex); }
         townHallHex.getUnits().addAll(units);

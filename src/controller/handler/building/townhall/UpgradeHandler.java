@@ -35,6 +35,9 @@ public class UpgradeHandler {
                 gameState.getEmpireState().getQueues().add(
                         new UpgradeQueue(next, next.getNextUpgradeTurnCost(),
                                 gameState.getWorldState().getTurnNumber()));
+                gameState.getEmpireState().getTownHallLevel().nextUpgrade().getCost().pay(gameState.getEmpireState().getStorage());
+                gamePanel.getTownHallPanel().refresh();
+                gamePanel.getHudPanel().refresh();
             }
              buildingHandler.updateTaskListPanel();
             gamePanel.getTownHallPanel().refresh();
