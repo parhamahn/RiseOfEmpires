@@ -106,10 +106,24 @@ public class TribeTradePanel extends BaseModalPanel {
             return;
         }
 
+        if(giveResource.equals(getResource)) {
+            summaryLabel.setText("You can't get what you give ! ");
+            summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
+            dealButton.setEnabled(false);
+            return;
+        }
+
         TribeTrade trade = tribe.getTradeStrategy();
         if (trade == null) return;
-
         int received = (int) Math.floor(qty * trade.getRate());
+
+        if (storage.getQuantity(getResource) + received > storage.getMax(getResource)) {
+            summaryLabel.setText("Not enough storage for : " + getResource.name());
+            summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
+            dealButton.setEnabled(false);
+            return;
+        };
+
         summaryLabel.setText("Give " + qty + " " + giveResource.name() + "  ->  Get " + received + " " + getResource.name());
         summaryLabel.setForeground(UITheme.POSITIVE_CHANGE);
         dealButton.setEnabled(true);

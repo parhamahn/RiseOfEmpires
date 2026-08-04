@@ -116,6 +116,7 @@ public class TribeHandler {
             tradePanel.updateSummary(storage, current);
         });
 
+
         tradePanel.getDealButton().addActionListener(e -> {
             Tribe current = gamePanel.getTribeMainPanel().getTribe();
             ResourceType giveResource = tradePanel.getSelectedGiveResource();
@@ -144,8 +145,8 @@ public class TribeHandler {
         Storage storage = gameState.getEmpireState().getStorage();
         TribeTrade trade = tribe.getTradeStrategy();
         if (trade == null) return;
-
         int received = (int) Math.floor(amount * trade.getRate());
+
         storage.setQuantity(giveType, storage.getQuantity(giveType) - amount);
         storage.setQuantity(getType, storage.getQuantity(getType) + received);
         tribe.setUsedThisTurn(true);

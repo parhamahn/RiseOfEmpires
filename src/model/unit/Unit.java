@@ -14,10 +14,10 @@ private static final long serialVersionUID = 1L;
         BUILDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
         BORDER_EXPANDER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
         WORKER(null, 3, TownHallLevel.BASE_CAMP, 0, 0, 1, false),
-        ARCHER(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 6, 1, false),
-        CAVALRY(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 8, 2, false),
+        ARCHER(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.SETTLEMENT, 2, 6, 1, false),
+        CAVALRY(new Cost(10, 0, 2, 20, 0), 3, TownHallLevel.SETTLEMENT, 1, 8, 2, false),
         SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1, false),
-        CATAPULT(new Cost(10, 5, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 20, 1, false),
+        CATAPULT(new Cost(15, 20, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 20, 1, false),
         BARBARIAN(null, 0, TownHallLevel.BASE_CAMP, 1, 8, 2, true),
         BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 2, true);
 

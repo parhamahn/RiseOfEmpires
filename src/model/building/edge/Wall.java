@@ -12,7 +12,7 @@ private static final long serialVersionUID = 1L;
     private final int MaxHP = 30;
     private int HP;
 
-    private final static Cost cost = new Cost(0, 5, 0, 0, 2);
+    private final static Cost cost = new Cost(5, 5, 0, 0, 2);
 
     public Wall(Hex hex1, Hex hex2, Map map) {
         super(hex1, hex2, map);
