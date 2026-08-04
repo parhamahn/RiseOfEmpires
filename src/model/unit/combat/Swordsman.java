@@ -8,7 +8,7 @@ public class Swordsman extends Unit  implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public Swordsman(){
-        super(UNIT_TYPE.SWORDSMAN, 10, 1, 40);
+        super(UNIT_TYPE.SWORDSMAN, 2, 1, 40);
     }
 
     @Override

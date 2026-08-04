@@ -101,7 +101,7 @@ private static final long serialVersionUID = 1L;
             case FOREST -> FOREST_AP_COST;
             case MEADOW, PLAIN -> FLAT_AP_COST;
             case SEA -> SEA_COST;
-            case TALL_MOUNTAIN -> Integer.MAX_VALUE;
+            case TALL_MOUNTAIN -> Integer.MAX_VALUE/2;
         };
     }
 

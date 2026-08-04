@@ -8,7 +8,7 @@ public class Archer extends Unit  implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public Archer(){
-        super(UNIT_TYPE.ARCHER, 10, 1, 20);
+        super(UNIT_TYPE.ARCHER, 2, 1, 20);
     }
 
     @Override

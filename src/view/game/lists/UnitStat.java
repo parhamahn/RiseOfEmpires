@@ -28,6 +28,9 @@ public class UnitStat {
                 double hpf = (double) unit.getHP()/unit.getMaxHP();
                 UITheme.drawHPBar(g, barX, barY-barHeight, barWidth, barHeight, hpf);
                 UITheme.drawAPBar(g, barX, barY, barWidth, barHeight, apf);
+                g.setColor(Color.RED);
+                g.setFont(new Font("Arial", Font.BOLD, 12));
+                g.drawString(String.valueOf(unit.getHealth()), getWidth()-10, getHeight());
                 if (unit.isWorker() && unit.isAssigned() && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall())) {
                     g.setFont(new Font("sanserif", Font.PLAIN, 18));
                     g.drawString("\u2699", barX, barY - 5);

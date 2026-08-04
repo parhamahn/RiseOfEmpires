@@ -4,6 +4,7 @@ import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
 import model.building.Building;
 import model.building.TradingBuilding;
+import model.building.other.TradingCenter;
 import model.building.tribes.Tribe;
 import model.queue.Queue;
 import model.queue.Technology;
@@ -45,11 +46,7 @@ public class TurnHandler {
             }
         }
 
-        for(Building building:gameState.getEmpireState().getBuildings()){
-            if(building instanceof TradingBuilding){
-                ((TradingBuilding) building).setUsedThisTurn(false);
-            }
-        }
+        gameState.getEmpireState().recalculateHappiness();
 
         endTurn();
         processQueues();
@@ -65,8 +62,6 @@ public class TurnHandler {
         if (gameState.getEmpireState().isStarving()) {
             WarningDialogs.starvationDisaster();
         }
-
-        gameState.getEmpireState().recalculateHappiness();
 
         try {
             SaveManager.writeSave(gameState, SlotID.AUTO_SAVE, "Auto_Save");
@@ -140,6 +135,9 @@ public class TurnHandler {
         }
         for (Tribe tribe : gameState.getWorldState().getTribes()) {
             tribe.setUsedThisTurn(false);
+        }
+        for(TradingCenter tradingCenter:gameState.getWorldState().getTradingCenters()){
+            tradingCenter.setUsedThisTurn(false);
         }
         gameState.getWorldState().nextTurn();
         Season.processSeason(gameState);

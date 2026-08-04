@@ -51,6 +51,9 @@ public class UnitLayer implements MapLayer {
                 double hpf = (double) unit.getHP()/unit.getMaxHP();
                 UITheme.drawAPBar(g2, barX, barY, barWidth, barHeight, apf);
                 UITheme.drawHPBar(g2, barX, barY+barHeight, barWidth, barHeight, hpf);
+                g2.setColor(Color.RED);
+                g2.setFont(new Font("Arial", Font.BOLD, 12));
+                g2.drawString(String.valueOf(unit.getHealth()), barX+barWidth, barY+barHeight*2);
             }
         }
     }
