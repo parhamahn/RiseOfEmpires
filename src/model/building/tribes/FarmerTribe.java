@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FarmerTribe extends Tribe implements Serializable {
-private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    public static double FOOD_PRODUCTION_BOOST = 1.2;
 
     private List<Mission> missions;
     private TribeTrade tradeStrategy;

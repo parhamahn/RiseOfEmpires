@@ -6,6 +6,7 @@ import model.building.empire.Farm;
 import model.building.empire.IronMine;
 import model.building.empire.Stable;
 import model.building.empire.StoneMine;
+import model.building.tribes.FarmerTribe;
 import model.map.Hex;
 import model.queue.Technology;
 import model.state.EmpireState;
@@ -77,7 +78,13 @@ private static final long serialVersionUID = 1L;
                 int storageCap = getStorageCap(empire, resourceType);
                 int producingResource = (int) Math.min(Math.min(workers * (Math.floor(building.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);
 
-                if(building instanceof Farm || building instanceof Stable){producingResource+= seasonEffect;}
+                if(building instanceof Farm || building instanceof Stable){
+                    boolean farmerAlly = empire.getAllies().stream().anyMatch(tribe ->  tribe instanceof FarmerTribe);
+                    if(farmerAlly){
+                        producingResource*= (int) FarmerTribe.FOOD_PRODUCTION_BOOST;
+                    }
+                    producingResource+= seasonEffect;
+                }
 
                 if (resourceOnHex - producingResource > 0) {
                     building.getHex().getResources().put(resourceType, resourceOnHex - producingResource);

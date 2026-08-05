@@ -25,7 +25,6 @@ private static final long serialVersionUID = 1L;
     public boolean execute(GameState gameState) {
         gameState.getEmpireState().setTownHallLevel(targetLevel);
         gameState.getEmpireState().getStorage().upgradeStorage(targetLevel.getMaxStorage());
-        gameState.getEmpireState().getTownHallHex().getBuilding().setHP(targetLevel.getMaxHP());
         gameState.getEmpireState().getTownHallHex().getBuilding().setMaxHP(targetLevel.getMaxHP());
         return false;
     }

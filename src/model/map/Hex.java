@@ -16,7 +16,7 @@ private static final long serialVersionUID = 1L;
     private static final int FLAT_AP_COST = 1;
     private static final int FOREST_AP_COST = 2;
     private static final int MOUNTAIN_AP_COST = 4;
-    private static final int SEA_COST = 2;
+    private static final int SEA_COST = 0;
 
     public enum TerrainType {PLAIN, FOREST, MOUNTAIN, MEADOW, SEA, TALL_MOUNTAIN}
     public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP, FISH}
