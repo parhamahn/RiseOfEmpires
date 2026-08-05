@@ -23,7 +23,7 @@ private static final long serialVersionUID = 1L;
 
     @Override
     public int getProductionPerWorker() {
-        return 0;
+        return 2;
     }
 
     @Override

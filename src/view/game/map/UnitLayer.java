@@ -2,6 +2,7 @@ package view.game.map;
 
 import controller.SelectionContext;
 import helpers.image.ImageLoader;
+import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 import model.unit.Unit;
@@ -36,8 +37,11 @@ public class UnitLayer implements MapLayer {
                 int drawX = pos.x;
                 int drawY = pos.y;
 
+                String imageName = unit.getHex().getTerrainType() == Hex.TerrainType.SEA
+                        ? "boat"
+                        : unit.getUnitImageName();
                 ImageIcon icon = ImageLoader.getInstance().loadIcon(
-                        "/utils/" + unit.getUnitImageName() + ".png", unitSize);
+                        "/utils/" + imageName + ".png", unitSize);
                 if (icon != null) {
                     g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2,
                             unitSize, unitSize, null);

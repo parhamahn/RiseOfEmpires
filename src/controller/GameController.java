@@ -7,6 +7,7 @@ import controller.handler.building.townhall.TownHallHandler;
 import controller.handler.building.tradingcenter.TradingCenterHandler;
 import controller.handler.building.tribe.TribeHandler;
 import controller.handler.combat.CombatHandler;
+import model.map.Hex;
 import model.state.GameState;
 import view.game.GamePanel;
 

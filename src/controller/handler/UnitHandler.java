@@ -70,8 +70,10 @@ public class UnitHandler {
                     gamePanel.getHudPanel().refresh();
                 }
                 unit.setActionPoints(unit.getActionPoints() - APNeeded);
+                if(clicked.getTerrainType()== Hex.TerrainType.SEA){unit.setActionPoints(0); gamePanel.getMapPanel().markStaticDirty();}
                 unit.setTargetHex(clicked);
-                UnitAnimator animator = gamePanel.getMapPanel().getUnitAnimator();
+                UnitAnimator animator = gamePanel.getMapPanel().getUnitAnimator();        if(clicked.getTerrainType()== Hex.TerrainType.SEA){unit.setActionPoints(0);}
+
                 if (animator.getPosition(unit) == null && unit.getHex() != null) {
                     Point p = gamePanel.getMapPanel().getHexCenter(unit.getHex());
                     animator.setPosition(unit, p);
