@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.SelectionContext;
 import controller.handler.building.townhall.CookUnitHandler;
+import model.building.tribes.Tribe;
 import model.state.GameState;
 import model.map.Hex;
 import model.Task;
@@ -71,7 +72,7 @@ public class BuildingHandler {
                     }
                 });
             }
-            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter)) {
+            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter && !(selected.getBuilding() instanceof Tribe))) {
                 for(ActionListener al:gamePanel.getTaskListPanel().getDestroyButton().getActionListeners()) {
                     gamePanel.getTaskListPanel().getDestroyButton().removeActionListener(al);
                 }

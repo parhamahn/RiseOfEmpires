@@ -50,12 +50,14 @@ public class HexHandler {
                 if(gamePanel.isAnyPanelOpen())return;
 
                 if (selectionContext.getWallOriginHex() != null) {
+                    if(!clicked.isDiscovered() || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
                     buildingHandler.handleWallTask(selectionContext.getWallOriginHex(), clicked);
                     gamePanel.repaint();
                     return;
                 }
 
                 if (selectionContext.getRoadOriginHex() != null) {
+                    if(!clicked.isDiscovered() || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
                     buildingHandler.handleRoadTask(selectionContext.getRoadOriginHex(), clicked);
                     gamePanel.repaint();
                     return;
