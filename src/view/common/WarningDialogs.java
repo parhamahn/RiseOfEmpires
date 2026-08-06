@@ -16,4 +16,11 @@ public class WarningDialogs {
         return JOptionPane.showConfirmDialog(null, "There are units with action points. Are you sure ?","", JOptionPane.YES_NO_OPTION);
     }
 
+    public static void autosaveFailed(String reason){
+        JOptionPane.showMessageDialog(null,
+                "Autosave failed: " + (reason == null ? "unknown error" : reason)
+                        + "\nYour last autosave has been preserved.",
+                "Autosave Error", JOptionPane.ERROR_MESSAGE);
+    }
+
 }

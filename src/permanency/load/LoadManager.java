@@ -19,6 +19,14 @@ public class LoadManager {
 
     private static final Gson GSON = new Gson();
 
+    public static boolean isTooNew(MetaDataSave metaDataSave) {
+        return metaDataSave != null && metaDataSave.getSaveVersion() > SaveManager.VERSION;
+    }
+
+    public static boolean needsMigration(MetaDataSave metaDataSave) {
+        return metaDataSave != null && metaDataSave.getSaveVersion() < SaveManager.VERSION;
+    }
+
     public static List<MetaDataSave> loadAllMetaData() throws Exception{
 
         List<MetaDataSave> metaDataSaves = new ArrayList<MetaDataSave>();
@@ -48,12 +56,12 @@ public class LoadManager {
         try(InputStream inputStream = Files.newInputStream(source);){
             ObjectInputStream reader = new ObjectInputStream(inputStream);
             Object readObject = reader.readObject();
-            if(!(readObject instanceof GameState)){
-                System.out.println("Failed to load gamestate from "+ source);
+            if(!(readObject instanceof GameState gameState)){
+                throw new Exception("Save data in " + source + " is corrupted: not a valid game state");
             }
-            return (GameState) readObject;
-        }catch(IOException e){
-            throw new Exception("Failed to load gamestate from "+ source, e);
+            return gameState;
+        }catch(IOException | ClassNotFoundException e){
+            throw new Exception("Save data in " + source + " is corrupted", e);
         }
     }
 

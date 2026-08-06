@@ -38,6 +38,7 @@ public class GamePanel extends JPanel {
     private PausePanel pausePanel;
     private CombatMainPanel combatMainPanel;
     private boolean anyPanelOpen;
+    private boolean combatActive;
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }
@@ -49,6 +50,8 @@ public class GamePanel extends JPanel {
     public PausePanel getPausePanel() { return pausePanel; }
     public boolean isAnyPanelOpen() { return anyPanelOpen; }
     public void setAnyPanelOpen(boolean anyPanelOpen) { this.anyPanelOpen = anyPanelOpen; }
+    public boolean isCombatActive() { return combatActive; }
+    public void setCombatActive(boolean combatActive) { this.combatActive = combatActive; }
     public TribeMainPanel getTribeMainPanel() { return tribeMainPanel; }
     public GiftPanel getGiftPanel() { return giftPanel; }
     public TribeTradePanel getTribeTradePanel() { return tribeTradePanel; }

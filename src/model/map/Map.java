@@ -8,11 +8,12 @@ private static final long serialVersionUID = 1L;
     private final Hex[][] grid;
     private final int rows;
     private final int cols;
-    private final Random RANDOM = new Random();
+    private final Random rng;
 
-    public Map(int rows, int cols) {
+    public Map(int rows, int cols, Random rng) {
         this.rows = rows;
         this.cols = cols;
+        this.rng = rng;
         this.grid = new Hex[rows][cols];
         generateMap();
         setResources();
@@ -32,9 +33,9 @@ private static final long serialVersionUID = 1L;
         Hex.TerrainType[] seedTerrain = new Hex.TerrainType[numSeeds];
 
         for (int i = 0; i < numSeeds; i++) {
-            seedPos[i][0]  = (int)(Math.random() * cols);
-            seedPos[i][1]  = (int)(Math.random() * rows);
-            seedTerrain[i] = terrains[(int)(Math.random() * terrains.length)];
+            seedPos[i][0]  = rng.nextInt(cols);
+            seedPos[i][1]  = rng.nextInt(rows);
+            seedTerrain[i] = terrains[rng.nextInt(terrains.length)];
         }
 
         for (int r = 0; r < rows; r++) {
@@ -98,27 +99,27 @@ private static final long serialVersionUID = 1L;
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.MEADOW){
 
-                        if (RANDOM.nextDouble()<=0.5){
+                        if (rng.nextDouble()<=0.5){
                             resources.put(Hex.ResourceType.WHEAT, 100);
                         }else{
-                            if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.RICE, 100);
+                            if (rng.nextDouble()<=0.3) resources.put(Hex.ResourceType.RICE, 100);
                         }
 
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.MOUNTAIN){
 
                         resources.put(Hex.ResourceType.STONE, 100);
-                        if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.IRON, 50);
+                        if (rng.nextDouble()<=0.3) resources.put(Hex.ResourceType.IRON, 50);
 
                     }else if (hex.getTerrainType()== Hex.TerrainType.PLAIN){
 
-                        if (RANDOM.nextDouble()<=0.3) {
+                        if (rng.nextDouble()<=0.3) {
                             resources.put(Hex.ResourceType.COW, 200);
                         }else{
-                            if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.SHEEP, 200);
+                            if (rng.nextDouble()<=0.3) resources.put(Hex.ResourceType.SHEEP, 200);
                         }
                     } else if (hex.getTerrainType()== Hex.TerrainType.SEA) {
-                        if(RANDOM.nextDouble()<=0.35){
+                        if(rng.nextDouble()<=0.35){
                             resources.put(Hex.ResourceType.FISH, 100);
                         }
                     }

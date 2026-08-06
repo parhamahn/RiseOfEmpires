@@ -9,26 +9,27 @@ import java.util.*;
 
 public class RiverGenerator {
 
-    public static Random RANDOM = new Random();
     public static int safeRadius = 0;
-    public static int numRivers = 30 + RANDOM.nextInt(20);
 
     public static void generateRivers(GameState gameState) {
         Map map = gameState.getWorldState().getMap();
+        Random rng = gameState.getRng();
 
         int townC =  map.getCols()/ 2;
         int townR = map.getRows()/ 2;
 
         Set<String> usedEdges = new HashSet<>();
 
+        int numRivers = 30 + rng.nextInt(20);
+
         for (int i = 0; i < numRivers; i++) {
-            Hex start = findRandomRiverStart(map, townC, townR, safeRadius);
+            Hex start = findRandomRiverStart(map, townC, townR, safeRadius, rng);
             if (start == null) continue;
 
             List<Hex> path = new ArrayList<>();
             path.add(start);
 
-            int length = 2 + RANDOM.nextInt(4);
+            int length = 2 + rng.nextInt(4);
             Hex current = start;
 
             for (int s = 0; s < length; s++) {
@@ -47,7 +48,7 @@ public class RiverGenerator {
                     candidates.add(n);
                 }
                 if (candidates.isEmpty()) break;
-                Hex next = candidates.get(RANDOM.nextInt(candidates.size()));
+                Hex next = candidates.get(rng.nextInt(candidates.size()));
                 usedEdges.add(map.edgeKey(current, next));
                 path.add(next);
                 current = next;
@@ -63,10 +64,10 @@ public class RiverGenerator {
         }
     }
 
-    private static Hex findRandomRiverStart(Map map, int townC, int townR, int safeRadius) {
+    private static Hex findRandomRiverStart(Map map, int townC, int townR, int safeRadius, Random rng) {
         for (int attempt = 0; attempt < 300; attempt++) {
-            int c = RANDOM.nextInt(map.getCols());
-            int r = RANDOM.nextInt(map.getRows());
+            int c = rng.nextInt(map.getCols());
+            int r = rng.nextInt(map.getRows());
             Hex hex = map.getHex(c, r);
             if (hex == null) continue;
             if (hex.getTerrainType() == Hex.TerrainType.SEA

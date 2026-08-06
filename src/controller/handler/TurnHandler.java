@@ -67,7 +67,7 @@ public class TurnHandler {
         try {
             SaveManager.writeSave(gameState, SlotID.AUTO_SAVE, "Auto_Save");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            WarningDialogs.autosaveFailed(e.getMessage());
         }
 
     }
@@ -123,7 +123,7 @@ public class TurnHandler {
         boolean anyDamagesToBuilding = false;
         for (Building building : gameState.getEmpireState().getBuildings()) {
             if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(gameState.getEmpireState().getStorage())) {
-                Random random = new Random();
+                Random random = gameState.getRng();
                 boolean damageBuilding = random.nextDouble() <= UPKEEP_DAMAGE_CHANCE;
                 if (damageBuilding) {
                     anyDamagesToBuilding = true;

@@ -68,7 +68,7 @@ public class AttackUnit {
 
     private List<Integer> rollSortedDesc(int n) {
         List<Integer> dice = new ArrayList<>();
-        for (int i = 0; i < n; i++) dice.add(Dice.getInstance().roll());
+        for (int i = 0; i < n; i++) dice.add(gameState.getRng().nextInt(6) + 1);
         dice.sort(Collections.reverseOrder());
         return dice;
     }

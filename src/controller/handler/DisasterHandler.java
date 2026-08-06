@@ -23,14 +23,14 @@ public class DisasterHandler {
     }
 
     public void handle() {
-        List<NaturalDisaster.DisasterType> disasters = NaturalDisaster.getRandomDisasters();
+        List<NaturalDisaster.DisasterType> disasters = NaturalDisaster.getRandomDisasters(gameState.getRng());
         if(gameState.getEmpireState().getSeason()!= Season.SeasonType.FALL && disasters.contains(NaturalDisaster.DisasterType.FLOOD)){
             disasters.remove(NaturalDisaster.DisasterType.FLOOD);
         }
         for (NaturalDisaster.DisasterType disaster : disasters) {
             switch (disaster) {
                 case EARTHQUAKE -> {
-                    Earthquake eq = new Earthquake(gameState.getWorldState().getMap());
+                    Earthquake eq = new Earthquake(gameState.getWorldState().getMap(), gameState.getRng());
                     List<Hex> cracks = new ArrayList<>();
                     boolean anyDiscovered = false;
                     for (Hex involved : eq.getInvolvedHexes()) {
@@ -46,7 +46,7 @@ public class DisasterHandler {
                     eq.effect(gameState);
                 }
                 case FLOOD -> {
-                    Flood flood = new Flood(gameState.getWorldState().getMap());
+                    Flood flood = new Flood(gameState.getWorldState().getMap(), gameState.getRng());
                     List<Hex> visibleHexes = new ArrayList<>();
                     for (Hex involved : flood.getInvolvedHexes()) {
                         if (involved.isDiscovered()) {
@@ -59,7 +59,7 @@ public class DisasterHandler {
                     flood.effect(gameState);
                 }
                 case TSUNAMI -> {
-                    Tsunami ts = new Tsunami(gameState.getWorldState().getMap());
+                    Tsunami ts = new Tsunami(gameState.getWorldState().getMap(), gameState.getRng());
                     List<Hex> visibleHexes = new ArrayList<>();
                     for (Hex involved : ts.getInvolvedHexes()) {
                         if (involved.isDiscovered()) {

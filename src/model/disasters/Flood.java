@@ -18,9 +18,8 @@ public class Flood {
     private Hex center;
     private List<Hex> involvedHexes;
 
-    public Flood(Map map) {
+    public Flood(Map map, Random rand) {
         List<Hex> eligibleCenters = new ArrayList<>();
-        Random rand = new Random();
         for(Hex hex:map.getAllHexes()){
             if(hex.getTerrainType()== Hex.TerrainType.FOREST || hex.getTerrainType()== Hex.TerrainType.PLAIN || hex.getTerrainType()== Hex.TerrainType.MEADOW) {
                 for (Hex neigh : map.getNeighbourHexes(hex)) {

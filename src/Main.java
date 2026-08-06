@@ -30,9 +30,9 @@ public class Main {
 
             Storage storage = new Storage();
             Production production = new Production();
-            Map map = new Map(32, 50);
-            GameState gameState = new GameState(storage, production, map);
+            GameState gameState = new GameState(storage, production);
             SelectionContext selectionContext = new SelectionContext();
+            Map map = gameState.getWorldState().getMap();
 
 
             music = new Sound();

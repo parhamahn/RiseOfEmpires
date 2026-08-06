@@ -19,11 +19,10 @@ public class TribeGenerator {
     public static int mountainTribeCount = 3;
     public static int beachTribeCount = 3;
 
-    public static Random rand = new Random();
-
     public static void generateTribes(GameState gameState){
 
         Map map = gameState.getWorldState().getMap();
+        Random rand = gameState.getRng();
 
         List<Hex> plainHexes = new ArrayList<>();
         List<Hex> meadowHexes = new ArrayList<>();
@@ -48,7 +47,6 @@ public class TribeGenerator {
         placeTribes(beachTribeCount, beachHexes, hex -> new BeachTribe(hex), rand, gameState);
         placeTribes(warriorTribeCount, map.getAllHexes(), hex -> new WarriorTribe(hex), rand, gameState);
         placeTribes(traderTribeCount, map.getAllHexes(), hex -> new TraderTribe(hex), rand, gameState);
-
     }
 
     private static void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, Building> factory, Random rand, GameState gameState) {

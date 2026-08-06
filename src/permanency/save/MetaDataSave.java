@@ -62,4 +62,8 @@ public class MetaDataSave {
         return dataFileName;
     }
 
+    public void upgradeToCurrentVersion() {
+        this.saveVersion = SaveManager.VERSION;
+    }
+
 }

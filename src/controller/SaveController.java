@@ -5,6 +5,7 @@ import permanency.SlotID;
 import permanency.load.LoadManager;
 import permanency.save.MetaDataSave;
 import permanency.save.SaveManager;
+import view.common.FormatUtils;
 import view.game.GamePanel;
 import view.menu.SaveOption;
 import view.menu.SavePanel;
@@ -41,10 +42,17 @@ public class SaveController {
                 }
                 option.getSaveButton().addActionListener(e -> saveSlotAction(slotID, option.getMetaData()));
             }
+            if (gamePanel.isCombatActive()) {
+                savePanel.setSaveBlocked("Saving is disabled during combat");
+            } else {
+                savePanel.setSaveBlocked(null);
+            }
             CardLayout cl = (CardLayout) (cards.getLayout());
             cl.show(cards, "save");
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            JOptionPane.showMessageDialog(savePanel, "Failed to open save panel: " + ex.getMessage(),
+                    "Save Error", JOptionPane.ERROR_MESSAGE);
+            backAction();
         }
     }
 
@@ -54,6 +62,26 @@ public class SaveController {
     }
 
     public void saveSlotAction(SlotID slotId, MetaDataSave existingMeta) {
+        if (gamePanel.isCombatActive()) {
+            JOptionPane.showMessageDialog(savePanel,
+                    "Cannot save during combat. Finish or exit combat first.",
+                    "Saving Disabled", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String defaultName = existingMeta != null
+                ? existingMeta.getSaveName()
+                : FormatUtils.formatSavedAt(Instant.now().toString());
+        String saveName = JOptionPane.showInputDialog(savePanel,
+                "Enter a name for this save:", defaultName);
+        if (saveName == null) {
+            return;
+        }
+        saveName = saveName.trim();
+        if (saveName.isEmpty()) {
+            JOptionPane.showMessageDialog(savePanel, "Save name cannot be empty.",
+                    "Save Name", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (existingMeta != null) {
             int sure = JOptionPane.showConfirmDialog(savePanel,
                     "Slot " + slotId + " already has a save. Overwrite?", "Save",
@@ -63,9 +91,12 @@ public class SaveController {
             }
         }
         try {
-            SaveManager.writeSave(gameState, slotId, Instant.now().toString());
+            SaveManager.writeSave(gameState, slotId, saveName);
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            JOptionPane.showMessageDialog(savePanel, "Save failed: " + ex.getMessage()
+                            + "\nYour previous save in this slot has been preserved.",
+                    "Save Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         JOptionPane.showMessageDialog(savePanel, "Game Saved!", "Save", JOptionPane.INFORMATION_MESSAGE);
         backAction();

@@ -17,8 +17,7 @@ public class Earthquake {
     private Hex center;
     private List<Hex> involvedHexes;
 
-    public Earthquake(Map map) {
-        Random rand = new Random();
+    public Earthquake(Map map, Random rand) {
         this.center = map.getAllHexes().get(rand.nextInt(map.getAllHexes().size()));
         involve(this.center, map);
     }

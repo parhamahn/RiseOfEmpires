@@ -2,9 +2,28 @@ package view.common;
 
 import model.storage.Cost;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public final class FormatUtils {
 
+    private static final DateTimeFormatter SAVED_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private FormatUtils() {}
+
+    public static String formatSavedAt(String isoInstant) {
+        if (isoInstant == null || isoInstant.isBlank()) {
+            return "";
+        }
+        try {
+            LocalDateTime local = LocalDateTime.ofInstant(Instant.parse(isoInstant), ZoneId.systemDefault());
+            return local.format(SAVED_AT_FORMATTER);
+        } catch (Exception e) {
+            return isoInstant;
+        }
+    }
 
     public static String formatEnum(String name) {
         StringBuilder formatted = new StringBuilder();

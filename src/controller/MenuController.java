@@ -79,6 +79,8 @@ public class MenuController {
     public void attachPauseAction(){
         if(gamePanel.isAnyPanelOpen())return;
         gamePanel.setAnyPanelOpen(true);
+        gamePanel.getPausePanel().setSaveBlocked(
+                gamePanel.isCombatActive() ? "Saving is disabled during combat" : null);
         gamePanel.getPausePanel().changeVisible();
     }
 

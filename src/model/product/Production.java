@@ -27,9 +27,14 @@ private static final long serialVersionUID = 1L;
     private int woodProduction;
     private int stoneProduction;
     private int ironProduction;
+    private Random rng = new Random();
 
     public Production(){
         reset();
+    }
+
+    public void setRng(Random rng) {
+        this.rng = rng;
     }
 
 
@@ -84,8 +89,7 @@ private static final long serialVersionUID = 1L;
                             .filter(hex -> hex.getResources().getOrDefault(resourceType, 0) > 0)
                             .toList();
                     if(!fishNeighbors.isEmpty()){
-                        Random RANDOM = new Random();
-                        resourceHex = fishNeighbors.get(RANDOM.nextInt(fishNeighbors.size()));
+                        resourceHex = fishNeighbors.get(rng.nextInt(fishNeighbors.size()));
                         resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
                     }
                 }

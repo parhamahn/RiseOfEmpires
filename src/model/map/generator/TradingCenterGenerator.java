@@ -13,7 +13,7 @@ public class TradingCenterGenerator {
 
     public static void generateTradingCenters(GameState gameState){
         Map map = gameState.getWorldState().getMap();
-        Random rand = new Random();
+        Random rand = gameState.getRng();
         for(int i=0;i<count;i++){
             Hex x = map.getAllHexes().get(rand.nextInt(map.getAllHexes().size()));
             if(x.getBuilding()==null){

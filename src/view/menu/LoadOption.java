@@ -2,6 +2,7 @@ package view.menu;
 
 import helpers.image.ImageLoader;
 import permanency.SlotID;
+import permanency.load.LoadManager;
 import permanency.save.MetaDataSave;
 import view.common.FormatUtils;
 import view.common.StyledButtons;
@@ -53,12 +54,21 @@ public class LoadOption extends JPanel {
             summary.setForeground(UITheme.MENU_BUTTON_FG);
             loadButton.setEnabled(false);
             removeButton.setEnabled(false);
+        } else if (LoadManager.isTooNew(metaData)) {
+            summary.setForeground(UITheme.MENU_BUTTON_FG);
+            loadButton.setEnabled(false);
         }
     }
 
     private String buildSummaryText() {
         if (metaData == null) {
             return FormatUtils.formatEnum(slotId.name());
+        }
+        if (LoadManager.isTooNew(metaData)) {
+            return metaData.getSummary() + "  [Incompatible: newer game version]";
+        }
+        if (LoadManager.needsMigration(metaData)) {
+            return metaData.getSummary() + "  [Old version - will be migrated]";
         }
         return metaData.getSummary();
     }

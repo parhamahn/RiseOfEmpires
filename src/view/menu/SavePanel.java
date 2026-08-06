@@ -19,6 +19,7 @@ public class SavePanel extends JPanel {
     private final JPanel listContainer;
     private final Map<SlotID, SaveOption> saveOptions = new HashMap<>();
     private JButton backButton;
+    private JLabel blockedLabel;
 
     public SavePanel() {
         setLayout(new BorderLayout());
@@ -26,7 +27,19 @@ public class SavePanel extends JPanel {
 
         JLabel title = UITheme.createSectionTitle("Save Game");
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setBorder(BorderFactory.createEmptyBorder(40, 0, 30, 0));
+        title.setBorder(BorderFactory.createEmptyBorder(40, 0, 10, 0));
+
+        blockedLabel = new JLabel("", SwingConstants.CENTER);
+        blockedLabel.setFont(UITheme.GAME_FONT.deriveFont(20f));
+        blockedLabel.setForeground(UITheme.MENU_BUTTON_FG);
+        blockedLabel.setVisible(false);
+        blockedLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+        JPanel north = new JPanel();
+        north.setOpaque(false);
+        north.setLayout(new BoxLayout(north, BoxLayout.Y_AXIS));
+        north.add(title);
+        north.add(blockedLabel);
 
         listContainer = new JPanel();
         listContainer.setOpaque(false);
@@ -50,9 +63,20 @@ public class SavePanel extends JPanel {
         bottom.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
         bottom.add(backButton);
 
-        add(title, BorderLayout.NORTH);
+        add(north, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
+    }
+
+    public void setSaveBlocked(String reason) {
+        boolean blocked = reason != null;
+        blockedLabel.setVisible(blocked);
+        if (blocked) {
+            blockedLabel.setText(reason);
+        }
+        for (SaveOption option : saveOptions.values()) {
+            option.getSaveButton().setEnabled(!blocked);
+        }
     }
 
     public void init(List<MetaDataSave> metaDataSaves) {

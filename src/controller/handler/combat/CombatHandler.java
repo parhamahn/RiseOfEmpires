@@ -62,6 +62,7 @@ public class CombatHandler {
         gamePanel.getCombatMainPanel().setHexes(attackerHex, defenderHex);
         gamePanel.getCombatMainPanel().open();
         gamePanel.setAnyPanelOpen(true);
+        gamePanel.setCombatActive(true);
 
     }
 
@@ -117,6 +118,7 @@ public class CombatHandler {
             if (defenderHex.getUnits().stream().noneMatch(Unit::isCombatUnit)) {
                 panel.close();
                 gamePanel.setAnyPanelOpen(false);
+                gamePanel.setCombatActive(false);
                 gamePanel.getHudPanel().refresh();
                 gamePanel.getMapPanel().markStaticDirty();
                 gamePanel.getMapPanel().repaint();
@@ -140,6 +142,7 @@ public class CombatHandler {
                 if (defenderHex.getUnits().stream().noneMatch(Unit::isCombatUnit)) {
                     panel.close();
                     gamePanel.setAnyPanelOpen(false);
+                    gamePanel.setCombatActive(false);
                     gamePanel.getHudPanel().refresh();
                     gamePanel.getMapPanel().markStaticDirty();
                     gamePanel.getMapPanel().repaint();

@@ -52,12 +52,14 @@ public class SaveManager {
     }
 
     public static void writeSave(GameState gameState, SlotID slotID, String saveName) throws Exception {
+        String savedAt = Instant.now().toString();
         String summary = saveName
                 + " | Turn " + gameState.getWorldState().getTurnNumber()
                 + " | " + gameState.getEmpireState().getSeason().toString()
-                + " | " + gameState.getEmpireState().getTownHallLevel().toString();
-        MetaDataSave metaDataSave = new MetaDataSave(slotID, VERSION, saveName, gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), summary, slotID.toString()+".roe", Instant.now().toString());
-        writeMetadata(metaDataSave);
+                + " | " + gameState.getEmpireState().getTownHallLevel().toString()
+                + " | Saved: " + FormatUtils.formatSavedAt(savedAt);
+        MetaDataSave metaDataSave = new MetaDataSave(slotID, VERSION, saveName, gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), summary, slotID.toString()+".roe", savedAt);
         writeData(gameState, metaDataSave);
+        writeMetadata(metaDataSave);
     }
 }

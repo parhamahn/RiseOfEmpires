@@ -16,9 +16,8 @@ public class Tsunami {
     private Hex center;
     private List<Hex> involvedHexes;
 
-    public Tsunami(Map map) {
+    public Tsunami(Map map, Random rand) {
         List<Hex> eligibleCenters = new ArrayList<>();
-        Random rand = new Random();
         for(Hex hex:map.getAllHexes()){
             if(hex.getTerrainType()!= Hex.TerrainType.SEA) {
                 for (Hex neigh : map.getNeighbourHexes(hex)) {

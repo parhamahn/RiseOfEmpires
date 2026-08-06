@@ -8,9 +8,8 @@ public class NaturalDisaster {
 
     public enum DisasterType {EARTHQUAKE, FLOOD, TSUNAMI}
 
-    public static List<DisasterType> getRandomDisasters(){
+    public static List<DisasterType> getRandomDisasters(Random rand){
         List<DisasterType> disasters = new ArrayList<DisasterType>();
-        Random rand = new Random();
 
         for(DisasterType disasterType : DisasterType.values()){
             if(rand.nextDouble()<=0.05){
