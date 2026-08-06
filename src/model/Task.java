@@ -8,6 +8,7 @@ import model.state.GameState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Task {
     public enum TASK {
@@ -60,8 +61,11 @@ public class Task {
                     break;
                 }
             }
-            for(Hex neighhex:gameState.getWorldState().getMap().getNeighbourHexes(hex)){
-                if(neighhex!=null &&neighhex.isDiscovered() && neighhex.getTerrainType()== Hex.TerrainType.SEA && gameState.getEmpireState().getTownHallLevel().ordinal()>= Dock.getLevel().ordinal()){availableTasks.add(TASK.DOCK);}
+            if(gameState.getEmpireState().getTownHallLevel().ordinal() >= Dock.getLevel().ordinal()
+                    && gameState.getWorldState().getMap().getNeighbourHexes(hex).stream()
+                    .filter(Objects::nonNull)
+                    .anyMatch(h -> h.getTerrainType() == Hex.TerrainType.SEA && h.isDiscovered() && h.getResources().containsKey(Hex.ResourceType.FISH))){
+                availableTasks.add(TASK.DOCK);
             }
         }
         if (hex.isDiscovered()) {

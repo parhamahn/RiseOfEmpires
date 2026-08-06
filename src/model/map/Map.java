@@ -117,6 +117,10 @@ private static final long serialVersionUID = 1L;
                         }else{
                             if (RANDOM.nextDouble()<=0.3) resources.put(Hex.ResourceType.SHEEP, 200);
                         }
+                    } else if (hex.getTerrainType()== Hex.TerrainType.SEA) {
+                        if(RANDOM.nextDouble()<=0.35){
+                            resources.put(Hex.ResourceType.FISH, 100);
+                        }
                     }
                 }
             }

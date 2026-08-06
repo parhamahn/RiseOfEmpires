@@ -4,6 +4,7 @@ import controller.handler.building.townhall.CookUnitHandler;
 import model.Season;
 import model.building.Building;
 import model.building.TradingBuilding;
+import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
 import model.building.tribes.Tribe;
 import model.queue.Queue;
@@ -138,6 +139,12 @@ public class TurnHandler {
         }
         for(TradingCenter tradingCenter:gameState.getWorldState().getTradingCenters()){
             tradingCenter.setUsedThisTurn(false);
+        }
+        for(Building building:gameState.getEmpireState().getBuildings()) {
+            if(building instanceof Bazaar){
+                Bazaar bazaar = (Bazaar) building;
+                bazaar.setUsedThisTurn(false);
+            }
         }
         gameState.getWorldState().nextTurn();
         Season.processSeason(gameState);

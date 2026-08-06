@@ -5,6 +5,7 @@ import model.building.*;
 import model.building.empire.*;
 import model.building.tribes.FarmerTribe;
 import model.map.Hex;
+import model.map.Map;
 import model.queue.Technology;
 import model.state.EmpireState;
 import model.unit.Unit;
@@ -12,6 +13,8 @@ import model.unit.Unit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 public class Production implements Serializable {
 private static final long serialVersionUID = 1L;
@@ -44,7 +47,7 @@ private static final long serialVersionUID = 1L;
     }
 
 
-    public void recalculate(EmpireState empire, AdjacencyBonus.ExtraResources bonus){
+    public void recalculate(EmpireState empire, AdjacencyBonus.ExtraResources bonus, Map map){
         this.foodProduction = DEFAULT_FOOD_PRODUCTION;
         this.woodProduction = DEFAULT_WOOD_PRODUCTION;
         this.stoneProduction = DEFAULT_STONE_PRODUCTION;
@@ -71,7 +74,22 @@ private static final long serialVersionUID = 1L;
             if(empire.getResearchedTechnologies().contains(Technology.STEEL_TOOLS) && (building instanceof StoneMine || building instanceof IronMine)){steelToolsMultiplier = 1.5;}
 
             if (workers > 0 && resourceType != null && !building.isProducingStopped()) {
-                int resourceOnHex = building.getHex().getResources().getOrDefault(resourceType, 0);
+                Hex resourceHex = building.getHex();
+                int resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+
+                if(building instanceof Dock){
+                    List<Hex> fishNeighbors = map.getNeighbourHexes(building.getHex()).stream()
+                            .filter(Objects::nonNull)
+                            .filter(hex -> hex.getTerrainType() == Hex.TerrainType.SEA)
+                            .filter(hex -> hex.getResources().getOrDefault(resourceType, 0) > 0)
+                            .toList();
+                    if(!fishNeighbors.isEmpty()){
+                        Random RANDOM = new Random();
+                        resourceHex = fishNeighbors.get(RANDOM.nextInt(fishNeighbors.size()));
+                        resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+                    }
+                }
+
                 int storageCap = getStorageCap(empire, resourceType);
                 int producingResource = (int) Math.min(Math.min(workers * (Math.floor(building.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);
 
@@ -84,12 +102,12 @@ private static final long serialVersionUID = 1L;
                 }
 
                 if (resourceOnHex - producingResource > 0) {
-                    building.getHex().getResources().put(resourceType, resourceOnHex - producingResource);
+                    resourceHex.getResources().put(resourceType, resourceOnHex - producingResource);
                 } else {
                     toRemove.add(building);
-                    building.getHex().getResources().remove(resourceType);
-                    if (building.getHex().getResources().isEmpty()) {
-                        building.getHex().setTerrainType(Hex.TerrainType.PLAIN);
+                    resourceHex.getResources().remove(resourceType);
+                    if (!(building instanceof Dock) && resourceHex.getResources().isEmpty()) {
+                        resourceHex.setTerrainType(Hex.TerrainType.PLAIN);
                     }
                 }
 
@@ -132,7 +150,7 @@ private static final long serialVersionUID = 1L;
             case WOOD  -> this.woodProduction += amount;
             case STONE -> this.stoneProduction += amount;
             case IRON  -> this.ironProduction += amount;
-            case WHEAT, RICE, COW, SHEEP -> this.foodProduction += amount;
+            case WHEAT, RICE, COW, SHEEP, FISH -> this.foodProduction += amount;
         }
     }
 
@@ -141,7 +159,7 @@ private static final long serialVersionUID = 1L;
             case WOOD  -> empire.getStorage().getWoodMax()  - empire.getStorage().getWoodQuantity();
             case STONE -> empire.getStorage().getStoneMax() - empire.getStorage().getStoneQuantity();
             case IRON  -> empire.getStorage().getIronMax()  - empire.getStorage().getIronQuantity();
-            case WHEAT, RICE, COW, SHEEP -> empire.getStorage().getFoodMax() - empire.getStorage().getFoodQuantity();
+            case WHEAT, RICE, COW, SHEEP, FISH -> empire.getStorage().getFoodMax() - empire.getStorage().getFoodQuantity();
             default -> 0;
         };
     }

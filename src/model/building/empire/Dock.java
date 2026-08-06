@@ -4,6 +4,7 @@ import model.TownHallLevel;
 import model.building.Building;
 import model.map.Hex;
 import model.storage.Cost;
+import model.storage.ResourceType;
 
 import java.io.Serializable;
 
@@ -30,4 +31,8 @@ private static final long serialVersionUID = 1L;
     public String getBuildingImageName() {
         return "dockhex";
     }
+
+    @Override
+    public Hex.ResourceType getResourceType() { return Hex.ResourceType.FISH; }
+
 }

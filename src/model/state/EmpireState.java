@@ -106,7 +106,7 @@ private static final long serialVersionUID = 1L;
     }
 
     public void recalculateProduction(Map map) {
-        production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map));
+        production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map), map);
     }
 
     public void recalculateHappiness() {

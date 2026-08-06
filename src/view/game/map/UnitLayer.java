@@ -32,16 +32,14 @@ public class UnitLayer implements MapLayer {
         for (Unit unit : units) {
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
+                if(unit.getHex().getTerrainType()== Hex.TerrainType.SEA && !unit.isMoving()){return;}
                 Point pos = unitAnimator.getPosition(unit);
                 if (pos == null) continue;
                 int drawX = pos.x;
                 int drawY = pos.y;
 
-                String imageName = unit.getHex().getTerrainType() == Hex.TerrainType.SEA
-                        ? "boat"
-                        : unit.getUnitImageName();
                 ImageIcon icon = ImageLoader.getInstance().loadIcon(
-                        "/utils/" + imageName + ".png", unitSize);
+                        "/utils/" + unit.getUnitImageName() + ".png", unitSize);
                 if (icon != null) {
                     g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2,
                             unitSize, unitSize, null);

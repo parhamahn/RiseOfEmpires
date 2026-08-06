@@ -26,6 +26,7 @@ public class ResourceLayer implements MapLayer {
         resourceIcons.put(Hex.ResourceType.RICE, loader.loadImage("/utils/rice.png"));
         resourceIcons.put(Hex.ResourceType.COW, loader.loadImage("/utils/cow.png"));
         resourceIcons.put(Hex.ResourceType.SHEEP, loader.loadImage("/utils/sheep.png"));
+        resourceIcons.put(Hex.ResourceType.FISH, loader.loadImage("/utils/fish.png"));
     }
 
 

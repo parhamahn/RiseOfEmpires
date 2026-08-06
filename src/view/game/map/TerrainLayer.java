@@ -62,6 +62,10 @@ public class TerrainLayer implements MapLayer {
                         g2.drawString("?", center.x - r2 / 10, center.y + r2 / 10);
                     }
                 }
+                if(hex.getTerrainType()== Hex.TerrainType.SEA && !hex.getUnits().isEmpty()){
+                    BufferedImage img = ImageLoader.getInstance().loadImage("/utils/boat.png");
+                    g2.drawImage(img, center.x - r2, center.y - r2, r2 * 2, r2 * 2, null);
+                }
             }
         }
     }

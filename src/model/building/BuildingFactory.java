@@ -32,7 +32,7 @@ public class BuildingFactory {
             case LUMBER_MILL -> new LumberMill(hex);
             case STONE_MINE -> new StoneMine(hex);
             case IRON_MINE -> new IronMine(hex);
-            case STABLE -> new Stable(hex, Hex.ResourceType.COW);
+            case STABLE -> new Stable(hex, hex.getResources().containsKey(Hex.ResourceType.COW) ? Hex.ResourceType.COW : Hex.ResourceType.SHEEP);
             case TOWN -> new Town(hex);
             case MONUMENT -> new Monument(hex);
             case BAZAAR -> new Bazaar(hex);

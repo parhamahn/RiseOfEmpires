@@ -46,7 +46,7 @@ public class BuildingHandler {
 
     public void updateTaskListPanel() {
         Hex selected = selectionContext.getSelectedHex();
-        if (selected != null) {
+        if (selected != null && selected.getUnits().stream().anyMatch(Unit::isBuilder)) {
             Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
             for (Task.TASK task : Task.getAvailableTasks(selected, gameState)) {
                 boolean enoughAP = false;
@@ -72,7 +72,7 @@ public class BuildingHandler {
                     }
                 });
             }
-            if(selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter && !(selected.getBuilding() instanceof Tribe))) {
+            if((selected.getBuilding() != null && !selected.getBuilding().isTownHall() && !(selected.getBuilding() instanceof TradingCenter || selected.getBuilding() instanceof Tribe)) && selected.getUnits().stream().anyMatch(Unit::isBuilder)) {
                 for(ActionListener al:gamePanel.getTaskListPanel().getDestroyButton().getActionListeners()) {
                     gamePanel.getTaskListPanel().getDestroyButton().removeActionListener(al);
                 }
@@ -218,6 +218,8 @@ public class BuildingHandler {
     }
 
     public void handleRoadDestroy(Hex origin, Hex edgeHex) {
+        boolean anyBuilder = origin.getUnits().stream().anyMatch(Unit::isBuilder);
+        if(!anyBuilder) {return;}
         if (edgeHex == null || !origin.hasRoadTo(edgeHex)) {
             selectionContext.setDestroyRoadOriginHex(null);
             return;
