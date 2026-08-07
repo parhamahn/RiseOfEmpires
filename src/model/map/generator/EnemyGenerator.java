@@ -3,17 +3,50 @@ package model.map.generator;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
+import model.unit.Unit;
 import model.unit.enemy.Barbarian;
+import model.unit.enemy.Bear;
+
+import java.util.List;
+import java.util.Random;
 
 public class EnemyGenerator {
 
+    private static final int ENEMY_COUNT = 8;
+
     public static void generateEnemies(GameState gameState){
         Map map = gameState.getWorldState().getMap();
-        Barbarian testBear = new Barbarian();
-        Hex townHallnei = map.getHex(map.getCols()/ 2 - 3, map.getRows() / 2);
-        testBear.setHex(townHallnei);
-        townHallnei.getUnits().add(testBear);
-        gameState.getWorldState().getEnemies().add(testBear);
+        Random rand = gameState.getRng();
+        Hex townHallHex = gameState.getEmpireState().getTownHallHex();
+
+        int placed = 0;
+        int attempts = 0;
+        int maxAttempts = ENEMY_COUNT * 300;
+        while (placed < ENEMY_COUNT && attempts < maxAttempts) {
+            attempts++;
+            Hex hex = map.getHex(rand.nextInt(map.getCols()), rand.nextInt(map.getRows()));
+            if (!isValidSpawnHex(map, hex, townHallHex)) continue;
+
+            Unit enemy = rand.nextBoolean() ? new Barbarian() : new Bear();
+            enemy.setHex(hex);
+            hex.getUnits().add(enemy);
+            gameState.getWorldState().getEnemies().add(enemy);
+            placed++;
+        }
+    }
+
+    private static boolean isValidSpawnHex(Map map, Hex hex, Hex townHallHex) {
+        if (hex == null) return false;
+        if (hex == townHallHex) return false;
+        if (hex.isInEmpireBorder()) return false;
+        if (hex.getBuilding() != null || !hex.getUnits().isEmpty()) return false;
+        if (hex.getTerrainType() == Hex.TerrainType.SEA || hex.getTerrainType() == Hex.TerrainType.TALL_MOUNTAIN) return false;
+
+        List<Hex> neighbours = map.getNeighbourHexes(hex);
+        for (Hex neighbour : neighbours) {
+            if (neighbour != null && neighbour.isInEmpireBorder()) return false;
+        }
+        return true;
     }
 
 }

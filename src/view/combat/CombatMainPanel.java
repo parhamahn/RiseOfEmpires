@@ -9,14 +9,17 @@ import view.common.UITheme;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class CombatMainPanel extends BaseModalPanel {
 
     private JButton attackButton;
     private CombatSideSection attackerSideSection;
     private CombatSideSection defenderSideSection;
+    private JLabel summaryLabel;
     private Hex attackerHex;
     private Hex defenderHex;
+    private boolean interactive = true;
 
     public CombatMainPanel(GameState gameState) {
         super(gameState, "Combat", "/utils/combatpanel.png");
@@ -40,6 +43,12 @@ public class CombatMainPanel extends BaseModalPanel {
         sides.add(Box.createHorizontalGlue());
         sides.add(defenderSideSection);
 
+        summaryLabel = new JLabel(" ");
+        summaryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        summaryLabel.setFont(UITheme.GAME_FONT_BOLD.deriveFont(20f));
+        summaryLabel.setForeground(UITheme.GOLD);
+        summaryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         float fontSize = 24f;
         Icon icon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png",240, 55);
         Dimension dimension = new Dimension(icon.getIconWidth(), icon.getIconHeight());
@@ -50,6 +59,8 @@ public class CombatMainPanel extends BaseModalPanel {
 
         content.add(sides);
         content.add(Box.createVerticalGlue());
+        content.add(summaryLabel);
+        content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(attackButton);
 
         return  content;
@@ -57,7 +68,7 @@ public class CombatMainPanel extends BaseModalPanel {
 
     @Override
     public void refresh() {
-        attackButton.setEnabled(true);
+        attackButton.setEnabled(interactive);
         attackerSideSection.refresh(attackerHex);
         defenderSideSection.refresh(defenderHex);
     }
@@ -65,6 +76,49 @@ public class CombatMainPanel extends BaseModalPanel {
     public void setHexes(Hex attackerHex, Hex defenderHex) {
         this.attackerHex = attackerHex;
         this.defenderHex = defenderHex;
+        clearSummary();
+        attackerSideSection.clearDice();
+        defenderSideSection.clearDice();
+    }
+
+    public void setInteractive(boolean interactive) {
+        this.interactive = interactive;
+        attackButton.setEnabled(interactive && attackerHex != null);
+    }
+
+    public void playRoll(List<Integer> attackerDice, List<Integer> defenderDice,
+                         boolean[] attackerWins, Runnable onDone) {
+        boolean[] defenderWins = new boolean[attackerWins.length];
+        for (int i = 0; i < attackerWins.length; i++) defenderWins[i] = !attackerWins[i];
+
+        int[] pending = {2};
+        Runnable done = () -> {
+            pending[0]--;
+            if (pending[0] == 0 && onDone != null) onDone.run();
+        };
+
+        attackerSideSection.animateTo(attackerDice, attackerWins, done);
+        defenderSideSection.animateTo(defenderDice, defenderWins, done);
+    }
+
+    public void showSummary(int attackerPower, int defenderPower) {
+        int attackerRounds = attackerPower;
+        int defenderRounds = defenderPower;
+        String winner;
+        if (attackerPower > defenderPower) {
+            winner = "Attacker wins!";
+        } else if (defenderPower > attackerPower) {
+            winner = "Defender wins!";
+        } else {
+            winner = "Draw!";
+        }
+        summaryLabel.setText(String.format(
+                "Attacker won %d round(s) \u2192 %d damage   |   Defender won %d round(s) \u2192 %d damage   \u2014   %s",
+                attackerRounds, attackerPower, defenderRounds, defenderPower, winner));
+    }
+
+    public void clearSummary() {
+        summaryLabel.setText(" ");
     }
 
     public Hex getAttackerHex() {

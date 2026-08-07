@@ -1,6 +1,7 @@
 package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
+import controller.handler.combat.EnemyAttackHandler;
 import model.Season;
 import model.building.Building;
 import model.building.TradingBuilding;
@@ -28,11 +29,13 @@ public class TurnHandler {
     private final GameState gameState;
     private final GamePanel gamePanel;
     private final DisasterHandler disasterHandler;
+    private final EnemyAttackHandler enemyAttackHandler;
 
     public TurnHandler(GameState gameState, GamePanel gamePanel, CookUnitHandler cookUnitHandler, BuildingHandler buildingHandler, DisasterHandler disasterHandler) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.disasterHandler = disasterHandler;
+        this.enemyAttackHandler = new EnemyAttackHandler(gameState, gamePanel);
     }
 
     public void endTurnAction() {
@@ -51,24 +54,27 @@ public class TurnHandler {
 
         endTurn();
         processQueues();
-        gamePanel.getTownHallPanel().refresh();
-        gamePanel.getHudPanel().refresh();
-        gamePanel.getUnitListPanel().clear();
-        gamePanel.getTaskListPanel().clear();
-        gamePanel.getMapPanel().markStaticDirty();
-        gamePanel.repaint();
-        if (gameState.getEmpireState().isUpkeepDisaster()) {
-            WarningDialogs.upkeepDisaster();
-        }
-        if (gameState.getEmpireState().isStarving()) {
-            WarningDialogs.starvationDisaster();
-        }
 
-        try {
-            SaveManager.writeSave(gameState, SlotID.AUTO_SAVE, "Auto_Save");
-        } catch (Exception e) {
-            WarningDialogs.autosaveFailed(e.getMessage());
-        }
+        enemyAttackHandler.handle(() -> {
+            gamePanel.getTownHallPanel().refresh();
+            gamePanel.getHudPanel().refresh();
+            gamePanel.getUnitListPanel().clear();
+            gamePanel.getTaskListPanel().clear();
+            gamePanel.getMapPanel().markStaticDirty();
+            gamePanel.repaint();
+            if (gameState.getEmpireState().isUpkeepDisaster()) {
+                WarningDialogs.upkeepDisaster();
+            }
+            if (gameState.getEmpireState().isStarving()) {
+                WarningDialogs.starvationDisaster();
+            }
+
+            try {
+                SaveManager.writeSave(gameState, SlotID.AUTO_SAVE, "Auto_Save");
+            } catch (Exception e) {
+                WarningDialogs.autosaveFailed(e.getMessage());
+            }
+        });
 
     }
 

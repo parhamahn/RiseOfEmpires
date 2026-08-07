@@ -12,13 +12,18 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatSideSection extends BaseSection {
+
+    private static final int ROLL_TICKS = 10;
+    private static final int ROLL_TICK_MS = 90;
 
     private List<DiceSlot> diceSlots = new ArrayList<>();
     private JPanel diceZone;
     private JPanel unitZone;
     private String title;
+    private Timer rollTimer;
 
     public CombatSideSection(String title) {
         super(title);
@@ -48,9 +53,7 @@ public class CombatSideSection extends BaseSection {
 
         Map<Unit.UNIT_TYPE, Integer> grouped = new LinkedHashMap<>();
         for (Unit u : hex.getUnits()) {
-            if (u.isCombatUnit()) {
-                grouped.merge(u.getUnitType(), 1, Integer::sum);
-            }
+            grouped.merge(u.getUnitType(), 1, Integer::sum);
         }
 
         for (Map.Entry<Unit.UNIT_TYPE, Integer> entry : grouped.entrySet()) {
@@ -58,8 +61,10 @@ public class CombatSideSection extends BaseSection {
             row.setLayout(new BoxLayout(row, BoxLayout.X_AXIS));
             row.setOpaque(false);
 
-            String path = "/utils/" + entry.getKey().toString().toLowerCase() + ".png";
+            Unit.UNIT_TYPE type = entry.getKey();
+            String path = "/utils/" + type.toString().toLowerCase().replace("_", "") + ".png";
             ImageIcon icon = ImageLoader.getInstance().loadIcon(path, 50);
+            if (icon == null) continue;
             JButton iconButton = new JButton(icon);
             UITheme.styleIconButton(iconButton);
             row.add(iconButton);
@@ -82,6 +87,7 @@ public class CombatSideSection extends BaseSection {
     }
 
     public void setDice(List<Integer> dice) {
+        if (rollTimer != null) rollTimer.stop();
         diceZone.removeAll();
         diceSlots.clear();
 
@@ -97,7 +103,58 @@ public class CombatSideSection extends BaseSection {
         repaint();
     }
 
+    public void animateTo(List<Integer> finalDice, boolean[] won, Runnable onDone) {
+        if (rollTimer != null) rollTimer.stop();
+
+        diceZone.removeAll();
+        diceSlots.clear();
+        for (int ignored : finalDice) {
+            DiceSlot slot = new DiceSlot();
+            diceSlots.add(slot);
+            diceZone.add(slot);
+        }
+
+        if (finalDice.isEmpty()) {
+            diceZone.setVisible(false);
+            revalidate();
+            repaint();
+            if (onDone != null) onDone.run();
+            return;
+        }
+
+        diceZone.setVisible(true);
+        revalidate();
+        repaint();
+
+        int[] tick = {0};
+        rollTimer = new Timer(ROLL_TICK_MS, ev -> {
+            tick[0]++;
+            for (DiceSlot slot : diceSlots) {
+                slot.setValue(ThreadLocalRandom.current().nextInt(6) + 1);
+            }
+            if (tick[0] >= ROLL_TICKS) {
+                ((Timer) ev.getSource()).stop();
+                settle(finalDice, won);
+                if (onDone != null) onDone.run();
+            }
+        });
+        rollTimer.start();
+    }
+
+    private void settle(List<Integer> finalDice, boolean[] won) {
+        for (int i = 0; i < diceSlots.size(); i++) {
+            DiceSlot slot = diceSlots.get(i);
+            slot.setValue(finalDice.get(i));
+            if (won != null && i < won.length) {
+                slot.setOutcome(won[i] ? DiceSlot.WIN : DiceSlot.LOSS);
+            }
+        }
+        revalidate();
+        repaint();
+    }
+
     public void clearDice() {
+        if (rollTimer != null) rollTimer.stop();
         diceZone.removeAll();
         diceSlots.clear();
         diceZone.setVisible(false);
@@ -106,7 +163,11 @@ public class CombatSideSection extends BaseSection {
     }
 
     private static class DiceSlot extends JPanel {
+        private static final int WIN = 1;
+        private static final int LOSS = -1;
+
         private int value = 0;
+        private int outcome = 0;
 
         DiceSlot() {
             setPreferredSize(new Dimension(55, 55));
@@ -117,6 +178,11 @@ public class CombatSideSection extends BaseSection {
 
         void setValue(int value) {
             this.value = value;
+            repaint();
+        }
+
+        void setOutcome(int outcome) {
+            this.outcome = outcome;
             repaint();
         }
 
@@ -140,7 +206,16 @@ public class CombatSideSection extends BaseSection {
 
             g2.setColor(Color.WHITE);
             g2.fillRoundRect(2, 2, w - 4, h - 4, 8, 8);
-            g2.setColor(Color.BLACK);
+            if (outcome == WIN) {
+                g2.setColor(new Color(0, 150, 60));
+                g2.setStroke(new BasicStroke(3f));
+            } else if (outcome == LOSS) {
+                g2.setColor(new Color(200, 40, 40));
+                g2.setStroke(new BasicStroke(3f));
+            } else {
+                g2.setColor(Color.BLACK);
+                g2.setStroke(new BasicStroke(1f));
+            }
             g2.drawRoundRect(2, 2, w - 4, h - 4, 8, 8);
 
             int pad = 14;

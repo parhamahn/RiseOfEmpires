@@ -11,6 +11,7 @@ import view.game.GamePanel;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class CombatHandler {
 
@@ -38,28 +39,34 @@ public class CombatHandler {
 
     public void handleAttackTarget(Hex attackerHex, Hex defenderHex){
 
-        boolean anyLongDistance = selectionContext.getAttackerHex().getUnits().stream().anyMatch(unit -> unit.getAttackRadius()>=2);
-        int distance = gameState.getWorldState().getMap().getDistance(attackerHex, defenderHex);
+        AttackUnit probe = new AttackUnit(gameState, attackerHex, defenderHex);
+        int distance = probe.getDistance();
 
-        if(distance == 0 || (distance==2 && !anyLongDistance) || distance==-1){
+        if (distance == 0 || distance == -1 || !probe.isLegal()) {
             selectionContext.setAttackerHex(null);
             return;
         }
 
         boolean defenderHasCombatUnits = defenderHex.getUnits().stream().anyMatch(Unit::isCombatUnit);
         boolean defenderHasBuilding = defenderHex.getBuilding() != null;
+        boolean defenderHasAnyUnits = !defenderHex.getUnits().isEmpty();
 
-        if (!defenderHasCombatUnits && distance == 1 && !defenderHasBuilding) {
-            handleAutoCapture(attackerHex, defenderHex);
-            return;
-        }
-
-        if (!defenderHasCombatUnits && defenderHasBuilding) {
+        if (defenderHasBuilding && !defenderHasCombatUnits) {
             handleBuildingAttack(attackerHex, defenderHex);
             return;
         }
 
+        if (!defenderHasAnyUnits) {
+            if (distance == 1) {
+                handleAutoCapture(attackerHex, defenderHex);
+            } else {
+                selectionContext.setAttackerHex(null);
+            }
+            return;
+        }
+
         gamePanel.getCombatMainPanel().setHexes(attackerHex, defenderHex);
+        gamePanel.getCombatMainPanel().setInteractive(true);
         gamePanel.getCombatMainPanel().open();
         gamePanel.setAnyPanelOpen(true);
         gamePanel.setCombatActive(true);
@@ -115,52 +122,73 @@ public class CombatHandler {
             Hex defenderHex = panel.getDefenderHex();
             if (attackerHex == null || defenderHex == null) return;
 
-            if (defenderHex.getUnits().stream().noneMatch(Unit::isCombatUnit)) {
-                panel.close();
-                gamePanel.setAnyPanelOpen(false);
-                gamePanel.setCombatActive(false);
-                gamePanel.getHudPanel().refresh();
-                gamePanel.getMapPanel().markStaticDirty();
-                gamePanel.getMapPanel().repaint();
+            if (defenderHex.getUnits().isEmpty()) {
+                closeCombat(panel);
                 return;
             }
 
             pendingAttack = new AttackUnit(gameState, attackerHex, defenderHex);
+            if (!pendingAttack.isLegal()) {
+                selectionContext.setAttackerHex(null);
+                return;
+            }
             pendingAttack.rollDice();
             pendingAttack.setPowers();
 
-            panel.getAttackerSideSection().setDice(pendingAttack.getAttackerDices());
-            panel.getDefenderSideSection().setDice(pendingAttack.getDefenderDices());
             panel.getAttackButton().setEnabled(false);
+            panel.clearSummary();
 
-            Timer timer = new Timer(1500, ev -> {
+            List<Integer> attackerDices = pendingAttack.getAttackerDices();
+            List<Integer> defenderDices = pendingAttack.getDefenderDices();
+            boolean[] attackerWins = computeWins(attackerDices, defenderDices);
+
+            panel.playRoll(attackerDices, defenderDices, attackerWins, () -> {
                 if (!panel.isVisible()) return;
-                pendingAttack.attack();
-                selectionContext.setAttackerHex(null);
-                panel.refresh();
+                panel.showSummary(pendingAttack.getAttackerPower(), pendingAttack.getDefenderPower());
 
-                if (defenderHex.getUnits().stream().noneMatch(Unit::isCombatUnit)) {
-                    panel.close();
-                    gamePanel.setAnyPanelOpen(false);
-                    gamePanel.setCombatActive(false);
+                Timer timer = new Timer(1400, ev -> {
+                    if (!panel.isVisible()) return;
+                    pendingAttack.attack();
+                    selectionContext.setAttackerHex(null);
+                    panel.refresh();
+
+                    if (defenderHex.getUnits().isEmpty()) {
+                        closeCombat(panel);
+                        return;
+                    }
+
+                    boolean hasAP = attackerHex.getUnits().stream()
+                            .filter(Unit::isCombatUnit)
+                            .anyMatch(u -> u.getActionPoints() > 0);
+                    if (!hasAP) panel.getAttackButton().setEnabled(false);
                     gamePanel.getHudPanel().refresh();
                     gamePanel.getMapPanel().markStaticDirty();
                     gamePanel.getMapPanel().repaint();
-                    return;
-                }
-
-                boolean hasAP = attackerHex.getUnits().stream()
-                        .filter(Unit::isCombatUnit)
-                        .anyMatch(u -> u.getActionPoints() > 0);
-                if (!hasAP) panel.getAttackButton().setEnabled(false);
-                gamePanel.getHudPanel().refresh();
-                gamePanel.getMapPanel().markStaticDirty();
-                gamePanel.getMapPanel().repaint();
+                });
+                timer.setRepeats(false);
+                timer.start();
             });
-            timer.setRepeats(false);
-            timer.start();
         };
         gamePanel.getCombatMainPanel().getAttackButton().addActionListener(attackListener);
+    }
+
+    private boolean[] computeWins(List<Integer> attackerDices, List<Integer> defenderDices) {
+        int pairs = Math.min(attackerDices.size(), defenderDices.size());
+        boolean[] wins = new boolean[pairs];
+        for (int i = 0; i < pairs; i++) {
+            wins[i] = attackerDices.get(i) > defenderDices.get(i);
+        }
+        return wins;
+    }
+
+    private void closeCombat(CombatMainPanel panel) {
+        selectionContext.setAttackerHex(null);
+        panel.close();
+        gamePanel.setAnyPanelOpen(false);
+        gamePanel.setCombatActive(false);
+        gamePanel.getHudPanel().refresh();
+        gamePanel.getMapPanel().markStaticDirty();
+        gamePanel.getMapPanel().repaint();
     }
 
 

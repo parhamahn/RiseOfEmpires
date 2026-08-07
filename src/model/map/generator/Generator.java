@@ -6,10 +6,10 @@ public class Generator {
 
     public static void generate(GameState gameState) {
 
-        EnemyGenerator.generateEnemies(gameState);
         RiverGenerator.generateRivers(gameState);
         TradingCenterGenerator.generateTradingCenters(gameState);
         TribeGenerator.generateTribes(gameState);
+        EnemyGenerator.generateEnemies(gameState);
 
     }
 

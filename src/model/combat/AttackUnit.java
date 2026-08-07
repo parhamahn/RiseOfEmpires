@@ -17,15 +17,21 @@ public class AttackUnit {
     private GameState gameState;
     private final Hex attackerHex;
     private final Hex defenderHex;
+    private final boolean enemyAttack;
     private List<Integer> attackerDices;
     private List<Integer> defenderDices;
     private int attackerPower;
     private int defenderPower;
 
     public AttackUnit(GameState gameState, Hex attackerHex, Hex defenderHex){
+        this(gameState, attackerHex, defenderHex, false);
+    }
+
+    public AttackUnit(GameState gameState, Hex attackerHex, Hex defenderHex, boolean enemyAttack){
         this.attackerHex = attackerHex;
         this.defenderHex = defenderHex;
         this.gameState = gameState;
+        this.enemyAttack = enemyAttack;
     }
 
     public Hex getAttackerHex() {return attackerHex;}
@@ -62,7 +68,7 @@ public class AttackUnit {
     public boolean isLegal() {
         int d = getDistance();
         if (d == 1) return true;
-        if (d == 2) return attackerHex.getUnits().stream().anyMatch(u -> u.isCombatUnit() && u.getAttackRadius()>=2);
+        if (d == 2) return hasCombatType(attackerHex, Unit.UNIT_TYPE.ARCHER);
         return false;
     }
 
@@ -74,8 +80,17 @@ public class AttackUnit {
     }
 
     public void rollDice() {
-        int attackerCount = getDistance() == 2 ? 1 : countCombatTypes(attackerHex);
-        int defenderCount = getDefenderDiceCount(defenderHex);
+        int attackerCount;
+        int defenderCount;
+        if (enemyAttack) {
+            attackerCount = 1;
+            defenderCount = 2;
+        } else {
+            attackerCount = getDistance() == 2
+                    ? (hasCombatType(attackerHex, Unit.UNIT_TYPE.ARCHER) ? 1 : 0)
+                    : countCombatTypes(attackerHex);
+            defenderCount = getDefenderDiceCount(defenderHex);
+        }
         attackerDices = rollSortedDesc(attackerCount);
         defenderDices = rollSortedDesc(defenderCount);
 
@@ -103,8 +118,10 @@ public class AttackUnit {
     }
 
     public void attack() {
-        for (Unit u : attackerHex.getUnits()) {
-            if (u.isCombatUnit() && getDistance() <= u.getAttackRadius() && u.getActionPoints()>0) u.setActionPoints(u.getActionPoints() - 1);
+        if (!enemyAttack) {
+            for (Unit u : attackerHex.getUnits()) {
+                if (u.isCombatUnit() && getDistance() <= u.getAttackRadius() && u.getActionPoints()>0) u.setActionPoints(u.getActionPoints() - 1);
+            }
         }
         applyDamage(defenderHex, attackerPower);
         applyDamage(attackerHex, defenderPower);
@@ -112,14 +129,14 @@ public class AttackUnit {
 
     private void applyDamage(Hex hex, int damage) {
         if (damage <= 0) return;
-        List<Unit> combatUnits = new ArrayList<>();
-        for (Unit u : hex.getUnits()) if (u.isCombatUnit()) combatUnits.add(u);
+        List<Unit> targets = new ArrayList<>(hex.getUnits());
         DamageHandler chain = new SwordsmanDamageHandler();
         chain.setNext(new ArcherDamageHandler())
                 .setNext(new CavalryDamageHandler())
                 .setNext(new CatapultDamageHandler())
-                .setNext(new EnemyDamageHandler());
-        chain.handle(combatUnits, damage, gameState);
+                .setNext(new EnemyDamageHandler())
+                .setNext(new CivilianDamageHandler());
+        chain.handle(targets, damage, gameState);
     }
 
     public int getDefenderPower() {
