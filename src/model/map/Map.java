@@ -179,11 +179,15 @@ private static final long serialVersionUID = 1L;
     }
 
     public int getDistance(Hex a, Hex b) {
-        if(a.equals(b)) return 0;
-        if (getNeighbourHexes(a).contains(b)) return 1;
-        for (Hex n : getNeighbourHexes(a)) {
-            if (n != null && getNeighbourHexes(n).contains(b)) return 2;
-        }
-        return -1;
+        int[] ac = toCube(a.getC(), a.getR());
+        int[] bc = toCube(b.getC(), b.getR());
+        return (Math.abs(ac[0] - bc[0]) + Math.abs(ac[1] - bc[1]) + Math.abs(ac[2] - bc[2])) / 2;
+    }
+
+    private static int[] toCube(int col, int row) {
+        int x = col - (row - (row & 1)) / 2;
+        int z = row;
+        int y = -x - z;
+        return new int[]{x, y, z};
     }
 }

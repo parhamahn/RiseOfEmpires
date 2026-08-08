@@ -9,7 +9,7 @@ import model.state.GameState;
 import java.util.Random;
 
 public class TradingCenterGenerator {
-    public static int count = 15;
+    public static int count = 5;
 
     public static void generateTradingCenters(GameState gameState){
         Map map = gameState.getWorldState().getMap();

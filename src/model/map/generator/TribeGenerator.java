@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 public class TribeGenerator {
 
+    public static int DISTANCE_TO_TOWNHALL = 5;
     public static int farmerTribeCount = 3;
     public static int traderTribeCount = 3;
     public static int warriorTribeCount = 3;
@@ -35,8 +36,9 @@ public class TribeGenerator {
                 case MEADOW -> meadowHexes.add(hex);
             }
             for(Hex neighbour:map.getNeighbourHexes(hex)){
-                if(neighbour!=null&&neighbour.getTerrainType()== Hex.TerrainType.SEA){
-                    beachHexes.add(neighbour);
+                if(neighbour!=null&&neighbour.getTerrainType()== Hex.TerrainType.SEA&&hex.getTerrainType()!= Hex.TerrainType.SEA&&hex.getTerrainType()!= Hex.TerrainType.TALL_MOUNTAIN){
+                    beachHexes.add(hex);
+                    break;
                 }
             }
         }
@@ -45,14 +47,15 @@ public class TribeGenerator {
         placeTribes(farmerTribeCount, plainAndMeadowHexes, hex -> new FarmerTribe(hex), rand, gameState);
         placeTribes(mountainTribeCount, mountainHexes, hex -> new MountainTribe(hex), rand, gameState);
         placeTribes(beachTribeCount, beachHexes, hex -> new BeachTribe(hex), rand, gameState);
-        placeTribes(warriorTribeCount, map.getAllHexes(), hex -> new WarriorTribe(hex), rand, gameState);
-        placeTribes(traderTribeCount, map.getAllHexes(), hex -> new TraderTribe(hex), rand, gameState);
+        placeTribes(warriorTribeCount, map.getAllHexes().stream().filter(hex -> hex.getTerrainType()!= Hex.TerrainType.TALL_MOUNTAIN && hex.getTerrainType()!= Hex.TerrainType.SEA).toList(), hex -> new WarriorTribe(hex), rand, gameState);
+        placeTribes(traderTribeCount, map.getAllHexes().stream().filter(hex -> hex.getTerrainType()!= Hex.TerrainType.TALL_MOUNTAIN && hex.getTerrainType()!= Hex.TerrainType.SEA).toList(), hex -> new TraderTribe(hex), rand, gameState);
     }
 
     private static void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, Building> factory, Random rand, GameState gameState) {
         int placed = 0;
         int maxAttempts = count * 100;
         int attempts = 0;
+        candidates = candidates.stream().filter(hex -> gameState.getWorldState().getMap().getDistance(gameState.getEmpireState().getTownHallHex(), hex)>DISTANCE_TO_TOWNHALL).toList();
         while (placed < count && attempts < maxAttempts) {
             Hex hex = candidates.get(rand.nextInt(candidates.size()));
             attempts++;

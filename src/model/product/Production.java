@@ -100,7 +100,7 @@ private static final long serialVersionUID = 1L;
                 if(building instanceof Farm || building instanceof Stable || building instanceof Dock){
                     boolean farmerAlly = empire.getAllies().stream().anyMatch(tribe ->  tribe instanceof FarmerTribe);
                     if(farmerAlly){
-                        producingResource*= (int) FarmerTribe.FOOD_PRODUCTION_BOOST;
+                        producingResource = (int)Math.floor(producingResource*FarmerTribe.FOOD_PRODUCTION_BOOST);
                     }
                     producingResource+= seasonEffect;
                 }

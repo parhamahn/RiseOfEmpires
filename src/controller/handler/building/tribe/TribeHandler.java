@@ -168,8 +168,8 @@ public class TribeHandler {
 
     public void askAlliance(Tribe tribe) {
         tribe.setPermanentReward(true);
-        tribe.setRelation(100);
-        gameState.getEmpireState().getAllies().add(gamePanel.getTribeMainPanel().getTribe());
+        tribe.changeRelation(100, gameState.getEmpireState().getAllies());
+        if(!gameState.getEmpireState().getAllies().contains(tribe)) gameState.getEmpireState().getAllies().add(tribe);
     }
 
 
