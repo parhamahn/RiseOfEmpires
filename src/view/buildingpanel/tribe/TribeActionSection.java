@@ -2,6 +2,7 @@ package view.buildingpanel.tribe;
 
 import helpers.image.ImageLoader;
 import model.building.tribes.Tribe;
+import model.state.GameState;
 import view.common.BaseSection;
 import view.common.StyledButtons;
 import view.common.UITheme;
@@ -20,9 +21,11 @@ public class TribeActionSection extends BaseSection {
     private JButton declareWar;
     private JButton askPeace;
     private JButton askAlliance;
+    private final GameState gameState;
 
-    public TribeActionSection() {
+    public TribeActionSection(GameState gameState) {
         super("Actions", 40);
+        this.gameState = gameState;
         List<JButton> buttons = new ArrayList<>();
 
 
@@ -63,11 +66,11 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.goldBorder(declareWar);
             declareWar.setEnabled(true);
         }
-        if(!tribe.isCanGetMission()){getMission.setEnabled(false);  getMission.setBorder(null);}else{
+        if(!tribe.isCanGetMission() || tribe.getActiveMission()!=null){getMission.setEnabled(false);  getMission.setBorder(null);}else{
             StyledButtons.goldBorder(getMission);
             getMission.setEnabled(true);
         }
-        if(tribe.getActiveMission()==null){ doMission.setEnabled(false); }else {
+        if(tribe.getActiveMission()==null || !tribe.getActiveMission().isAffordable(gameState)){ doMission.setEnabled(false); }else {
             StyledButtons.goldBorder(doMission);
             doMission.setEnabled(true);
         }

@@ -17,7 +17,7 @@ public class TraderMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public TraderMission(Tribe tribe) {
-        super(tribe, 10);
+        super(tribe, 10, "Connect your townhall to tribe by roads | 10% growth for trading with this tribe");
     }
 
     @Override

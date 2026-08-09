@@ -1,6 +1,7 @@
 package view.buildingpanel.tribe;
 
 import model.building.tribes.Tribe;
+import model.storage.ResourceType;
 import view.common.BaseSection;
 import view.common.UITheme;
 
@@ -17,6 +18,8 @@ public class TribeInfoSection extends BaseSection {
     private final JLabel tribeType;
     private final JLabel relationValue;
     private final JLabel hex;
+    private final JLabel missionSummary;
+    private final JLabel tradeableResources;
 
     public TribeInfoSection() {
         super("Tribe's Info", 40);
@@ -40,6 +43,16 @@ public class TribeInfoSection extends BaseSection {
         hex.setForeground(Color.WHITE);
         hex.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        missionSummary = new JLabel();
+        missionSummary.setFont(UITheme.GAME_FONT.deriveFont(fontSize));
+        missionSummary.setAlignmentX(Component.CENTER_ALIGNMENT);
+        missionSummary.setForeground(Color.WHITE);
+
+        tradeableResources = new JLabel();
+        tradeableResources.setFont(UITheme.GAME_FONT.deriveFont(fontSize));
+        tradeableResources.setAlignmentX(Component.CENTER_ALIGNMENT);
+        tradeableResources.setForeground(Color.WHITE);
+
 
         add(tribeName);
         add(Box.createRigidArea(new Dimension(0, spaceSize)));
@@ -48,6 +61,10 @@ public class TribeInfoSection extends BaseSection {
         add(relationValue);
         add(Box.createRigidArea(new Dimension(0, spaceSize)));
         add(hex);
+        add(Box.createRigidArea(new Dimension(0, spaceSize)));
+        add(missionSummary);
+        add(Box.createRigidArea(new Dimension(0, spaceSize)));
+        add(tradeableResources);
         add(Box.createRigidArea(new Dimension(0, spaceSize)));
     }
 
@@ -59,6 +76,22 @@ public class TribeInfoSection extends BaseSection {
 
         int relation = tribe.getRelation();
         relationValue.setText("Relation :   " + relation + "       " + tribe.getRelationStatus().name());
+
+        if(tribe.getActiveMission()!=null){
+            missionSummary.setText(tribe.getActiveMission().getSummary());
+        }else{
+            missionSummary.setText("No active mission");
+        }
+
+        String tradeables = "Trades : ";
+        if(tribe.getTradeStrategy()!=null){
+            for(ResourceType resourceType:tribe.getTradeStrategy().getResourceTypes()){
+                tradeables += resourceType.name()+" ";
+            }
+        }else{
+            tradeables += "Nothing";
+        }
+        tradeableResources.setText(tradeables);
 
         if (relation > 0) {
             relationValue.setForeground(UITheme.POSITIVE_CHANGE);

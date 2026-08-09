@@ -11,6 +11,8 @@ import view.buildingpanel.tribe.GiftPanel;
 import view.buildingpanel.tribe.TribeTradePanel;
 import view.game.GamePanel;
 
+import javax.swing.*;
+
 public class TribeHandler {
 
     private Tribe tribe;
@@ -24,14 +26,17 @@ public class TribeHandler {
 
     public void attachHandlers() {
 
+
         gamePanel.getTribeMainPanel().getCloseButton().addActionListener(e -> {
             gamePanel.getTribeMainPanel().close();
             gamePanel.setAnyPanelOpen(false);
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getDeclareWar().addActionListener(e -> {
-            declareWar(gamePanel.getTribeMainPanel().getTribe());
-            gamePanel.getTribeMainPanel().refresh();
+            if(JOptionPane.showConfirmDialog(null, "Are you sure you want to declare war with : "+gamePanel.getTribeMainPanel().getTribe().getName()+" ?", "Declare War" , JOptionPane.YES_NO_OPTION)==0){
+                declareWar(gamePanel.getTribeMainPanel().getTribe());
+                gamePanel.getTribeMainPanel().refresh();
+            }
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getAskAlliance().addActionListener(e -> {
@@ -44,6 +49,17 @@ public class TribeHandler {
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getGetMission().addActionListener(e -> {
            getMission(gamePanel.getTribeMainPanel().getTribe());
+           gamePanel.getTribeMainPanel().refresh();
+        });
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getDoMission().addActionListener(e -> {
+            Tribe current = gamePanel.getTribeMainPanel().getTribe();
+            if(current.getActiveMission() == null || !current.getActiveMission().isAffordable(gameState)) return;
+            current.getActiveMission().check(gameState);
+            current.getActiveMission().processDone(gameState);
+            current.setActiveMission(null);
+            gamePanel.getTribeMainPanel().refresh();
+            gamePanel.getHudPanel().refresh();
         });
 
         attachGiftHandlers();
@@ -189,6 +205,10 @@ public class TribeHandler {
             if(mission.getStatus() == MissionStatus.AVAILABLE){
                 mission.setStatus(MissionStatus.ACTIVE);
                 gameState.getEmpireState().getMissions().add(mission);
+                if(tribe.getActiveMission() != null){
+                    tribe.getActiveMission().setStatus(MissionStatus.CANCELED);
+                }
+                tribe.setActiveMission(mission);
             }
         }
     }

@@ -12,7 +12,7 @@ private static final long serialVersionUID = 1L;
     private final Cost cost = new Cost(15, 0, 10, 0, 0);
 
     public MountainMission(Tribe tribe) {
-        super(tribe, 6);
+        super(tribe, 6, "Send 15 wood and 10 iron |  You get 20 stone");
     }
 
     @Override

@@ -11,16 +11,19 @@ private static final long serialVersionUID = 1L;
     private final Tribe tribe;
     private int deadline;
     private MissionStatus status;
+    private String summary;
 
-    public Mission(Tribe tribe, int deadline) {
+    public Mission(Tribe tribe, int deadline, String summary) {
         this.tribe = tribe;
         this.deadline = deadline;
+        this.summary = summary;
         this.status = MissionStatus.AVAILABLE;
     }
 
     public abstract boolean isAffordable(GameState gameState);
     public abstract void check(GameState gameState);
     public abstract void processDone(GameState gameState);
+
 
     public Tribe getTribe() {return tribe;}
 
@@ -31,6 +34,11 @@ private static final long serialVersionUID = 1L;
     public void setStatus(MissionStatus status) {
         this.status = status;
     }
+
+    public String getSummary() {
+        return summary;
+    }
+    public void setSummary(String summary) {}
 
     public void decreaseDeadline() {
         deadline--;

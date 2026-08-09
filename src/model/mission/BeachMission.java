@@ -13,7 +13,7 @@ public class BeachMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public BeachMission(Tribe tribe) {
-        super(tribe, 10);
+        super(tribe, 10, "Instruct a dock in tribe's area | You get 30 food");
     }
 
     @Override

@@ -12,7 +12,7 @@ public class WarriorMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
     public WarriorMission(Tribe tribe) {
 
-        super(tribe, 8);
+        super(tribe, 8, "Kill 3 enemies in tribe's area | You get 1 swordsman");
     }
 
     @Override
