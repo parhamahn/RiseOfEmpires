@@ -19,7 +19,8 @@ private static final long serialVersionUID = 1L;
         SWORDSMAN(new Cost(10, 0, 0, 20, 0), 3, TownHallLevel.BASE_CAMP, 1, 10, 1, false),
         CATAPULT(new Cost(15, 20, 0, 20, 0), 3, TownHallLevel.CAPITAL, 2, 20, 1, false),
         BARBARIAN(null, 0, TownHallLevel.BASE_CAMP, 1, 8, 2, true),
-        BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 2, true);
+        BEAR(null, 0, TownHallLevel.BASE_CAMP, 1, 35, 2, true),
+        GUARD(null, 0, TownHallLevel.BASE_CAMP, 1, 10, 3, true);
 
         private final Cost cookCost;
         private final int turnCost;

@@ -43,6 +43,7 @@ private static final long serialVersionUID = 1L;
     private List<Tribe> allies;
     private int warHappinessEffect;
     private List<Mission> missions = new ArrayList<>();
+    private boolean dockDiscount;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -207,6 +208,14 @@ private static final long serialVersionUID = 1L;
         return missions;
     }
 
+    public boolean isDockDiscount() {
+        return dockDiscount;
+    }
+
+    public void setDockDiscount(boolean dockDiscount) {
+        this.dockDiscount = dockDiscount;
+    }
+
     public void loadFrom(EmpireState loaded){
         this.storage = loaded.getStorage();
         this.production = loaded.getProduction();
@@ -224,6 +233,7 @@ private static final long serialVersionUID = 1L;
         this.allies = loaded.getAllies();
         this.warHappinessEffect = loaded.getWarHappinessEffect();
         this.missions = loaded.getMissions();
+        this.dockDiscount = loaded.isDockDiscount();
     }
 
 }

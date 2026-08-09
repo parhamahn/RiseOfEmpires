@@ -13,7 +13,7 @@ public class BeachMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public BeachMission(Tribe tribe) {
-        super(tribe, 10, "Instruct a dock in tribe's area | You get 30 food");
+        super(tribe, 10, "Instruct a dock in tribe's area | You get 30 food and 50% off your next dock");
     }
 
     @Override
@@ -53,7 +53,8 @@ private static final long serialVersionUID = 1L;
     public void processDone(GameState gameState) {
         if(super.getStatus() == MissionStatus.DONE) {
             gameState.getEmpireState().getStorage().setFoodQuantity(gameState.getEmpireState().getStorage().getFoodQuantity()+30);
-
+            gameState.getEmpireState().setDockDiscount(true);
+            super.setStatus(MissionStatus.REWARDED);
         }
     }
 }

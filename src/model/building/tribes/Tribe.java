@@ -28,6 +28,9 @@ private static final long serialVersionUID = 1L;
     private Mission activeMission;
     private boolean isPermanentReward;
     private boolean usedThisTurn;
+    private boolean discovered;
+    private int allianceLockTurns;
+    private int lastMissionTurn;
 
     private final String imageName;
 
@@ -36,6 +39,9 @@ private static final long serialVersionUID = 1L;
         this.imageName = imageName;
         this.name = RandomNameGenerator.generateRandomName();
         this.isPermanentReward = false;
+        this.discovered = true;
+        this.allianceLockTurns = 0;
+        this.lastMissionTurn = 0;
         changeRelation(0, Collections.emptyList());
         activeMission = null;
     }
@@ -137,7 +143,7 @@ private static final long serialVersionUID = 1L;
     }
 
     public boolean isCanRequestAlliance() {
-        return canRequestAlliance;
+        return canRequestAlliance && allianceLockTurns <= 0;
     }
 
     public boolean isCanRequestPeace() {
@@ -228,5 +234,29 @@ private static final long serialVersionUID = 1L;
 
     public void setUsedThisTurn(boolean usedThisTurn) {
         this.usedThisTurn = usedThisTurn;
+    }
+
+    public boolean isDiscovered() {
+        return discovered;
+    }
+
+    public void setDiscovered(boolean discovered) {
+        this.discovered = discovered;
+    }
+
+    public int getAllianceLockTurns() {
+        return allianceLockTurns;
+    }
+
+    public void setAllianceLockTurns(int allianceLockTurns) {
+        this.allianceLockTurns = allianceLockTurns;
+    }
+
+    public int getLastMissionTurn() {
+        return lastMissionTurn;
+    }
+
+    public void setLastMissionTurn(int lastMissionTurn) {
+        this.lastMissionTurn = lastMissionTurn;
     }
 }

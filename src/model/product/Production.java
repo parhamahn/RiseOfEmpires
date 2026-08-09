@@ -3,6 +3,7 @@ package model.product;
 import model.Season;
 import model.building.*;
 import model.building.empire.*;
+import model.building.tribes.BeachTribe;
 import model.building.tribes.FarmerTribe;
 import model.map.Hex;
 import model.map.Map;
@@ -145,6 +146,11 @@ private static final long serialVersionUID = 1L;
             this.woodProduction += Math.floor(0.1*this.woodProduction);
             this.stoneProduction += Math.floor(0.1*this.stoneProduction);
             this.ironProduction += Math.floor(0.1*this.ironProduction);
+        }
+
+        boolean beachAlly = empire.getAllies().stream().anyMatch(BeachTribe.class::isInstance);
+        if (beachAlly) {
+            this.foodProduction += 4;
         }
 
     }

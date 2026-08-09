@@ -2,9 +2,15 @@ package model.combat;
 
 import model.building.Building;
 import model.building.edge.Wall;
+import model.building.tribes.*;
 import model.map.Hex;
 import model.state.GameState;
+import model.storage.Storage;
 import model.unit.Unit;
+import model.unit.enemy.Guard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AttackBuilding {
@@ -65,7 +71,52 @@ public class AttackBuilding {
         if (attackerPower > 0 && defenderHex.getBuilding() != null) {
             Building building = defenderHex.getBuilding();
             building.setHP(building.getHP() - attackerPower);
-            if (building.getHP() <= 0) gameState.getEmpireState().removeBuilding(building);
+            if (building.getHP() <= 0) {
+                if (building instanceof Tribe) {
+                    destroyCamp((Tribe) building);
+                } else {
+                    gameState.getEmpireState().removeBuilding(building);
+                }
+            }
+        }
+    }
+
+    private void destroyCamp(Tribe tribe) {
+        Hex campHex = tribe.getHex();
+        gameState.getWorldState().getTribes().remove(tribe);
+        gameState.getEmpireState().getAllies().remove(tribe);
+        List<Unit> guards = new ArrayList<>(campHex.getUnits());
+        for (Unit unit : guards) {
+            if (unit instanceof Guard) {
+                campHex.getUnits().remove(unit);
+                gameState.getWorldState().getEnemies().remove(unit);
+            }
+        }
+        campHex.setBuilding(null);
+        campHex.setInEmpireBorder(true);
+        for (Hex neighbour : gameState.getWorldState().getMap().getNeighbourHexes(campHex)) {
+            if (neighbour != null && !neighbour.isInEmpireBorder()) {
+                neighbour.setInEmpireBorder(true);
+            }
+        }
+        collectLoot(tribe);
+    }
+
+    private void collectLoot(Tribe tribe) {
+        Storage storage = gameState.getEmpireState().getStorage();
+        if (tribe instanceof FarmerTribe) {
+            storage.setFoodQuantity(storage.getFoodQuantity() + 40);
+        } else if (tribe instanceof MountainTribe) {
+            storage.setStoneQuantity(storage.getStoneQuantity() + 30);
+            storage.setIronQuantity(storage.getIronQuantity() + 20);
+        } else if (tribe instanceof BeachTribe) {
+            storage.setFoodQuantity(storage.getFoodQuantity() + 30);
+            storage.setWoodQuantity(storage.getWoodQuantity() + 20);
+        } else if (tribe instanceof TraderTribe) {
+            storage.setFoodQuantity(storage.getFoodQuantity() + 30);
+            storage.setWoodQuantity(storage.getWoodQuantity() + 30);
+        } else if (tribe instanceof WarriorTribe) {
+            storage.setIronQuantity(storage.getIronQuantity() + 30);
         }
     }
 

@@ -1,5 +1,6 @@
 package model.mission;
 
+import model.building.Building;
 import model.building.edge.Road;
 import model.building.tribes.TraderTribe;
 import model.building.tribes.Tribe;
@@ -9,22 +10,32 @@ import model.trade.tribe.TraderTrade;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TraderMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public TraderMission(Tribe tribe) {
-        super(tribe, 10, "Connect your townhall to tribe by roads | 10% growth for trading with this tribe");
+        super(tribe, 10, "Connect a building to the tribe by roads | 10% growth for trading with this tribe");
     }
 
     @Override
     public boolean isAffordable(GameState gameState) {
-        Hex start = gameState.getEmpireState().getTownHallHex();
-        Hex target = super.getTribe().getHex();
-        return isConnectedByRoad(start, target);
+        List<Hex> targets = new ArrayList<>();
+        targets.add(super.getTribe().getHex());
+        for (Hex neighbour : gameState.getWorldState().getMap().getNeighbourHexes(super.getTribe().getHex())) {
+            if (neighbour != null) targets.add(neighbour);
+        }
+        for (Building building : gameState.getEmpireState().getBuildings()) {
+            for (Hex target : targets) {
+                if (isConnectedByRoad(building.getHex(), target)) return true;
+            }
+        }
+        return false;
     }
 
     private boolean isConnectedByRoad(Hex start, Hex target) {
@@ -62,6 +73,7 @@ private static final long serialVersionUID = 1L;
             TraderTribe traderTribe = (TraderTribe) super.getTribe();
             TraderTrade tradingStrategy = (TraderTrade) traderTribe.getTradeStrategy();
             tradingStrategy.setMissionBonus(0.1);
+            super.setStatus(MissionStatus.REWARDED);
         }
     }
 }

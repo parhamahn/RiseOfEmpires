@@ -21,6 +21,7 @@ public class TribeActionSection extends BaseSection {
     private JButton declareWar;
     private JButton askPeace;
     private JButton askAlliance;
+    private JButton viewReward;
     private final GameState gameState;
 
     public TribeActionSection(GameState gameState) {
@@ -41,6 +42,7 @@ public class TribeActionSection extends BaseSection {
         declareWar = StyledButtons.textButton("Declare War", icon, dimension, fontSize, UITheme.MENU_BUTTON_FG);
         askPeace = StyledButtons.textButton("Ask Peace",  icon, dimension, fontSize, UITheme.MENU_BUTTON_FG);
         askAlliance = StyledButtons.textButton("Ask Alliance",  icon, dimension, fontSize, UITheme.MENU_BUTTON_FG);
+        viewReward = StyledButtons.textButton("View Reward", icon, dimension, fontSize, UITheme.MENU_BUTTON_FG);
 
         buttons.add(sendGiftButton);
         buttons.add(startTrade);
@@ -49,6 +51,7 @@ public class TribeActionSection extends BaseSection {
         buttons.add(declareWar);
         buttons.add(askPeace);
         buttons.add(askAlliance);
+        buttons.add(viewReward);
 
 
 
@@ -90,6 +93,10 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.goldBorder(askAlliance);
             askAlliance.setEnabled(true);
         }
+        if(!tribe.isDiscovered()){viewReward.setEnabled(false);   viewReward.setBorder(null);}else{
+            StyledButtons.goldBorder(viewReward);
+            viewReward.setEnabled(true);
+        }
 
     }
 
@@ -119,5 +126,9 @@ public class TribeActionSection extends BaseSection {
 
     public JButton getAskAlliance() {
         return askAlliance;
+    }
+
+    public JButton getViewReward() {
+        return viewReward;
     }
 }

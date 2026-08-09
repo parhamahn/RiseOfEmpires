@@ -1,12 +1,18 @@
 package controller.handler.building.tribe;
 
+import model.building.tribes.BeachTribe;
+import model.building.tribes.FarmerTribe;
+import model.building.tribes.MountainTribe;
 import model.building.tribes.Tribe;
+import model.building.tribes.TraderTribe;
+import model.building.tribes.WarriorTribe;
 import model.mission.Mission;
 import model.mission.MissionStatus;
 import model.state.GameState;
 import model.storage.ResourceType;
 import model.storage.Storage;
 import model.trade.tribe.TribeTrade;
+import model.unit.enemy.Guard;
 import view.buildingpanel.tribe.GiftPanel;
 import view.buildingpanel.tribe.TribeTradePanel;
 import view.game.GamePanel;
@@ -36,15 +42,20 @@ public class TribeHandler {
             if(JOptionPane.showConfirmDialog(null, "Are you sure you want to declare war with : "+gamePanel.getTribeMainPanel().getTribe().getName()+" ?", "Declare War" , JOptionPane.YES_NO_OPTION)==0){
                 declareWar(gamePanel.getTribeMainPanel().getTribe());
                 gamePanel.getTribeMainPanel().refresh();
+                gamePanel.getHudPanel().refresh();
             }
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getAskAlliance().addActionListener(e -> {
            askAlliance(gamePanel.getTribeMainPanel().getTribe());
+           gamePanel.getTribeMainPanel().refresh();
+           gamePanel.getHudPanel().refresh();
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getAskPeace().addActionListener(e -> {
             askPeace(gamePanel.getTribeMainPanel().getTribe());
+            gamePanel.getTribeMainPanel().refresh();
+            gamePanel.getHudPanel().refresh();
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getGetMission().addActionListener(e -> {
@@ -57,9 +68,14 @@ public class TribeHandler {
             if(current.getActiveMission() == null || !current.getActiveMission().isAffordable(gameState)) return;
             current.getActiveMission().check(gameState);
             current.getActiveMission().processDone(gameState);
+            current.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
             current.setActiveMission(null);
             gamePanel.getTribeMainPanel().refresh();
             gamePanel.getHudPanel().refresh();
+        });
+
+        gamePanel.getTribeMainPanel().getTribeActionSection().getViewReward().addActionListener(e -> {
+            viewReward(gamePanel.getTribeMainPanel().getTribe());
         });
 
         attachGiftHandlers();
@@ -161,7 +177,10 @@ public class TribeHandler {
         Storage storage = gameState.getEmpireState().getStorage();
         TribeTrade trade = tribe.getTradeStrategy();
         if (trade == null) return;
-        int received = (int) Math.floor(amount * trade.getRate());
+        double rate = trade.getRate();
+        boolean traderAlly = gameState.getEmpireState().getAllies().stream().anyMatch(TraderTribe.class::isInstance);
+        if (traderAlly) rate += 0.2;
+        int received = (int) Math.floor(amount * rate);
 
         storage.setQuantity(giveType, storage.getQuantity(giveType) - amount);
         storage.setQuantity(getType, storage.getQuantity(getType) + received);
@@ -179,6 +198,18 @@ public class TribeHandler {
         tribe.changeRelation(-100, gameState.getEmpireState().getAllies());
         for (Mission mission : tribe.getMissions()) {
             mission.setStatus(MissionStatus.CANCELED);
+        }
+        tribe.setActiveMission(null);
+        spawnGuards(tribe);
+    }
+
+    private void spawnGuards(Tribe tribe) {
+        int currentGuards = (int) tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).count();
+        for (int i = currentGuards; i < 2; i++) {
+            Guard guard = new Guard(tribe);
+            guard.setHex(tribe.getHex());
+            tribe.getHex().getUnits().add(guard);
+            gameState.getWorldState().getEnemies().add(guard);
         }
     }
 
@@ -204,13 +235,37 @@ public class TribeHandler {
         for (Mission mission : tribe.getMissions()) {
             if(mission.getStatus() == MissionStatus.AVAILABLE){
                 mission.setStatus(MissionStatus.ACTIVE);
-                gameState.getEmpireState().getMissions().add(mission);
+                if(!gameState.getEmpireState().getMissions().contains(mission)){
+                    gameState.getEmpireState().getMissions().add(mission);
+                }
                 if(tribe.getActiveMission() != null){
                     tribe.getActiveMission().setStatus(MissionStatus.CANCELED);
                 }
                 tribe.setActiveMission(mission);
+                tribe.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
             }
         }
+    }
+
+    private void viewReward(Tribe tribe) {
+        String reward;
+        if (tribe instanceof FarmerTribe) {
+            reward = "Ally reward : +20% food production\nMission : Send 20 wood and 10 stone | You get 30 food";
+        } else if (tribe instanceof MountainTribe) {
+            reward = "Ally reward : trade stone/iron at a good rate\nMission : Send 15 wood and 10 iron | You get 20 stone";
+        } else if (tribe instanceof BeachTribe) {
+            reward = "Ally reward : +4 food production each turn\nMission : Instruct a dock in tribe's area | 30 food + 50% off next dock";
+        } else if (tribe instanceof TraderTribe) {
+            reward = "Ally reward : +20% trade rate\nMission : Connect a building by roads | +10% trading growth";
+        } else if (tribe instanceof WarriorTribe) {
+            reward = "Ally reward : a swordsman joins you every 3 turns\nMission : Kill 3 enemies in tribe's area | You get 3 swordsmen";
+        } else {
+            reward = "";
+        }
+        String missionLine = tribe.getActiveMission() != null
+                ? "\n\nActive mission : " + tribe.getActiveMission().getSummary()
+                : "\n\nActive mission : none";
+        JOptionPane.showMessageDialog(null, reward + missionLine, tribe.getName() + " - Reward", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public Tribe getTribe() {

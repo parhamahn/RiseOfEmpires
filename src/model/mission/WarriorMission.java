@@ -15,9 +15,19 @@ private static final long serialVersionUID = 1L;
         super(tribe, 8, "Kill 3 enemies in tribe's area | You get 1 swordsman");
     }
 
+    private int killedEnemies;
+
     @Override
     public boolean isAffordable(GameState gameState) {
-        return false;
+        return killedEnemies >= 3;
+    }
+
+    public void enemyKilled() {
+        killedEnemies++;
+    }
+
+    public int getKilledEnemies() {
+        return killedEnemies;
     }
 
     @Override
@@ -37,6 +47,7 @@ private static final long serialVersionUID = 1L;
                 unit.setHex(gameState.getEmpireState().getTownHallHex());
                 gameState.getEmpireState().getTownHallHex().getUnits().add(unit);
             }
+            super.setStatus(MissionStatus.REWARDED);
         }
     }
 }

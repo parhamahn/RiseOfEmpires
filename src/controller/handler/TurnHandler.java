@@ -8,10 +8,16 @@ import model.building.TradingBuilding;
 import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
 import model.building.tribes.Tribe;
+import model.building.tribes.WarriorTribe;
+import model.map.Hex;
+import model.mission.Mission;
+import model.mission.MissionStatus;
 import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
 import model.unit.Unit;
+import model.unit.combat.Swordsman;
+import model.unit.enemy.Guard;
 import permanency.SlotID;
 import permanency.save.SaveManager;
 import view.game.GamePanel;
@@ -142,6 +148,56 @@ public class TurnHandler {
         }
         for (Tribe tribe : gameState.getWorldState().getTribes()) {
             tribe.setUsedThisTurn(false);
+            if (tribe.getAllianceLockTurns() > 0) {
+                tribe.setAllianceLockTurns(tribe.getAllianceLockTurns() - 1);
+            }
+            if(tribe.getActiveMission()!=null){
+                tribe.getActiveMission().decreaseDeadline();
+                if(tribe.getActiveMission().getDeadline()==0){
+                    tribe.getActiveMission().setStatus(MissionStatus.FAILED);
+                    tribe.setAllianceLockTurns(5);
+                    tribe.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
+                    tribe.setActiveMission(null);
+                    tribe.changeRelation(tribe.getRelation()-10, gameState.getEmpireState().getAllies());
+                }
+            }
+            if (tribe.getActiveMission() == null
+                    && (tribe.getRelationStatus() == Tribe.RelationStatus.FRIEND || tribe.getRelationStatus() == Tribe.RelationStatus.ALLY)
+                    && gameState.getWorldState().getTurnNumber() - tribe.getLastMissionTurn() >= 5) {
+                for (Mission mission : tribe.getMissions()) {
+                    mission.setStatus(MissionStatus.AVAILABLE);
+                }
+                tribe.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
+            }
+            if (tribe.getRelationStatus() == Tribe.RelationStatus.ENEMY) {
+                long guards = tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).count();
+                if (guards < 2) {
+                    Guard guard = new Guard(tribe);
+                    guard.setHex(tribe.getHex());
+                    tribe.getHex().getUnits().add(guard);
+                    gameState.getWorldState().getEnemies().add(guard);
+                }
+            } else {
+                List<Unit> tribeGuards = tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).toList();
+                for (Unit guard : tribeGuards) {
+                    tribe.getHex().getUnits().remove(guard);
+                    gameState.getWorldState().getEnemies().remove(guard);
+                }
+            }
+            if (tribe.getRelationStatus() != Tribe.RelationStatus.ENEMY && isEmpireBuildingNear(tribe.getHex())) {
+                tribe.changeRelation(tribe.getRelation() - 5, gameState.getEmpireState().getAllies());
+                if (tribe.getRelationStatus() == Tribe.RelationStatus.ENEMY) {
+                    WarningDialogs.tribeWarning(tribe.getName() + " has become your enemy because you built near its camp!");
+                }
+            }
+        }
+        boolean warriorAlly = gameState.getEmpireState().getAllies().stream().anyMatch(WarriorTribe.class::isInstance);
+        if (warriorAlly && gameState.getWorldState().getTurnNumber() % 3 == 0) {
+            Hex townHallHex = gameState.getEmpireState().getTownHallHex();
+            Swordsman helper = new Swordsman();
+            helper.setHex(townHallHex);
+            townHallHex.getUnits().add(helper);
+            gameState.getEmpireState().getUnits().add(helper);
         }
         for(TradingCenter tradingCenter:gameState.getWorldState().getTradingCenters()){
             tradingCenter.setUsedThisTurn(false);
@@ -156,6 +212,15 @@ public class TurnHandler {
         Season.processSeason(gameState);
         gameState.getEmpireState().setUpkeepDisaster(anyDamagesToBuilding);
         gameState.getEmpireState().updateTownCapacity();
+    }
+
+    private boolean isEmpireBuildingNear(Hex tribeHex) {
+        for (Building building : gameState.getEmpireState().getBuildings()) {
+            if (gameState.getWorldState().getMap().getDistance(building.getHex(), tribeHex) <= 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

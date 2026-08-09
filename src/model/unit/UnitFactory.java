@@ -10,6 +10,7 @@ import model.unit.combat.Cavalry;
 import model.unit.combat.Swordsman;
 import model.unit.enemy.Barbarian;
 import model.unit.enemy.Bear;
+import model.unit.enemy.Guard;
 
 public class UnitFactory {
 
@@ -25,6 +26,7 @@ public class UnitFactory {
             case CATAPULT -> new Catapult();
             case BARBARIAN -> new Barbarian();
             case BEAR -> new Bear();
+            case GUARD -> new Guard(null);
         };
     }
 }

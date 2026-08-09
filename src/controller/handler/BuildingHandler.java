@@ -12,6 +12,8 @@ import model.building.other.TradingCenter;
 import model.building.edge.Wall;
 import model.building.edge.Road;
 import model.building.Building;
+import model.building.empire.Dock;
+import model.storage.Cost;
 import view.game.GamePanel;
 import view.game.lists.TaskStat;
 
@@ -37,7 +39,12 @@ public class BuildingHandler {
 
         Building building = BuildingFactory.createBuilding(task, hex);
 
-        deductBuilderCost(building.getCost(), hex);
+        Cost cost = building.getCost();
+        if (building instanceof Dock && gameState.getEmpireState().isDockDiscount()) {
+            gameState.getEmpireState().setDockDiscount(false);
+            cost = new Cost(cost.getWoodNeeded()/2, cost.getStoneNeeded()/2, cost.getIronNeeded()/2, cost.getFoodNeeded()/2, cost.getAPNeeded());
+        }
+        cost.pay(gameState.getEmpireState().getStorage());
         hex.setBuilding(building);
         gameState.getEmpireState().getBuildings().add(building);
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
@@ -55,7 +62,11 @@ public class BuildingHandler {
                         enoughAP = Building.getBuildCost(task).enoughAP(unit.getActionPoints());
                     }
                 }
-                boolean canBuild = Building.getBuildCost(task).enoughResources(gameState.getEmpireState().getStorage())
+                Cost buildCost = Building.getBuildCost(task);
+                if (task == Task.TASK.DOCK && gameState.getEmpireState().isDockDiscount()) {
+                    buildCost = new Cost(buildCost.getWoodNeeded()/2, buildCost.getStoneNeeded()/2, buildCost.getIronNeeded()/2, buildCost.getFoodNeeded()/2, buildCost.getAPNeeded());
+                }
+                boolean canBuild = buildCost.enoughResources(gameState.getEmpireState().getStorage())
                         && enoughAP
                         && selected.isInEmpireBorder();
                 canBuildMap.put(task, canBuild);

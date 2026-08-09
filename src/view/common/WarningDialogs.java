@@ -23,4 +23,8 @@ public class WarningDialogs {
                 "Autosave Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void tribeWarning(String message){
+        JOptionPane.showMessageDialog(null, message, "Tribe", JOptionPane.WARNING_MESSAGE);
+    }
+
 }

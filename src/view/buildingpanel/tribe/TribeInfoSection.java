@@ -78,7 +78,12 @@ public class TribeInfoSection extends BaseSection {
         relationValue.setText("Relation :   " + relation + "       " + tribe.getRelationStatus().name());
 
         if(tribe.getActiveMission()!=null){
-            missionSummary.setText(tribe.getActiveMission().getSummary());
+            String summary = tribe.getActiveMission().getSummary();
+            if(tribe.getActiveMission() instanceof model.mission.WarriorMission){
+                summary += "  (Kills: " + ((model.mission.WarriorMission) tribe.getActiveMission()).getKilledEnemies() + "/3)";
+            }
+            summary += "  |  Deadline: " + tribe.getActiveMission().getDeadline() + " turns";
+            missionSummary.setText(summary);
         }else{
             missionSummary.setText("No active mission");
         }
