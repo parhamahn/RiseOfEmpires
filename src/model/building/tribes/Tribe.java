@@ -84,6 +84,10 @@ private static final long serialVersionUID = 1L;
             isPermanentReward = false;
         }
 
+        if (newRelation < 70 && allies != null && allies.contains(this)) {
+            allies.remove(this);
+        }
+
 
         if(this instanceof FarmerTribe){
             for(Tribe tribe:allies){

@@ -205,7 +205,7 @@ public class TribeHandler {
 
     private void spawnGuards(Tribe tribe) {
         int currentGuards = (int) tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).count();
-        for (int i = currentGuards; i < 2; i++) {
+        if (currentGuards < 1) {
             Guard guard = new Guard(tribe);
             guard.setHex(tribe.getHex());
             tribe.getHex().getUnits().add(guard);
@@ -235,6 +235,7 @@ public class TribeHandler {
         for (Mission mission : tribe.getMissions()) {
             if(mission.getStatus() == MissionStatus.AVAILABLE){
                 mission.setStatus(MissionStatus.ACTIVE);
+                mission.resetDeadline();
                 if(!gameState.getEmpireState().getMissions().contains(mission)){
                     gameState.getEmpireState().getMissions().add(mission);
                 }

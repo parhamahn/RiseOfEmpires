@@ -80,7 +80,7 @@ public class TribeInfoSection extends BaseSection {
         if(tribe.getActiveMission()!=null){
             String summary = tribe.getActiveMission().getSummary();
             if(tribe.getActiveMission() instanceof model.mission.WarriorMission){
-                summary += "  (Kills: " + ((model.mission.WarriorMission) tribe.getActiveMission()).getKilledEnemies() + "/3)";
+                summary += "  (Kills: " + ((model.mission.WarriorMission) tribe.getActiveMission()).getKilledEnemies() + "/2)";
             }
             summary += "  |  Deadline: " + tribe.getActiveMission().getDeadline() + " turns";
             missionSummary.setText(summary);

@@ -10,12 +10,14 @@ private static final long serialVersionUID = 1L;
 
     private final Tribe tribe;
     private int deadline;
+    private final int startingDeadline;
     private MissionStatus status;
     private String summary;
 
     public Mission(Tribe tribe, int deadline, String summary) {
         this.tribe = tribe;
         this.deadline = deadline;
+        this.startingDeadline = deadline;
         this.summary = summary;
         this.status = MissionStatus.AVAILABLE;
     }
@@ -42,6 +44,10 @@ private static final long serialVersionUID = 1L;
 
     public void decreaseDeadline() {
         deadline--;
+    }
+
+    public void resetDeadline() {
+        deadline = startingDeadline;
     }
 
     public int getDeadline() {

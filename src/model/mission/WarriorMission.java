@@ -12,14 +12,14 @@ public class WarriorMission extends Mission implements Serializable {
 private static final long serialVersionUID = 1L;
     public WarriorMission(Tribe tribe) {
 
-        super(tribe, 8, "Kill 3 enemies in tribe's area | You get 1 swordsman");
+        super(tribe, 8, "Kill 2 enemies in tribe's camp neighbors | You get 3 swordsmen");
     }
 
     private int killedEnemies;
 
     @Override
     public boolean isAffordable(GameState gameState) {
-        return killedEnemies >= 3;
+        return killedEnemies >= 2;
     }
 
     public void enemyKilled() {

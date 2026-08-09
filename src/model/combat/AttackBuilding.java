@@ -95,7 +95,10 @@ public class AttackBuilding {
         campHex.setBuilding(null);
         campHex.setInEmpireBorder(true);
         for (Hex neighbour : gameState.getWorldState().getMap().getNeighbourHexes(campHex)) {
-            if (neighbour != null && !neighbour.isInEmpireBorder()) {
+            if (neighbour != null
+                    && neighbour.getTerrainType() != Hex.TerrainType.SEA
+                    && neighbour.getTerrainType() != Hex.TerrainType.TALL_MOUNTAIN
+                    && !neighbour.isInEmpireBorder()) {
                 neighbour.setInEmpireBorder(true);
             }
         }

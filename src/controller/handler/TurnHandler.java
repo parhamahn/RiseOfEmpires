@@ -166,12 +166,14 @@ public class TurnHandler {
                     && gameState.getWorldState().getTurnNumber() - tribe.getLastMissionTurn() >= 5) {
                 for (Mission mission : tribe.getMissions()) {
                     mission.setStatus(MissionStatus.AVAILABLE);
+                    mission.resetDeadline();
                 }
                 tribe.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
             }
             if (tribe.getRelationStatus() == Tribe.RelationStatus.ENEMY) {
                 long guards = tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).count();
-                if (guards < 2) {
+                int guardCap = tribe instanceof WarriorTribe ? 5 : 3;
+                if (guards < guardCap && gameState.getWorldState().getTurnNumber() % 3 == 0) {
                     Guard guard = new Guard(tribe);
                     guard.setHex(tribe.getHex());
                     tribe.getHex().getUnits().add(guard);

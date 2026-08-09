@@ -31,8 +31,8 @@ public class TribeActionSection extends BaseSection {
 
 
         int spaceSize = 30;
-        float fontSize = 24f;
-        Icon icon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png",240, 55);
+        float fontSize = 21f;
+        Icon icon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png",200, 43);
         Dimension dimension = new Dimension(icon.getIconWidth(), icon.getIconHeight());
 
         sendGiftButton = StyledButtons.textButton("Send Gift", icon, dimension, fontSize, UITheme.MENU_BUTTON_FG);
