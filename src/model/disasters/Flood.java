@@ -73,11 +73,7 @@ public class Flood {
                         building.setProducingStopped(true);
                     }
                     if(structure.getHP()<=0){
-                        if(structure.isTownHall()){
-                            structure.setHP(1);
-                        }else{
-                            destroyed.add(structure);
-                        }
+                        destroyed.add(structure);
                     }
                 }
             }
@@ -92,9 +88,7 @@ public class Flood {
             if (structure instanceof Building building) {
                 gameState.getEmpireState().removeBuilding(building);
             } else if (structure instanceof Tribe tribe) {
-                tribe.getHex().setBuilding(null);
-                gameState.getWorldState().getTribes().remove(tribe);
-                gameState.getEmpireState().getAllies().remove(tribe);
+                tribe.destroyCamp(gameState);
             }
         }
     }

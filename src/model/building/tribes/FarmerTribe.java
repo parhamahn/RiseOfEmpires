@@ -3,6 +3,7 @@ package model.building.tribes;
 import model.map.Hex;
 import model.mission.FarmerMission;
 import model.mission.Mission;
+import model.storage.Storage;
 import model.trade.tribe.FarmerTrade;
 import model.trade.tribe.TribeTrade;
 
@@ -30,5 +31,15 @@ public class FarmerTribe extends Tribe implements Serializable {
 
     public TribeTrade getTradeStrategy() {
         return tradeStrategy;
+    }
+
+    @Override
+    public boolean isAllianceBlocked(List<Tribe> allies) {
+        return allies.stream().anyMatch(tribe -> tribe instanceof MountainTribe || tribe instanceof WarriorTribe);
+    }
+
+    @Override
+    protected void collectLoot(Storage storage) {
+        storage.setFoodQuantity(storage.getFoodQuantity() + 40);
     }
 }

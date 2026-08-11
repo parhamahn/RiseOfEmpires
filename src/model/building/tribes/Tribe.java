@@ -4,26 +4,23 @@ import helpers.other.RandomNameGenerator;
 import model.MapStructure;
 import model.map.Hex;
 import model.mission.Mission;
+import model.mission.MissionStatus;
+import model.state.GameState;
+import model.storage.Storage;
 import model.trade.tribe.TribeTrade;
+import model.unit.Unit;
+import model.unit.enemy.Guard;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class Tribe extends MapStructure implements Serializable {
 private static final long serialVersionUID = 1L;
 
-    public enum RelationStatus {ENEMY, UNSATISFIED, NEUTRAL, FRIEND, ALLY}
-
-
     private int relation;
     private RelationStatus relationStatus;
-    private boolean canTrade;
-    private boolean canGetMission;
-    private boolean canRequestAlliance;
-    private boolean canRequestPeace;
-    private boolean canDeclareWar;
-    private boolean canGift;
     private String name;
     private Mission activeMission;
     private boolean isPermanentReward;
@@ -44,109 +41,56 @@ private static final long serialVersionUID = 1L;
     }
 
     public void changeRelation(int newRelation, List<Tribe> allies) {
-        newRelation = Math.min(100, newRelation);
-        newRelation = Math.max(-100, newRelation);
+        newRelation = Math.min(100, Math.max(-100, newRelation));
         this.relation = newRelation;
 
-        if(newRelation>=70 && newRelation<=100) {
+        if (newRelation >= 70) {
             this.relationStatus = RelationStatus.ALLY;
-            setOptions(true, true, true,false, true, true);
             isPermanentReward = true;
-
-        }else if(newRelation>=20 && newRelation<=69) {
+        } else if (newRelation >= 20) {
             this.relationStatus = RelationStatus.FRIEND;
-            setOptions(true, true, false,false, true, true);
-
-        }else if(newRelation>=-19 && newRelation<=19) {
+        } else if (newRelation >= -19) {
             this.relationStatus = RelationStatus.NEUTRAL;
-            setOptions(false, false, false,false, true, true);
-
-        }else if(newRelation>=-49 && newRelation<=-20) {
+        } else if (newRelation >= -49) {
             this.relationStatus = RelationStatus.UNSATISFIED;
-            setOptions(false, false, false,false, true, true);
-
-        }else if(newRelation>=-100 && newRelation<=-50) {
+        } else {
             this.relationStatus = RelationStatus.ENEMY;
-            setOptions(false, false, false, true, false, false);
             isPermanentReward = false;
         }
 
         if (newRelation < 70 && allies != null && allies.contains(this)) {
             allies.remove(this);
         }
-
-
-        if(this instanceof FarmerTribe){
-            for(Tribe tribe:allies){
-                if(tribe instanceof MountainTribe || tribe instanceof WarriorTribe){
-                    canRequestAlliance = false;
-                    break;
-                }
-            }
-        }else if(this instanceof WarriorTribe){
-            if(!allies.isEmpty()){
-                canRequestAlliance = false;
-            }
-        }else if(this instanceof TraderTribe){
-            for(Tribe tribe:allies){
-                if(tribe instanceof WarriorTribe){
-                    canRequestAlliance = false;
-                    break;
-                }
-            }
-        }else if(this instanceof MountainTribe){
-            for(Tribe tribe:allies){
-                if(tribe instanceof FarmerTribe || tribe instanceof WarriorTribe){
-                    canRequestAlliance = false;
-                    break;
-                }
-            }
-        }else if(this instanceof BeachTribe){
-            for(Tribe tribe:allies){
-                if(tribe instanceof WarriorTribe){
-                    canRequestAlliance = false;
-                    break;
-                }
-            }
-        }
-
-
-
-
     }
 
-    private void setOptions(boolean canTrade,  boolean canGetMission, boolean canRequestAlliance, boolean canRequestPeace, boolean canDeclareWar, boolean canGift) {
-        this.canTrade = canTrade;
-        this.canGetMission = canGetMission;
-        this.canRequestAlliance = canRequestAlliance;
-        this.canRequestPeace = canRequestPeace;
-        this.canDeclareWar = canDeclareWar;
-        this.canGift = canGift;
+    public boolean isAllianceBlocked(List<Tribe> allies) {
+        return false;
     }
-
 
     public boolean isCanTrade() {
-        return canTrade && !usedThisTurn;
+        return getRelationStatus().canTrade() && !usedThisTurn;
     }
 
     public boolean isCanGetMission() {
-        return canGetMission;
+        return getRelationStatus().canGetMission();
     }
 
-    public boolean isCanRequestAlliance() {
-        return canRequestAlliance && allianceLockTurns <= 0;
+    public boolean isCanRequestAlliance(List<Tribe> allies) {
+        return getRelationStatus().canRequestAlliance()
+                && allianceLockTurns <= 0
+                && !isAllianceBlocked(allies);
     }
 
     public boolean isCanRequestPeace() {
-        return canRequestPeace;
+        return getRelationStatus().canRequestPeace();
     }
 
     public boolean isCanDeclareWar() {
-        return canDeclareWar;
+        return getRelationStatus().canDeclareWar();
     }
 
     public boolean isCanGift() {
-        return canGift;
+        return getRelationStatus().canGift();
     }
 
     public RelationStatus getRelationStatus() {
@@ -159,30 +103,6 @@ private static final long serialVersionUID = 1L;
 
     public void setRelationStatus(RelationStatus relationStatus) {
         this.relationStatus = relationStatus;
-    }
-
-    public void setCanTrade(boolean canTrade) {
-        this.canTrade = canTrade;
-    }
-
-    public void setCanGetMission(boolean canGetMission) {
-        this.canGetMission = canGetMission;
-    }
-
-    public void setCanRequestAlliance(boolean canRequestAlliance) {
-        this.canRequestAlliance = canRequestAlliance;
-    }
-
-    public void setCanRequestPeace(boolean canRequestPeace) {
-        this.canRequestPeace = canRequestPeace;
-    }
-
-    public void setCanDeclareWar(boolean canDeclareWar) {
-        this.canDeclareWar = canDeclareWar;
-    }
-
-    public void setCanGift(boolean canGift) {
-        this.canGift = canGift;
     }
 
     public void setName(String name) {
@@ -250,4 +170,54 @@ private static final long serialVersionUID = 1L;
     public void setLastMissionTurn(int lastMissionTurn) {
         this.lastMissionTurn = lastMissionTurn;
     }
+
+    public void tickActiveMission(GameState gameState) {
+        if (activeMission == null) return;
+        activeMission.decreaseDeadline();
+        if (activeMission.getDeadline() == 0) {
+            activeMission.expire(gameState);
+        }
+    }
+
+    public void refreshMissions(int currentTurn) {
+        if (activeMission == null
+                && (getRelationStatus() == RelationStatus.FRIEND || getRelationStatus() == RelationStatus.ALLY)
+                && currentTurn - lastMissionTurn >= 5) {
+            for (Mission mission : getMissions()) {
+                mission.setStatus(MissionStatus.AVAILABLE);
+                mission.resetDeadline();
+            }
+            lastMissionTurn = currentTurn;
+        }
+    }
+
+    public void destroyCamp(GameState gameState) {
+        Hex campHex = getHex();
+        gameState.getWorldState().getTribes().remove(this);
+        gameState.getEmpireState().getAllies().remove(this);
+        if (activeMission != null) {
+            activeMission.setStatus(MissionStatus.FAILED);
+            activeMission = null;
+        }
+        List<Unit> guards = new ArrayList<>(campHex.getUnits());
+        for (Unit unit : guards) {
+            if (unit instanceof Guard) {
+                campHex.getUnits().remove(unit);
+                gameState.getWorldState().getEnemies().remove(unit);
+            }
+        }
+        campHex.setBuilding(null);
+        campHex.setInEmpireBorder(true);
+        for (Hex neighbour : gameState.getWorldState().getMap().getNeighbourHexes(campHex)) {
+            if (neighbour != null
+                    && neighbour.getTerrainType() != Hex.TerrainType.SEA
+                    && neighbour.getTerrainType() != Hex.TerrainType.TALL_MOUNTAIN
+                    && !neighbour.isInEmpireBorder()) {
+                neighbour.setInEmpireBorder(true);
+            }
+        }
+        collectLoot(gameState.getEmpireState().getStorage());
+    }
+
+    protected abstract void collectLoot(Storage storage);
 }

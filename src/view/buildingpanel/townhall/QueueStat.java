@@ -2,7 +2,6 @@ package view.buildingpanel.townhall;
 
 import helpers.image.ImageLoader;
 import model.queue.*;
-import view.common.FormatUtils;
 import view.common.StyledButtons;
 import view.common.UITheme;
 import view.game.GameAssets;
@@ -33,7 +32,7 @@ public class QueueStat extends JPanel {
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setAlignmentY(CENTER_ALIGNMENT);
 
-        JLabel descLabel = new JLabel(descriptionFor(queue));
+        JLabel descLabel = new JLabel(queue.getDescription());
         descLabel.setFont(UITheme.GAME_FONT.deriveFont(15f));
         descLabel.setForeground(Color.WHITE);
         textPanel.add(descLabel);
@@ -54,14 +53,6 @@ public class QueueStat extends JPanel {
 
     public JButton getCancelButton() {
         return cancelButton;
-    }
-
-    private String descriptionFor(Queue queue) {
-        return switch (queue.getQueueType()) {
-            case COOK -> "Cooking " + FormatUtils.formatEnum(((CookQueue) queue).getUnit().getUnitType().toString());
-            case UPGRADE -> "Upgrading to " + FormatUtils.formatEnum(((UpgradeQueue) queue).getTargetLevel().toString());
-            case RESEARCH -> "Researching " + FormatUtils.formatEnum(((ResearchQueue) queue).getTechnology().toString());
-        };
     }
 
     private String iconPathFor(Queue queue) {

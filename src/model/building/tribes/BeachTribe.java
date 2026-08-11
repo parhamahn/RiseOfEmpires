@@ -3,6 +3,7 @@ package model.building.tribes;
 import model.map.Hex;
 import model.mission.BeachMission;
 import model.mission.Mission;
+import model.storage.Storage;
 import model.trade.tribe.BeachTrade;
 import model.trade.tribe.TribeTrade;
 
@@ -29,5 +30,16 @@ private static final long serialVersionUID = 1L;
 
     public TribeTrade getTradeStrategy() {
         return tradeStrategy;
+    }
+
+    @Override
+    public boolean isAllianceBlocked(List<Tribe> allies) {
+        return allies.stream().anyMatch(tribe -> tribe instanceof WarriorTribe);
+    }
+
+    @Override
+    protected void collectLoot(Storage storage) {
+        storage.setFoodQuantity(storage.getFoodQuantity() + 30);
+        storage.setWoodQuantity(storage.getWoodQuantity() + 20);
     }
 }

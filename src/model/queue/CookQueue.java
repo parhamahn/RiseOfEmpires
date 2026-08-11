@@ -31,4 +31,13 @@ private static final long serialVersionUID = 1L;
         }
         return false;
     }
+
+    @Override
+    public void cancel(GameState gameState) {
+    }
+
+    @Override
+    public String getDescription() {
+        return "Cooking " + formatted(unit.getUnitType());
+    }
 }

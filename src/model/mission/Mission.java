@@ -26,6 +26,26 @@ private static final long serialVersionUID = 1L;
     public abstract void check(GameState gameState);
     public abstract void processDone(GameState gameState);
 
+    public void activate() {
+        this.status = MissionStatus.ACTIVE;
+        resetDeadline();
+    }
+
+    public boolean complete(GameState gameState) {
+        if (!isAffordable(gameState)) return false;
+        check(gameState);
+        processDone(gameState);
+        return true;
+    }
+
+    public void expire(GameState gameState) {
+        this.status = MissionStatus.FAILED;
+        tribe.setAllianceLockTurns(5);
+        tribe.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
+        tribe.setActiveMission(null);
+        tribe.changeRelation(tribe.getRelation() - 10, gameState.getEmpireState().getAllies());
+    }
+
 
     public Tribe getTribe() {return tribe;}
 

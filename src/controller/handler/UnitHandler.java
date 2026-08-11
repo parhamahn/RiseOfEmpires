@@ -1,9 +1,6 @@
 package controller.handler;
 
 import controller.SelectionContext;
-import model.Season;
-import model.building.edge.River;
-import model.building.edge.Road;
 import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;
@@ -43,26 +40,8 @@ public class UnitHandler {
 
         if(clicked.getTerrainType()== Hex.TerrainType.SEA && !gameState.getEmpireState().getResearchedTechnologies().contains(Technology.SAILING)){return;}
 
-        int frozenRoads = 0;
-        if (gameState.getEmpireState().getSeason()== Season.SeasonType.WINTER){frozenRoads+=1;}
-
         if (gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex()).contains(clicked)) {
-            int APNeeded = clicked.getAPToMove()+frozenRoads;
-
-            for(River river:unit.getHex().getRiversWith()){
-                if(river.connects(unit.getHex(), clicked)){
-                    APNeeded +=1;
-                }
-            }
-
-            for(Road road:unit.getHex().getRoadsTo()){
-                if(road.connects(unit.getHex(), clicked)){
-                    APNeeded = (int) Math.max(1,  Math.floor(APNeeded/2));
-                    break;
-                }
-            }
-
-            if(gameState.getEmpireState().getSeason() == Season.SeasonType.FALL && clicked.getTerrainType()== Hex.TerrainType.SEA){APNeeded+=1;}
+            int APNeeded = unit.getHex().getMoveAPCostTo(clicked, gameState.getEmpireState().getSeason());
 
             if (unit.getActionPoints() >= APNeeded) {
                 if (unit.getHex().getBuilding() instanceof ProducingBuilding producing) {

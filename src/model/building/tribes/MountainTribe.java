@@ -3,6 +3,7 @@ package model.building.tribes;
 import model.map.Hex;
 import model.mission.Mission;
 import model.mission.MountainMission;
+import model.storage.Storage;
 import model.trade.tribe.MountainTrade;
 import model.trade.tribe.TribeTrade;
 
@@ -29,5 +30,16 @@ private static final long serialVersionUID = 1L;
 
     public TribeTrade getTradeStrategy() {
         return tradeStrategy;
+    }
+
+    @Override
+    public boolean isAllianceBlocked(List<Tribe> allies) {
+        return allies.stream().anyMatch(tribe -> tribe instanceof FarmerTribe || tribe instanceof WarriorTribe);
+    }
+
+    @Override
+    protected void collectLoot(Storage storage) {
+        storage.setStoneQuantity(storage.getStoneQuantity() + 30);
+        storage.setIronQuantity(storage.getIronQuantity() + 20);
     }
 }

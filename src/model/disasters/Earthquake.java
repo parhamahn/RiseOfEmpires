@@ -73,17 +73,10 @@ public class Earthquake {
             if (structure instanceof Building building) {
                 gameState.getEmpireState().removeBuilding(building);
             } else if (structure instanceof Tribe tribe) {
-                destroyTribeCamp(gameState, tribe);
+                tribe.destroyCamp(gameState);
             }
         }
     }
-
-    private void destroyTribeCamp(GameState gameState, Tribe tribe) {
-        tribe.getHex().setBuilding(null);
-        gameState.getWorldState().getTribes().remove(tribe);
-        gameState.getEmpireState().getAllies().remove(tribe);
-    }
-
 
     public List<Hex> getInvolvedHexes() {
         return involvedHexes;

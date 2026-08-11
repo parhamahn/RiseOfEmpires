@@ -1,6 +1,7 @@
 package model.map;
 
 import model.MapStructure;
+import model.Season;
 import model.building.edge.Road;
 import model.building.edge.River;
 import model.building.edge.Wall;
@@ -103,6 +104,32 @@ private static final long serialVersionUID = 1L;
             case SEA -> SEA_COST;
             case TALL_MOUNTAIN -> Integer.MAX_VALUE/2;
         };
+    }
+
+    public int getMoveAPCostTo(Hex target, Season.SeasonType season) {
+        int APNeeded = target.getAPToMove();
+        if (season == Season.SeasonType.WINTER) {
+            APNeeded += 1;
+        }
+
+        for (River river : riversWith) {
+            if (river.connects(this, target)) {
+                APNeeded += 1;
+            }
+        }
+
+        for (Road road : roadsTo) {
+            if (road.connects(this, target)) {
+                APNeeded = (int) Math.max(1, Math.floor(APNeeded / 2));
+                break;
+            }
+        }
+
+        if (season == Season.SeasonType.FALL && target.getTerrainType() == TerrainType.SEA) {
+            APNeeded += 1;
+        }
+
+        return APNeeded;
     }
 
     public int getUnitTypeCount(Unit.UNIT_TYPE type) {

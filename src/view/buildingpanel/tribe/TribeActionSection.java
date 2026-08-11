@@ -89,7 +89,7 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.goldBorder(askPeace);
             askPeace.setEnabled(true);
         }
-        if(!tribe.isCanRequestAlliance()){askAlliance.setEnabled(false);   askAlliance.setBorder(null);}else{
+        if(!tribe.isCanRequestAlliance(gameState.getEmpireState().getAllies())){askAlliance.setEnabled(false);   askAlliance.setBorder(null);}else{
             StyledButtons.goldBorder(askAlliance);
             askAlliance.setEnabled(true);
         }

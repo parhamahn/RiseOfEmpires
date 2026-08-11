@@ -1,10 +1,13 @@
 package model;
 
+import model.building.Building;
 import model.building.empire.Bazaar;
 import model.building.empire.Dock;
 import model.building.empire.MilitaryStable;
 import model.map.Hex;
 import model.state.GameState;
+import model.storage.Cost;
+import model.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,5 +76,17 @@ public class Task {
             availableTasks.add(TASK.ROAD);
         }
         return availableTasks;
+    }
+
+    public static boolean canBuild(TASK task, Hex hex, GameState gameState) {
+        Cost baseCost = Building.getBuildCost(task);
+        Cost buildCost = task == TASK.DOCK && gameState.getEmpireState().isDockDiscount()
+                ? new Cost(baseCost.getWoodNeeded()/2, baseCost.getStoneNeeded()/2, baseCost.getIronNeeded()/2, baseCost.getFoodNeeded()/2, baseCost.getAPNeeded())
+                : baseCost;
+        boolean enoughAP = hex.getUnits().stream()
+                .anyMatch(unit -> unit.isBuilder() && buildCost.enoughAP(unit.getActionPoints()));
+        return buildCost.enoughResources(gameState.getEmpireState().getStorage())
+                && enoughAP
+                && hex.isInEmpireBorder();
     }
 }

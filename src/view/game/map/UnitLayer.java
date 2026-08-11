@@ -33,7 +33,7 @@ public class UnitLayer implements MapLayer {
         for (Unit unit : units) {
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
-                if(unit.getHex().getTerrainType()== Hex.TerrainType.SEA && !unit.isMoving()){return;}
+                if(unit.getHex().getTerrainType()== Hex.TerrainType.SEA && !unit.isMoving()){continue;}
                 Point pos = unitAnimator.getPosition(unit);
                 if (pos == null) continue;
                 int drawX = pos.x;

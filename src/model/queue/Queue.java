@@ -49,4 +49,25 @@ private static final long serialVersionUID = 1L;
 
 
     public abstract boolean execute(GameState gameState);
+
+    public abstract void cancel(GameState gameState);
+
+    public abstract String getDescription();
+
+    protected String formatted(Enum<?> value) {
+        StringBuilder formatted = new StringBuilder();
+        boolean nextUpper = true;
+        for (char c : value.name().toCharArray()) {
+            if (c == '_') {
+                formatted.append(' ');
+                nextUpper = true;
+            } else if (nextUpper) {
+                formatted.append(Character.toUpperCase(c));
+                nextUpper = false;
+            } else {
+                formatted.append(Character.toLowerCase(c));
+            }
+        }
+        return formatted.toString();
+    }
 }

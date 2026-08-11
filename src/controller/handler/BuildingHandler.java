@@ -62,20 +62,7 @@ public class BuildingHandler {
         if (selected != null && selected.getUnits().stream().anyMatch(Unit::isBuilder)) {
             Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
             for (Task.TASK task : Task.getAvailableTasks(selected, gameState)) {
-                boolean enoughAP = false;
-                for (Unit unit : selected.getUnits()) {
-                    if (unit.isBuilder()) {
-                        enoughAP = Building.getBuildCost(task).enoughAP(unit.getActionPoints());
-                    }
-                }
-                Cost buildCost = Building.getBuildCost(task);
-                if (task == Task.TASK.DOCK && gameState.getEmpireState().isDockDiscount()) {
-                    buildCost = new Cost(buildCost.getWoodNeeded()/2, buildCost.getStoneNeeded()/2, buildCost.getIronNeeded()/2, buildCost.getFoodNeeded()/2, buildCost.getAPNeeded());
-                }
-                boolean canBuild = buildCost.enoughResources(gameState.getEmpireState().getStorage())
-                        && enoughAP
-                        && selected.isInEmpireBorder();
-                canBuildMap.put(task, canBuild);
+                canBuildMap.put(task, Task.canBuild(task, selected, gameState));
             }
             List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(canBuildMap);
             for (TaskStat stat : stats) {

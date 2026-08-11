@@ -29,4 +29,13 @@ private static final long serialVersionUID = 1L;
         gameState.getEmpireState().getTownHallHex().getBuilding().setMaxHP(targetLevel.getMaxHP());
         return false;
     }
+
+    @Override
+    public void cancel(GameState gameState) {
+    }
+
+    @Override
+    public String getDescription() {
+        return "Upgrading to " + formatted(targetLevel);
+    }
 }

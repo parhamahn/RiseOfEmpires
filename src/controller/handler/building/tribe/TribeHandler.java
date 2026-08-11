@@ -3,6 +3,7 @@ package controller.handler.building.tribe;
 import model.building.tribes.BeachTribe;
 import model.building.tribes.FarmerTribe;
 import model.building.tribes.MountainTribe;
+import model.building.tribes.RelationStatus;
 import model.building.tribes.Tribe;
 import model.building.tribes.TraderTribe;
 import model.building.tribes.WarriorTribe;
@@ -65,9 +66,7 @@ public class TribeHandler {
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getDoMission().addActionListener(e -> {
             Tribe current = gamePanel.getTribeMainPanel().getTribe();
-            if(current.getActiveMission() == null || !current.getActiveMission().isAffordable(gameState)) return;
-            current.getActiveMission().check(gameState);
-            current.getActiveMission().processDone(gameState);
+            if (current.getActiveMission() == null || !current.getActiveMission().complete(gameState)) return;
             current.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
             current.setActiveMission(null);
             gamePanel.getTribeMainPanel().refresh();
@@ -189,8 +188,8 @@ public class TribeHandler {
 
     public void declareWar(Tribe tribe) {
         int happinessChange = 0;
-        if (tribe.getRelationStatus() == Tribe.RelationStatus.ALLY) happinessChange = -15;
-        if (tribe.getRelationStatus() == Tribe.RelationStatus.FRIEND) happinessChange = -5;
+        if (tribe.getRelationStatus() == RelationStatus.ALLY) happinessChange = -15;
+        if (tribe.getRelationStatus() == RelationStatus.FRIEND) happinessChange = -5;
 
         gameState.getEmpireState().setWarHappinessEffect(
                 gameState.getEmpireState().getWarHappinessEffect() + happinessChange);
@@ -234,8 +233,7 @@ public class TribeHandler {
     public void getMission(Tribe tribe) {
         for (Mission mission : tribe.getMissions()) {
             if(mission.getStatus() == MissionStatus.AVAILABLE){
-                mission.setStatus(MissionStatus.ACTIVE);
-                mission.resetDeadline();
+                mission.activate();
                 if(!gameState.getEmpireState().getMissions().contains(mission)){
                     gameState.getEmpireState().getMissions().add(mission);
                 }

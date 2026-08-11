@@ -81,9 +81,7 @@ public class Tsunami {
             if (structure instanceof Building building) {
                 gameState.getEmpireState().removeBuilding(building);
             } else if (structure instanceof Tribe tribe) {
-                tribe.getHex().setBuilding(null);
-                gameState.getWorldState().getTribes().remove(tribe);
-                gameState.getEmpireState().getAllies().remove(tribe);
+                tribe.destroyCamp(gameState);
             }
         }
     }

@@ -29,6 +29,7 @@ public class TownHallHandler {
 
         gamePanel.getTownHallPanel().setOnCancel(queue -> {
             gameState.getEmpireState().getQueues().remove(queue);
+            queue.cancel(gameState);
             gamePanel.getTownHallPanel().refresh();
         });
     }
