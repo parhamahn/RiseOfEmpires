@@ -1,6 +1,7 @@
 package controller.handler;
 
 import controller.SelectionContext;
+import helpers.sound.SoundEffects;
 import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;
@@ -60,6 +61,7 @@ public class UnitHandler {
                 }
                 unit.setMoving(true);
                 unit.setAssigned(false);
+                SoundEffects.getInstance().playUnitMoveSoundEffect();
             }
         }
 

@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.handler.building.townhall.CookUnitHandler;
 import controller.handler.combat.EnemyAttackHandler;
+import helpers.sound.SoundEffects;
 import model.Season;
 import model.building.Building;
 import model.building.TradingBuilding;
@@ -235,7 +236,10 @@ public class TurnHandler {
 
     private void advanceWorld() {
         gameState.getWorldState().nextTurn();
+        Season.SeasonType old = gameState.getEmpireState().getSeason();
         Season.processSeason(gameState);
+        Season.SeasonType newSeason = gameState.getEmpireState().getSeason();
+        SoundEffects.getInstance().seasonSoundEffect(old, newSeason);
     }
 
     private boolean isEmpireBuildingNear(Hex tribeHex) {

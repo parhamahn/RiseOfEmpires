@@ -1,4 +1,5 @@
 package controller;
+import helpers.sound.SoundEffects;
 import model.state.GameState;
 import view.game.GamePanel;
 import view.menu.MenuPanel;
@@ -45,6 +46,8 @@ public class MenuController {
         gamePanel.getMapPanel().setMap(gameState.getWorldState().getMap());
         CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, "game");
+        SoundEffects.getInstance().playStartGameSoundEffect();
+        SoundEffects.getInstance().seasonSoundEffect(null, gameState.getEmpireState().getSeason());
     }
 
     public void settingsAction(){
@@ -59,6 +62,7 @@ public class MenuController {
             gamePanel.getPausePanel().close();
             CardLayout cl = (CardLayout) (cards.getLayout());
             cl.show(cards, "menu");
+            SoundEffects.getInstance().stopEffects();
         }
     }
 

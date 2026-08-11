@@ -1,5 +1,7 @@
 package controller;
 
+import helpers.sound.SoundEffects;
+import model.Season;
 import model.state.GameState;
 import permanency.SlotID;
 import permanency.load.LoadManager;
@@ -74,7 +76,11 @@ public class LoadController {
         for(SlotID slotID:SlotID.values()){
             LoadOption option = loadPanel.getLoadOption(slotID);
             if(option == null){continue;}
-            option.getLoadButton().addActionListener(e -> loadSlotAction(slotID, option.getMetaData()));
+            option.getLoadButton().addActionListener(e -> {
+                loadSlotAction(slotID, option.getMetaData());
+                SoundEffects.getInstance().playStartGameSoundEffect();
+                SoundEffects.getInstance().seasonSoundEffect(null, Season.SeasonType.valueOf( option.getMetaData().getSeason()));
+            });
             option.getRemoveButton().addActionListener(e -> removeAction(option.getMetaData()));
         }
         CardLayout cl = (CardLayout) (cards.getLayout());

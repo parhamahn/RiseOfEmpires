@@ -37,7 +37,7 @@ public class Main {
 
             music = new Sound();
             music.load("/utils/music.wav");
-            //music.play();
+            music.play();
 
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);

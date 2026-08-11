@@ -1,5 +1,7 @@
 package view.common;
 
+import helpers.sound.SoundEffects;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -122,6 +124,15 @@ public class StyledButtons {
 
     public static JButton textButton(String text, Icon icon, Dimension size, float fontSize, Color fg) {
         JButton button = new JButton(text, icon);
+
+        button.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundEffects.getInstance().playHoverSoundEffect();
+                System.out.println("Entered");
+            }
+        });
+
         goldBorder(button);
         button.setPreferredSize(size);
         button.setMinimumSize(size);
