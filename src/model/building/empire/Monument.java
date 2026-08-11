@@ -13,17 +13,9 @@ private static final long serialVersionUID = 1L;
     private final static Cost upkeep = new Cost(2, 1, 0, 0, 0);
 
     public Monument(Hex hex) {
-        super(hex, cost, upkeep, 0, 50);
+        super(hex, cost, upkeep, 50);
     }
 
     public static Cost getBuildCost() { return cost; }
-
-    @Override
-    public int getProductionPerWorker() {
-        return 0;
-    }
-
-    @Override
-    public String getBuildingImageName() { return "monumenthex"; }
 
 }

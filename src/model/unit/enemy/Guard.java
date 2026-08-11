@@ -20,11 +20,6 @@ private static final long serialVersionUID = 1L;
         return true;
     }
 
-    @Override
-    public String getUnitImageName() {
-        return "guard";
-    }
-
     public Tribe getTribe() {
         return tribe;
     }

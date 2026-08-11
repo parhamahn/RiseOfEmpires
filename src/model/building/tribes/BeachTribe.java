@@ -17,7 +17,7 @@ private static final long serialVersionUID = 1L;
     private TribeTrade tradeStrategy;
 
     public BeachTribe(Hex hex) {
-        super(hex, "beachtribe", 50);
+        super(hex, 50);
         this.missions = new ArrayList<>();
         this.missions.add(new BeachMission(this));
         this.tradeStrategy = new BeachTrade();

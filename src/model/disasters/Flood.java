@@ -1,7 +1,9 @@
 package model.disasters;
 
+import model.MapStructure;
 import model.building.Building;
 import model.building.empire.Farm;
+import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
@@ -47,7 +49,7 @@ public class Flood {
 
     public void effect(GameState gameState){
         List<Unit> dead = new ArrayList<Unit>();
-        List<Building> destroyed = new ArrayList<Building>();
+        List<MapStructure> destroyed = new ArrayList<MapStructure>();
 
 
         for(Hex hex:involvedHexes){
@@ -61,17 +63,20 @@ public class Flood {
                 }
             }
 
-            if(hex.getBuilding()!=null && !hex.getBuilding().isTownHall()){
-                if(hex.getBuilding() instanceof Farm){
-                    destroyed.add(hex.getBuilding());
+            MapStructure structure = hex.getBuilding();
+            if(structure!=null && !structure.isTownHall()){
+                if(structure instanceof Farm){
+                    destroyed.add(structure);
                 }else{
-                    hex.getBuilding().setHP(hex.getBuilding().getHP()-BUILDING_DAMAGE);
-                    hex.getBuilding().setProducingStopped(true);
-                    if(hex.getBuilding().getHP()<=0){
-                        if(hex.getBuilding().isTownHall()){
-                            hex.getBuilding().setHP(1);
+                    structure.setHP(structure.getHP()-BUILDING_DAMAGE);
+                    if(structure instanceof Building building){
+                        building.setProducingStopped(true);
+                    }
+                    if(structure.getHP()<=0){
+                        if(structure.isTownHall()){
+                            structure.setHP(1);
                         }else{
-                            destroyed.add(hex.getBuilding());
+                            destroyed.add(structure);
                         }
                     }
                 }
@@ -83,8 +88,14 @@ public class Flood {
             gameState.getEmpireState().removeUnit(unit);
         }
 
-        for(Building building : destroyed){
-            gameState.getEmpireState().removeBuilding(building);
+        for(MapStructure structure : destroyed){
+            if (structure instanceof Building building) {
+                gameState.getEmpireState().removeBuilding(building);
+            } else if (structure instanceof Tribe tribe) {
+                tribe.getHex().setBuilding(null);
+                gameState.getWorldState().getTribes().remove(tribe);
+                gameState.getEmpireState().getAllies().remove(tribe);
+            }
         }
     }
 

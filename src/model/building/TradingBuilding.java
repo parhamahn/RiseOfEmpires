@@ -10,7 +10,7 @@ private static final long serialVersionUID = 1L;
     private boolean usedThisTurn;
 
     protected TradingBuilding(Hex hex, Cost cost, Cost upkeep, int maxHP) {
-        super(hex, cost, upkeep, 0, maxHP);
+        super(hex, cost, upkeep, maxHP);
         this.usedThisTurn = false;
     }
 
@@ -20,11 +20,6 @@ private static final long serialVersionUID = 1L;
 
     public void setUsedThisTurn(boolean usedThisTurn) {
         this.usedThisTurn = usedThisTurn;
-    }
-
-    @Override
-    public int getProductionPerWorker() {
-        return 0;
     }
 
     public abstract double getMultiplier(int quantity);

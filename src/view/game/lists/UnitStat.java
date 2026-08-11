@@ -4,6 +4,7 @@ import helpers.image.ImageLoader;
 import model.unit.Unit;
 import view.common.StyledButtons;
 import view.common.UITheme;
+import view.game.GameAssets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +39,7 @@ public class UnitStat {
             }
         };
 
-        ImageIcon icon = ImageLoader.getInstance().loadIcon("/utils/" + unit.getUnitImageName() + ".png", 60);
+        ImageIcon icon = ImageLoader.getInstance().loadIcon("/utils/" + GameAssets.unitImage(unit) + ".png", 60);
 
         button.setIcon(icon);
         UITheme.styleIconButton(button);

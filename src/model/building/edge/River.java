@@ -11,7 +11,4 @@ private static final long serialVersionUID = 1L;
     public River(Hex hex1, Hex hex2, Map map) {
         super(hex1, hex2, map);
     }
-
-    @Override
-    public String getImageName() { return "/utils/rivermap.png"; }
 }

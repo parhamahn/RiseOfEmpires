@@ -1,12 +1,13 @@
 package model.unit;
 
 import model.TownHallLevel;
+import model.combat.Damageable;
 import model.map.Hex;
 import model.storage.Cost;
 
 import java.io.Serializable;
 
-public abstract class Unit implements Serializable {
+public abstract class Unit implements Damageable, Serializable {
 private static final long serialVersionUID = 1L;
 
     public enum UNIT_TYPE {
@@ -130,9 +131,6 @@ private static final long serialVersionUID = 1L;
     public int getHP() {return HP;}
     public void setHP(int HP) {this.HP = HP;}
     public Cost getCookCost() { return cookCost; }
-    public String getUnitImageName() {
-        return unitType.toString().toLowerCase().replace("_", "");
-    }
     public abstract boolean isCombatUnit();
     public int getAttackRadius(){
         return unitType.getAttackRadius();
@@ -141,12 +139,18 @@ private static final long serialVersionUID = 1L;
         return unitType.getAttackPower();
     }
 
+    @Override
     public int getHealth() {
         return health;
     }
 
+    @Override
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public void resetActionPointsForNewTurn() {

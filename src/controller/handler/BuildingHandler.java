@@ -44,11 +44,17 @@ public class BuildingHandler {
             gameState.getEmpireState().setDockDiscount(false);
             cost = new Cost(cost.getWoodNeeded()/2, cost.getStoneNeeded()/2, cost.getIronNeeded()/2, cost.getFoodNeeded()/2, cost.getAPNeeded());
         }
-        cost.pay(gameState.getEmpireState().getStorage());
+        if (!cost.enoughResources(gameState.getEmpireState().getStorage())) return;
+        if (!hasBuilderWithAP(hex, cost.getAPNeeded())) return;
+        deductBuilderCost(cost, hex);
         hex.setBuilding(building);
         gameState.getEmpireState().getBuildings().add(building);
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         afterBuildingChange();
+    }
+
+    private boolean hasBuilderWithAP(Hex hex, int apNeeded) {
+        return hex.getUnits().stream().anyMatch(unit -> unit.isBuilder() && unit.getActionPoints() >= apNeeded);
     }
 
     public void updateTaskListPanel() {
@@ -111,13 +117,10 @@ public class BuildingHandler {
         for(Unit unit : hex.getUnits()) {
             if(unit.isBuilder() && unit.getActionPoints() >= 1) {
                 int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_OPTION);
-                if (sure == JOptionPane.YES_OPTION) {
-                    Building building = hex.getBuilding();
-                    if (building != null && !building.isTownHall()) {
-                        gameState.getEmpireState().removeBuilding(building);
-                        unit.setActionPoints(unit.getActionPoints() - 1);
-                        afterBuildingChange();
-                    }
+                if (sure == JOptionPane.YES_OPTION && hex.getBuilding() instanceof Building building && !building.isTownHall()) {
+                    gameState.getEmpireState().removeBuilding(building);
+                    unit.setActionPoints(unit.getActionPoints() - 1);
+                    afterBuildingChange();
                 }
                 break;
             }

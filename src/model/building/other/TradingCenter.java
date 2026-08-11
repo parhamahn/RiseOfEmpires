@@ -12,11 +12,6 @@ private static final long serialVersionUID = 1L;
     }
 
     @Override
-    public String getBuildingImageName() {
-        return "tradingcenterhex";
-    }
-
-    @Override
     public double getMultiplier(int quantity) {
         return 0.8;
     }

@@ -1,12 +1,12 @@
 package model.building.empire;
 
-import model.building.Building;
+import model.building.ProducingBuilding;
 import model.storage.Cost;
 import model.map.Hex;
 
 import java.io.Serializable;
 
-public class Farm extends Building implements Serializable {
+public class Farm extends ProducingBuilding implements Serializable {
 private static final long serialVersionUID = 1L;
     public final static int productingPerUnit = 2;
 
@@ -26,7 +26,4 @@ private static final long serialVersionUID = 1L;
 
     @Override
     public Hex.ResourceType getResourceType() { return farming; }
-
-    @Override
-    public String getBuildingImageName() { return "farmhex"; }
 }

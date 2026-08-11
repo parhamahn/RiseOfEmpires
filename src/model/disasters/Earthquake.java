@@ -1,6 +1,8 @@
 package model.disasters;
 
+import model.MapStructure;
 import model.building.Building;
+import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
@@ -38,7 +40,7 @@ public class Earthquake {
 
     public void effect(GameState gameState) {
         List<Unit> dead = new ArrayList<Unit>();
-        List<Building> destroyed = new ArrayList<Building>();
+        List<MapStructure> destroyed = new ArrayList<MapStructure>();
 
         for(Hex involved:involvedHexes){
             if(!involved.getUnits().isEmpty()){
@@ -49,15 +51,16 @@ public class Earthquake {
                     }
                 }
             }
-            if(involved.getBuilding()!=null){
-                involved.getBuilding().setHP(involved.getBuilding().getHP() - BUILDING_DAMAGE);
-                if(involved.getBuilding().isTownHall()){
-                    if(involved.getBuilding().getHP() <= 0) {
-                        involved.getBuilding().setHP(1);
+            MapStructure structure = involved.getBuilding();
+            if(structure!=null){
+                structure.setHP(structure.getHP() - BUILDING_DAMAGE);
+                if(structure.isTownHall()){
+                    if(structure.getHP() <= 0) {
+                        structure.setHP(1);
                     }
                 }else{
-                    if(involved.getBuilding().getHP() <= 0) {
-                        destroyed.add(involved.getBuilding());
+                    if(structure.getHP() <= 0) {
+                        destroyed.add(structure);
                     }
                 }
             }
@@ -66,9 +69,19 @@ public class Earthquake {
             gameState.getEmpireState().removeUnit(unit);
         }
 
-        for(Building building : destroyed){
-            gameState.getEmpireState().removeBuilding(building);
+        for(MapStructure structure : destroyed){
+            if (structure instanceof Building building) {
+                gameState.getEmpireState().removeBuilding(building);
+            } else if (structure instanceof Tribe tribe) {
+                destroyTribeCamp(gameState, tribe);
+            }
         }
+    }
+
+    private void destroyTribeCamp(GameState gameState, Tribe tribe) {
+        tribe.getHex().setBuilding(null);
+        gameState.getWorldState().getTribes().remove(tribe);
+        gameState.getEmpireState().getAllies().remove(tribe);
     }
 
 

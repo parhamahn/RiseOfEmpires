@@ -16,7 +16,4 @@ public class Road extends EdgeComponent implements Serializable {
     }
 
     public static Cost getBuildCost() { return cost; }
-
-    @Override
-    public String getImageName() { return "/utils/roadmap.png"; }
 }

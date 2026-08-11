@@ -5,6 +5,7 @@ import model.queue.*;
 import view.common.FormatUtils;
 import view.common.StyledButtons;
 import view.common.UITheme;
+import view.game.GameAssets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +66,7 @@ public class QueueStat extends JPanel {
 
     private String iconPathFor(Queue queue) {
         return switch (queue.getQueueType()) {
-            case COOK -> "/utils/" + ((CookQueue) queue).getUnit().getUnitImageName() + ".png";
+            case COOK -> "/utils/" + GameAssets.unitImage(((CookQueue) queue).getUnit()) + ".png";
             case UPGRADE -> "/utils/townhall.png";
             case RESEARCH -> switch (((ResearchQueue) queue).getTechnology()) {
                 case SAILING -> "/utils/sailingresearch.png";

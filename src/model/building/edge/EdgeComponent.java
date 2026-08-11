@@ -40,6 +40,4 @@ private static final long serialVersionUID = 1L;
     public boolean connects(Hex hex1, Hex hex2) {
         return isValid() && ((hexA == hex1 && hexB == hex2) || (hexA == hex2 && hexB == hex1));
     }
-
-    public abstract String getImageName();
 }

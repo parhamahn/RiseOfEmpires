@@ -7,6 +7,7 @@ import model.map.Map;
 import model.state.GameState;
 import model.unit.Unit;
 import view.common.UITheme;
+import view.game.GameAssets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +40,7 @@ public class UnitLayer implements MapLayer {
                 int drawY = pos.y;
 
                 ImageIcon icon = ImageLoader.getInstance().loadIcon(
-                        "/utils/" + unit.getUnitImageName() + ".png", unitSize);
+                        "/utils/" + GameAssets.unitImage(unit) + ".png", unitSize);
                 if (icon != null) {
                     g2.drawImage(icon.getImage(), drawX - unitSize / 2, drawY - unitSize / 2,
                             unitSize, unitSize, null);

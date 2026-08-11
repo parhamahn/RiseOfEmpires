@@ -2,11 +2,12 @@ package view.game.map;
 
 import controller.SelectionContext;
 import helpers.image.ImageLoader;
+import model.MapStructure;
 import model.map.Hex;
 import model.map.Map;
-import model.building.Building;
 import model.state.GameState;
 import view.common.UITheme;
+import view.game.GameAssets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -47,10 +48,10 @@ public class BuildingLayer implements MapLayer {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
                 if (hex == null) continue;
-                Building building = hex.getBuilding();
+                MapStructure building = hex.getBuilding();
                 if (building == null) continue;
 
-                BufferedImage img = buildingImages.get(building.getBuildingImageName());
+                BufferedImage img = buildingImages.get(GameAssets.buildingImage(building));
                 if (img == null) continue;
 
                 Point center = camera.getHexCenter(hex);

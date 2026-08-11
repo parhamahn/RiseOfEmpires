@@ -73,50 +73,52 @@ private static final long serialVersionUID = 1L;
         if(empire.getSeason()== Season.SeasonType.WINTER){seasonEffect = -1;}
 
         for (Building building : empire.getBuildings()) {
-            int workers = building.getAssignedWorkers().size();
-            Hex.ResourceType resourceType = building.getResourceType();
-
             double steelToolsMultiplier = 1;
             if(empire.getResearchedTechnologies().contains(Technology.STEEL_TOOLS) && (building instanceof StoneMine || building instanceof IronMine)){steelToolsMultiplier = 1.5;}
 
-            if (workers > 0 && resourceType != null && !building.isProducingStopped()) {
-                Hex resourceHex = building.getHex();
-                int resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+            if (building instanceof ProducingBuilding producing) {
+                int workers = producing.getAssignedWorkers().size();
+                Hex.ResourceType resourceType = producing.getResourceType();
 
-                if(building instanceof Dock){
-                    List<Hex> fishNeighbors = map.getNeighbourHexes(building.getHex()).stream()
-                            .filter(Objects::nonNull)
-                            .filter(hex -> hex.getTerrainType() == Hex.TerrainType.SEA)
-                            .filter(hex -> hex.getResources().getOrDefault(resourceType, 0) > 0)
-                            .toList();
-                    if(!fishNeighbors.isEmpty()){
-                        resourceHex = fishNeighbors.get(rng.nextInt(fishNeighbors.size()));
-                        resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+                if (workers > 0 && resourceType != null && !producing.isProducingStopped()) {
+                    Hex resourceHex = producing.getHex();
+                    int resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+
+                    if(producing instanceof Dock){
+                        List<Hex> fishNeighbors = map.getNeighbourHexes(producing.getHex()).stream()
+                                .filter(Objects::nonNull)
+                                .filter(hex -> hex.getTerrainType() == Hex.TerrainType.SEA)
+                                .filter(hex -> hex.getResources().getOrDefault(resourceType, 0) > 0)
+                                .toList();
+                        if(!fishNeighbors.isEmpty()){
+                            resourceHex = fishNeighbors.get(rng.nextInt(fishNeighbors.size()));
+                            resourceOnHex = resourceHex.getResources().getOrDefault(resourceType, 0);
+                        }
                     }
-                }
 
-                int storageCap = getStorageCap(empire, resourceType);
-                int producingResource = (int) Math.min(Math.min(workers * (Math.floor(building.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);
+                    int storageCap = getStorageCap(empire, resourceType);
+                    int producingResource = (int) Math.min(Math.min(workers * (Math.floor(producing.getProductionPerWorker() * steelToolsMultiplier)-protestPenalty), resourceOnHex), storageCap);
 
-                if(building instanceof Farm || building instanceof Stable || building instanceof Dock){
-                    boolean farmerAlly = empire.getAllies().stream().anyMatch(tribe ->  tribe instanceof FarmerTribe);
-                    if(farmerAlly){
-                        producingResource = (int)Math.floor(producingResource*FarmerTribe.FOOD_PRODUCTION_BOOST);
+                    if(producing instanceof Farm || producing instanceof Stable || producing instanceof Dock){
+                        boolean farmerAlly = empire.getAllies().stream().anyMatch(tribe ->  tribe instanceof FarmerTribe);
+                        if(farmerAlly){
+                            producingResource = (int)Math.floor(producingResource*FarmerTribe.FOOD_PRODUCTION_BOOST);
+                        }
+                        producingResource+= seasonEffect;
                     }
-                    producingResource+= seasonEffect;
-                }
 
-                if (resourceOnHex - producingResource > 0) {
-                    resourceHex.getResources().put(resourceType, resourceOnHex - producingResource);
-                } else {
-                    toRemove.add(building);
-                    resourceHex.getResources().remove(resourceType);
-                    if (!(building instanceof Dock) && resourceHex.getResources().isEmpty()) {
-                        resourceHex.setTerrainType(Hex.TerrainType.PLAIN);
+                    if (resourceOnHex - producingResource > 0) {
+                        resourceHex.getResources().put(resourceType, resourceOnHex - producingResource);
+                    } else {
+                        toRemove.add(building);
+                        resourceHex.getResources().remove(resourceType);
+                        if (!(producing instanceof Dock) && resourceHex.getResources().isEmpty()) {
+                            resourceHex.setTerrainType(Hex.TerrainType.PLAIN);
+                        }
                     }
-                }
 
-                addProduction(resourceType, producingResource);
+                    addProduction(resourceType, producingResource);
+                }
             }
 
             if (this.foodProduction < 0 && empire.getStorage().getFoodQuantity() < 0) {

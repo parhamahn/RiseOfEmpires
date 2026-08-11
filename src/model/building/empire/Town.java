@@ -14,17 +14,11 @@ private static final long serialVersionUID = 1L;
 
 
     public Town(Hex hex) {
-        super(hex, cost, upkeep, 0, 100);
+        super(hex, cost, upkeep, 100);
     }
 
 
     public static Cost getBuildCost() { return cost; }
-
-    @Override
-    public int getProductionPerWorker() { return 0; }
-
-    @Override
-    public String getBuildingImageName() { return "townhex"; }
 
     @Override
     public boolean isTown() { return true; }

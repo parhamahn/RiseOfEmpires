@@ -1,12 +1,12 @@
 package model.building.empire;
 
-import model.building.Building;
+import model.building.ProducingBuilding;
 import model.storage.Cost;
 import model.map.Hex;
 
 import java.io.Serializable;
 
-public class LumberMill extends Building implements Serializable {
+public class LumberMill extends ProducingBuilding implements Serializable {
 private static final long serialVersionUID = 1L;
     public final static int productingPerUnit = 3;
 
@@ -27,9 +27,5 @@ private static final long serialVersionUID = 1L;
 
     @Override
     public Hex.ResourceType getResourceType() { return Hex.ResourceType.WOOD; }
-
-    @Override
-    public String getBuildingImageName() { return "lumbermillhex"; }
-
 
 }

@@ -1,5 +1,6 @@
 package model.combat;
 
+import model.MapStructure;
 import model.building.Building;
 import model.building.edge.Wall;
 import model.building.tribes.*;
@@ -69,12 +70,12 @@ public class AttackBuilding {
         }
 
         if (attackerPower > 0 && defenderHex.getBuilding() != null) {
-            Building building = defenderHex.getBuilding();
-            building.setHP(building.getHP() - attackerPower);
-            if (building.getHP() <= 0) {
-                if (building instanceof Tribe) {
-                    destroyCamp((Tribe) building);
-                } else {
+            MapStructure structure = defenderHex.getBuilding();
+            structure.setHP(structure.getHP() - attackerPower);
+            if (structure.getHP() <= 0) {
+                if (structure instanceof Tribe) {
+                    destroyCamp((Tribe) structure);
+                } else if (structure instanceof Building building) {
                     gameState.getEmpireState().removeBuilding(building);
                 }
             }

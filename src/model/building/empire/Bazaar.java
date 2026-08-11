@@ -21,11 +21,6 @@ private static final long serialVersionUID = 1L;
     public static TownHallLevel getLevel() { return TownHallLevel.SETTLEMENT; }
 
     @Override
-    public String getBuildingImageName() {
-        return "bazaarhex";
-    }
-
-    @Override
     public double getMultiplier(int quantity) {
         return switch (quantity) {
             case 10  -> 0.5;

@@ -1,6 +1,6 @@
 package model.map;
 
-import model.building.Building;
+import model.MapStructure;
 import model.building.edge.Road;
 import model.building.edge.River;
 import model.building.edge.Wall;
@@ -26,7 +26,7 @@ private static final long serialVersionUID = 1L;
     private boolean inEmpireBorder;
     private TerrainType terrainType;
     private HashMap<ResourceType, Integer> resources;
-    private Building building;
+    private MapStructure building;
     private List<Unit> units;
     private List<Road> roadsTo;
     private List<River> riversWith;
@@ -59,10 +59,10 @@ private static final long serialVersionUID = 1L;
     public TerrainType getTerrainType() {return terrainType;}
     public void setTerrainType(TerrainType terrainType) {this.terrainType = terrainType;}
     public HashMap<ResourceType, Integer> getResources() {return resources;}
-    public Building getBuilding() {
+    public MapStructure getBuilding() {
         return building;
     }
-    public void setBuilding(Building building) {
+    public void setBuilding(MapStructure building) {
         this.building = building;
     }
     public List<Unit> getUnits() {

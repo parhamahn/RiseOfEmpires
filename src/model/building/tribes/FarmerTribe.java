@@ -18,7 +18,7 @@ public class FarmerTribe extends Tribe implements Serializable {
     private TribeTrade tradeStrategy;
 
     public FarmerTribe(Hex hex) {
-        super(hex, "farmertribe", 40);
+        super(hex, 40);
         this.missions = new ArrayList<>();
         this.missions.add(new FarmerMission(this));
         this.tradeStrategy = new FarmerTrade();

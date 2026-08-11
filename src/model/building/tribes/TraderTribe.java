@@ -17,7 +17,7 @@ private static final long serialVersionUID = 1L;
     private TribeTrade tradeStrategy;
 
     public TraderTribe(Hex hex) {
-        super(hex, "tradertribe", 50);
+        super(hex, 50);
         missions = new ArrayList<>();
         missions.add(new TraderMission(this));
         tradeStrategy = new TraderTrade();

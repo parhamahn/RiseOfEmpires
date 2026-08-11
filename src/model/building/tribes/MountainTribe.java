@@ -17,7 +17,7 @@ private static final long serialVersionUID = 1L;
     private TribeTrade tradeStrategy;
 
     public MountainTribe(Hex hex) {
-        super(hex, "mountaintribe", 50);
+        super(hex, 50);
         this.missions = new ArrayList<>();
         this.missions.add(new MountainMission(this));
         this.tradeStrategy = new MountainTrade();

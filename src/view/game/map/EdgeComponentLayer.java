@@ -7,6 +7,7 @@ import model.building.edge.Road;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
+import view.game.GameAssets;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -40,7 +41,7 @@ public class EdgeComponentLayer implements MapLayer {
         int thickness = Math.max(6, camera.getHexRadius() / 6);
 
         for (EdgeComponent component : allComponents) {
-            BufferedImage image = getImage(component.getImageName());
+            BufferedImage image = getImage(GameAssets.edgeImage(component));
             if (image == null) continue;
 
             int midX, midY;

@@ -1,74 +1,53 @@
 package model.building;
 
-import model.storage.Cost;
-import model.map.Hex;
+import model.MapStructure;
 import model.Task;
-import model.unit.civilian.Worker;
+import model.map.Hex;
+import model.storage.Cost;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Building implements Serializable {
+public abstract class Building extends MapStructure implements Serializable {
 private static final long serialVersionUID = 1L;
     public static int actionPointToAssign = 1;
 
-    private Hex hex;
     private Cost cost;
     private Cost upkeep;
-    private List<Worker> assignedWorkers = new ArrayList<>();
-    private int workerCapacity;
     private int noUpkeepTurns;
-    private int maxHP;
-    private int HP;
     private boolean producingStopped;
 
-
-    public Building(Hex hex, Cost cost, Cost upkeep, int workerCapacity, int maxHP){
-        this.hex = hex;
+    public Building(Hex hex, Cost cost, Cost upkeep, int maxHP){
+        super(hex, maxHP);
         this.cost = cost;
         this.upkeep = upkeep;
-        this.workerCapacity = workerCapacity;
         this.noUpkeepTurns = 0;
-        this.maxHP = maxHP;
-        this.HP = maxHP;
     }
 
-
-    public abstract int getProductionPerWorker();
-    public Hex.ResourceType getResourceType() { return null; }
-    public abstract String getBuildingImageName();
     public boolean isTown() { return false; }
-    public boolean isTownHall() { return false; }
-    public Hex getHex() {
-        return hex;
-    }
+
     public Cost getCost(){
         return cost;
     }
+
     public Cost getUpkeep() {
         return upkeep;
     }
-    public List<Worker> getAssignedWorkers() {
-        return assignedWorkers;
-    }
-    public int getWorkerCapacity() {
-        return workerCapacity;
-    }
+
     public int getNoUpkeepTurns() {
         return noUpkeepTurns;
     }
+
     public void setNoUpkeepTurns(int noUpkeepTurns) {
         this.noUpkeepTurns = noUpkeepTurns;
     }
-    public int getHP() {return HP;}
-    public void setHP(int HP) {this.HP = HP;}
-    public int getMaxHP() {return maxHP;}
-    public void setMaxHP(int maxHP) {this.maxHP = maxHP;}
+
     public boolean isProducingStopped() {
         return producingStopped;
     }
-    public void setProducingStopped(boolean producingStopped) {this.producingStopped = producingStopped;}
+
+    public void setProducingStopped(boolean producingStopped) {
+        this.producingStopped = producingStopped;
+    }
 
     public static Cost getBuildCost(Task.TASK task) {
         return BuildingFactory.getBuildCost(task);

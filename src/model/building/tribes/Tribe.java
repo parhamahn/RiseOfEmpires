@@ -1,7 +1,7 @@
 package model.building.tribes;
 
 import helpers.other.RandomNameGenerator;
-import model.building.Building;
+import model.MapStructure;
 import model.map.Hex;
 import model.mission.Mission;
 import model.trade.tribe.TribeTrade;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Tribe extends Building implements Serializable {
+public abstract class Tribe extends MapStructure implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public enum RelationStatus {ENEMY, UNSATISFIED, NEUTRAL, FRIEND, ALLY}
@@ -32,11 +32,8 @@ private static final long serialVersionUID = 1L;
     private int allianceLockTurns;
     private int lastMissionTurn;
 
-    private final String imageName;
-
-    public Tribe(Hex hex, String imageName, int maxHP) {
-        super(hex, null, null, 0, maxHP);
-        this.imageName = imageName;
+    public Tribe(Hex hex, int maxHP) {
+        super(hex, maxHP);
         this.name = RandomNameGenerator.generateRandomName();
         this.isPermanentReward = false;
         this.discovered = true;
@@ -44,16 +41,6 @@ private static final long serialVersionUID = 1L;
         this.lastMissionTurn = 0;
         changeRelation(0, Collections.emptyList());
         activeMission = null;
-    }
-
-    @Override
-    public int getProductionPerWorker() {
-        return 0;
-    }
-
-    @Override
-    public String getBuildingImageName() {
-        return imageName;
     }
 
     public void changeRelation(int newRelation, List<Tribe> allies) {

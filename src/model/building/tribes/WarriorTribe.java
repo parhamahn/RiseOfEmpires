@@ -14,7 +14,7 @@ private static final long serialVersionUID = 1L;
     private List<Mission> missions;
 
     public WarriorTribe(Hex hex) {
-        super(hex, "warriortribe", 70);
+        super(hex, 70);
         this.missions = new ArrayList<>();
         this.missions.add(new WarriorMission(this));
     }

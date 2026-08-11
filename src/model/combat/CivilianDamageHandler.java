@@ -1,5 +1,6 @@
 package model.combat;
 
+import model.building.ProducingBuilding;
 import model.state.GameState;
 import model.unit.Unit;
 
@@ -17,8 +18,8 @@ public class CivilianDamageHandler extends DamageHandler {
                 remaining = damageUnit(u, remaining);
                 if (isDead(u)) {
                     it.remove();
-                    if (u.isWorker() && u.getHex().getBuilding() != null) {
-                        u.getHex().getBuilding().getAssignedWorkers().remove(u);
+                    if (u.isWorker() && u.getHex().getBuilding() instanceof ProducingBuilding producing) {
+                        producing.getAssignedWorkers().remove(u);
                     }
                     gameState.getEmpireState().removeUnit(u);
                 }

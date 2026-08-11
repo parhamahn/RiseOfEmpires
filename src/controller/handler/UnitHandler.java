@@ -8,6 +8,7 @@ import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
+import model.building.ProducingBuilding;
 import model.unit.Unit;
 import model.unit.civilian.Worker;
 import view.game.GamePanel;
@@ -64,8 +65,8 @@ public class UnitHandler {
             if(gameState.getEmpireState().getSeason() == Season.SeasonType.FALL && clicked.getTerrainType()== Hex.TerrainType.SEA){APNeeded+=1;}
 
             if (unit.getActionPoints() >= APNeeded) {
-                if (unit.getHex().getBuilding() != null) {
-                    unit.getHex().getBuilding().getAssignedWorkers().remove(unit);
+                if (unit.getHex().getBuilding() instanceof ProducingBuilding producing) {
+                    producing.getAssignedWorkers().remove(unit);
                     gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
                     gamePanel.getHudPanel().refresh();
                 }
@@ -92,22 +93,24 @@ public class UnitHandler {
     }
 
     private void handleWorkerAssignment(Hex clicked, Unit unit) {
-        if (selectionContext.getSelectedHex().getBuilding() != null && !selectionContext.getSelectedHex().getBuilding().isTown()) {
-            if (!unit.isAssigned()) {
-                if (selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().size() < selectionContext.getSelectedHex().getBuilding().getWorkerCapacity()) {
-                    if (unit.getActionPoints() >= Building.actionPointToAssign) {
-                        unit.setAssigned(true);
-                        unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
-                        selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().add((Worker) unit);
-                        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
-                        gamePanel.getHudPanel().refresh();
+        if (selectionContext.getSelectedHex().getBuilding() instanceof Building building && !building.isTown()) {
+            if (building instanceof ProducingBuilding producing) {
+                if (!unit.isAssigned()) {
+                    if (producing.getAssignedWorkers().size() < producing.getWorkerCapacity()) {
+                        if (unit.getActionPoints() >= Building.actionPointToAssign) {
+                            unit.setAssigned(true);
+                            unit.setActionPoints(unit.getActionPoints() - Building.actionPointToAssign);
+                            producing.getAssignedWorkers().add((Worker) unit);
+                            gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
+                            gamePanel.getHudPanel().refresh();
+                        }
                     }
+                } else {
+                    unit.setAssigned(false);
+                    producing.getAssignedWorkers().remove(unit);
+                    gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
+                    gamePanel.getHudPanel().refresh();
                 }
-            } else {
-                unit.setAssigned(false);
-                selectionContext.getSelectedHex().getBuilding().getAssignedWorkers().remove(unit);
-                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
-                gamePanel.getHudPanel().refresh();
             }
         }
     }

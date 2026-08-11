@@ -1,6 +1,8 @@
 package model.disasters;
 
+import model.MapStructure;
 import model.building.Building;
+import model.building.tribes.Tribe;
 import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
@@ -51,7 +53,7 @@ public class Tsunami {
 
     public void effect(GameState gameState){
         List<Unit> dead = new ArrayList<Unit>();
-        List<Building> destroyed = new ArrayList<Building>();
+        List<MapStructure> destroyed = new ArrayList<MapStructure>();
 
 
         for(Hex hex:involvedHexes){
@@ -64,8 +66,9 @@ public class Tsunami {
                 }
             }
 
-            if(hex.getBuilding()!=null && !hex.getBuilding().isTownHall()){
-                destroyed.add(hex.getBuilding());
+            MapStructure structure = hex.getBuilding();
+            if(structure!=null && !structure.isTownHall()){
+                destroyed.add(structure);
             }
         }
 
@@ -74,8 +77,14 @@ public class Tsunami {
             gameState.getEmpireState().removeUnit(unit);
         }
 
-        for(Building building : destroyed){
-            gameState.getEmpireState().removeBuilding(building);
+        for(MapStructure structure : destroyed){
+            if (structure instanceof Building building) {
+                gameState.getEmpireState().removeBuilding(building);
+            } else if (structure instanceof Tribe tribe) {
+                tribe.getHex().setBuilding(null);
+                gameState.getWorldState().getTribes().remove(tribe);
+                gameState.getEmpireState().getAllies().remove(tribe);
+            }
         }
     }
 

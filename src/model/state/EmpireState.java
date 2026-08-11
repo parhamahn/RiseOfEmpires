@@ -88,10 +88,12 @@ private static final long serialVersionUID = 1L;
     }
 
     public void removeBuilding(Building building) {
-        for (Unit unit : building.getAssignedWorkers()) {
-            unit.setAssigned(false);
+        if (building instanceof ProducingBuilding producing) {
+            for (Unit unit : producing.getAssignedWorkers()) {
+                unit.setAssigned(false);
+            }
+            producing.getAssignedWorkers().clear();
         }
-        building.getAssignedWorkers().clear();
         building.getHex().setBuilding(null);
         buildings.remove(building);
     }

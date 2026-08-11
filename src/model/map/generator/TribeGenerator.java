@@ -1,6 +1,6 @@
 package model.map.generator;
 
-import model.building.Building;
+import model.MapStructure;
 import model.building.tribes.*;
 import model.map.Hex;
 import model.map.Map;
@@ -51,7 +51,7 @@ public class TribeGenerator {
         placeTribes(traderTribeCount, map.getAllHexes().stream().filter(hex -> hex.getTerrainType()!= Hex.TerrainType.TALL_MOUNTAIN && hex.getTerrainType()!= Hex.TerrainType.SEA).toList(), hex -> new TraderTribe(hex), rand, gameState);
     }
 
-    private static void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, Building> factory, Random rand, GameState gameState) {
+    private static void placeTribes(int count, List<Hex> candidates, java.util.function.Function<Hex, MapStructure> factory, Random rand, GameState gameState) {
         int placed = 0;
         int maxAttempts = count * 100;
         int attempts = 0;
@@ -60,9 +60,9 @@ public class TribeGenerator {
             Hex hex = candidates.get(rand.nextInt(candidates.size()));
             attempts++;
             if (hex.getBuilding() == null) {
-                Building building = factory.apply(hex);
-                hex.setBuilding(building);
-                gameState.getWorldState().getTribes().add((Tribe) building);
+                MapStructure structure = factory.apply(hex);
+                hex.setBuilding(structure);
+                gameState.getWorldState().getTribes().add((Tribe) structure);
                 placed++;
             }
         }

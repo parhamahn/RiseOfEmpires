@@ -32,7 +32,4 @@ private static final long serialVersionUID = 1L;
     }
 
     public static Cost getBuildCost() { return cost; }
-
-    @Override
-    public String getImageName() { return "/utils/wallmap.png"; }
 }
