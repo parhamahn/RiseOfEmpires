@@ -190,8 +190,9 @@ private static final long serialVersionUID = 1L;
         return true;
     }
 
-    public boolean hasUpgradeQueued() {
-        return queues.stream().anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.UPGRADE);
+    public boolean canUpgrade() {
+        TownHallLevel next = townHallLevel.nextUpgrade();
+        return next != null && queues.isEmpty() && next.getCost().enoughResources(storage);
     }
 
     public List<Tribe> getAllies() {

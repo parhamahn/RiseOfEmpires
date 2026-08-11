@@ -30,13 +30,12 @@ public class UpgradeHandler {
             });
         }
         gamePanel.getTownHallPanel().getUpgradeStorageButton().addActionListener(e -> {
-            TownHallLevel next = gameState.getEmpireState().getTownHallLevel().nextUpgrade();
-            if (next != null) {
+            if (gameState.getEmpireState().canUpgrade()) {
+                TownHallLevel next = gameState.getEmpireState().getTownHallLevel().nextUpgrade();
                 gameState.getEmpireState().getQueues().add(
                         new UpgradeQueue(next, next.getNextUpgradeTurnCost(),
                                 gameState.getWorldState().getTurnNumber()));
-                gameState.getEmpireState().getTownHallLevel().nextUpgrade().getCost().pay(gameState.getEmpireState().getStorage());
-                gamePanel.getTownHallPanel().refresh();
+                next.getCost().pay(gameState.getEmpireState().getStorage());
                 gamePanel.getHudPanel().refresh();
             }
              buildingHandler.updateTaskListPanel();

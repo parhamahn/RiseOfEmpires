@@ -33,15 +33,7 @@ public class UpgradeSection extends BaseSection {
     }
 
     public void refresh() {
-        boolean canPay = gameState.getEmpireState().getTownHallLevel().nextUpgrade().getCost().enoughResources(gameState.getEmpireState().getStorage());
-        if (gameState.getEmpireState().getTownHallLevel().nextUpgrade() != null
-                && !gameState.getEmpireState().hasUpgradeQueued()
-                && gameState.getEmpireState().getQueues().isEmpty()
-                && canPay) {
-            upgradeButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
-            upgradeButton.setEnabled(true);
-        } else {
-            upgradeButton.setEnabled(false);
-        }
+        upgradeButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
+        upgradeButton.setEnabled(gameState.getEmpireState().canUpgrade());
     }
 }

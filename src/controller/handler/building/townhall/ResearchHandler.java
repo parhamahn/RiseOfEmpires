@@ -25,6 +25,8 @@ public class ResearchHandler {
 
             gamePanel.getTownHallPanel().getResearchButton(technology).addActionListener(e->{
 
+                if (!gameState.getEmpireState().canResearch(technology)) return;
+
                 ResearchQueue researchQueue = new ResearchQueue(technology, technology.getTurnCost(), gameState.getWorldState().getTurnNumber());
                 researchQueue.getTechnology().getCost().pay(gameState.getEmpireState().getStorage());
                 gameState.getEmpireState().getQueues().add(researchQueue);
