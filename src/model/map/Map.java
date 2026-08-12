@@ -55,7 +55,7 @@ private static final long serialVersionUID = 1L;
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(true);
+                grid[r][c].setDiscovered(false);
             }
         }
 
