@@ -128,8 +128,7 @@ public class StyledButtons {
         button.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseEntered(MouseEvent e) {
-                SoundEffects.getInstance().playHoverSoundEffect();
-                System.out.println("Entered");
+                if(button.isEnabled()) SoundEffects.getInstance().playHoverSoundEffect();
             }
         });
 

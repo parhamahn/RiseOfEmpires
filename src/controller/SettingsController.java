@@ -22,7 +22,7 @@ public class SettingsController {
         settingsPanel.getSoundSlider().addChangeListener(e -> {
             JSlider source = (JSlider) e.getSource();
             if (!source.getValueIsAdjusting()) {
-                float volume = source.getValue() / 100.0f;
+                float volume = source.getValue() / 500.0f;
                 Music.getInstance().setVolume(volume);
             }
         });

@@ -1,4 +1,5 @@
 import controller.*;
+import helpers.sound.Music;
 import helpers.sound.Sound;
 import model.map.Map;
 import model.product.Production;
@@ -35,9 +36,8 @@ public class Main {
             Map map = gameState.getWorldState().getMap();
 
 
-            music = new Sound();
-            music.load("/utils/music.wav");
-            music.play();
+            Music.getInstance().setVolume(0.1f);
+            Music.getInstance().play();
 
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);

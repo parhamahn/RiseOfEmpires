@@ -23,5 +23,9 @@ public class Music {
     public void setVolume(float percent) {
         backgroundMusic.setVolume(percent);
     }
+
+    public  void play() {
+        backgroundMusic.play();
+    }
     
 }

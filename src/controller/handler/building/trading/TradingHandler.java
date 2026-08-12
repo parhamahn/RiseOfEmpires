@@ -1,5 +1,6 @@
 package controller.handler.building.trading;
 
+import helpers.sound.SoundEffects;
 import model.building.TradingBuilding;
 import model.state.GameState;
 import model.storage.ResourceType;
@@ -32,6 +33,7 @@ public abstract class TradingHandler {
         panel.getCloseButton().addActionListener(e -> {
             gamePanel.setAnyPanelOpen(false);
             panel.close();
+            SoundEffects.getInstance().stopBackgroundEffects();
         });
 
         Runnable refreshDealButton = () -> {

@@ -1,5 +1,6 @@
 package controller.handler.building.tribe;
 
+import helpers.sound.SoundEffects;
 import model.building.tribes.BeachTribe;
 import model.building.tribes.FarmerTribe;
 import model.building.tribes.MountainTribe;
@@ -37,6 +38,7 @@ public class TribeHandler {
         gamePanel.getTribeMainPanel().getCloseButton().addActionListener(e -> {
             gamePanel.getTribeMainPanel().close();
             gamePanel.setAnyPanelOpen(false);
+            SoundEffects.getInstance().stopBackgroundEffects();
         });
 
         gamePanel.getTribeMainPanel().getTribeActionSection().getDeclareWar().addActionListener(e -> {

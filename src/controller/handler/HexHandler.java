@@ -99,14 +99,17 @@ public class HexHandler {
                         gamePanel.setAnyPanelOpen(true);
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
+                        SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
                     } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isInEmpireBorder()) {
                         gamePanel.setAnyPanelOpen(true);
                         tradingCenterHandler.setTradingCenter((TradingCenter) clicked.getBuilding());
                         gamePanel.getTradingCenterPanel().open();
+                        SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
                     } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe) {
                         gamePanel.setAnyPanelOpen(true);
                         tribeHandler.setTribe((Tribe) clicked.getBuilding());
                         gamePanel.getTribeMainPanel().open();
+                        SoundEffects.getInstance().startTribeSoundEffect();
                     }
 
 

@@ -1,5 +1,6 @@
 package controller.handler;
 
+import helpers.sound.SoundEffects;
 import model.Season;
 import model.disasters.Earthquake;
 import model.disasters.Flood;
@@ -43,6 +44,7 @@ public class DisasterHandler {
                         gamePanel.getMapPanel().startShake();
                     }
                     gamePanel.getMapPanel().showCracks(cracks);
+                    SoundEffects.getInstance().playEarthquakeSoundEffect();
                     eq.effect(gameState);
                 }
                 case FLOOD -> {
@@ -56,6 +58,7 @@ public class DisasterHandler {
                     if (!visibleHexes.isEmpty()) {
                         gamePanel.getMapPanel().showFlood(flood.getCenter(), visibleHexes);
                     }
+                    SoundEffects.getInstance().playFloodSoundEffect();
                     flood.effect(gameState);
                 }
                 case TSUNAMI -> {
@@ -69,6 +72,7 @@ public class DisasterHandler {
                     if (!visibleHexes.isEmpty()) {
                         gamePanel.getMapPanel().showTsunami(ts.getCenter(), visibleHexes);
                     }
+                    SoundEffects.getInstance().playFloodSoundEffect();
                     ts.effect(gameState);
                 }
             }

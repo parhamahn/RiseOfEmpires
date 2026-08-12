@@ -2,6 +2,7 @@ package controller.handler;
 
 import controller.SelectionContext;
 import controller.handler.building.townhall.CookUnitHandler;
+import helpers.sound.SoundEffects;
 import model.building.tribes.Tribe;
 import model.state.GameState;
 import model.map.Hex;
@@ -51,6 +52,7 @@ public class BuildingHandler {
         gameState.getEmpireState().getBuildings().add(building);
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         afterBuildingChange();
+        SoundEffects.getInstance().playConstructSoundEffect();
     }
 
     private boolean hasBuilderWithAP(Hex hex, int apNeeded) {
@@ -144,6 +146,7 @@ public class BuildingHandler {
 
         selectionContext.setWallOriginHex(null);
         afterBuildingChange();
+        SoundEffects.getInstance().playConstructSoundEffect();
     }
 
     public void startRoadPlacement(Hex origin) {
@@ -176,6 +179,7 @@ public class BuildingHandler {
 
         selectionContext.setRoadOriginHex(null);
         afterBuildingChange();
+        SoundEffects.getInstance().playConstructSoundEffect();
     }
 
     public void startWallDestroy(Hex origin) {
