@@ -1,6 +1,7 @@
 package controller.handler.combat;
 
 import controller.SelectionContext;
+import model.building.tribes.Tribe;
 import model.combat.AttackBuilding;
 import model.combat.AttackUnit;
 import model.map.Hex;
@@ -78,7 +79,12 @@ public class CombatHandler {
             if (u.isCombatUnit() && u.getActionPoints()>0) u.setActionPoints(u.getActionPoints() - 1);
         }
 
-        defenderHex.setInEmpireBorder(true);
+        if(defenderHex.getBuilding() != null && defenderHex.getBuilding() instanceof Tribe){
+            for(Hex neigh:gameState.getWorldState().getMap().getNeighbourHexes(defenderHex)){
+                neigh.setInEmpireBorder(true);
+            }
+            defenderHex.setInEmpireBorder(true);
+        }
 
         selectionContext.setAttackerHex(null);
         gamePanel.getHudPanel().refresh();

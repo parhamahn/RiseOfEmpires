@@ -108,7 +108,7 @@ private static final long serialVersionUID = 1L;
 
     public int getMoveAPCostTo(Hex target, Season.SeasonType season) {
         int APNeeded = target.getAPToMove();
-        if (season == Season.SeasonType.WINTER) {
+        if (season == Season.SeasonType.WINTER && target.getTerrainType()!=TerrainType.SEA) {
             APNeeded += 1;
         }
 

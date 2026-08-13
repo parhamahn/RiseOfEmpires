@@ -43,9 +43,9 @@ public class DisasterHandler {
                     }
                     if (anyDiscovered) {
                         gamePanel.getMapPanel().startShake();
+                        SoundEffects.getInstance().playEarthquakeSoundEffect();
                     }
                     gamePanel.getMapPanel().showCracks(cracks);
-                    SoundEffects.getInstance().playEarthquakeSoundEffect();
                     eq.effect(gameState);
                 }
                 case FLOOD -> {
@@ -59,8 +59,8 @@ public class DisasterHandler {
                     }
                     if (!visibleHexes.isEmpty()) {
                         gamePanel.getMapPanel().showFlood(flood.getCenter(), visibleHexes);
+                        SoundEffects.getInstance().playFloodSoundEffect();
                     }
-                    SoundEffects.getInstance().playFloodSoundEffect();
                     flood.effect(gameState);
                 }
                 case TSUNAMI -> {
@@ -74,8 +74,8 @@ public class DisasterHandler {
                     }
                     if (!visibleHexes.isEmpty()) {
                         gamePanel.getMapPanel().showTsunami(ts.getCenter(), visibleHexes);
+                        SoundEffects.getInstance().playFloodSoundEffect();
                     }
-                    SoundEffects.getInstance().playFloodSoundEffect();
                     ts.effect(gameState);
                 }
             }

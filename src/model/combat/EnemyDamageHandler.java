@@ -36,7 +36,7 @@ public class EnemyDamageHandler extends DamageHandler {
             Mission mission = tribe.getActiveMission();
             if (mission instanceof WarriorMission
                     && mission.getStatus() == MissionStatus.ACTIVE
-                    && gameState.getWorldState().getMap().getDistance(tribe.getHex(), killHex) <= 1) {
+                    && gameState.getWorldState().getMap().getDistance(tribe.getHex(), killHex) <= 5) {
                 ((WarriorMission) mission).enemyKilled();
             }
         }
