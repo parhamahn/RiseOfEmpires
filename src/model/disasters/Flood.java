@@ -29,9 +29,14 @@ public class Flood {
                         eligibleCenters.add(hex);
                         break;
                     }
+                    if(hex.hasRiverTo(neigh)){
+                        eligibleCenters.add(hex);
+                        break;
+                    }
                 }
             }
         }
+        if (eligibleCenters.isEmpty()) {return;}
         this.center = eligibleCenters.get(rand.nextInt(eligibleCenters.size()));
         involve(this.center, map);
     }

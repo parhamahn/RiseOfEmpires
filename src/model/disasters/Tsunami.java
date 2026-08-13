@@ -30,6 +30,7 @@ public class Tsunami {
                 }
             }
         }
+        if (eligibleCenters.isEmpty()) {return;}
         this.center = eligibleCenters.get(rand.nextInt(eligibleCenters.size()));
         involve(this.center, map);
     }

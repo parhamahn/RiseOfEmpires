@@ -32,6 +32,7 @@ public class DisasterHandler {
             switch (disaster) {
                 case EARTHQUAKE -> {
                     Earthquake eq = new Earthquake(gameState.getWorldState().getMap(), gameState.getRng());
+                    if(eq.getCenter()==null){continue;}
                     List<Hex> cracks = new ArrayList<>();
                     boolean anyDiscovered = false;
                     for (Hex involved : eq.getInvolvedHexes()) {
@@ -49,6 +50,7 @@ public class DisasterHandler {
                 }
                 case FLOOD -> {
                     Flood flood = new Flood(gameState.getWorldState().getMap(), gameState.getRng());
+                    if(flood.getCenter()==null){continue;}
                     List<Hex> visibleHexes = new ArrayList<>();
                     for (Hex involved : flood.getInvolvedHexes()) {
                         if (involved.isDiscovered()) {
@@ -63,6 +65,7 @@ public class DisasterHandler {
                 }
                 case TSUNAMI -> {
                     Tsunami ts = new Tsunami(gameState.getWorldState().getMap(), gameState.getRng());
+                    if(ts.getCenter()==null){continue;}
                     List<Hex> visibleHexes = new ArrayList<>();
                     for (Hex involved : ts.getInvolvedHexes()) {
                         if (involved.isDiscovered()) {
