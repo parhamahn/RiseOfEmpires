@@ -85,6 +85,8 @@ public class MapPanel extends JPanel {
             public void componentResized(ComponentEvent e) {
                 if (getWidth() > 0 && getHeight() > 0) {
                     camera.setViewport(getWidth(), getHeight());
+                    rainEffectLayer.setViewport(getWidth(), getHeight());
+                    snowEffectLayer.setViewport(getWidth(), getHeight());
                     staticDirty = true;
                 }
             }
@@ -136,6 +138,8 @@ public class MapPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (staticDirty || staticBuffer == null) rebuildStaticBuffer();
+        rainEffectLayer.setViewport(getWidth(), getHeight());
+        snowEffectLayer.setViewport(getWidth(), getHeight());
         g.translate(screenShake.getOffsetX(), screenShake.getOffsetY());
         g.drawImage(staticBuffer, 0, 0, null);
 

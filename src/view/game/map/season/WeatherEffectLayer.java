@@ -17,6 +17,15 @@ public abstract class WeatherEffectLayer implements MapLayer {
     protected final List<Particle> particles = new ArrayList<>();
     protected final Random rand = new Random();
     private boolean initialized = false;
+    private int width;
+    private int height;
+
+    public void setViewport(int width, int height) {
+        if (width == this.width && height == this.height) return;
+        this.width = width;
+        this.height = height;
+        initialized = false;
+    }
 
     protected abstract Season.SeasonType getActiveSeason();
     protected abstract int getParticleCount();
@@ -44,18 +53,17 @@ public abstract class WeatherEffectLayer implements MapLayer {
             return;
         }
 
-        Rectangle bounds = g2.getClipBounds();
-        if (bounds == null || bounds.width == 0 || bounds.height == 0) return;
+        if (width == 0 || height == 0) return;
 
         if (!initialized) {
-            initParticles(bounds.width, bounds.height);
+            initParticles(width, height);
         }
 
         for (int i = 0; i < particles.size(); i++) {
             Particle p = particles.get(i);
             moveParticle(p);
-            if (p.y > bounds.height + 50 || p.x > bounds.width + 150 || p.x < -150) {
-                particles.set(i, spawnParticle(bounds.width, bounds.height, rand, false));
+            if (p.y > height + 50 || p.x > width + 150 || p.x < -150) {
+                particles.set(i, spawnParticle(width, height, rand, false));
             }
         }
 
