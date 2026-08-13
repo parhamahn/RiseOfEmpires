@@ -31,6 +31,7 @@ public class UnitLayer implements MapLayer {
         for(Unit unit:gameState.getEmpireState().getUnits())units.add(unit);{}
 
         for (Unit unit : units) {
+            if (unit.getHex() == null || !unit.getHex().isDiscovered()) continue;
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
                 if(unit.getHex().getTerrainType()== Hex.TerrainType.SEA && !unit.isMoving()){continue;}

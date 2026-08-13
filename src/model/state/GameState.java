@@ -49,9 +49,6 @@ private static final long serialVersionUID = 1L;
         this.worldState.loadFrom(loaded.getWorldState());
         this.empireState.loadFrom(loaded.getEmpireState());
         this.empireState.getProduction().setRng(this.rng);
-        for (model.building.tribes.Tribe tribe : worldState.getTribes()) {
-            if (!tribe.isDiscovered()) tribe.setDiscovered(true);
-        }
     }
 
 }

@@ -41,6 +41,7 @@ public class EdgeComponentLayer implements MapLayer {
         int thickness = Math.max(6, camera.getHexRadius() / 6);
 
         for (EdgeComponent component : allComponents) {
+            if(!component.getHexA().isDiscovered() && !component.getHexB().isDiscovered()) {continue;}
             BufferedImage image = getImage(GameAssets.edgeImage(component));
             if (image == null) continue;
 

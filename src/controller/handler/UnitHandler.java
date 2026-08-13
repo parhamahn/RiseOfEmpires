@@ -7,6 +7,7 @@ import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
 import model.building.ProducingBuilding;
+import model.building.tribes.Tribe;
 import model.unit.Unit;
 import model.unit.civilian.Worker;
 import view.game.GamePanel;
@@ -128,21 +129,36 @@ public class UnitHandler {
 
     public void discover() {
         Hex selected = selectionContext.getSelectedHex();
-        if (selected != null) {
-            boolean discoveredAny = false;
-            for (Unit unit : selected.getUnits()) {
-                if (unit.isExplorer()) {
-                    for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selected)) {
-                        if (!neighbor.isDiscovered()) {
-                            neighbor.setDiscovered(true);
-                            discoveredAny = true;
-                        }
+        if (selected == null) return;
+
+        boolean discoveredAny = false;
+
+        for (Unit unit : selected.getUnits()) {
+            if (unit.isExplorer()) {
+                for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selected)) {
+                    if (neighbor != null && !neighbor.isDiscovered()) {
+                        neighbor.setDiscovered(true);
+                        markStructureDiscovered(neighbor);
+                        discoveredAny = true;
                     }
                 }
             }
-            if (discoveredAny) {
-                gamePanel.getMapPanel().markStaticDirty();
-            }
+        }
+
+        if (!selected.isDiscovered()) {
+            selected.setDiscovered(true);
+            markStructureDiscovered(selected);
+            discoveredAny = true;
+        }
+
+        if (discoveredAny) {
+            gamePanel.getMapPanel().markStaticDirty();
+        }
+    }
+
+    private void markStructureDiscovered(Hex hex) {
+        if (hex.getBuilding() instanceof Tribe tribe) {
+            tribe.setDiscovered(true);
         }
     }
 }

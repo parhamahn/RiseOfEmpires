@@ -100,12 +100,12 @@ public class HexHandler {
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
                         SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
-                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isInEmpireBorder()) {
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isDiscovered() && clicked.isInEmpireBorder()) {
                         gamePanel.setAnyPanelOpen(true);
                         tradingCenterHandler.setTradingCenter((TradingCenter) clicked.getBuilding());
                         gamePanel.getTradingCenterPanel().open();
                         SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
-                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe) {
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe && clicked.isDiscovered()) {
                         gamePanel.setAnyPanelOpen(true);
                         tribeHandler.setTribe((Tribe) clicked.getBuilding());
                         gamePanel.getTribeMainPanel().open();

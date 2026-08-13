@@ -48,6 +48,7 @@ public class BuildingLayer implements MapLayer {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
                 if (hex == null) continue;
+                if (!hex.isDiscovered()) continue;
                 MapStructure building = hex.getBuilding();
                 if (building == null) continue;
 

@@ -33,7 +33,7 @@ private static final long serialVersionUID = 1L;
         super(hex, maxHP);
         this.name = RandomNameGenerator.generateRandomName();
         this.isPermanentReward = false;
-        this.discovered = true;
+        this.discovered = false;
         this.allianceLockTurns = 0;
         this.lastMissionTurn = 0;
         changeRelation(0, Collections.emptyList());

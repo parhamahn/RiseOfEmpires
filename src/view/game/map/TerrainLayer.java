@@ -41,7 +41,7 @@ public class TerrainLayer implements MapLayer {
                 Point center = camera.getHexCenter(c, r);
                 Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
 
-                if (hex.isDiscovered() || !hex.getUnits().isEmpty()) {
+                if (hex.isDiscovered()) {
                     BufferedImage img = terrainImages.get(hex.getTerrainType());
                     if (img == null) continue;
                     Shape oldClip = g2.getClip();
