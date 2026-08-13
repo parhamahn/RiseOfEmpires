@@ -62,11 +62,11 @@ public class BuildingHandler {
     public void updateTaskListPanel() {
         Hex selected = selectionContext.getSelectedHex();
         if (selected != null && selected.getUnits().stream().anyMatch(Unit::isBuilder)) {
-            Map<Task.TASK, Boolean> canBuildMap = new HashMap<>();
+            Map<Task.TASK, String> blockReasonMap = new HashMap<>();
             for (Task.TASK task : Task.getAvailableTasks(selected, gameState)) {
-                canBuildMap.put(task, Task.canBuild(task, selected, gameState));
+                blockReasonMap.put(task, Task.getBuildBlockReason(task, selected, gameState));
             }
-            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(canBuildMap);
+            List<TaskStat> stats = gamePanel.getTaskListPanel().updateTasks(blockReasonMap);
             for (TaskStat stat : stats) {
                 stat.getButton().addActionListener(e -> {
                     if (stat.getTask() == Task.TASK.WALL) {

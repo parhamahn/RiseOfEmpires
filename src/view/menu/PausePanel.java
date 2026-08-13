@@ -68,7 +68,7 @@ public class PausePanel extends JPanel {
 
     public void setSaveBlocked(String reason) {
         boolean blocked = reason != null;
-        saveButton.setEnabled(!blocked);
+        StyledButtons.setDisabled(saveButton, blocked, reason);
         saveBlockedLabel.setVisible(blocked);
         if (blocked) {
             saveBlockedLabel.setText(reason);

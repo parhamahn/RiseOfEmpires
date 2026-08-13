@@ -15,7 +15,7 @@ public class CookStat extends JPanel {
     private Unit.UNIT_TYPE unitType;
     private JButton cookButton;
 
-    public CookStat(Unit.UNIT_TYPE unitType, String iconPath, boolean canAfford) {
+    public CookStat(Unit.UNIT_TYPE unitType, String iconPath, String blockReason) {
         this.unitType = unitType;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
@@ -47,15 +47,16 @@ public class CookStat extends JPanel {
         turnLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(turnLabel);
 
-        applyState(canAfford);
+        applyState(blockReason);
     }
 
-    public void refresh(boolean canAfford) {
-        applyState(canAfford);
+    public void refresh(String blockReason) {
+        applyState(blockReason);
     }
 
-    private void applyState(boolean canAfford) {
-        cookButton.setEnabled(canAfford);
+    private void applyState(String blockReason) {
+        boolean canAfford = blockReason == null;
+        StyledButtons.setDisabled(cookButton, !canAfford, blockReason);
         if (!canAfford) {
             ImageIcon icon = (ImageIcon) cookButton.getIcon();
             if (icon != null) {

@@ -22,7 +22,7 @@ public class DealSection extends JPanel {
 
         ImageIcon dealIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 200, 56);
         dealButton = StyledButtons.textButton("Deal", dealIcon, new Dimension(200, 56), 18f, UITheme.MENU_BUTTON_FG);
-        dealButton.setEnabled(false);
+        setDealState(false, "Select resources to make a deal");
 
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -37,6 +37,10 @@ public class DealSection extends JPanel {
 
     public JButton getDealButton() {
         return dealButton;
+    }
+
+    public void setDealState(boolean enabled, String reason) {
+        StyledButtons.setDisabled(dealButton, !enabled, reason);
     }
 
     public void setSummary(String text) {

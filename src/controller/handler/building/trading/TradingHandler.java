@@ -38,7 +38,7 @@ public abstract class TradingHandler {
 
         Runnable refreshDealButton = () -> {
             Trade trade = buildTrade();
-            panel.getDealSection().getDealButton().setEnabled(trade != null);
+            panel.getDealSection().setDealState(trade != null, trade == null ? buildTradeBlockReason() : null);
             panel.getDealSection().setSummary(trade == null ? null :
                     trade.getToGiveCount() + " " + trade.getToGive() +
                             "  ->  " + trade.getToGetCount() + " " + trade.getToGet());
@@ -79,5 +79,19 @@ public abstract class TradingHandler {
         if (!trade.isReady(!tradingBuilding.isUsedThisTurn())) return null;
 
         return trade;
+    }
+
+    protected String buildTradeBlockReason() {
+        TradingPanel panel = getPanel();
+        ResourceType give = panel.getToGiveSection().getSelectedResource();
+        ResourceType get = panel.getToGetSection().getSelectedResource();
+        int qty = panel.getQuantityValue();
+
+        if (give == null) return "Select a resource to give";
+        if (get == null) return "Select a resource to receive";
+        if (qty <= 0) return "Choose a quantity";
+        if (tradingBuilding.isUsedThisTurn()) return "This building has already been used this turn";
+        if (give == get) return "You can't trade a resource for itself";
+        return "Select resources to make a deal";
     }
 }

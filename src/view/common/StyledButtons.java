@@ -38,6 +38,11 @@ public class StyledButtons {
         button.setToolTipText(reason);
     }
 
+    public static void setDisabled(JButton button, boolean disabled, String reason) {
+        button.setEnabled(!disabled);
+        button.setToolTipText(disabled ? reason : null);
+    }
+
     public static JButton circularButton(Icon overlayIcon, int size) {
         JButton button = new JButton() {
             @Override

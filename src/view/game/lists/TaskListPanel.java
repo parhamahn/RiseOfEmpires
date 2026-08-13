@@ -44,10 +44,10 @@ public class TaskListPanel extends JPanel {
     }
 
 
-    public List<TaskStat> updateTasks(Map<Task.TASK, Boolean> canBuildMap) {
+    public List<TaskStat> updateTasks(Map<Task.TASK, String> blockReasonMap) {
         removeAll();
         List<TaskStat> stats = new ArrayList<>();
-        for (Map.Entry<Task.TASK, Boolean> entry : canBuildMap.entrySet()) {
+        for (Map.Entry<Task.TASK, String> entry : blockReasonMap.entrySet()) {
             TaskStat stat = new TaskStat(entry.getKey(), entry.getValue());
             add(stat.getButton());
             add(Box.createVerticalStrut(5));

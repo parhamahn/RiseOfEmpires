@@ -41,7 +41,7 @@ public class TradingCenterPanel extends TradingPanel {
         sliderSection.reset();
         sliderSection.setMax(0);
         dealSection.setSummary(null);
-        dealSection.getDealButton().setEnabled(false);
+        dealSection.setDealState(false, "Select resources to make a deal");
     }
 
     @Override

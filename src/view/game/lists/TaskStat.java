@@ -2,6 +2,7 @@ package view.game.lists;
 
 import helpers.image.ImageLoader;
 import model.Task;
+import view.common.StyledButtons;
 import view.common.UITheme;
 
 import javax.swing.*;
@@ -10,13 +11,11 @@ public class TaskStat{
 
     private Task.TASK task;
     private JButton button;
-    private boolean canAfford;
 
 
-    public TaskStat(Task.TASK task, boolean canAfford){
+    public TaskStat(Task.TASK task, String blockReason){
         this.task = task;
         this.button = new JButton();
-        this.canAfford = canAfford;
 
         String iconPath = "/utils/"+task.toString().toLowerCase()+".png";
         ImageIcon icon = ImageLoader.getInstance().loadIcon(iconPath, 75);
@@ -24,9 +23,9 @@ public class TaskStat{
         button.setIcon(icon);
         UITheme.styleIconButton(button);
 
-        if(!this.canAfford){
+        if(blockReason != null){
             button.setDisabledIcon(UITheme.createDisabledIcon(icon));
-            button.setEnabled(false);
+            StyledButtons.setDisabled(button, true, blockReason);
         }
 
     }

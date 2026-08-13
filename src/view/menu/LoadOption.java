@@ -52,11 +52,11 @@ public class LoadOption extends JPanel {
 
         if (metaData == null) {
             summary.setForeground(UITheme.MENU_BUTTON_FG);
-            loadButton.setEnabled(false);
-            removeButton.setEnabled(false);
+            StyledButtons.setDisabled(loadButton, true, "No save in this slot");
+            StyledButtons.setDisabled(removeButton, true, "No save in this slot");
         } else if (LoadManager.isTooNew(metaData)) {
             summary.setForeground(UITheme.MENU_BUTTON_FG);
-            loadButton.setEnabled(false);
+            StyledButtons.setDisabled(loadButton, true, "Created by a newer game version");
         }
     }
 

@@ -43,7 +43,7 @@ public abstract class TradingPanel extends BaseModalPanel {
         toGetSection.reset();
         quantitySection.reset();
         dealSection.setSummary(null);
-        dealSection.getDealButton().setEnabled(false);
+        dealSection.setDealState(false, "Select resources to make a deal");
     }
 
     public ToGiveSection getToGiveSection() { return toGiveSection; }

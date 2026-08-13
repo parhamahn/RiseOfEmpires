@@ -34,6 +34,7 @@ public class UpgradeSection extends BaseSection {
 
     public void refresh() {
         upgradeButton.setText("Upgrade to " + gameState.getEmpireState().getTownHallLevel().nextUpgrade());
-        upgradeButton.setEnabled(gameState.getEmpireState().canUpgrade());
+        StyledButtons.setDisabled(upgradeButton, !gameState.getEmpireState().canUpgrade(),
+                gameState.getEmpireState().upgradeBlockReason());
     }
 }

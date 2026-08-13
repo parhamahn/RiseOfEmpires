@@ -26,8 +26,8 @@ public class CookSection extends BaseSection {
         cookStats = new EnumMap<>(Unit.UNIT_TYPE.class);
         for (Unit.UNIT_TYPE type : Unit.UNIT_TYPE.values()) {
             if(type== Unit.UNIT_TYPE.BEAR || type== Unit.UNIT_TYPE.BARBARIAN || type== Unit.UNIT_TYPE.GUARD){continue;}
-            boolean canAfford = gameState.getEmpireState().canCookUnit(type);
-            CookStat stat = new CookStat(type, unitIconPath(type), canAfford);
+            String blockReason = gameState.getEmpireState().cookBlockReason(type);
+            CookStat stat = new CookStat(type, unitIconPath(type), blockReason);
             cookStats.put(type, stat);
             grid.add(stat);
         }
@@ -52,8 +52,7 @@ public class CookSection extends BaseSection {
         for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
             CookStat stat = entry.getValue();
             Unit.UNIT_TYPE type = entry.getKey();
-            boolean canAfford = gameState.getEmpireState().canCookUnit(type);
-            stat.refresh(canAfford);
+            stat.refresh(gameState.getEmpireState().cookBlockReason(type));
         }
         revalidate();
         repaint();

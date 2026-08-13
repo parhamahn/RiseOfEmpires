@@ -1,7 +1,5 @@
 package view.buildingpanel.townhall;
 
-import model.queue.Queue;
-import model.queue.ResearchQueue;
 import model.queue.Technology;
 import model.state.GameState;
 import view.common.BaseSection;
@@ -37,9 +35,7 @@ public class ResearchSection extends BaseSection {
             ResearchStat stat = researchStatMap.get(tech);
             if (stat == null) continue;
 
-            boolean alreadyResearched = gameState.getEmpireState().getResearchedTechnologies().contains(tech);
-            boolean canAfford = !alreadyResearched && gameState.getEmpireState().canResearch(tech);
-            stat.refresh(canAfford, alreadyResearched);
+            stat.refresh(gameState.getEmpireState().researchBlockReason(tech));
         }
         revalidate();
         repaint();
@@ -47,14 +43,10 @@ public class ResearchSection extends BaseSection {
 
     private void buildInitial() {
         for (Technology tech : Technology.values()) {
-            boolean alreadyResearched = gameState.getEmpireState().getResearchedTechnologies().contains(tech);
-            boolean canAfford = tech.getCost().enoughResources(gameState.getEmpireState().getStorage());
-            boolean alreadyQueued = gameState.getEmpireState().getQueues().stream()
-                    .anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.RESEARCH
-                            && ((ResearchQueue) q).getTechnology() == tech);
+            String blockReason = gameState.getEmpireState().researchBlockReason(tech);
 
             String iconPath = iconPathFor(tech);
-            ResearchStat stat = new ResearchStat(tech, iconPath, canAfford, alreadyResearched || alreadyQueued);
+            ResearchStat stat = new ResearchStat(tech, iconPath, blockReason);
             researchStatMap.put(tech, stat);
             techOrder.add(tech);
             stat.setAlignmentX(CENTER_ALIGNMENT);

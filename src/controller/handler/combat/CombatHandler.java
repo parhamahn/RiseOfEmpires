@@ -8,6 +8,7 @@ import model.map.Hex;
 import model.state.GameState;
 import model.unit.Unit;
 import view.combat.CombatMainPanel;
+import view.common.StyledButtons;
 import view.game.GamePanel;
 
 import javax.swing.*;
@@ -141,7 +142,7 @@ public class CombatHandler {
             pendingAttack.rollDice();
             pendingAttack.setPowers();
 
-            panel.getAttackButton().setEnabled(false);
+            StyledButtons.setDisabled(panel.getAttackButton(), true, "Resolving combat...");
             panel.clearSummary();
 
             List<Integer> attackerDices = pendingAttack.getAttackerDices();
@@ -166,7 +167,7 @@ public class CombatHandler {
                     boolean hasAP = attackerHex.getUnits().stream()
                             .filter(Unit::isCombatUnit)
                             .anyMatch(u -> u.getActionPoints() > 0);
-                    if (!hasAP) panel.getAttackButton().setEnabled(false);
+                    if (!hasAP) StyledButtons.setDisabled(panel.getAttackButton(), true, "No action points left");
                     gamePanel.getHudPanel().refresh();
                     gamePanel.getMapPanel().markStaticDirty();
                     gamePanel.getMapPanel().repaint();

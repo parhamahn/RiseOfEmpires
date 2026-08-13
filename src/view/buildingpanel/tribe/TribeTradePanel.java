@@ -42,7 +42,7 @@ public class TribeTradePanel extends BaseModalPanel {
         Icon dealIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 220, 56);
         dealButton = StyledButtons.textButton("Deal", dealIcon, new Dimension(220, 56), 20f, UITheme.MENU_BUTTON_FG);
         dealButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dealButton.setEnabled(false);
+        StyledButtons.setDisabled(dealButton, true, "Select a resource to give and receive and a quantity");
 
         body = new JPanel();
         body.setOpaque(false);
@@ -77,7 +77,7 @@ public class TribeTradePanel extends BaseModalPanel {
         quantitySection.reset();
         quantitySection.setMax(0);
         summaryLabel.setText(" ");
-        dealButton.setEnabled(false);
+        StyledButtons.setDisabled(dealButton, true, "Select a resource to give and receive and a quantity");
     }
 
     public void updateSliderMax(Storage storage) {
@@ -96,20 +96,20 @@ public class TribeTradePanel extends BaseModalPanel {
         int qty = quantitySection.getValue();
         if (giveResource == null || getResource == null || qty <= 0 || tribe == null) {
             summaryLabel.setText(" ");
-            dealButton.setEnabled(false);
+            StyledButtons.setDisabled(dealButton, true, "Select a resource to give and receive and a quantity");
             return;
         }
         if (storage.getQuantity(giveResource) < qty) {
             summaryLabel.setText("Not enough " + giveResource.name());
             summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-            dealButton.setEnabled(false);
+            StyledButtons.setDisabled(dealButton, true, "Not enough " + giveResource.name());
             return;
         }
 
         if(giveResource.equals(getResource)) {
             summaryLabel.setText("You can't get what you give ! ");
             summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-            dealButton.setEnabled(false);
+            StyledButtons.setDisabled(dealButton, true, "You can't trade a resource for itself");
             return;
         }
 
@@ -120,13 +120,13 @@ public class TribeTradePanel extends BaseModalPanel {
         if (storage.getQuantity(getResource) + received > storage.getMax(getResource)) {
             summaryLabel.setText("Not enough storage for : " + getResource.name());
             summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-            dealButton.setEnabled(false);
+            StyledButtons.setDisabled(dealButton, true, "Not enough storage for " + getResource.name());
             return;
         };
 
         summaryLabel.setText("Give " + qty + " " + giveResource.name() + "  ->  Get " + received + " " + getResource.name());
         summaryLabel.setForeground(UITheme.POSITIVE_CHANGE);
-        dealButton.setEnabled(true);
+        StyledButtons.setDisabled(dealButton, false, null);
     }
 
     public ResourceType getSelectedGiveResource() {

@@ -39,7 +39,7 @@ public class GiftPanel extends BaseModalPanel {
         Icon sendIcon = ImageLoader.getInstance().loadScaledIcon("/utils/menubutton.png", 220, 56);
         sendButton = StyledButtons.textButton("Send Gift", sendIcon, new Dimension(220, 56), 20f, UITheme.MENU_BUTTON_FG);
         sendButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        sendButton.setEnabled(false);
+        StyledButtons.setDisabled(sendButton, true, "Select a resource and a quantity");
 
         JPanel body = new JPanel();
         body.setOpaque(false);
@@ -63,7 +63,7 @@ public class GiftPanel extends BaseModalPanel {
         quantitySection.reset();
         quantitySection.setMax(0);
         summaryLabel.setText(" ");
-        sendButton.setEnabled(false);
+        StyledButtons.setDisabled(sendButton, true, "Select a resource and a quantity");
     }
 
     public void updateSliderMax(Storage storage) {
@@ -81,20 +81,20 @@ public class GiftPanel extends BaseModalPanel {
         int qty = quantitySection.getValue();
         if (selected == null || qty <= 0) {
             summaryLabel.setText(" ");
-            sendButton.setEnabled(false);
+            StyledButtons.setDisabled(sendButton, true, "Select a resource and a quantity");
             return;
         }
         if (storage.getQuantity(selected) < qty) {
             summaryLabel.setText("Not enough " + selected.name());
             summaryLabel.setForeground(UITheme.NEGATIVE_CHANGE);
-            sendButton.setEnabled(false);
+            StyledButtons.setDisabled(sendButton, true, "Not enough " + selected.name());
             return;
         }
 
         int relation = computeRelationGain(selected, qty);
         summaryLabel.setText("Give " + qty + " " + selected.name() + "  ->  +" + relation + " Relation");
         summaryLabel.setForeground(UITheme.POSITIVE_CHANGE);
-        sendButton.setEnabled(true);
+        StyledButtons.setDisabled(sendButton, false, null);
     }
 
     public static int computeRelationGain(ResourceType type, int amount) {

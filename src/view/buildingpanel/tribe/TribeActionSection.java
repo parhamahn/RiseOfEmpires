@@ -65,37 +65,68 @@ public class TribeActionSection extends BaseSection {
 
     public void reset(Tribe tribe){
 
-        if(!tribe.isCanDeclareWar()){declareWar.setEnabled(false); declareWar.setBorder(null);}else{
+        if(!tribe.isCanDeclareWar()){
+            StyledButtons.setDisabled(declareWar, true, "Cannot declare war with this tribe");
+            declareWar.setBorder(null);
+        }else{
             StyledButtons.goldBorder(declareWar);
-            declareWar.setEnabled(true);
+            StyledButtons.setDisabled(declareWar, false, null);
         }
-        if(!tribe.isCanGetMission() || tribe.getActiveMission()!=null){getMission.setEnabled(false);  getMission.setBorder(null);}else{
+        if(!tribe.isCanGetMission()){
+            StyledButtons.setDisabled(getMission, true, "Cannot take a mission from this tribe");
+            getMission.setBorder(null);
+        }else if(tribe.getActiveMission()!=null){
+            StyledButtons.setDisabled(getMission, true, "You already have an active mission");
+            getMission.setBorder(null);
+        }else{
             StyledButtons.goldBorder(getMission);
-            getMission.setEnabled(true);
+            StyledButtons.setDisabled(getMission, false, null);
         }
-        if(tribe.getActiveMission()==null || !tribe.getActiveMission().isAffordable(gameState)){ doMission.setEnabled(false); }else {
+        if(tribe.getActiveMission()==null){
+            StyledButtons.setDisabled(doMission, true, "No active mission");
+        }else if(!tribe.getActiveMission().isAffordable(gameState)){
+            StyledButtons.setDisabled(doMission, true, "Not enough resources for the mission");
+        }else {
             StyledButtons.goldBorder(doMission);
-            doMission.setEnabled(true);
+            StyledButtons.setDisabled(doMission, false, null);
         }
-        if(!tribe.isCanTrade() || tribe.getTradeStrategy() == null){startTrade.setEnabled(false);   startTrade.setBorder(null);}else{
+        if(!tribe.isCanTrade()){
+            StyledButtons.setDisabled(startTrade, true, "Cannot trade with this tribe");
+            startTrade.setBorder(null);
+        }else if(tribe.getTradeStrategy() == null){
+            StyledButtons.setDisabled(startTrade, true, "This tribe has no trade offer");
+            startTrade.setBorder(null);
+        }else{
             StyledButtons.goldBorder(startTrade);
-            startTrade.setEnabled(true);
+            StyledButtons.setDisabled(startTrade, false, null);
         }
-        if(!tribe.isCanGift()){sendGiftButton.setEnabled(false);  sendGiftButton.setBorder(null);}else{
+        if(!tribe.isCanGift()){
+            StyledButtons.setDisabled(sendGiftButton, true, "Cannot send gifts to this tribe");
+            sendGiftButton.setBorder(null);
+        }else{
             StyledButtons.goldBorder(sendGiftButton);
-            sendGiftButton.setEnabled(true);
+            StyledButtons.setDisabled(sendGiftButton, false, null);
         }
-        if(!tribe.isCanRequestPeace()){askPeace.setEnabled(false);   askPeace.setBorder(null);}else{
+        if(!tribe.isCanRequestPeace()){
+            StyledButtons.setDisabled(askPeace, true, "Cannot request peace with this tribe");
+            askPeace.setBorder(null);
+        }else{
             StyledButtons.goldBorder(askPeace);
-            askPeace.setEnabled(true);
+            StyledButtons.setDisabled(askPeace, false, null);
         }
-        if(!tribe.isCanRequestAlliance(gameState.getEmpireState().getAllies())){askAlliance.setEnabled(false);   askAlliance.setBorder(null);}else{
+        if(!tribe.isCanRequestAlliance(gameState.getEmpireState().getAllies())){
+            StyledButtons.setDisabled(askAlliance, true, "Cannot request an alliance with this tribe");
+            askAlliance.setBorder(null);
+        }else{
             StyledButtons.goldBorder(askAlliance);
-            askAlliance.setEnabled(true);
+            StyledButtons.setDisabled(askAlliance, false, null);
         }
-        if(!tribe.isDiscovered()){viewReward.setEnabled(false);   viewReward.setBorder(null);}else{
+        if(!tribe.isDiscovered()){
+            StyledButtons.setDisabled(viewReward, true, "Tribe is not discovered yet");
+            viewReward.setBorder(null);
+        }else{
             StyledButtons.goldBorder(viewReward);
-            viewReward.setEnabled(true);
+            StyledButtons.setDisabled(viewReward, false, null);
         }
 
     }

@@ -1,6 +1,8 @@
 package model.storage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cost implements Serializable {
 private static final long serialVersionUID = 1L;
@@ -36,6 +38,23 @@ private static final long serialVersionUID = 1L;
 
     public boolean enoughResources(Storage storage){
         return storage.getWoodQuantity() >= this.getWoodNeeded() && storage.getStoneQuantity() >= this.getStoneNeeded() && storage.getIronQuantity() >= this.getIronNeeded() && storage.getFoodQuantity()>=this.foodNeeded;
+    }
+
+    public String missingResources(Storage storage) {
+        List<String> missing = new ArrayList<>();
+        if (this.getWoodNeeded() > 0 && storage.getWoodQuantity() < this.getWoodNeeded()) {
+            missing.add("wood (need " + this.getWoodNeeded() + ", have " + storage.getWoodQuantity() + ")");
+        }
+        if (this.getStoneNeeded() > 0 && storage.getStoneQuantity() < this.getStoneNeeded()) {
+            missing.add("stone (need " + this.getStoneNeeded() + ", have " + storage.getStoneQuantity() + ")");
+        }
+        if (this.getIronNeeded() > 0 && storage.getIronQuantity() < this.getIronNeeded()) {
+            missing.add("iron (need " + this.getIronNeeded() + ", have " + storage.getIronQuantity() + ")");
+        }
+        if (this.foodNeeded > 0 && storage.getFoodQuantity() < this.foodNeeded) {
+            missing.add("food (need " + this.foodNeeded + ", have " + storage.getFoodQuantity() + ")");
+        }
+        return String.join(", ", missing);
     }
 
     public boolean enoughAP(int AP){

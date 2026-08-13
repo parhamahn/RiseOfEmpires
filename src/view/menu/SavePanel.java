@@ -75,7 +75,7 @@ public class SavePanel extends JPanel {
             blockedLabel.setText(reason);
         }
         for (SaveOption option : saveOptions.values()) {
-            option.getSaveButton().setEnabled(!blocked);
+            StyledButtons.setDisabled(option.getSaveButton(), blocked, reason);
         }
     }
 

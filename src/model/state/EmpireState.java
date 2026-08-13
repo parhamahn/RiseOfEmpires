@@ -195,6 +195,44 @@ private static final long serialVersionUID = 1L;
         return next != null && queues.isEmpty() && next.getCost().enoughResources(storage);
     }
 
+    public String upgradeBlockReason() {
+        if (canUpgrade()) return null;
+        TownHallLevel next = townHallLevel.nextUpgrade();
+        if (next == null) return "Town Hall is at maximum level";
+        if (!queues.isEmpty()) return "A queue is already in progress";
+        return "Not enough " + next.getCost().missingResources(storage);
+    }
+
+    public String researchBlockReason(Technology tech) {
+        if (canResearch(tech)) return null;
+        if (researchedTechnologies.contains(tech)) return "Already researched";
+        if (queues.stream().anyMatch(q -> q.getQueueType() == Queue.QUEUE_TYPE.RESEARCH
+                && ((ResearchQueue) q).getTechnology() == tech)) return "Already in the research queue";
+        if (tech.getTownHallLevel().ordinal() > townHallLevel.ordinal())
+            return "Requires Town Hall " + tech.getTownHallLevel();
+        if (!queues.isEmpty()) return "A queue is already in progress";
+        return "Not enough " + tech.getCost().missingResources(storage);
+    }
+
+    public String cookBlockReason(Unit.UNIT_TYPE type) {
+        if (canCookUnit(type)) return null;
+        if (type.isEnemy()) return "Cannot cook enemy units";
+        if (!queues.isEmpty()) return "A queue is already in progress";
+        if (type.getLevel().ordinal() > townHallLevel.ordinal())
+            return "Requires Town Hall " + type.getLevel();
+        if (type.getCookCost() != null && !type.getCookCost().enoughResources(storage))
+            return "Not enough " + type.getCookCost().missingResources(storage);
+        if (type.getAttackPower() > 0) {
+            if (getCombatUnitCount() >= townHallLevel.getCombatUnitCap()) return "Combat unit cap reached";
+            if (townHallHex != null && !townHallHex.canAddUnitType(type)) return "No room in the Town Hall hex";
+        } else {
+            if (getCivilUnitCount() >= maxUnit) return "Civil unit cap reached";
+        }
+        if (type == Unit.UNIT_TYPE.CAVALRY && buildings.stream().noneMatch(b -> b instanceof MilitaryStable))
+            return "Requires a Military Stable";
+        return null;
+    }
+
     public List<Tribe> getAllies() {
         return allies;
     }

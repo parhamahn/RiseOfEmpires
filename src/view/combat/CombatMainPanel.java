@@ -68,9 +68,19 @@ public class CombatMainPanel extends BaseModalPanel {
 
     @Override
     public void refresh() {
-        attackButton.setEnabled(interactive);
+        updateAttackButton();
         attackerSideSection.refresh(attackerHex);
         defenderSideSection.refresh(defenderHex);
+    }
+
+    private void updateAttackButton() {
+        if (!interactive) {
+            StyledButtons.setDisabled(attackButton, true, "Combat is not available");
+        } else if (attackerHex == null) {
+            StyledButtons.setDisabled(attackButton, true, "Select an attacker");
+        } else {
+            StyledButtons.setDisabled(attackButton, false, null);
+        }
     }
 
     public void setHexes(Hex attackerHex, Hex defenderHex) {
@@ -83,7 +93,7 @@ public class CombatMainPanel extends BaseModalPanel {
 
     public void setInteractive(boolean interactive) {
         this.interactive = interactive;
-        attackButton.setEnabled(interactive && attackerHex != null);
+        updateAttackButton();
     }
 
     public void playRoll(List<Integer> attackerDice, List<Integer> defenderDice,

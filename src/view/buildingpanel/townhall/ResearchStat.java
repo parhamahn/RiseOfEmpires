@@ -16,7 +16,7 @@ public class ResearchStat extends JPanel {
     private JButton researchButton;
     private ImageIcon buttonBg;
 
-    public ResearchStat(Technology technology, String iconPath, boolean canAfford, boolean alreadyResearched) {
+    public ResearchStat(Technology technology, String iconPath, String blockReason) {
         this.technology = technology;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
@@ -56,18 +56,18 @@ public class ResearchStat extends JPanel {
         researchButton = StyledButtons.textButton("research", buttonBg, new Dimension(120, 40), 14f, UITheme.MENU_BUTTON_FG);
         researchButton.setAlignmentY(CENTER_ALIGNMENT);
 
-        applyState(canAfford, alreadyResearched);
+        applyState(blockReason);
 
         add(researchButton);
     }
 
-    public void refresh(boolean canAfford, boolean alreadyResearched) {
-        applyState(canAfford, alreadyResearched);
+    public void refresh(String blockReason) {
+        applyState(blockReason);
     }
 
-    private void applyState(boolean canAfford, boolean alreadyResearched) {
-        boolean disabled = !canAfford || alreadyResearched;
-        researchButton.setEnabled(!disabled);
+    private void applyState(String blockReason) {
+        boolean disabled = blockReason != null;
+        StyledButtons.setDisabled(researchButton, disabled, blockReason);
         if (disabled) {
             researchButton.setDisabledIcon(UITheme.createDisabledIcon(buttonBg));
             researchButton.setBorder(null);

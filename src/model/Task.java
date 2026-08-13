@@ -89,4 +89,16 @@ public class Task {
                 && enoughAP
                 && hex.isInEmpireBorder();
     }
+
+    public static String getBuildBlockReason(TASK task, Hex hex, GameState gameState) {
+        if (canBuild(task, hex, gameState)) return null;
+        Cost baseCost = Building.getBuildCost(task);
+        Cost buildCost = task == TASK.DOCK && gameState.getEmpireState().isDockDiscount()
+                ? new Cost(baseCost.getWoodNeeded()/2, baseCost.getStoneNeeded()/2, baseCost.getIronNeeded()/2, baseCost.getFoodNeeded()/2, baseCost.getAPNeeded())
+                : baseCost;
+        if (!buildCost.enoughResources(gameState.getEmpireState().getStorage()))
+            return "Not enough " + buildCost.missingResources(gameState.getEmpireState().getStorage());
+        if (!hex.isInEmpireBorder()) return "Hex is not within the empire border";
+        return "No builder in this hex has enough action points";
+    }
 }
