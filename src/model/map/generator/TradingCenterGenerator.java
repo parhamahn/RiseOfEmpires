@@ -6,6 +6,8 @@ import model.map.Hex;
 import model.map.Map;
 import model.state.GameState;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TradingCenterGenerator {
@@ -14,15 +16,18 @@ public class TradingCenterGenerator {
     public static void generateTradingCenters(GameState gameState){
         Map map = gameState.getWorldState().getMap();
         Random rand = gameState.getRng();
-        for(int i=0;i<count;i++){
-            Hex x = map.getAllHexes().get(rand.nextInt(map.getAllHexes().size()));
-            if(x.getBuilding()==null){
-                Building y = new TradingCenter(x);
-                x.setBuilding(y);
-                gameState.getWorldState().getTradingCenters().add((TradingCenter) y);
-            }else{
-                i-=1;
-            }
+        List<Hex> candidates = new ArrayList<>(map.getAllHexes().stream()
+                .filter(hex -> hex.getBuilding() == null)
+                .filter(hex -> hex.getTerrainType() != Hex.TerrainType.SEA
+                        && hex.getTerrainType() != Hex.TerrainType.TALL_MOUNTAIN)
+                .toList());
+        int placed = 0;
+        while (placed < count && !candidates.isEmpty()) {
+            Hex hex = candidates.remove(rand.nextInt(candidates.size()));
+            Building building = new TradingCenter(hex);
+            hex.setBuilding(building);
+            gameState.getWorldState().getTradingCenters().add((TradingCenter) building);
+            placed++;
         }
     }
 

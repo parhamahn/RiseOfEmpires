@@ -1,7 +1,10 @@
 package model.state;
 
+import model.map.Hex;
 import model.map.Map;
 import model.map.generator.*;
+import model.building.tribes.Tribe;
+import model.unit.enemy.Guard;
 import model.product.Production;
 import model.storage.Storage;
 
@@ -32,13 +35,24 @@ private static final long serialVersionUID = 1L;
     public EmpireState getEmpireState() { return empireState; }
     public WorldState getWorldState() { return worldState; }
 
+    public void recordTribeAttack(Hex attackerHex, Hex defenderHex) {
+        for (Tribe tribe : worldState.getTribes()) {
+            boolean campHit = tribe.getHex() == defenderHex;
+            boolean guardHit = defenderHex.getUnits().stream()
+                    .anyMatch(unit -> unit instanceof Guard && ((Guard) unit).getTribe() == tribe);
+            if (campHit || guardHit) {
+                tribe.markAttacked(attackerHex, worldState.getTurnNumber());
+            }
+        }
+    }
+
     public Random getRng() { return rng; }
 
     public void reset(){
         Map map = new Map(32, 50, rng);
         empireState.getStorage().reset();
         empireState.getProduction().reset();
-        empireState.getBuildings().clear();
+        empireState.reset();
         worldState.reset(map);
         empireState.init(map);
         Generator.generate(this);

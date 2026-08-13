@@ -32,6 +32,10 @@ public class UnitHandler {
 
     public void handleUnitMoving(Hex clicked) {
         Unit unit = selectionContext.getSelectedUnit();
+        if (unit == null || unit.getUnitType().isEnemy()) {
+            selectionContext.setSelectedUnit(null);
+            return;
+        }
         if (selectionContext.getSelectedHex() == clicked) {
             if (unit.isWorker()) {
                 handleWorkerAssignment(clicked, unit);
@@ -115,6 +119,9 @@ public class UnitHandler {
         if (selected != null) {
             List<UnitStat> stats = gamePanel.getUnitListPanel().updateUnits(selected.getUnits());
             for (UnitStat stat : stats) {
+                if (stat.getUnit().getUnitType().isEnemy()) {
+                    continue;
+                }
                 stat.getButton().addActionListener(e -> {
                     selectionContext.setSelectedUnit(stat.getUnit());
                     gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

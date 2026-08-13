@@ -49,6 +49,8 @@ public class CombatHandler {
             return;
         }
 
+        gameState.recordTribeAttack(attackerHex, defenderHex);
+
         boolean defenderHasCombatUnits = defenderHex.getUnits().stream().anyMatch(Unit::isCombatUnit);
         boolean defenderHasBuilding = defenderHex.getBuilding() != null;
         boolean defenderHasAnyUnits = !defenderHex.getUnits().isEmpty();

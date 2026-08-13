@@ -21,6 +21,12 @@ private static final long serialVersionUID = 1L;
     }
 
     @Override
+    public boolean canReward(GameState gameState) {
+        return gameState.getEmpireState().getStorage().getFoodQuantity() + 30
+                <= gameState.getEmpireState().getStorage().getFoodMax();
+    }
+
+    @Override
     public void check(GameState gameState) {
         if(isAffordable(gameState)) {
             cost.pay(gameState.getEmpireState().getStorage());

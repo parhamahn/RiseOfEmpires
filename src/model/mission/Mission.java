@@ -26,6 +26,10 @@ private static final long serialVersionUID = 1L;
     public abstract void check(GameState gameState);
     public abstract void processDone(GameState gameState);
 
+    public boolean canReward(GameState gameState) {
+        return true;
+    }
+
     public void activate() {
         this.status = MissionStatus.ACTIVE;
         resetDeadline();
@@ -33,6 +37,7 @@ private static final long serialVersionUID = 1L;
 
     public boolean complete(GameState gameState) {
         if (!isAffordable(gameState)) return false;
+        if (!canReward(gameState)) return false;
         check(gameState);
         processDone(gameState);
         return true;

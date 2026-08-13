@@ -4,7 +4,10 @@ import model.combat.AttackUnit;
 import model.map.Hex;
 import model.state.GameState;
 import model.unit.Unit;
+import model.unit.enemy.Bear;
+import model.unit.enemy.Guard;
 import view.combat.CombatMainPanel;
+import view.common.WarningDialogs;
 import view.game.GamePanel;
 
 import javax.swing.*;
@@ -22,10 +25,12 @@ public class EnemyAttackHandler {
     }
 
     private static class EnemyAttack {
+        final Unit attacker;
         final Hex enemyHex;
         final Hex playerHex;
 
-        EnemyAttack(Hex enemyHex, Hex playerHex) {
+        EnemyAttack(Unit attacker, Hex enemyHex, Hex playerHex) {
+            this.attacker = attacker;
             this.enemyHex = enemyHex;
             this.playerHex = playerHex;
         }
@@ -43,9 +48,9 @@ public class EnemyAttackHandler {
     private List<EnemyAttack> collectAttacks() {
         List<EnemyAttack> attacks = new ArrayList<>();
         for (Unit enemy : gameState.getWorldState().getEnemies()) {
-            if (enemy.getHex() == null) continue;
+            if (enemy.getHex() == null || enemy instanceof Bear) continue;
             Hex target = findAdjacentPlayerHex(enemy.getHex());
-            if (target != null) attacks.add(new EnemyAttack(enemy.getHex(), target));
+            if (target != null) attacks.add(new EnemyAttack(enemy, enemy.getHex(), target));
         }
         return attacks;
     }
@@ -99,6 +104,10 @@ public class EnemyAttackHandler {
 
             Timer timer = new Timer(1400, ev -> {
                 attackUnit.attack();
+                if (attack.attacker instanceof Guard) {
+                    Guard guard = (Guard) attack.attacker;
+                    WarningDialogs.tribeAttackedPlayer(guard.getTribe().getName());
+                }
                 if (panel.isVisible()) {
                     panel.refresh();
                 }

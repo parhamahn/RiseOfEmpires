@@ -2,12 +2,14 @@ package controller.handler;
 
 import helpers.sound.SoundEffects;
 import model.Season;
+import model.disasters.BearAttack;
 import model.disasters.Earthquake;
 import model.disasters.Flood;
 import model.disasters.NaturalDisaster;
 import model.disasters.Tsunami;
 import model.map.Hex;
 import model.state.GameState;
+import view.common.WarningDialogs;
 import view.game.GamePanel;
 
 import java.util.ArrayList;
@@ -77,6 +79,16 @@ public class DisasterHandler {
                         SoundEffects.getInstance().playFloodSoundEffect();
                     }
                     ts.effect(gameState);
+                }
+                case BEAR_ATTACK -> {
+                    BearAttack bearAttack = new BearAttack(gameState.getWorldState().getMap(), gameState, gameState.getRng());
+                    if (bearAttack.getCenter() == null) {continue;}
+                    boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(Hex::isDiscovered);
+                    if (anyDiscovered) {
+                        gamePanel.getMapPanel().startShake();
+                        WarningDialogs.bearAttack();
+                    }
+                    bearAttack.effect(gameState);
                 }
             }
         }

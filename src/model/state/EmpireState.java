@@ -39,11 +39,13 @@ private static final long serialVersionUID = 1L;
     private List<Technology> researchedTechnologies;
     private TownHallLevel townHallLevel;
     private int happiness;
+    private int happinessBase;
     private Season.SeasonType season;
     private List<Tribe> allies;
     private int warHappinessEffect;
     private List<Mission> missions = new ArrayList<>();
     private boolean dockDiscount;
+    private boolean capHappinessApplied;
 
     public EmpireState(Storage storage, Production production) {
         this.storage = storage;
@@ -56,6 +58,8 @@ private static final long serialVersionUID = 1L;
         this.season = Season.SeasonType.SPRING;
         this.allies = new  ArrayList<>();
         this.warHappinessEffect = 0;
+        this.happiness = 0;
+        this.happinessBase = 0;
     }
 
     public Season.SeasonType getSeason() {
@@ -83,8 +87,31 @@ private static final long serialVersionUID = 1L;
         for (Unit unit : units) { unit.setHex(townHallHex); }
         townHallHex.getUnits().addAll(units);
 
+        happiness = 0;
+        happinessBase = 0;
+        capHappinessApplied = false;
+
         recalculateProduction(map);
-        recalculateHappiness();
+    }
+
+    public void reset() {
+        this.maxUnit = DEFAULT_UNIT_CAPACITY;
+        this.townHallLevel = TownHallLevel.BASE_CAMP;
+        this.queues = new ArrayList<>();
+        this.researchedTechnologies = new ArrayList<>();
+        this.buildings = new ArrayList<>();
+        this.units = new ArrayList<>();
+        this.season = Season.SeasonType.SPRING;
+        this.allies = new ArrayList<>();
+        this.warHappinessEffect = 0;
+        this.missions = new ArrayList<>();
+        this.dockDiscount = false;
+        this.capHappinessApplied = false;
+        this.isStarving = false;
+        this.upkeepDisaster = false;
+        this.happiness = 0;
+        this.happinessBase = 0;
+        this.townHallHex = null;
     }
 
     public void removeBuilding(Building building) {
@@ -112,22 +139,35 @@ private static final long serialVersionUID = 1L;
         production.recalculate(this, AdjacencyBonus.checkForAdjacencyBonus(buildings, map), map);
     }
 
-    public void recalculateHappiness() {
-        this.happiness = this.warHappinessEffect;
+    public void addHappiness(int delta) {
+        this.happinessBase += delta;
+        this.happiness += delta;
+    }
 
-        for(Building building:buildings){
-            if(building.isTown()){this.happiness -= 1;}
-            if(building instanceof Monument){this.happiness += 2;}
-        }
+    public void applyTurnEndHappiness() {
+        int value = this.happinessBase;
 
-        if(getCombatUnitCount()==townHallLevel.getCombatUnitCap()){this.happiness -= 1;}
-
-        for(Unit unit: townHallHex.getUnits()){
-            if(unit.isCombatUnit()){
-                this.happiness += 1;
-                break;
+        for (Building building : buildings) {
+            if (building instanceof Monument) {
+                value += 2;
             }
         }
+        if (hasCombatUnitInTownHall()) {
+            value += 1;
+        }
+        this.capHappinessApplied = getCombatUnitCount() >= townHallLevel.getCombatUnitCap();
+        if (capHappinessApplied) {
+            value -= 1;
+        }
+        this.happiness = value;
+    }
+
+    private boolean hasCombatUnitInTownHall() {
+        if (townHallHex == null) return false;
+        for (Unit unit : townHallHex.getUnits()) {
+            if (unit.isCombatUnit()) return true;
+        }
+        return false;
     }
 
     public int getCivilUnitCount(){
@@ -164,6 +204,8 @@ private static final long serialVersionUID = 1L;
     public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
     public long getCookQueueCount() {return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();}
     public int getHappiness() {return happiness;}
+
+    public int getHappinessBase() {return happinessBase;}
 
     public boolean canCookUnit(Unit.UNIT_TYPE type) {
         if (type.isEnemy()) return false;
@@ -257,6 +299,14 @@ private static final long serialVersionUID = 1L;
         this.dockDiscount = dockDiscount;
     }
 
+    public boolean isCapHappinessApplied() {
+        return capHappinessApplied;
+    }
+
+    public void setCapHappinessApplied(boolean capHappinessApplied) {
+        this.capHappinessApplied = capHappinessApplied;
+    }
+
     public void loadFrom(EmpireState loaded){
         this.storage = loaded.getStorage();
         this.production = loaded.getProduction();
@@ -265,6 +315,7 @@ private static final long serialVersionUID = 1L;
         this.maxUnit = loaded.getMaxUnit();
         this.upkeepDisaster = loaded.isUpkeepDisaster();
         this.happiness = loaded.getHappiness();
+        this.happinessBase = loaded.getHappinessBase();
         this.buildings = loaded.getBuildings();
         this.units = loaded.getUnits();
         this.isStarving = loaded.isStarving();
@@ -275,6 +326,7 @@ private static final long serialVersionUID = 1L;
         this.warHappinessEffect = loaded.getWarHappinessEffect();
         this.missions = loaded.getMissions();
         this.dockDiscount = loaded.isDockDiscount();
+        this.capHappinessApplied = loaded.isCapHappinessApplied();
     }
 
 }

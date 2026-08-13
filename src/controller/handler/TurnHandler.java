@@ -12,6 +12,10 @@ import model.building.tribes.RelationStatus;
 import model.building.tribes.Tribe;
 import model.building.tribes.WarriorTribe;
 import model.map.Hex;
+import model.map.Map;
+import model.map.MapPath;
+import model.mission.Mission;
+import model.mission.MissionStatus;
 import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
@@ -52,7 +56,7 @@ public class TurnHandler {
             }
         }
 
-        gameState.getEmpireState().recalculateHappiness();
+        gameState.getEmpireState().applyTurnEndHappiness();
 
         endTurn();
         processQueues();
@@ -184,8 +188,12 @@ public class TurnHandler {
             if (tribe.getAllianceLockTurns() > 0) {
                 tribe.setAllianceLockTurns(tribe.getAllianceLockTurns() - 1);
             }
-            tribe.tickActiveMission(gameState);
-            tribe.refreshMissions(gameState.getWorldState().getTurnNumber());
+            if (tribe.tickActiveMission(gameState)) {
+                WarningDialogs.missionFailed(tribe.getName());
+            }
+            if (tribe.refreshMissions(gameState.getWorldState().getTurnNumber())) {
+                WarningDialogs.newTradeOrMission(tribe.getName());
+            }
             if (tribe.getRelationStatus() == RelationStatus.ENEMY) {
                 long guards = tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).count();
                 int guardCap = tribe instanceof WarriorTribe ? 5 : 3;
@@ -194,7 +202,9 @@ public class TurnHandler {
                     guard.setHex(tribe.getHex());
                     tribe.getHex().getUnits().add(guard);
                     gameState.getWorldState().getEnemies().add(guard);
+                    WarningDialogs.tribeProducedUnit(tribe.getName());
                 }
+                moveGuardsTowardLastAttacker(tribe);
             } else {
                 List<Unit> tribeGuards = tribe.getHex().getUnits().stream().filter(Guard.class::isInstance).toList();
                 for (Unit guard : tribeGuards) {
@@ -208,6 +218,29 @@ public class TurnHandler {
                     WarningDialogs.tribeWarning(tribe.getName() + " has become your enemy because you built near its camp!");
                 }
             }
+        }
+    }
+
+    private void moveGuardsTowardLastAttacker(Tribe tribe) {
+        Hex lastAttackerHex = tribe.getLastAttackerHex();
+        if (lastAttackerHex == null) return;
+        int turnsSinceAttack = gameState.getWorldState().getTurnNumber() - tribe.getLastAttackedTurn();
+        if (turnsSinceAttack > 2) {
+            tribe.markAttacked(null, -1);
+            return;
+        }
+        Map map = gameState.getWorldState().getMap();
+        List<Unit> guards = gameState.getWorldState().getEnemies().stream()
+                .filter(unit -> unit instanceof Guard && ((Guard) unit).getTribe() == tribe)
+                .toList();
+        for (Unit guard : guards) {
+            if (guard.getActionPoints() <= 0) continue;
+            Hex next = MapPath.nextStepToward(map, guard.getHex(), lastAttackerHex, MapPath::isPassableForEnemy);
+            if (next == null || next == guard.getHex()) continue;
+            guard.getHex().getUnits().remove(guard);
+            guard.setHex(next);
+            next.getUnits().add(guard);
+            guard.setActionPoints(guard.getActionPoints() - 1);
         }
     }
 

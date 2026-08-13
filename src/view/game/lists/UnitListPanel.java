@@ -36,7 +36,7 @@ public class UnitListPanel extends JPanel {
             stats.add(stat);
             add(stat.getButton());
             add(Box.createVerticalStrut(5));
-            if(unit.isCombatUnit()) showAttackButton=true;
+            if(unit.isCombatUnit() && !unit.getUnitType().isEnemy()) showAttackButton=true;
         }
         if(showAttackButton){
             add(Box.createVerticalGlue());

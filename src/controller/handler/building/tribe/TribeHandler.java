@@ -17,6 +17,7 @@ import model.trade.tribe.TribeTrade;
 import model.unit.enemy.Guard;
 import view.buildingpanel.tribe.GiftPanel;
 import view.buildingpanel.tribe.TribeTradePanel;
+import view.common.WarningDialogs;
 import view.game.GamePanel;
 
 import javax.swing.*;
@@ -71,6 +72,7 @@ public class TribeHandler {
             if (current.getActiveMission() == null || !current.getActiveMission().complete(gameState)) return;
             current.setLastMissionTurn(gameState.getWorldState().getTurnNumber());
             current.setActiveMission(null);
+            WarningDialogs.missionCompleted(current.getName());
             gamePanel.getTribeMainPanel().refresh();
             gamePanel.getHudPanel().refresh();
         });
@@ -193,8 +195,9 @@ public class TribeHandler {
         if (tribe.getRelationStatus() == RelationStatus.ALLY) happinessChange = -15;
         if (tribe.getRelationStatus() == RelationStatus.FRIEND) happinessChange = -5;
 
-        gameState.getEmpireState().setWarHappinessEffect(
-                gameState.getEmpireState().getWarHappinessEffect() + happinessChange);
+        if (happinessChange != 0) {
+            gameState.getEmpireState().addHappiness(happinessChange);
+        }
 
         tribe.changeRelation(-100, gameState.getEmpireState().getAllies());
         for (Mission mission : tribe.getMissions()) {
@@ -202,6 +205,7 @@ public class TribeHandler {
         }
         tribe.setActiveMission(null);
         spawnGuards(tribe);
+        WarningDialogs.warDeclared(tribe.getName());
     }
 
     private void spawnGuards(Tribe tribe) {
@@ -218,6 +222,7 @@ public class TribeHandler {
         tribe.setPermanentReward(true);
         tribe.changeRelation(100, gameState.getEmpireState().getAllies());
         if(!gameState.getEmpireState().getAllies().contains(tribe)) gameState.getEmpireState().getAllies().add(tribe);
+        WarningDialogs.allianceFormed(tribe.getName());
     }
 
 
@@ -230,6 +235,7 @@ public class TribeHandler {
             gameState.getEmpireState().getStorage().setQuantity(type, gameState.getEmpireState().getStorage().getQuantity(type)-30);
         }
         tribe.changeRelation(-10, gameState.getEmpireState().getAllies());
+        WarningDialogs.peaceMade(tribe.getName());
     }
 
     public void getMission(Tribe tribe) {

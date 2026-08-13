@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class NaturalDisaster {
 
-    public enum DisasterType {EARTHQUAKE, FLOOD, TSUNAMI}
+    public enum DisasterType {EARTHQUAKE, FLOOD, TSUNAMI, BEAR_ATTACK}
 
     public static List<DisasterType> getRandomDisasters(Random rand){
         List<DisasterType> disasters = new ArrayList<DisasterType>();

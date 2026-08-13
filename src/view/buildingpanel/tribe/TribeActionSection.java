@@ -86,6 +86,8 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.setDisabled(doMission, true, "No active mission");
         }else if(!tribe.getActiveMission().isAffordable(gameState)){
             StyledButtons.setDisabled(doMission, true, "Not enough resources for the mission");
+        }else if(!tribe.getActiveMission().canReward(gameState)){
+            StyledButtons.setDisabled(doMission, true, "Not enough storage capacity for the reward");
         }else {
             StyledButtons.goldBorder(doMission);
             StyledButtons.setDisabled(doMission, false, null);

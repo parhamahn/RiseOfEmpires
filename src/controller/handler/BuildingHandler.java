@@ -50,6 +50,9 @@ public class BuildingHandler {
         deductBuilderCost(cost, hex);
         hex.setBuilding(building);
         gameState.getEmpireState().getBuildings().add(building);
+        if (building.isTown()) {
+            gameState.getEmpireState().addHappiness(-1);
+        }
         gameState.getEmpireState().getBuildings().sort(Comparator.comparingInt(b -> b.getHex().getR()));
         afterBuildingChange();
         SoundEffects.getInstance().playConstructSoundEffect();
@@ -105,7 +108,7 @@ public class BuildingHandler {
     public void destroyBuilding(Hex hex) {
         for(Unit unit : hex.getUnits()) {
             if(unit.isBuilder() && unit.getActionPoints() >= 1) {
-                int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_OPTION);
+                int sure = JOptionPane.showConfirmDialog(null, "Are you sure ?", "Destroy", JOptionPane.YES_NO_OPTION);
                 if (sure == JOptionPane.YES_OPTION && hex.getBuilding() instanceof Building building && !building.isTownHall()) {
                     gameState.getEmpireState().removeBuilding(building);
                     unit.setActionPoints(unit.getActionPoints() - 1);
@@ -265,7 +268,6 @@ public class BuildingHandler {
     private void afterBuildingChange() {
         gameState.getEmpireState().updateTownCapacity();
         gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
-        gameState.getEmpireState().recalculateHappiness();
         gamePanel.getTaskListPanel().clear();
         gamePanel.getHudPanel().refresh();
         gamePanel.getMapPanel().markStaticDirty();

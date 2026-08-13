@@ -28,6 +28,8 @@ private static final long serialVersionUID = 1L;
     private boolean discovered;
     private int allianceLockTurns;
     private int lastMissionTurn;
+    private int lastAttackedTurn = -1;
+    private Hex lastAttackerHex;
 
     public Tribe(Hex hex, int maxHP) {
         super(hex, maxHP);
@@ -171,15 +173,30 @@ private static final long serialVersionUID = 1L;
         this.lastMissionTurn = lastMissionTurn;
     }
 
-    public void tickActiveMission(GameState gameState) {
-        if (activeMission == null) return;
+    public int getLastAttackedTurn() {
+        return lastAttackedTurn;
+    }
+
+    public Hex getLastAttackerHex() {
+        return lastAttackerHex;
+    }
+
+    public void markAttacked(Hex attackerHex, int turn) {
+        this.lastAttackerHex = attackerHex;
+        this.lastAttackedTurn = turn;
+    }
+
+    public boolean tickActiveMission(GameState gameState) {
+        if (activeMission == null) return false;
         activeMission.decreaseDeadline();
         if (activeMission.getDeadline() == 0) {
             activeMission.expire(gameState);
+            return true;
         }
+        return false;
     }
 
-    public void refreshMissions(int currentTurn) {
+    public boolean refreshMissions(int currentTurn) {
         if (activeMission == null
                 && (getRelationStatus() == RelationStatus.FRIEND || getRelationStatus() == RelationStatus.ALLY)
                 && currentTurn - lastMissionTurn >= 5) {
@@ -188,7 +205,9 @@ private static final long serialVersionUID = 1L;
                 mission.resetDeadline();
             }
             lastMissionTurn = currentTurn;
+            return true;
         }
+        return false;
     }
 
     public void destroyCamp(GameState gameState) {
