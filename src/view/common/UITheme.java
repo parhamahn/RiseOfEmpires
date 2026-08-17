@@ -5,13 +5,24 @@ import model.Season;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class UITheme {
 
-    public static final Font GAME_FONT = new Font("Pixel Game", Font.PLAIN, 24);
-    public static final Font GAME_FONT_BOLD = GAME_FONT.deriveFont(Font.BOLD, 24);
-    public static final Font GAME_FONT_SMALL = GAME_FONT.deriveFont(Font.PLAIN, 14);
-    public static final Font GAME_FONT_LARGE = GAME_FONT.deriveFont(Font.PLAIN, 32);
+    public static final Font baseFont;
+
+    static {
+        try {
+            baseFont = Font.createFont(Font.TRUETYPE_FONT, UITheme.class.getResourceAsStream("/utils/Pixel Game.otf"));
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final Font GAME_FONT = baseFont.deriveFont(Font.PLAIN, 24);
+    public static final Font GAME_FONT_BOLD = baseFont.deriveFont(Font.BOLD, 24);
+    public static final Font GAME_FONT_SMALL = baseFont.deriveFont(Font.PLAIN, 14);
+    public static final Font GAME_FONT_LARGE = baseFont.deriveFont(Font.PLAIN, 32);
 
     public static final Color GOLD = new Color(255, 203, 87);
     public static final Color PANEL_BG = new Color(28, 28, 28);
