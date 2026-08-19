@@ -1,5 +1,8 @@
 package network.server.tcp;
 
+import network.common.JsonSerializer;
+import network.common.Message;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,11 +45,11 @@ public class TCPServer {
         clients.put(clientID, clientHandler);
     }
 
-    public void processMessage(UUID clientID, String message){
+    public void processMessage(UUID clientID, Message message){
         System.out.println("Server --> "+clientID+" : "+message);
     }
 
-    public void broadcast(String message){
+    public void broadcast(Message message){
         for (TCPClientHandler clientHandler:clients.values()){
             clientHandler.sendMessage(message);
         }

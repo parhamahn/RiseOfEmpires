@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class JsonSerializer {
-    private static Gson GSON = new Gson();
+    public static Gson GSON = new Gson();
 
     public static JsonObject toJson(Message message){
         JsonObject jsonObject = new JsonObject();

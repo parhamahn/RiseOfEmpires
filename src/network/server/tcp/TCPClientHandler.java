@@ -1,5 +1,9 @@
 package network.server.tcp;
 
+import com.google.gson.JsonObject;
+import network.common.JsonSerializer;
+import network.common.Message;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -60,11 +64,12 @@ public class TCPClientHandler implements Runnable{
 
     @Override
     public void run() {
-        String message;
+        String messageString;
         try {
-            while (connected && (message = reader.readLine()) != null) {
-                System.out.println("Received from client " + clientID + ": " + message);
-
+            while (connected && (messageString = reader.readLine()) != null) {
+                System.out.println("Received from client " + clientID);
+                JsonObject json = JsonSerializer.GSON.fromJson(messageString, JsonObject.class);
+                Message message = JsonSerializer.fromJson(json);
                 server.processMessage(clientID, message);
             }
         } catch (IOException e) {
@@ -76,11 +81,13 @@ public class TCPClientHandler implements Runnable{
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(Message message) {
         if (connected && writer != null) {
-            writer.println(message);
+            JsonObject json = JsonSerializer.toJson(message);
+            writer.println(JsonSerializer.GSON.toJson(json));
         }
     }
+
 
     public void disconnect() {
         connected = false;
