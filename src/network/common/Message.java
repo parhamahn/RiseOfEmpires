@@ -8,17 +8,21 @@ public abstract class Message {
     private long timeStamp;
     private MessageType messageType;
 
+    protected Message() {
+        this.senderID = null;
+        this.timeStamp = 0;
+        this.messageType = null;
+    }
 
-    protected Message(MessageType messageType, UUID senderID, long timeStamp){
+    protected Message(MessageType messageType, UUID senderID, long timeStamp) {
         this.senderID = senderID;
         this.timeStamp = timeStamp;
         this.messageType = messageType;
     }
 
-
-    public MessageType getMessageType(){
+    public MessageType getMessageType() {
         return messageType;
-    };
+    }
 
     public long getTimeStamp() {
         return timeStamp;
@@ -27,5 +31,4 @@ public abstract class Message {
     public UUID getSenderID() {
         return senderID;
     }
-
 }
