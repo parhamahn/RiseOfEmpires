@@ -8,11 +8,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TCPServer {
 
+    public final int PORT = 1919;
+
     private ServerSocket serverSocket;
     private Map<UUID, TCPClientHandler> clients;
     private List<Thread> threadPool;
-    private final int PORT = 1919;
-
 
     public TCPServer() {
         clients = new ConcurrentHashMap<>();
