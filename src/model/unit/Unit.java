@@ -1,5 +1,6 @@
 package model.unit;
 
+import model.Entity;
 import model.TownHallLevel;
 import model.combat.Damageable;
 import model.map.Hex;
@@ -7,7 +8,7 @@ import model.storage.Cost;
 
 import java.io.Serializable;
 
-public abstract class Unit implements Damageable, Serializable {
+public abstract class Unit extends Entity implements Damageable, Serializable {
 private static final long serialVersionUID = 1L;
 
     public enum UNIT_TYPE {
@@ -66,6 +67,7 @@ private static final long serialVersionUID = 1L;
 
 
     protected Unit(UNIT_TYPE unitType, int actionPointsMax, int foodConsumptionPerTurn, int maxHP){
+        super();
         this.unitType = unitType;
         this.cookCost = unitType.getCookCost();
         this.actionPointsMax = actionPointsMax;

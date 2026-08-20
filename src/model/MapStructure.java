@@ -4,7 +4,7 @@ import model.map.Hex;
 
 import java.io.Serializable;
 
-public abstract class MapStructure implements Serializable {
+public abstract class MapStructure extends Entity implements Serializable {
 private static final long serialVersionUID = 1L;
 
     private Hex hex;
@@ -12,6 +12,7 @@ private static final long serialVersionUID = 1L;
     private int maxHP;
 
     protected MapStructure(Hex hex, int maxHP) {
+        super();
         this.hex = hex;
         this.maxHP = maxHP;
         this.HP = maxHP;
