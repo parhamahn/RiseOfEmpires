@@ -3,6 +3,8 @@ package network.server.udp;
 import com.google.gson.JsonObject;
 import network.common.JsonSerializer;
 import network.common.Message;
+import network.server.GameServer;
+import network.server.Messenger;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,11 +15,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UDPServer implements Runnable {
+public class UDPServer implements Runnable, Messenger {
 
     private static final int BUFFER_SIZE = 8192;
     public final int PORT = 1920;
 
+    private GameServer gameServer;
     private DatagramSocket socket;
     private volatile boolean running;
     private final Map<UUID, SocketAddress> clientAddresses = new ConcurrentHashMap<>();
@@ -62,7 +65,7 @@ public class UDPServer implements Runnable {
     }
 
     public void processMessage(UUID clientID, Message message) {
-        System.out.println("Server --> " + clientID + " : " + message.getMessageType());
+        gameServer.processMessage(clientID, message);
     }
 
     public void sendTo(UUID clientID, Message message) {
@@ -85,6 +88,14 @@ public class UDPServer implements Runnable {
         for (SocketAddress address : clientAddresses.values()) {
             sendTo(address, message);
         }
+    }
+
+    public GameServer getGameServer() {
+        return gameServer;
+    }
+
+    public void setGameServer(GameServer gameServer) {
+        this.gameServer = gameServer;
     }
 
     public void removeClient(UUID clientID) {

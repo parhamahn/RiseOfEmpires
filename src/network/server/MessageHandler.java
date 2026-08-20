@@ -1,4 +1,4 @@
-package network.server.handlers;
+package network.server;
 
 import network.common.Message;
 

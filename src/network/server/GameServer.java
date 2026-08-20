@@ -1,7 +1,6 @@
 package network.server;
 
 import network.common.Message;
-import network.server.handlers.MessageHandler;
 
 import java.util.HashMap;
 import java.util.Map;

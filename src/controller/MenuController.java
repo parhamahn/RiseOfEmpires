@@ -1,8 +1,12 @@
 package controller;
 import helpers.sound.SoundEffects;
 import model.state.GameState;
+import network.server.GameServer;
+import network.server.Server;
 import view.game.GamePanel;
 import view.menu.MenuPanel;
+import view.multiplayer.MultiplayerOption;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,6 +36,7 @@ public class MenuController {
         menuPanel.getStartButton().addActionListener(e -> startAction());
         menuPanel.getSettingsButton().addActionListener(e -> settingsAction());
         menuPanel.getExitButton().addActionListener(e -> exitAction());
+        menuPanel.getMultiplayerButton().addActionListener(e -> multiplayerAction());
         gamePanel.getPausePanel().getMainMenuButton().addActionListener(e -> menuAction());
         gamePanel.getPausePanel().getContinueButton().addActionListener(e -> continueAction());
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "menu");
@@ -48,6 +53,16 @@ public class MenuController {
         cl.show(cards, "game");
         SoundEffects.getInstance().playStartGameSoundEffect();
         SoundEffects.getInstance().seasonSoundEffect(null, gameState.getEmpireState().getSeason());
+    }
+
+    public void multiplayerAction(){
+        int option = MultiplayerOption.hostOrJoin();
+        if(option==JOptionPane.NO_OPTION){
+            MultiplayerOption.joinAddress();
+        }else if(option==JOptionPane.YES_OPTION){
+            Server server = new Server();
+            server.start();
+        }
     }
 
     public void settingsAction(){

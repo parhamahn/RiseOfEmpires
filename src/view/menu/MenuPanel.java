@@ -15,6 +15,7 @@ public class MenuPanel extends JPanel {
     private JButton settingsButton;
     private JButton exitButton;
     private JButton loadButton;
+    private JButton multiplayerButton;
     private BufferedImage backgroundImage;
     private ImageIcon buttonIcon;
 
@@ -27,10 +28,11 @@ public class MenuPanel extends JPanel {
         this.settingsButton = StyledButtons.textButton("Settings", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
         this.exitButton = StyledButtons.textButton("Exit", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
         this.loadButton = StyledButtons.textButton("Load", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
+        this.multiplayerButton = StyledButtons.textButton("Multiplayer", buttonIcon, BUTTON_SIZE, 24f, UITheme.MENU_BUTTON_FG);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        for (JButton button : new JButton[]{startButton, settingsButton, exitButton, loadButton}) {
+        for (JButton button : new JButton[]{startButton, settingsButton, exitButton, loadButton, multiplayerButton}) {
             button.setAlignmentX(CENTER_ALIGNMENT);
         }
 
@@ -40,11 +42,13 @@ public class MenuPanel extends JPanel {
 
         add(Box.createRigidArea(new Dimension(0, 500)));
         add(startButton);
-        add(Box.createRigidArea(new Dimension(0, 50)));
+        add(Box.createRigidArea(new Dimension(0, 40)));
         add(loadButton);
-        add(Box.createRigidArea(new Dimension(0, 50)));
+        add(Box.createRigidArea(new Dimension(0, 40)));
+        add(multiplayerButton);
+        add(Box.createRigidArea(new Dimension(0, 40)));
         add(settingsButton);
-        add(Box.createRigidArea(new Dimension(0, 50)));
+        add(Box.createRigidArea(new Dimension(0, 40)));
         add(exitButton);
         add(Box.createVerticalGlue());
     }
@@ -54,6 +58,7 @@ public class MenuPanel extends JPanel {
     public JButton getSettingsButton() {return settingsButton;}
     public JButton getExitButton() {return exitButton;}
     public JButton getLoadButton() {return loadButton;}
+    public JButton getMultiplayerButton() {return multiplayerButton;}
 
 
     @Override

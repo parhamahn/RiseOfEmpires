@@ -2,6 +2,8 @@ package network.server.tcp;
 
 import network.common.JsonSerializer;
 import network.common.Message;
+import network.server.GameServer;
+import network.server.Messenger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,10 +11,11 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TCPServer {
+public class TCPServer implements Messenger, Runnable {
 
     public final int PORT = 1919;
 
+    private GameServer gameServer;
     private ServerSocket serverSocket;
     private Map<UUID, TCPClientHandler> clients;
     private List<Thread> threadPool;
@@ -28,7 +31,7 @@ public class TCPServer {
     }
 
 
-    public void start() throws IOException {
+    private void start() throws IOException {
         while(true){
             Socket NewSocket = serverSocket.accept();
             acceptClient(NewSocket);
@@ -46,7 +49,7 @@ public class TCPServer {
     }
 
     public void processMessage(UUID clientID, Message message){
-        System.out.println("Server --> "+clientID+" : "+message);
+        gameServer.processMessage(clientID, message);
     }
 
     public void broadcast(Message message){
@@ -55,7 +58,29 @@ public class TCPServer {
         }
     }
 
+    public void sendTo(UUID playerId, Message message) {
+        TCPClientHandler handler = clients.get(playerId);
+        if (handler != null) handler.sendMessage(message);
+    }
+
+    public GameServer getGameServer() {
+        return gameServer;
+    }
+
+    public void setGameServer(GameServer gameServer) {
+        this.gameServer = gameServer;
+    }
+
     public void removeClient(UUID clientID){
         clients.remove(clientID);
+    }
+
+    @Override
+    public void run() {
+        try {
+            start();
+        } catch (IOException e) {
+            System.out.println("Error starting TCP server : "+e);
+        }
     }
 }
