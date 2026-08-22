@@ -6,6 +6,7 @@ import java.util.*;
 public class Map implements Serializable {
 private static final long serialVersionUID = 1L;
     private Hex[][] grid;
+    private List<Hex> spawnPoints;
     private final int rows;
     private final int cols;
     private Random rng;
@@ -13,7 +14,7 @@ private static final long serialVersionUID = 1L;
     public Map(int rows, int cols){
         this.rows = rows;
         this.cols = cols;
-
+        this.grid = new Hex[rows][cols];
     }
 
     public Map(int rows, int cols, Random rng) {
@@ -25,10 +26,29 @@ private static final long serialVersionUID = 1L;
         setResources();
     }
 
+    public List<Hex> getSpawnPoints() {
+        return spawnPoints;
+    }
+
+    public void setSpawnPoints(List<Hex> spawnPoints) {
+        this.spawnPoints = spawnPoints;
+    }
+
+    public void setRng(Random rng) {
+        this.rng = rng;
+    }
+
+    public void setResources(Random rng){
+        this.rng = rng;
+        setResources();
+    }
 
     public int getRows() { return rows; }
     public int getCols() { return cols; }
 
+    public void setHex(int r, int c, Hex hex){
+        grid[r][c]=hex;
+    }
 
     private void generateMap() {
         Hex.TerrainType[] terrains = Hex.TerrainType.values();
