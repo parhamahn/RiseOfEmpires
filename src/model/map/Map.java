@@ -5,10 +5,16 @@ import java.util.*;
 
 public class Map implements Serializable {
 private static final long serialVersionUID = 1L;
-    private final Hex[][] grid;
+    private Hex[][] grid;
     private final int rows;
     private final int cols;
-    private final Random rng;
+    private Random rng;
+
+    public Map(int rows, int cols){
+        this.rows = rows;
+        this.cols = cols;
+
+    }
 
     public Map(int rows, int cols, Random rng) {
         this.rows = rows;

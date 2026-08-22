@@ -1,10 +1,11 @@
 package model.queue;
 
+import model.Entity;
 import model.state.GameState;
 
 import java.io.Serializable;
 
-public abstract class Queue implements Serializable {
+public abstract class Queue extends Entity implements Serializable {
 private static final long serialVersionUID = 1L;
 
     public enum QUEUE_TYPE {UPGRADE, RESEARCH, COOK};
@@ -16,6 +17,7 @@ private static final long serialVersionUID = 1L;
 
 
     public Queue(QUEUE_TYPE queueType, int turnCost, int startTurn){
+        super();
         this.queueType = queueType;
         this.turnCost = turnCost;
         this.startTurn = startTurn;

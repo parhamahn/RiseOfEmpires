@@ -4,6 +4,8 @@ import model.map.Hex;
 import model.map.Map;
 import model.building.edge.EdgeComponent;
 import network.dto.DtoMapper;
+import network.dto.EdgeDTO;
+import network.dto.HexDTO;
 import network.dto.MapDTO;
 
 import java.util.ArrayList;

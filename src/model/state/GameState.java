@@ -1,12 +1,16 @@
 package model.state;
 
+import com.google.gson.Gson;
 import model.map.Hex;
 import model.map.Map;
+import model.map.TextMap;
 import model.map.generator.*;
 import model.building.tribes.Tribe;
 import model.unit.enemy.Guard;
 import model.product.Production;
 import model.storage.Storage;
+import network.dto.GameStateDTO;
+import network.dto.mapper.GameStateMapper;
 
 import java.io.Serializable;
 import java.util.Random;
