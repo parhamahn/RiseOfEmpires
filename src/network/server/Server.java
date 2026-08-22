@@ -1,5 +1,6 @@
 package network.server;
 
+import model.state.Lobby;
 import network.server.tcp.TCPServer;
 import network.server.udp.UDPServer;
 
@@ -10,6 +11,7 @@ public class Server {
     private Thread TCPThread;
     private Thread UDPThread;
     private GameServer gameServer;
+    private Lobby lobby;
 
     public Server() {
         this.tcpServer = new TCPServer();
@@ -29,8 +31,10 @@ public class Server {
     }
 
     public void stop(){
-        TCPThread.interrupt();
-        UDPThread.interrupt();
+        tcpServer.stop();
+        System.out.println("TCP Server stopped ...");
+        udpServer.stop();
+        System.out.println("UDP Server stopped ...");
     }
 
     public TCPServer getTcpServer() {
@@ -43,5 +47,13 @@ public class Server {
 
     public GameServer getGameServer() {
         return gameServer;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
     }
 }

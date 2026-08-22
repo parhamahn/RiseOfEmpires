@@ -42,6 +42,7 @@ public class UDPServer implements Runnable, Messenger {
 
     @Override
     public void run() {
+        running = true;
         byte[] buffer = new byte[BUFFER_SIZE];
         while (running) {
             try {

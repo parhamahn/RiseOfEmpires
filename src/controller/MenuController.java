@@ -18,13 +18,15 @@ public class MenuController {
     private GameState gameState;
     private GamePanel gamePanel;
     private SelectionContext selectionContext;
+    private LobbyController lobbyController;
 
-    public MenuController(MenuPanel menuPanel, JPanel cards, GameState gameState, GamePanel gamePanel, SelectionContext selectionContext){
+    public MenuController(MenuPanel menuPanel, JPanel cards, GameState gameState, GamePanel gamePanel, SelectionContext selectionContext, LobbyController lobbyController){
         this.menuPanel = menuPanel;
         this.cards = cards;
         this.gameState = gameState;
         this.gamePanel = gamePanel;
         this.selectionContext = selectionContext;
+        this.lobbyController = lobbyController;
         this.attachListeners();
     }
 
@@ -62,6 +64,10 @@ public class MenuController {
         }else if(option==JOptionPane.YES_OPTION){
             Server server = new Server();
             server.start();
+            lobbyController.setServer(server);
+
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            cl.show(cards, "lobby");
         }
     }
 

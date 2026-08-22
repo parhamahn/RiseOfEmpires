@@ -44,7 +44,7 @@ public class SoundEffects {
         unitMoveSoundEffect.setVolume(0.5f);
 
         constructSoundEffect = new Sound();
-        constructSoundEffect.load("/utils/construct.wav");
+        //constructSoundEffect.load("/utils/construct.wav");
         constructSoundEffect.setVolume(1f);
 
         bazaarBackgroundSoundEffect = new Sound();

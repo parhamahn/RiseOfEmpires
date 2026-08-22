@@ -75,12 +75,28 @@ public class TCPServer implements Messenger, Runnable {
         clients.remove(clientID);
     }
 
+    public void stop(){
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error stopping TCP server : " + e);
+        }
+        for (TCPClientHandler clientHandler : clients.values()) {
+            clientHandler.disconnect();
+        }
+        clients.clear();
+    }
+
     @Override
     public void run() {
         try {
             start();
         } catch (IOException e) {
-            System.out.println("Error starting TCP server : "+e);
+            if (serverSocket == null || !serverSocket.isClosed()) {
+                System.out.println("Error starting TCP server : "+e);
+            }
         }
     }
 }

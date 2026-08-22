@@ -12,6 +12,8 @@ import view.menu.LoadPanel;
 import view.menu.MenuPanel;
 import view.menu.SavePanel;
 import view.menu.SettingsPanel;
+import view.multiplayer.LobbyPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -43,6 +45,9 @@ public class Main {
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
+            LobbyPanel lobbyPanel = new LobbyPanel();
+            LobbyController lobbyController = new LobbyController(lobbyPanel, cards);
+
             HUDPanel hudPanel = new HUDPanel(gameState);
             MapPanel mapPanel = new MapPanel(map, gameState, selectionContext);
             GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
@@ -51,7 +56,7 @@ public class Main {
             GameController gameController = new GameController(gamePanel, cards, gameState, selectionContext);
 
             MenuPanel menuPanel = new MenuPanel();
-            MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext);
+            MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext, lobbyController);
 
             LoadPanel loadPanel = new LoadPanel();
             LoadController loadController = new LoadController(gameState, gamePanel, selectionContext, loadPanel, cards, menuPanel);
@@ -64,6 +69,7 @@ public class Main {
             cards.add(gamePanel, "game");
             cards.add(loadPanel, "load");
             cards.add(savePanel, "save");
+            cards.add(lobbyPanel, "lobby");
 
             frame.setVisible(true);
         });
