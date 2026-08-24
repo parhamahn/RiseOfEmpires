@@ -19,7 +19,7 @@ public class ReadyToggleHandler implements MessageHandler<ReadyToggleRequest> {
 
     @Override
     public void handle(UUID senderID, ReadyToggleRequest message) {
-        lobby.getPlayers().get(senderID).setReady(true);
+        lobby.getPlayers().get(senderID).setReady(message.isReady());
     }
 
 }
