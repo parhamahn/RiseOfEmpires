@@ -102,12 +102,13 @@ public class UnitHandler {
     }
 
     private void handleBorderExpansion(Hex clicked, Unit unit) {
+        java.util.UUID owner = gameState.resolveActivePlayerId();
         for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex())) {
             if (!neighbor.isInEmpireBorder() && neighbor.isDiscovered()) {
-                neighbor.setInEmpireBorder(true);
+                neighbor.setBorderOwner(owner);
             }
         }
-        clicked.setInEmpireBorder(true);
+        clicked.setBorderOwner(owner);
         gameState.getEmpireState().removeUnit(unit);
         gamePanel.getUnitListPanel().clear();
         gamePanel.getTaskListPanel().clear();

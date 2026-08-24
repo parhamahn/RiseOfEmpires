@@ -226,13 +226,14 @@ private static final long serialVersionUID = 1L;
             }
         }
         campHex.setBuilding(null);
-        campHex.setInEmpireBorder(true);
+        java.util.UUID claimer = gameState.resolveActivePlayerId();
+        campHex.setBorderOwner(claimer);
         for (Hex neighbour : gameState.getWorldState().getMap().getNeighbourHexes(campHex)) {
             if (neighbour != null
                     && neighbour.getTerrainType() != Hex.TerrainType.SEA
                     && neighbour.getTerrainType() != Hex.TerrainType.TALL_MOUNTAIN
                     && !neighbour.isInEmpireBorder()) {
-                neighbour.setInEmpireBorder(true);
+                neighbour.setBorderOwner(claimer);
             }
         }
         collectLoot(gameState.getEmpireState().getStorage());

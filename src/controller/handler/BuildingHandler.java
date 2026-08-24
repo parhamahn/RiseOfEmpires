@@ -37,6 +37,7 @@ public class BuildingHandler {
 
     public void handleBuildingTask(Task.TASK task, Hex hex) {
         if (hex.getBuilding() != null) return;
+        if (!hex.isOwnedBy(gameState.resolveActivePlayerId())) return;
 
         Building building = BuildingFactory.createBuilding(task, hex);
         building.setOwnerID(gameState.resolveActivePlayerId());

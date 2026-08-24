@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Hex implements Serializable {
 private static final long serialVersionUID = 1L;
@@ -24,7 +25,7 @@ private static final long serialVersionUID = 1L;
 
     private int c,r;
     private boolean discovered;
-    private boolean inEmpireBorder;
+    private UUID borderOwner;
     private TerrainType terrainType;
     private HashMap<ResourceType, Integer> resources;
     private MapStructure building;
@@ -48,10 +49,16 @@ private static final long serialVersionUID = 1L;
 
 
     public boolean isInEmpireBorder() {
-        return inEmpireBorder;
+        return borderOwner != null;
     }
-    public void setInEmpireBorder(boolean inEmpireBorder) {
-        this.inEmpireBorder = inEmpireBorder;
+    public boolean isOwnedBy(UUID playerId) {
+        return playerId != null && playerId.equals(borderOwner);
+    }
+    public UUID getBorderOwner() {
+        return borderOwner;
+    }
+    public void setBorderOwner(UUID owner) {
+        this.borderOwner = owner;
     }
     public int getC() {return c;}
     public int getR() {return r;}

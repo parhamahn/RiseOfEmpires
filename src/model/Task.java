@@ -87,7 +87,7 @@ public class Task {
                 .anyMatch(unit -> unit.isBuilder() && buildCost.enoughAP(unit.getActionPoints()));
         return buildCost.enoughResources(gameState.getEmpireState().getStorage())
                 && enoughAP
-                && hex.isInEmpireBorder();
+                && hex.isOwnedBy(gameState.resolveActivePlayerId());
     }
 
     public static String getBuildBlockReason(TASK task, Hex hex, GameState gameState) {
@@ -98,7 +98,7 @@ public class Task {
                 : baseCost;
         if (!buildCost.enoughResources(gameState.getEmpireState().getStorage()))
             return "Not enough " + buildCost.missingResources(gameState.getEmpireState().getStorage());
-        if (!hex.isInEmpireBorder()) return "Hex is not within the empire border";
+        if (!hex.isOwnedBy(gameState.resolveActivePlayerId())) return "Hex is not within your empire border";
         return "No builder in this hex has enough action points";
     }
 }

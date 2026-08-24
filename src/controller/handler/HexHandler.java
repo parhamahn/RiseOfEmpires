@@ -92,10 +92,12 @@ public class HexHandler {
                 if (selectionContext.getSelectedUnit() != null) {
                     unitHandler.handleUnitMoving(clicked);
                 } else if (discoveredNeighbour) {
-                    if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding().isTownHall()) {
+                    boolean ownBuilding = clicked.getBuilding() != null
+                            && gameState.resolveActivePlayerId().equals(clicked.getBuilding().getOwnerID());
+                    if (selectionContext.getSelectedHex() == clicked && ownBuilding && clicked.getBuilding().isTownHall()) {
                         gamePanel.setAnyPanelOpen(true);
                         gamePanel.getTownHallPanel().open();
-                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Bazaar) {
+                    } else if (selectionContext.getSelectedHex() == clicked && ownBuilding && clicked.getBuilding() instanceof Bazaar) {
                         gamePanel.setAnyPanelOpen(true);
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();

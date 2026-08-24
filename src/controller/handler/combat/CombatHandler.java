@@ -83,10 +83,11 @@ public class CombatHandler {
         }
 
         if(defenderHex.getBuilding() != null && defenderHex.getBuilding() instanceof Tribe){
+            java.util.UUID owner = gameState.resolveActivePlayerId();
             for(Hex neigh:gameState.getWorldState().getMap().getNeighbourHexes(defenderHex)){
-                neigh.setInEmpireBorder(true);
+                neigh.setBorderOwner(owner);
             }
-            defenderHex.setInEmpireBorder(true);
+            defenderHex.setBorderOwner(owner);
         }
 
         selectionContext.setAttackerHex(null);

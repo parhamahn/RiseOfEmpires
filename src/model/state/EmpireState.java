@@ -76,6 +76,12 @@ private static final long serialVersionUID = 1L;
         TownHall townHall = new TownHall(thHex);
         townHall.setOwnerID(ownerId);
         thHex.setBuilding(townHall);
+        thHex.setBorderOwner(ownerId);
+        for (Hex neigh : map.getNeighbourHexes(thHex)) {
+            if (neigh != null) {
+                neigh.setBorderOwner(ownerId);
+            }
+        }
         this.townHallHex = thHex;
         this.buildings.add(townHall);
 
