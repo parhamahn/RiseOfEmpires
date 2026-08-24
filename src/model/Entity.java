@@ -17,7 +17,7 @@ public abstract class Entity implements Serializable {
 
     protected Entity(UUID id) {
         this.id = id;
-        this.ownerID = id;
+        this.ownerID = null;
         this.createdAt = System.currentTimeMillis();
     }
 

@@ -249,6 +249,7 @@ public class TurnHandler {
         if (warriorAlly && gameState.getWorldState().getTurnNumber() % 3 == 0) {
             Hex townHallHex = gameState.getEmpireState().getTownHallHex();
             Swordsman helper = new Swordsman();
+            helper.setOwnerID(gameState.resolveActivePlayerId());
             helper.setHex(townHallHex);
             townHallHex.getUnits().add(helper);
             gameState.getEmpireState().getUnits().add(helper);

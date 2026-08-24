@@ -43,6 +43,7 @@ private static final long serialVersionUID = 1L;
             super.getTribe().changeRelation(super.getTribe().getRelation()+20, gameState.getEmpireState().getAllies());
             for(int i=0;i<3;i++){
                 Unit unit = new Swordsman();
+                unit.setOwnerID(gameState.resolveActivePlayerId());
                 gameState.getEmpireState().getUnits().add(unit);
                 unit.setHex(gameState.getEmpireState().getTownHallHex());
                 gameState.getEmpireState().getTownHallHex().getUnits().add(unit);

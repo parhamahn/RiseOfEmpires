@@ -71,9 +71,10 @@ private static final long serialVersionUID = 1L;
         this.season = season;
     }
 
-    public void init(Map map) {
-        Hex thHex = map.getHex(map.getCols() / 2, map.getRows() / 2);
+    public void init(Map map, Hex spawnHex, java.util.UUID ownerId) {
+        Hex thHex = spawnHex;
         TownHall townHall = new TownHall(thHex);
+        townHall.setOwnerID(ownerId);
         thHex.setBuilding(townHall);
         this.townHallHex = thHex;
         this.buildings.add(townHall);
@@ -85,7 +86,10 @@ private static final long serialVersionUID = 1L;
         units.add(new Worker());
         units.add(new Explorer());
 
-        for (Unit unit : units) { unit.setHex(townHallHex); }
+        for (Unit unit : units) {
+            unit.setOwnerID(ownerId);
+            unit.setHex(townHallHex);
+        }
         townHallHex.getUnits().addAll(units);
 
         happiness = 0;

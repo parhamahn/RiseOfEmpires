@@ -12,6 +12,7 @@ public class CookUnitHandler {
         if (!gameState.getEmpireState().canCookUnit(unitType)) return;
 
         Unit unit = UnitFactory.createUnit(unitType);
+        unit.setOwnerID(gameState.resolveActivePlayerId());
 
         if (unitType.getCookCost() != null) {
             unitType.getCookCost().pay(gameState.getEmpireState().getStorage());

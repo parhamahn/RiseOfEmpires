@@ -39,6 +39,7 @@ public class BuildingHandler {
         if (hex.getBuilding() != null) return;
 
         Building building = BuildingFactory.createBuilding(task, hex);
+        building.setOwnerID(gameState.resolveActivePlayerId());
 
         Cost cost = building.getCost();
         if (building instanceof Dock && gameState.getEmpireState().isDockDiscount()) {
