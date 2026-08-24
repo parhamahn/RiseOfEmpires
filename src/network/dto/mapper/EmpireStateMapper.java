@@ -25,8 +25,7 @@ public enum EmpireStateMapper implements DtoMapper<EmpireState, EmpireStateDTO> 
         dto.starving = empireState.isStarving();
         dto.upkeepDisaster = empireState.isUpkeepDisaster();
 
-        Hex townHallHex = empireState.getTownHallHex();
-        if (townHallHex != null) {
+        for (Hex townHallHex : empireState.getTownHallHexes()) {
             dto.townHallHexes.add(new int[]{townHallHex.getC(), townHallHex.getR()});
         }
 

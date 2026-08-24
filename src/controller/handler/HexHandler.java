@@ -96,6 +96,7 @@ public class HexHandler {
                             && gameState.resolveActivePlayerId().equals(clicked.getBuilding().getOwnerID());
                     if (selectionContext.getSelectedHex() == clicked && ownBuilding && clicked.getBuilding().isTownHall()) {
                         gamePanel.setAnyPanelOpen(true);
+                        gamePanel.getTownHallPanel().setSourceHex(clicked);
                         gamePanel.getTownHallPanel().open();
                     } else if (selectionContext.getSelectedHex() == clicked && ownBuilding && clicked.getBuilding() instanceof Bazaar) {
                         gamePanel.setAnyPanelOpen(true);

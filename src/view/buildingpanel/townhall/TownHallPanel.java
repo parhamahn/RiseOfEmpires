@@ -1,5 +1,6 @@
 package view.buildingpanel.townhall;
 
+import model.map.Hex;
 import model.queue.Queue;
 import model.queue.Technology;
 import model.state.GameState;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class TownHallPanel extends BaseModalPanel {
 
+    private Hex sourceHex;
     private UpgradeSection upgradeSection;
     private CookSection cookSection;
     private QueueSection queueSection;
@@ -49,10 +51,13 @@ public class TownHallPanel extends BaseModalPanel {
     public void setOnCancel(java.util.function.Consumer<Queue> onCancel) {queueSection.setOnCancel(onCancel);}
     public List<QueueStat> getQueueStats() {return queueSection.getCurrentStats();}
 
+    public Hex getSourceHex() { return sourceHex; }
+    public void setSourceHex(Hex sourceHex) { this.sourceHex = sourceHex; }
+
     @Override
     public void refresh() {
         upgradeSection.refresh();
-        cookSection.refresh();
+        cookSection.refresh(sourceHex);
         researchSection.refresh();
         setQueue(getGameState().getEmpireState().getQueues());
     }

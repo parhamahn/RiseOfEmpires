@@ -1,6 +1,8 @@
 package model.queue;
 
+import model.MapStructure;
 import model.TownHallLevel;
+import model.map.Hex;
 import model.state.GameState;
 
 import java.io.Serializable;
@@ -25,8 +27,13 @@ private static final long serialVersionUID = 1L;
     public boolean execute(GameState gameState) {
         gameState.getEmpireState().setTownHallLevel(targetLevel);
         gameState.getEmpireState().getStorage().upgradeStorage(targetLevel.getMaxStorage());
-        gameState.getEmpireState().getTownHallHex().getBuilding().setHP(gameState.getEmpireState().getTownHallHex().getBuilding().getHP()+50);
-        gameState.getEmpireState().getTownHallHex().getBuilding().setMaxHP(targetLevel.getMaxHP());
+        for (Hex townHall : gameState.getEmpireState().getTownHallHexes()) {
+            MapStructure building = townHall.getBuilding();
+            if (building != null && building.isTownHall()) {
+                building.setHP(building.getHP() + 50);
+                building.setMaxHP(targetLevel.getMaxHP());
+            }
+        }
         return false;
     }
 

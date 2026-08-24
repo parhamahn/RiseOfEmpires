@@ -7,13 +7,17 @@ import model.state.GameState;
 public class ProcessTechnology {
 
     public static void processDefensivePattern(GameState gameState) {
-        Hex townHallHex = gameState.getEmpireState().getTownHallHex();
-        for (Hex neigh : gameState.getWorldState().getMap().getNeighbourHexes(townHallHex)) {
-            Wall wall = new Wall(townHallHex, neigh, gameState.getWorldState().getMap());
-            townHallHex.getWallsWith().add(wall);
-            neigh.getWallsWith().add(wall);
+        for (Hex townHallHex : gameState.getEmpireState().getTownHallHexes()) {
+            for (Hex neigh : gameState.getWorldState().getMap().getNeighbourHexes(townHallHex)) {
+                if (neigh == null || townHallHex.hasWallTo(neigh)) continue;
+                Wall wall = new Wall(townHallHex, neigh, gameState.getWorldState().getMap());
+                townHallHex.getWallsWith().add(wall);
+                neigh.getWallsWith().add(wall);
+            }
+            if (townHallHex.getBuilding() != null) {
+                townHallHex.getBuilding().setMaxHP(350);
+            }
         }
-        townHallHex.getBuilding().setMaxHP(350);
     }
 
 }

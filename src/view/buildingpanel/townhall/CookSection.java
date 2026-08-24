@@ -1,5 +1,6 @@
 package view.buildingpanel.townhall;
 
+import model.map.Hex;
 import model.state.GameState;
 import model.unit.Unit;
 import view.common.BaseSection;
@@ -48,11 +49,11 @@ public class CookSection extends BaseSection {
         return buttons;
     }
 
-    public void refresh() {
+    public void refresh(Hex sourceTownHall) {
         for (Map.Entry<Unit.UNIT_TYPE, CookStat> entry : cookStats.entrySet()) {
             CookStat stat = entry.getValue();
             Unit.UNIT_TYPE type = entry.getKey();
-            stat.refresh(gameState.getEmpireState().cookBlockReason(type));
+            stat.refresh(gameState.getEmpireState().cookBlockReason(type, sourceTownHall));
         }
         revalidate();
         repaint();

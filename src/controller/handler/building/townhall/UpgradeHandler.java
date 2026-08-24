@@ -25,7 +25,7 @@ public class UpgradeHandler {
         for (Unit.UNIT_TYPE unitType : Unit.UNIT_TYPE.values()) {
             if(unitType == Unit.UNIT_TYPE.BEAR || unitType== Unit.UNIT_TYPE.BARBARIAN || unitType == Unit.UNIT_TYPE.GUARD){continue;}
             gamePanel.getTownHallPanel().getCookButton(unitType).addActionListener(e -> {
-                cookUnitHandler.startCook(gameState, unitType);
+                cookUnitHandler.startCook(gameState, unitType, gamePanel.getTownHallPanel().getSourceHex());
                 gamePanel.getTownHallPanel().refresh();
             });
         }

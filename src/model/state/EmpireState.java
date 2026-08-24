@@ -34,7 +34,7 @@ private static final long serialVersionUID = 1L;
     private boolean isStarving;
     private boolean upkeepDisaster;
     private int maxUnit;
-    private Hex townHallHex;
+    private List<Hex> townHallHexes = new ArrayList<>();
     private List<Queue> queues;
     private List<Technology> researchedTechnologies;
     private TownHallLevel townHallLevel;
@@ -82,7 +82,7 @@ private static final long serialVersionUID = 1L;
                 neigh.setBorderOwner(ownerId);
             }
         }
-        this.townHallHex = thHex;
+        addTownHall(thHex);
         this.buildings.add(townHall);
 
         units = new ArrayList<>();
@@ -94,9 +94,9 @@ private static final long serialVersionUID = 1L;
 
         for (Unit unit : units) {
             unit.setOwnerID(ownerId);
-            unit.setHex(townHallHex);
+            unit.setHex(thHex);
         }
-        townHallHex.getUnits().addAll(units);
+        thHex.getUnits().addAll(units);
 
         happiness = 0;
         happinessBase = 0;
@@ -122,7 +122,7 @@ private static final long serialVersionUID = 1L;
         this.upkeepDisaster = false;
         this.happiness = 0;
         this.happinessBase = 0;
-        this.townHallHex = null;
+        this.townHallHexes.clear();
     }
 
     public void removeBuilding(Building building) {
@@ -134,6 +134,9 @@ private static final long serialVersionUID = 1L;
         }
         building.getHex().setBuilding(null);
         buildings.remove(building);
+        if (building.isTownHall()) {
+            townHallHexes.remove(building.getHex());
+        }
     }
 
     public void removeUnit(Unit unit) {
@@ -174,9 +177,10 @@ private static final long serialVersionUID = 1L;
     }
 
     private boolean hasCombatUnitInTownHall() {
-        if (townHallHex == null) return false;
-        for (Unit unit : townHallHex.getUnits()) {
-            if (unit.isCombatUnit()) return true;
+        for (Hex townHall : townHallHexes) {
+            for (Unit unit : townHall.getUnits()) {
+                if (unit.isCombatUnit()) return true;
+            }
         }
         return false;
     }
@@ -210,7 +214,14 @@ private static final long serialVersionUID = 1L;
     public void setUpkeepDisaster(boolean upkeepDisaster) { this.upkeepDisaster = upkeepDisaster; }
     public TownHallLevel getTownHallLevel() {return townHallLevel;}
     public void setTownHallLevel(TownHallLevel townHallLevel) {this.townHallLevel = townHallLevel;}
-    public Hex getTownHallHex() { return townHallHex; }
+    public Hex getTownHallHex() { return townHallHexes.isEmpty() ? null : townHallHexes.get(0); }
+    public List<Hex> getTownHallHexes() { return townHallHexes; }
+    public void addTownHall(Hex hex) {
+        if (!townHallHexes.contains(hex)) townHallHexes.add(hex);
+    }
+    public boolean isEliminated() {
+        return buildings.stream().noneMatch(Building::isTownHall);
+    }
     public List<Queue> getQueues() { return queues; }
     public List<Technology> getResearchedTechnologies() { return researchedTechnologies; }
     public long getCookQueueCount() {return queues.stream().filter(q -> q.getQueueType() == Queue.QUEUE_TYPE.COOK).count();}
@@ -219,13 +230,17 @@ private static final long serialVersionUID = 1L;
     public int getHappinessBase() {return happinessBase;}
 
     public boolean canCookUnit(Unit.UNIT_TYPE type) {
+        return canCookUnit(type, getTownHallHex());
+    }
+
+    public boolean canCookUnit(Unit.UNIT_TYPE type, Hex sourceTownHall) {
         if (type.isEnemy()) return false;
         if (!queues.isEmpty()) return false;
         if (type.getLevel().ordinal() > townHallLevel.ordinal()) return false;
         if (type.getCookCost() != null && !type.getCookCost().enoughResources(storage)) return false;
         if (type.getAttackPower() > 0) {
             if (getCombatUnitCount() >= townHallLevel.getCombatUnitCap()) return false;
-            if (townHallHex != null && !townHallHex.canAddUnitType(type)) return false;
+            if (sourceTownHall == null || !sourceTownHall.canAddUnitType(type)) return false;
         } else {
             if (getCivilUnitCount() >= maxUnit) return false;
         }
@@ -268,7 +283,11 @@ private static final long serialVersionUID = 1L;
     }
 
     public String cookBlockReason(Unit.UNIT_TYPE type) {
-        if (canCookUnit(type)) return null;
+        return cookBlockReason(type, getTownHallHex());
+    }
+
+    public String cookBlockReason(Unit.UNIT_TYPE type, Hex sourceTownHall) {
+        if (canCookUnit(type, sourceTownHall)) return null;
         if (type.isEnemy()) return "Cannot cook enemy units";
         if (!queues.isEmpty()) return "A queue is already in progress";
         if (type.getLevel().ordinal() > townHallLevel.ordinal())
@@ -277,7 +296,7 @@ private static final long serialVersionUID = 1L;
             return "Not enough " + type.getCookCost().missingResources(storage);
         if (type.getAttackPower() > 0) {
             if (getCombatUnitCount() >= townHallLevel.getCombatUnitCap()) return "Combat unit cap reached";
-            if (townHallHex != null && !townHallHex.canAddUnitType(type)) return "No room in the Town Hall hex";
+            if (sourceTownHall == null || !sourceTownHall.canAddUnitType(type)) return "No room in this Town Hall";
         } else {
             if (getCivilUnitCount() >= maxUnit) return "Civil unit cap reached";
         }
@@ -326,7 +345,7 @@ private static final long serialVersionUID = 1L;
         this.storage = loaded.getStorage();
         this.production = loaded.getProduction();
         this.townHallLevel = loaded.getTownHallLevel();
-        this.townHallHex = loaded.getTownHallHex();
+        this.townHallHexes = new ArrayList<>(loaded.getTownHallHexes());
         this.maxUnit = loaded.getMaxUnit();
         this.upkeepDisaster = loaded.isUpkeepDisaster();
         this.happiness = loaded.getHappiness();
