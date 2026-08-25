@@ -27,7 +27,7 @@ public class DisasterHandler {
 
     public void handle() {
         List<NaturalDisaster.DisasterType> disasters = NaturalDisaster.getRandomDisasters(gameState.getRng());
-        if(gameState.getEmpireState().getSeason()!= Season.SeasonType.FALL && disasters.contains(NaturalDisaster.DisasterType.FLOOD)){
+        if(gameState.getWorldState().getSeason()!= Season.SeasonType.FALL && disasters.contains(NaturalDisaster.DisasterType.FLOOD)){
             disasters.remove(NaturalDisaster.DisasterType.FLOOD);
         }
         for (NaturalDisaster.DisasterType disaster : disasters) {
@@ -85,7 +85,6 @@ public class DisasterHandler {
                     if (bearAttack.getCenter() == null) {continue;}
                     boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(Hex::isDiscovered);
                     if (anyDiscovered) {
-                        gamePanel.getMapPanel().startShake();
                         WarningDialogs.bearAttack();
                     }
                     bearAttack.effect(gameState);

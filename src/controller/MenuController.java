@@ -54,7 +54,7 @@ public class MenuController {
         CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, "game");
         SoundEffects.getInstance().playStartGameSoundEffect();
-        SoundEffects.getInstance().seasonSoundEffect(null, gameState.getEmpireState().getSeason());
+        SoundEffects.getInstance().seasonSoundEffect(null, gameState.getWorldState().getSeason());
     }
 
     public void multiplayerAction(){

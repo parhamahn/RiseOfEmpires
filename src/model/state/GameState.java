@@ -54,6 +54,7 @@ private static final long serialVersionUID = 2L;
         Hex center = map.getHex(map.getCols() / 2, map.getRows() / 2);
         for (java.util.Map.Entry<UUID, EmpireState> entry : empireStates.entrySet()) {
             entry.getValue().init(map, center, entry.getKey());
+            entry.getValue().getProduction().setSeason(worldState.getSeason());
         }
         Generator.generate(this);
     }

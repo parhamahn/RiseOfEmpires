@@ -40,7 +40,6 @@ private static final long serialVersionUID = 1L;
     private TownHallLevel townHallLevel;
     private int happiness;
     private int happinessBase;
-    private Season.SeasonType season;
     private List<Tribe> allies;
     private int warHappinessEffect;
     private List<Mission> missions = new ArrayList<>();
@@ -56,19 +55,10 @@ private static final long serialVersionUID = 1L;
         this.queues = new ArrayList<>();
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
-        this.season = Season.SeasonType.SPRING;
         this.allies = new  ArrayList<>();
         this.warHappinessEffect = 0;
         this.happiness = 0;
         this.happinessBase = 0;
-    }
-
-    public Season.SeasonType getSeason() {
-        return season;
-    }
-
-    public void setSeason(Season.SeasonType season) {
-        this.season = season;
     }
 
     public void init(Map map, Hex spawnHex, java.util.UUID ownerId) {
@@ -112,7 +102,6 @@ private static final long serialVersionUID = 1L;
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.units = new ArrayList<>();
-        this.season = Season.SeasonType.SPRING;
         this.allies = new ArrayList<>();
         this.warHappinessEffect = 0;
         this.missions = new ArrayList<>();
@@ -355,7 +344,6 @@ private static final long serialVersionUID = 1L;
         this.isStarving = loaded.isStarving();
         this.queues = loaded.getQueues();
         this.researchedTechnologies = loaded.getResearchedTechnologies();
-        this.season = loaded.getSeason();
         this.allies = loaded.getAllies();
         this.warHappinessEffect = loaded.getWarHappinessEffect();
         this.missions = loaded.getMissions();

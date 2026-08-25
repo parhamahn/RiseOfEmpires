@@ -47,7 +47,7 @@ public class UnitHandler {
         if(clicked.getTerrainType()== Hex.TerrainType.SEA && !gameState.getEmpireState().getResearchedTechnologies().contains(Technology.SAILING)){return;}
 
         if (gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex()).contains(clicked)) {
-            int APNeeded = unit.getHex().getMoveAPCostTo(clicked, gameState.getEmpireState().getSeason());
+            int APNeeded = unit.getHex().getMoveAPCostTo(clicked, gameState.getWorldState().getSeason());
 
             if (unit.getActionPoints() >= APNeeded) {
                 if (unit.getHex().getBuilding() instanceof ProducingBuilding producing) {

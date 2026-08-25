@@ -34,7 +34,7 @@ public abstract class WeatherEffectLayer implements MapLayer {
     protected abstract void drawParticle(Graphics2D g2, Particle p);
 
     public boolean isActive(GameState gameState) {
-        return gameState.getEmpireState().getSeason() == getActiveSeason();
+        return gameState.getWorldState().getSeason() == getActiveSeason();
     }
 
     private void initParticles(int width, int height) {

@@ -16,9 +16,8 @@ public class EmpireStateDTO {
     public List<String> researchedTechnologies = new ArrayList<>();
     public String townHallLevel;
     public int happiness;
-    public String season;
-    public List<String> allyTribeIds = new ArrayList<>();
     public boolean dockDiscount;
+    public List<String> allyTribeIds = new ArrayList<>();
 
     public EmpireStateDTO() {}
 }

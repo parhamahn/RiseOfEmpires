@@ -18,6 +18,7 @@ import model.mission.Mission;
 import model.mission.MissionStatus;
 import model.queue.Queue;
 import model.queue.Technology;
+import model.state.EmpireState;
 import model.state.GameState;
 import model.unit.Unit;
 import model.unit.combat.Swordsman;
@@ -31,6 +32,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class TurnHandler {
     private static final double UPKEEP_DAMAGE_CHANCE = 0.3;
@@ -49,17 +51,23 @@ public class TurnHandler {
     }
 
     public void endTurnAction() {
-        if (hasUnspentActionPoints()) {
+        EmpireState actor = gameState.getEmpireState();
+        if (hasUnspentActionPoints(actor)) {
             int x = WarningDialogs.unitsWithActionPoints();
             if (x == JOptionPane.NO_OPTION) {
                 return;
             }
         }
 
-        gameState.getEmpireState().applyTurnEndHappiness();
+        actor.applyTurnEndHappiness();
 
-        endTurn();
-        processQueues();
+        endTurnFor(actor);
+        if (gameState.isLastInRound()) {
+            worldTick();
+        }
+        processQueues(actor);
+
+        gameState.nextPlayerTurn();
 
         enemyAttackHandler.handle(() -> {
             gamePanel.getTownHallPanel().refresh();
@@ -68,10 +76,10 @@ public class TurnHandler {
             gamePanel.getTaskListPanel().clear();
             gamePanel.getMapPanel().markStaticDirty();
             gamePanel.repaint();
-            if (gameState.getEmpireState().isUpkeepDisaster()) {
+            if (actor.isUpkeepDisaster()) {
                 WarningDialogs.upkeepDisaster();
             }
-            if (gameState.getEmpireState().isStarving()) {
+            if (actor.isStarving()) {
                 WarningDialogs.starvationDisaster();
             }
 
@@ -84,8 +92,8 @@ public class TurnHandler {
 
     }
 
-    private boolean hasUnspentActionPoints() {
-        for (Unit unit : gameState.getEmpireState().getUnits()) {
+    private boolean hasUnspentActionPoints(EmpireState empire) {
+        for (Unit unit : empire.getUnits()) {
             if (unit.getActionPoints() != 0) {
                 return true;
             }
@@ -93,21 +101,21 @@ public class TurnHandler {
         return false;
     }
 
-    private void processQueues() {
+    private void processQueues(EmpireState empire) {
         List<Queue> toRemove = new ArrayList<>();
         int currentTurn = gameState.getWorldState().getTurnNumber();
         boolean mapNeedsRefresh = false;
 
-        for (Queue queue : gameState.getEmpireState().getQueues()) {
+        for (Queue queue : empire.getQueues()) {
             if (queue.isComplete(currentTurn)) {
                 if (queue.execute(gameState)) {
                     mapNeedsRefresh = true;
                 }
                 toRemove.add(queue);
-                gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
+                empire.recalculateProduction(gameState.getWorldState().getMap());
             }
         }
-        gameState.getEmpireState().getQueues().removeAll(toRemove);
+        empire.getQueues().removeAll(toRemove);
 
         if (mapNeedsRefresh) {
             gamePanel.getMapPanel().markStaticDirty();
@@ -115,66 +123,70 @@ public class TurnHandler {
         }
     }
 
-    private void endTurn() {
-        disasterHandler.handle();
-        resetProductionForNewTurn();
-        resetUnitsForNewTurn();
-        applyStoredProduction();
-        processStarvation();
-        boolean anyDamagesToBuilding = processUpkeep();
-        processTribes();
-        spawnWarriorAllyHelper();
-        resetTradingBuildings();
-        advanceWorld();
-        gameState.getEmpireState().setUpkeepDisaster(anyDamagesToBuilding);
-        gameState.getEmpireState().updateTownCapacity();
+    private void endTurnFor(EmpireState empire) {
+        resetProductionForNewTurn(empire);
+        resetUnitsForNewTurn(empire);
+        applyStoredProduction(empire);
+        processStarvation(empire);
+        boolean anyDamagesToBuilding = processUpkeep(empire);
+        resetBazaars(empire);
+        empire.setUpkeepDisaster(anyDamagesToBuilding);
+        empire.updateTownCapacity();
     }
 
-    private void resetProductionForNewTurn() {
-        for (Building building : gameState.getEmpireState().getBuildings()) {
+    private void worldTick() {
+        disasterHandler.handle();
+        processTribes();
+        spawnWarriorAllyHelpers();
+        resetTradingCenters();
+        advanceWorld();
+    }
+
+    private void resetProductionForNewTurn(EmpireState empire) {
+        for (Building building : empire.getBuildings()) {
             building.setProducingStopped(false);
         }
-        gameState.getEmpireState().recalculateProduction(gameState.getWorldState().getMap());
+        empire.recalculateProduction(gameState.getWorldState().getMap());
     }
 
-    private void resetUnitsForNewTurn() {
-        for (Unit unit : gameState.getEmpireState().getUnits()) {
+    private void resetUnitsForNewTurn(EmpireState empire) {
+        for (Unit unit : empire.getUnits()) {
             unit.resetActionPointsForNewTurn();
-            if (gameState.getEmpireState().getHappiness() <= -5) {
+            if (empire.getHappiness() <= -5) {
                 unit.setActionPoints(unit.getActionPoints() - 1);
             }
         }
     }
 
-    private void applyStoredProduction() {
-        gameState.getEmpireState().getStorage().applyProduction(gameState.getEmpireState().getProduction());
+    private void applyStoredProduction(EmpireState empire) {
+        empire.getStorage().applyProduction(empire.getProduction());
     }
 
-    private void processStarvation() {
-        if (gameState.getEmpireState().getStorage().getFoodQuantity() == 0 && gameState.getEmpireState().getProduction().getFoodProduction() < 0) {
-            for (Unit unit : gameState.getEmpireState().getUnits()) {
+    private void processStarvation(EmpireState empire) {
+        if (empire.getStorage().getFoodQuantity() == 0 && empire.getProduction().getFoodProduction() < 0) {
+            for (Unit unit : empire.getUnits()) {
                 unit.setActionPoints(Math.max(0, unit.getActionPoints() * 2 / 3));
             }
-            for (Queue queue : gameState.getEmpireState().getQueues()) {
+            for (Queue queue : empire.getQueues()) {
                 queue.addDelay(1);
             }
-            gameState.getEmpireState().setStarving(true);
+            empire.setStarving(true);
         } else {
-            gameState.getEmpireState().setStarving(false);
+            empire.setStarving(false);
         }
     }
 
-    private boolean processUpkeep() {
+    private boolean processUpkeep(EmpireState empire) {
         boolean anyDamagesToBuilding = false;
-        for (Building building : gameState.getEmpireState().getBuildings()) {
-            if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(gameState.getEmpireState().getStorage())) {
+        for (Building building : empire.getBuildings()) {
+            if (building.getUpkeep() != null && !building.getUpkeep().enoughResources(empire.getStorage())) {
                 Random random = gameState.getRng();
                 boolean damageBuilding = random.nextDouble() <= UPKEEP_DAMAGE_CHANCE;
                 if (damageBuilding) {
                     anyDamagesToBuilding = true;
                     building.setNoUpkeepTurns(building.getNoUpkeepTurns() + 1);
                     if (building.getNoUpkeepTurns() == MAX_UPKEEP_TURNS) {
-                        gameState.getEmpireState().removeBuilding(building);
+                        empire.removeBuilding(building);
                     }
                 }
             }
@@ -244,23 +256,30 @@ public class TurnHandler {
         }
     }
 
-    private void spawnWarriorAllyHelper() {
-        boolean warriorAlly = gameState.getEmpireState().getAllies().stream().anyMatch(WarriorTribe.class::isInstance);
-        if (warriorAlly && gameState.getWorldState().getTurnNumber() % 3 == 0) {
-            Hex townHallHex = gameState.getEmpireState().getTownHallHex();
+    private void spawnWarriorAllyHelpers() {
+        if (gameState.getWorldState().getTurnNumber() % 3 != 0) return;
+        for (java.util.Map.Entry<UUID, EmpireState> entry : gameState.getEmpireStates().entrySet()) {
+            EmpireState empire = entry.getValue();
+            boolean warriorAlly = empire.getAllies().stream().anyMatch(WarriorTribe.class::isInstance);
+            if (!warriorAlly) continue;
+            Hex townHallHex = empire.getTownHallHex();
+            if (townHallHex == null) continue;
             Swordsman helper = new Swordsman();
-            helper.setOwnerID(gameState.resolveActivePlayerId());
+            helper.setOwnerID(entry.getKey());
             helper.setHex(townHallHex);
             townHallHex.getUnits().add(helper);
-            gameState.getEmpireState().getUnits().add(helper);
+            empire.getUnits().add(helper);
         }
     }
 
-    private void resetTradingBuildings() {
+    private void resetTradingCenters() {
         for (TradingCenter tradingCenter : gameState.getWorldState().getTradingCenters()) {
             tradingCenter.setUsedThisTurn(false);
         }
-        for (Building building : gameState.getEmpireState().getBuildings()) {
+    }
+
+    private void resetBazaars(EmpireState empire) {
+        for (Building building : empire.getBuildings()) {
             if (building instanceof Bazaar) {
                 Bazaar bazaar = (Bazaar) building;
                 bazaar.setUsedThisTurn(false);
@@ -270,9 +289,12 @@ public class TurnHandler {
 
     private void advanceWorld() {
         gameState.getWorldState().nextTurn();
-        Season.SeasonType old = gameState.getEmpireState().getSeason();
+        Season.SeasonType old = gameState.getWorldState().getSeason();
         Season.processSeason(gameState);
-        Season.SeasonType newSeason = gameState.getEmpireState().getSeason();
+        Season.SeasonType newSeason = gameState.getWorldState().getSeason();
+        for (EmpireState empire : gameState.getEmpireStates().values()) {
+            empire.getProduction().setSeason(newSeason);
+        }
         SoundEffects.getInstance().seasonSoundEffect(old, newSeason);
     }
 

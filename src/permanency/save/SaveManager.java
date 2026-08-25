@@ -55,10 +55,10 @@ public class SaveManager {
         String savedAt = Instant.now().toString();
         String summary = saveName
                 + " | Turn " + gameState.getWorldState().getTurnNumber()
-                + " | " + gameState.getEmpireState().getSeason().toString()
+                + " | " + gameState.getWorldState().getSeason().toString()
                 + " | " + gameState.getEmpireState().getTownHallLevel().toString()
                 + " | Saved: " + FormatUtils.formatSavedAt(savedAt);
-        MetaDataSave metaDataSave = new MetaDataSave(slotID, VERSION, saveName, gameState.getWorldState().getTurnNumber(), gameState.getEmpireState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), summary, slotID.toString()+".roe", savedAt);
+        MetaDataSave metaDataSave = new MetaDataSave(slotID, VERSION, saveName, gameState.getWorldState().getTurnNumber(), gameState.getWorldState().getSeason().toString(), gameState.getEmpireState().getTownHallLevel().toString(), summary, slotID.toString()+".roe", savedAt);
         writeData(gameState, metaDataSave);
         writeMetadata(metaDataSave);
     }

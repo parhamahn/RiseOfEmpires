@@ -12,13 +12,13 @@ public class Season {
         int x = gameState.getWorldState().getTurnNumber() % 40;
 
         if(x>=1 && x<=10){
-            gameState.getEmpireState().setSeason(SeasonType.SPRING);
+            gameState.getWorldState().setSeason(SeasonType.SPRING);
         }else if(x>=11 && x<=20){
-            gameState.getEmpireState().setSeason(SeasonType.SUMMER);
+            gameState.getWorldState().setSeason(SeasonType.SUMMER);
         }else if(x>=21 && x<=30){
-            gameState.getEmpireState().setSeason(SeasonType.FALL);
+            gameState.getWorldState().setSeason(SeasonType.FALL);
         }else if((x>=31 && x<=40) || x==0){
-            gameState.getEmpireState().setSeason(SeasonType.WINTER);
+            gameState.getWorldState().setSeason(SeasonType.WINTER);
         }
 
     }

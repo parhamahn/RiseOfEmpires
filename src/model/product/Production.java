@@ -28,6 +28,7 @@ private static final long serialVersionUID = 1L;
     private int woodProduction;
     private int stoneProduction;
     private int ironProduction;
+    private Season.SeasonType season = Season.SeasonType.SPRING;
     private Random rng = new Random();
 
     public Production(){
@@ -36,6 +37,14 @@ private static final long serialVersionUID = 1L;
 
     public void setRng(Random rng) {
         this.rng = rng;
+    }
+
+    public Season.SeasonType getSeason() {
+        return season;
+    }
+
+    public void setSeason(Season.SeasonType season) {
+        this.season = season;
     }
 
 
@@ -69,8 +78,8 @@ private static final long serialVersionUID = 1L;
         if(empire.getHappiness()<=-3){protestPenalty = 1;}
 
         int seasonEffect = 0;
-        if(empire.getSeason()== Season.SeasonType.SPRING){seasonEffect = 1;}
-        if(empire.getSeason()== Season.SeasonType.WINTER){seasonEffect = -1;}
+        if(season == Season.SeasonType.SPRING){seasonEffect = 1;}
+        if(season == Season.SeasonType.WINTER){seasonEffect = -1;}
 
         for (Building building : empire.getBuildings()) {
             double steelToolsMultiplier = 1;

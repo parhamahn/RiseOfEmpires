@@ -82,7 +82,7 @@ public class HUDPanel extends JPanel {
 
         add(Box.createHorizontalStrut(20));
 
-        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getEmpireState().getSeason()));
+        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getWorldState().getSeason()));
 
         add(this.seasonLabel);
 
@@ -117,7 +117,7 @@ public class HUDPanel extends JPanel {
 
         UITheme.formatChangeLabel(happinessLabel, gameState.getEmpireState().getHappiness(), "Happiness : ");
 
-        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getEmpireState().getSeason()));
+        seasonLabel.setIcon(UITheme.getSeasonIcon(gameState.getWorldState().getSeason()));
 
         repaint();
     }

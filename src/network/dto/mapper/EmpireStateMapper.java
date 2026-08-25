@@ -38,7 +38,6 @@ public enum EmpireStateMapper implements DtoMapper<EmpireState, EmpireStateDTO> 
 
         dto.townHallLevel = empireState.getTownHallLevel().name();
         dto.happiness = empireState.getHappiness();
-        dto.season = empireState.getSeason().name();
         dto.dockDiscount = empireState.isDockDiscount();
 
         for (Tribe ally : empireState.getAllies()) {
