@@ -277,9 +277,11 @@ public class TurnHandler {
     }
 
     private boolean isEmpireBuildingNear(Hex tribeHex) {
-        for (Building building : gameState.getEmpireState().getBuildings()) {
-            if (gameState.getWorldState().getMap().getDistance(building.getHex(), tribeHex) <= 2) {
-                return true;
+        for (model.state.EmpireState empireState : gameState.getEmpireStates().values()) {
+            for (Building building : empireState.getBuildings()) {
+                if (gameState.getWorldState().getMap().getDistance(building.getHex(), tribeHex) <= 2) {
+                    return true;
+                }
             }
         }
         return false;

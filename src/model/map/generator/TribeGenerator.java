@@ -55,7 +55,11 @@ public class TribeGenerator {
         int placed = 0;
         int maxAttempts = count * 100;
         int attempts = 0;
-        candidates = candidates.stream().filter(hex -> gameState.getWorldState().getMap().getDistance(gameState.getEmpireState().getTownHallHex(), hex)>DISTANCE_TO_TOWNHALL).toList();
+        candidates = candidates.stream()
+                .filter(hex -> gameState.getEmpireStates().values().stream()
+                        .flatMap(empire -> empire.getTownHallHexes().stream())
+                        .allMatch(th -> gameState.getWorldState().getMap().getDistance(th, hex) > DISTANCE_TO_TOWNHALL))
+                .toList();
         if (candidates.isEmpty()) {return;}
         while (placed < count && attempts < maxAttempts) {
             Hex hex = candidates.get(rand.nextInt(candidates.size()));

@@ -86,15 +86,11 @@ public class Flood {
 
 
         for(Unit unit : dead){
-            gameState.getEmpireState().removeUnit(unit);
+            gameState.removeDeadUnit(unit);
         }
 
         for(MapStructure structure : destroyed){
-            if (structure instanceof Building building) {
-                gameState.getEmpireState().removeBuilding(building);
-            } else if (structure instanceof Tribe tribe) {
-                tribe.destroyCamp(gameState);
-            }
+            gameState.removeDestroyedStructure(structure);
         }
     }
 

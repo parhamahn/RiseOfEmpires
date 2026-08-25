@@ -1,9 +1,12 @@
 package model.state;
 
+import model.MapStructure;
+import model.building.Building;
 import model.map.Hex;
 import model.map.Map;
 import model.map.generator.*;
 import model.building.tribes.Tribe;
+import model.unit.Unit;
 import model.unit.enemy.Guard;
 import model.product.Production;
 import model.storage.Storage;
@@ -89,6 +92,32 @@ private static final long serialVersionUID = 2L;
     }
 
     public Random getRng() { return rng; }
+
+    public void removeDeadUnit(Unit unit) {
+        if (unit == null || unit.getHex() == null) return;
+        EmpireState owner = unit.getOwnerID() != null ? empireStates.get(unit.getOwnerID()) : null;
+        if (owner != null && owner.getUnits().contains(unit)) {
+            owner.removeUnit(unit);
+            return;
+        }
+        unit.getHex().getUnits().remove(unit);
+        worldState.getEnemies().remove(unit);
+    }
+
+    public void removeDestroyedStructure(MapStructure structure) {
+        if (structure instanceof Building building) {
+            if (building.getHex() == null) return;
+            EmpireState owner = building.getOwnerID() != null ? empireStates.get(building.getOwnerID()) : null;
+            if (owner != null) {
+                owner.removeBuilding(building);
+                return;
+            }
+            building.getHex().setBuilding(null);
+            worldState.getTradingCenters().remove(building);
+        } else if (structure instanceof Tribe tribe) {
+            tribe.destroyCamp(this);
+        }
+    }
 
     public void reset(){
         Map map = new Map(32, 50, rng);

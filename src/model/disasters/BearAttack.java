@@ -25,15 +25,19 @@ public class BearAttack {
 
     public BearAttack(Map map, GameState gameState, Random rand) {
         List<Hex> playerHexes = new ArrayList<>();
-        for (Unit unit : gameState.getEmpireState().getUnits()) {
-            if (unit.getHex() != null && !playerHexes.contains(unit.getHex())) {
-                playerHexes.add(unit.getHex());
+        for (model.state.EmpireState empireState : gameState.getEmpireStates().values()) {
+            for (Unit unit : empireState.getUnits()) {
+                if (unit.getHex() != null && !playerHexes.contains(unit.getHex())) {
+                    playerHexes.add(unit.getHex());
+                }
             }
         }
         if (playerHexes.isEmpty()) {
-            for (Building building : gameState.getEmpireState().getBuildings()) {
-                if (building.getHex() != null && !playerHexes.contains(building.getHex())) {
-                    playerHexes.add(building.getHex());
+            for (model.state.EmpireState empireState : gameState.getEmpireStates().values()) {
+                for (Building building : empireState.getBuildings()) {
+                    if (building.getHex() != null && !playerHexes.contains(building.getHex())) {
+                        playerHexes.add(building.getHex());
+                    }
                 }
             }
         }
@@ -163,10 +167,10 @@ public class BearAttack {
         }
 
         for (Unit unit : dead) {
-            gameState.getEmpireState().removeUnit(unit);
+            gameState.removeDeadUnit(unit);
         }
         for (Building building : destroyed) {
-            gameState.getEmpireState().removeBuilding(building);
+            gameState.removeDestroyedStructure(building);
         }
     }
 
