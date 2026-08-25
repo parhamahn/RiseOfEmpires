@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Tsunami {
+public class Tsunami implements Disaster {
     public static int UNIT_DAMAGE = 30;
 
     private Hex center;

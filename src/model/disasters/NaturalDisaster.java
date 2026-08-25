@@ -20,4 +20,5 @@ public class NaturalDisaster {
         return  disasters;
     }
 
+
 }

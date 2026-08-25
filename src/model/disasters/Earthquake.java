@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Earthquake {
+public class Earthquake implements Disaster {
     public static int UNIT_DAMAGE = 10;
     public static int BUILDING_DAMAGE = 50;
 

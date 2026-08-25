@@ -18,7 +18,7 @@ public class CavalryDamageHandler extends DamageHandler {
                 remaining = damageUnit(u, remaining);
                 if (isDead(u)) {
                     it.remove();
-                    gameState.getEmpireState().removeUnit(u);
+                    gameState.removeDeadUnit(u);
                 }
             }
         }

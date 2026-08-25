@@ -1,11 +1,10 @@
 package controller.handler;
 
 import helpers.sound.SoundEffects;
-import model.Season;
 import model.disasters.BearAttack;
 import model.disasters.Earthquake;
 import model.disasters.Flood;
-import model.disasters.NaturalDisaster;
+import model.disasters.Disaster;
 import model.disasters.Tsunami;
 import model.map.Hex;
 import model.state.GameState;
@@ -25,72 +24,70 @@ public class DisasterHandler {
         this.gamePanel = gamePanel;
     }
 
-    public void handle() {
-        List<NaturalDisaster.DisasterType> disasters = NaturalDisaster.getRandomDisasters(gameState.getRng());
-        if(gameState.getWorldState().getSeason()!= Season.SeasonType.FALL && disasters.contains(NaturalDisaster.DisasterType.FLOOD)){
-            disasters.remove(NaturalDisaster.DisasterType.FLOOD);
-        }
-        for (NaturalDisaster.DisasterType disaster : disasters) {
-            switch (disaster) {
-                case EARTHQUAKE -> {
-                    Earthquake eq = new Earthquake(gameState.getWorldState().getMap(), gameState.getRng());
-                    if(eq.getCenter()==null){continue;}
-                    List<Hex> cracks = new ArrayList<>();
-                    boolean anyDiscovered = false;
-                    for (Hex involved : eq.getInvolvedHexes()) {
-                        if (involved.isDiscovered()) {
-                            cracks.add(involved);
-                            anyDiscovered = true;
-                        }
-                    }
-                    if (anyDiscovered) {
-                        gamePanel.getMapPanel().startShake();
-                        SoundEffects.getInstance().playEarthquakeSoundEffect();
-                    }
-                    gamePanel.getMapPanel().showCracks(cracks);
-                    eq.effect(gameState);
-                }
-                case FLOOD -> {
-                    Flood flood = new Flood(gameState.getWorldState().getMap(), gameState.getRng());
-                    if(flood.getCenter()==null){continue;}
-                    List<Hex> visibleHexes = new ArrayList<>();
-                    for (Hex involved : flood.getInvolvedHexes()) {
-                        if (involved.isDiscovered()) {
-                            visibleHexes.add(involved);
-                        }
-                    }
-                    if (!visibleHexes.isEmpty()) {
-                        gamePanel.getMapPanel().showFlood(flood.getCenter(), visibleHexes);
-                        SoundEffects.getInstance().playFloodSoundEffect();
-                    }
-                    flood.effect(gameState);
-                }
-                case TSUNAMI -> {
-                    Tsunami ts = new Tsunami(gameState.getWorldState().getMap(), gameState.getRng());
-                    if(ts.getCenter()==null){continue;}
-                    List<Hex> visibleHexes = new ArrayList<>();
-                    for (Hex involved : ts.getInvolvedHexes()) {
-                        if (involved.isDiscovered()) {
-                            visibleHexes.add(involved);
-                        }
-                    }
-                    if (!visibleHexes.isEmpty()) {
-                        gamePanel.getMapPanel().showTsunami(ts.getCenter(), visibleHexes);
-                        SoundEffects.getInstance().playFloodSoundEffect();
-                    }
-                    ts.effect(gameState);
-                }
-                case BEAR_ATTACK -> {
-                    BearAttack bearAttack = new BearAttack(gameState.getWorldState().getMap(), gameState, gameState.getRng());
-                    if (bearAttack.getCenter() == null) {continue;}
-                    boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(Hex::isDiscovered);
-                    if (anyDiscovered) {
-                        WarningDialogs.bearAttack();
-                    }
-                    bearAttack.effect(gameState);
-                }
+    public void animate(List<Disaster> disasters) {
+        for (Disaster disaster : disasters) {
+            if (disaster instanceof Earthquake earthquake) {
+                animateEarthquake(earthquake);
+            } else if (disaster instanceof Flood flood) {
+                animateFlood(flood);
+            } else if (disaster instanceof Tsunami tsunami) {
+                animateTsunami(tsunami);
+            } else if (disaster instanceof BearAttack bearAttack) {
+                animateBearAttack(bearAttack);
             }
         }
     }
 
+    private void animateEarthquake(Earthquake eq) {
+        if (eq.getCenter() == null) return;
+        List<Hex> cracks = new ArrayList<>();
+        boolean anyDiscovered = false;
+        for (Hex involved : eq.getInvolvedHexes()) {
+            if (involved.isDiscovered()) {
+                cracks.add(involved);
+                anyDiscovered = true;
+            }
+        }
+        if (anyDiscovered) {
+            gamePanel.getMapPanel().startShake();
+            SoundEffects.getInstance().playEarthquakeSoundEffect();
+        }
+        gamePanel.getMapPanel().showCracks(cracks);
+    }
+
+    private void animateFlood(Flood flood) {
+        if (flood.getCenter() == null) return;
+        List<Hex> visibleHexes = new ArrayList<>();
+        for (Hex involved : flood.getInvolvedHexes()) {
+            if (involved.isDiscovered()) {
+                visibleHexes.add(involved);
+            }
+        }
+        if (!visibleHexes.isEmpty()) {
+            gamePanel.getMapPanel().showFlood(flood.getCenter(), visibleHexes);
+            SoundEffects.getInstance().playFloodSoundEffect();
+        }
+    }
+
+    private void animateTsunami(Tsunami tsunami) {
+        if (tsunami.getCenter() == null) return;
+        List<Hex> visibleHexes = new ArrayList<>();
+        for (Hex involved : tsunami.getInvolvedHexes()) {
+            if (involved.isDiscovered()) {
+                visibleHexes.add(involved);
+            }
+        }
+        if (!visibleHexes.isEmpty()) {
+            gamePanel.getMapPanel().showTsunami(tsunami.getCenter(), visibleHexes);
+            SoundEffects.getInstance().playFloodSoundEffect();
+        }
+    }
+
+    private void animateBearAttack(BearAttack bearAttack) {
+        if (bearAttack.getCenter() == null) return;
+        boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(Hex::isDiscovered);
+        if (anyDiscovered) {
+            WarningDialogs.bearAttack();
+        }
+    }
 }

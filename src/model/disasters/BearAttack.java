@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BearAttack {
+public class BearAttack implements Disaster {
     public static int UNIT_DAMAGE = 35;
     public static int BUILDING_DAMAGE = 20;
     public static int MAX_SPAWN_DISTANCE = 7;
@@ -88,10 +88,12 @@ public class BearAttack {
 
         this.forestHex = chosenForest;
         this.bear = new Bear();
-        bear.setHex(chosenForest);
 
         Hex reached = moveToward(map, chosenForest, nearestPlayerHex);
         this.center = reached;
+
+        bear.setHex(reached);
+        gameState.getWorldState().getEnemies().add(bear);
 
         List<Hex> area = new ArrayList<>();
         area.add(reached);
@@ -137,7 +139,7 @@ public class BearAttack {
             }
             if (next == null) break;
             current = next;
-            if (map.getDistance(current, target) <= 1) break;
+            if (map.getDistance(current, target) <= 2) break;
         }
         return current;
     }

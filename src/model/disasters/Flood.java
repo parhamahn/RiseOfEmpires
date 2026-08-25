@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Flood {
+public class Flood implements Disaster {
     public static int UNIT_DAMAGE = 20;
     public static int BUILDING_DAMAGE = 30;
 

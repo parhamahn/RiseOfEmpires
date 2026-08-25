@@ -21,7 +21,7 @@ public class CivilianDamageHandler extends DamageHandler {
                     if (u.isWorker() && u.getHex().getBuilding() instanceof ProducingBuilding producing) {
                         producing.getAssignedWorkers().remove(u);
                     }
-                    gameState.getEmpireState().removeUnit(u);
+                    gameState.removeDeadUnit(u);
                 }
             }
         }
