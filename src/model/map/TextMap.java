@@ -39,6 +39,7 @@ public class TextMap {
                     map.setHex(r, c, hex);
                 }
             }
+            map.setSpawnPoints(spawns);
             return map;
 
         } catch (Exception e) {

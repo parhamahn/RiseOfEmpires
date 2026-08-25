@@ -1,6 +1,7 @@
 package model.state;
 
 import model.MapStructure;
+import model.Season;
 import model.building.Building;
 import model.map.Hex;
 import model.map.Map;
@@ -51,11 +52,38 @@ private static final long serialVersionUID = 2L;
 
     public void restartGame() {
         Map map = worldState.getMap();
-        Hex center = map.getHex(map.getCols() / 2, map.getRows() / 2);
-        for (java.util.Map.Entry<UUID, EmpireState> entry : empireStates.entrySet()) {
-            entry.getValue().init(map, center, entry.getKey());
-            entry.getValue().getProduction().setSeason(worldState.getSeason());
+        List<Hex> spawns = map.getSpawnPoints();
+        if (spawns == null || spawns.isEmpty()) {
+            Hex center = map.getHex(map.getCols() / 2, map.getRows() / 2);
+            spawns = new ArrayList<>();
+            for (int i = 0; i < turnOrder.size(); i++) {
+                spawns.add(center);
+            }
+            map.setSpawnPoints(spawns);
         }
+        startMatch(map, new ArrayList<>(turnOrder));
+    }
+
+    public void startMatch(Map map, List<UUID> playerOrder) {
+        List<Hex> spawns = map.getSpawnPoints();
+        int spawnCount = spawns == null ? 0 : spawns.size();
+        if (playerOrder.size() > spawnCount) {
+            throw new IllegalStateException("Selected map provides " + spawnCount
+                    + " spawn points for " + playerOrder.size() + " players");
+        }
+        worldState.reset(map);
+        worldState.setSeason(Season.SeasonType.SPRING);
+        int index = 0;
+        for (UUID playerId : playerOrder) {
+            EmpireState empire = empireStates.get(playerId);
+            if (empire == null) {
+                throw new IllegalStateException("No empire registered for player " + playerId);
+            }
+            empire.init(map, spawns.get(index), playerId);
+            empire.getProduction().setSeason(worldState.getSeason());
+            index++;
+        }
+        turnIndex = 0;
         Generator.generate(this);
     }
 

@@ -106,6 +106,7 @@ public class LoadController {
                 JOptionPane.showMessageDialog(loadPanel,
                         "Could not migrate this old save: " + ex.getMessage(),
                         "Migration Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         }
 

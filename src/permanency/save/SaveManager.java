@@ -15,7 +15,7 @@ import java.time.Instant;
 
 public class SaveManager {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final Path SAVE_DIR = Paths.get(System.getProperty("user.dir"), "saves");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
