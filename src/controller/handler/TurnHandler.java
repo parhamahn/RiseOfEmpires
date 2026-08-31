@@ -9,6 +9,7 @@ import model.engine.GameEvent;
 import model.engine.TurnEngine;
 import model.state.EmpireState;
 import model.state.GameState;
+import model.unit.Unit;
 import permanency.SlotID;
 import permanency.save.SaveManager;
 import view.common.WarningDialogs;
@@ -42,6 +43,8 @@ public class TurnHandler {
         }
 
         actor.applyTurnEndHappiness();
+
+        for(Unit unit:actor.getUnits())unit.setUsedItem(false);
 
         List<GameEvent> events = new ArrayList<>(TurnEngine.endTurnFor(gameState, actor));
         List<Disaster> disasters = List.of();

@@ -1,5 +1,6 @@
 package model.item;
 
+import model.storage.Storage;
 import model.unit.Unit;
 
 public abstract class Item {
@@ -10,8 +11,8 @@ public abstract class Item {
         this.unit = unit;
     }
 
-    public abstract void effect();
-    public abstract String isAvailable();
+    public abstract void effect(Storage storage);
+    public abstract String isAvailable(Storage storage);
 
     public Unit getUnit() {
         return unit;

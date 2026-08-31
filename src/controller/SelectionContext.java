@@ -1,5 +1,6 @@
 package controller;
 
+import model.item.TeleportItem;
 import model.map.Hex;
 import model.unit.Unit;
 
@@ -11,11 +12,13 @@ public class SelectionContext {
     private Hex destroyWallOriginHex;
     private Hex destroyRoadOriginHex;
     private Hex attackerHex;
+    private TeleportItem teleportItemUsed;
 
     public Hex getSelectedHex() { return selectedHex; }
     public void setSelectedHex(Hex selectedHex) { this.selectedHex = selectedHex; }
     public Unit getSelectedUnit() { return selectedUnit; }
-    public void setSelectedUnit(Unit selectedUnit) { this.selectedUnit = selectedUnit; }
+    public void setSelectedUnit(Unit selectedUnit) { this.selectedUnit = selectedUnit;
+    }
     public Hex getWallOriginHex() { return wallOriginHex; }
     public void setWallOriginHex(Hex wallOriginHex) { this.wallOriginHex = wallOriginHex; }
     public Hex getRoadOriginHex() { return roadOriginHex; }
@@ -27,6 +30,13 @@ public class SelectionContext {
     public Hex getAttackerHex() { return attackerHex; }
     public void setAttackerHex(Hex attacker) { this.attackerHex = attacker; }
 
+    public TeleportItem getTeleportItemUsed() {
+        return teleportItemUsed;
+    }
+
+    public void setTeleportItemUsed(TeleportItem teleportItemUsed) {
+        this.teleportItemUsed = teleportItemUsed;
+    }
 
     public void clearAllModes() {
         wallOriginHex = null;

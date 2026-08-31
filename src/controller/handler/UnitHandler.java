@@ -2,20 +2,29 @@ package controller.handler;
 
 import controller.SelectionContext;
 import helpers.sound.SoundEffects;
+import model.Task;
+import model.building.other.TradingCenter;
+import model.item.*;
 import model.queue.Technology;
 import model.state.GameState;
 import model.map.Hex;
 import model.building.Building;
 import model.building.ProducingBuilding;
 import model.building.tribes.Tribe;
+import model.storage.Storage;
 import model.unit.Unit;
 import model.unit.civilian.Worker;
 import view.game.GamePanel;
+import view.game.lists.ItemStat;
+import view.game.lists.TaskStat;
 import view.game.lists.UnitStat;
 import view.game.map.UnitAnimator;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UnitHandler {
     private final GameState gameState;
@@ -31,6 +40,7 @@ public class UnitHandler {
     }
 
     public void handleUnitMoving(Hex clicked) {
+        if(selectionContext.getTeleportItemUsed()!=null)return;
         Unit unit = selectionContext.getSelectedUnit();
         if (unit == null || unit.getUnitType().isEnemy()) {
             selectionContext.setSelectedUnit(null);
@@ -43,6 +53,7 @@ public class UnitHandler {
                 handleBorderExpansion(clicked, unit);
             }
         }
+
 
         if(clicked.getTerrainType()== Hex.TerrainType.SEA && !gameState.getEmpireState().getResearchedTechnologies().contains(Technology.SAILING)){return;}
 
@@ -75,6 +86,7 @@ public class UnitHandler {
         gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         updateUnitListPanel();
+        updateItemListPanel();
         buildingHandler.updateTaskListPanel();
     }
 
@@ -131,6 +143,7 @@ public class UnitHandler {
                         selectionContext.setSelectedUnit(stat.getUnit());
                         gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }
+                    updateItemListPanel();
                     gamePanel.repaint();
                 });
             }
@@ -138,6 +151,41 @@ public class UnitHandler {
         } else {
             gamePanel.getUnitListPanel().clear();
         }
+    }
+
+    public void updateItemListPanel() {
+        Unit unit = selectionContext.getSelectedUnit();
+        if (unit == null) { gamePanel.getItemListPanel().clear(); return; }
+
+        Storage storage = gameState.getEmpireState().getStorage();
+        Map<ItemType, String> blockReasonMap = new HashMap<>();
+        blockReasonMap.put(ItemType.ACTION_ITEM, new ActionItem(unit).isAvailable(storage));
+        blockReasonMap.put(ItemType.COMBAT_ITEM, new CombatItem(unit).isAvailable(storage));
+        blockReasonMap.put(ItemType.TELEPORT_ITEM, new TeleportItem(unit, null).isAvailable(storage));
+
+        List<ItemStat> stats = gamePanel.getItemListPanel().updateItems(blockReasonMap);
+        for (ItemStat stat : stats) {
+            stat.getButton().addActionListener(e -> {
+                if (stat.getItemType() == ItemType.TELEPORT_ITEM) {
+                    selectionContext.setTeleportItemUsed(new TeleportItem(selectionContext.getSelectedUnit(), null));
+                    selectionContext.setSelectedHex(null);
+                    selectionContext.setSelectedUnit(null);
+                    gamePanel.getItemListPanel().removeAll();
+                    gamePanel.getUnitListPanel().removeAll();
+                    gamePanel.getTaskListPanel().removeAll();
+                    gamePanel.repaint();
+                } else {
+                    Item item = stat.getItemType() == ItemType.ACTION_ITEM
+                            ? new ActionItem(unit) : new CombatItem(unit);
+                    if (item.isAvailable(storage) == null) {
+                        item.effect(storage);
+                        unit.setUsedItem(true);
+                        updateItemListPanel();
+                    }
+                }
+            });
+        }
+        gamePanel.repaint();
     }
 
     public void discover() {

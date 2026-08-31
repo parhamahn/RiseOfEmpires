@@ -9,11 +9,13 @@ import helpers.sound.SoundEffects;
 import model.building.empire.Bazaar;
 import model.building.other.TradingCenter;
 import model.building.tribes.Tribe;
+import model.item.TeleportItem;
 import model.state.GameState;
 import model.map.Hex;
 import view.game.GamePanel;
 import view.game.map.MapPanel;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -48,6 +50,23 @@ public class HexHandler {
                 Hex clicked = mapPanel.getHexAt(e.getX(), e.getY());
                 if (clicked == null) return;
                 if(gamePanel.isAnyPanelOpen())return;
+
+
+                if(selectionContext.getTeleportItemUsed()!=null){
+                    TeleportItem item = selectionContext.getTeleportItemUsed();
+                    item.setToHex(clicked);
+                    item.effect(gameState.getEmpireState().getStorage());
+                    Point p = gamePanel.getMapPanel().getHexCenter(clicked);
+                    gamePanel.getMapPanel().getUnitAnimator().setPosition(item.getUnit(), p);
+                    selectionContext.setTeleportItemUsed(null);
+                    selectionContext.setSelectedHex(clicked);
+                    unitHandler.updateUnitListPanel();
+                    buildingHandler.updateTaskListPanel();
+                    gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    gamePanel.repaint();
+
+                    return;
+                }
 
                 if (selectionContext.getWallOriginHex() != null) {
                     if(!clicked.isDiscovered() || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
@@ -119,6 +138,7 @@ public class HexHandler {
                     selectionContext.setSelectedHex(clicked);
                     SoundEffects.getInstance().playSelectHexSoundEffect();
                     unitHandler.updateUnitListPanel();
+                    unitHandler.updateItemListPanel();
                     buildingHandler.updateTaskListPanel();
                 }
                 gamePanel.repaint();

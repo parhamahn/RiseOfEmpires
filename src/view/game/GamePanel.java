@@ -8,6 +8,7 @@ import view.buildingpanel.tribe.TribeMainPanel;
 import view.buildingpanel.tribe.TribeTradePanel;
 import view.combat.CombatMainPanel;
 import view.game.hud.HUDPanel;
+import view.game.lists.ItemListPanel;
 import view.game.lists.TaskListPanel;
 import view.game.lists.UnitListPanel;
 import view.game.map.MapPanel;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel {
 
     private static final int FPS = 30;
     private static final int SIDE_PANEL_WIDTH = 100;
+    private static final int SIDE_PANEL_HEIGHT = 200;
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;
@@ -39,11 +41,13 @@ public class GamePanel extends JPanel {
     private CombatMainPanel combatMainPanel;
     private boolean anyPanelOpen;
     private boolean combatActive;
+    private ItemListPanel itemListPanel;
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }
     public UnitListPanel getUnitListPanel() {return unitListPanel;}
     public TaskListPanel getTaskListPanel() { return taskListPanel; }
+    public ItemListPanel getItemListPanel() { return itemListPanel; }
     public TownHallPanel getTownHallPanel() { return townHallPanel; }
     public BazaarPanel getBazaarPanel() { return bazaarPanel; }
     public TradingCenterPanel getTradingCenterPanel() { return tradingCenterPanel; }
@@ -79,6 +83,9 @@ public class GamePanel extends JPanel {
 
         taskListPanel = new TaskListPanel();
         layeredPane.add(taskListPanel, JLayeredPane.PALETTE_LAYER);
+
+        itemListPanel = new ItemListPanel();
+        layeredPane.add(itemListPanel, JLayeredPane.PALETTE_LAYER);
 
         townHallPanel = new TownHallPanel(mapPanel.getGameState());
         layeredPane.add(townHallPanel, JLayeredPane.MODAL_LAYER);
@@ -123,6 +130,7 @@ public class GamePanel extends JPanel {
         hudWrapper.setBounds(0, 0, size.width, size.height);
         unitListPanel.setBounds(size.width - SIDE_PANEL_WIDTH, 0, SIDE_PANEL_WIDTH, size.height);
         taskListPanel.setBounds(0, 0, size.width, size.height);
+        itemListPanel.setBounds(size.width - SIDE_PANEL_WIDTH, size.height-SIDE_PANEL_HEIGHT, size.width, size.height);
         townHallPanel.setBounds(0, 0, size.width, size.height);
         bazaarPanel.setBounds(0, 0, size.width, size.height);
         tribeMainPanel.setBounds(0, 0, size.width, size.height);
@@ -141,6 +149,7 @@ public class GamePanel extends JPanel {
         tribeTradePanel.close();
         unitListPanel.clear();
         taskListPanel.clear();
+        itemListPanel.clear();
     }
 
 }

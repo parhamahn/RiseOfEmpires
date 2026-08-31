@@ -23,6 +23,9 @@ private static final long serialVersionUID = 1L;
     private int stoneMax;
     private int ironMax;
     private int foodMax;
+    private int teleportItemCount;
+    private int actionItemCount;
+    private int combatItemCount;
 
 
     public Storage() {
@@ -67,6 +70,17 @@ private static final long serialVersionUID = 1L;
         return woodMax;
     }
 
+    public int getTeleportItemCount() {
+        return teleportItemCount;
+    }
+
+    public int getActionItemCount() {
+        return actionItemCount;
+    }
+
+    public int getCombatItemCount() {
+        return combatItemCount;
+    }
 
     public int getQuantity(ResourceType type) {
         return switch (type) {
@@ -76,6 +90,14 @@ private static final long serialVersionUID = 1L;
             case FOOD -> foodQuantity;
         };
     }
+
+    public void consumeTeleportItem(){if(this.teleportItemCount>0)this.teleportItemCount -= 1;}
+    public void consumeActionItem(){if(this.actionItemCount>0)this.actionItemCount -= 1;}
+    public void consumeCombatItem(){if(this.combatItemCount>0)this.combatItemCount -= 1;}
+
+    public void produceTeleportItem(){this.teleportItemCount+=1;}
+    public void produceActionItem(){this.actionItemCount+=1;}
+    public void produceCombatItem(){this.combatItemCount+=1;}
 
     public void setQuantity(ResourceType type, int amount) {
         switch (type) {
@@ -111,6 +133,9 @@ private static final long serialVersionUID = 1L;
         this.stoneMax = DEFAULT_STONE_MAX_STORAGE;
         this.ironMax = DEFAULT_IRON_MAX_STORAGE;
         this.woodMax = DEFAULT_WOOD_MAX_STORAGE;
+        this.combatItemCount = 2;
+        this.actionItemCount = 2;
+        this.teleportItemCount = 2;
     }
 
     public void applyProduction(Production production) {
