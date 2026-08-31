@@ -23,6 +23,7 @@ public class BuildingFactory {
             case MILITARY_STABLE -> MilitaryStable.getBuildCost();
             case WALL        -> Wall.getBuildCost();
             case ROAD        -> Road.getBuildCost();
+            case APOTHECARY -> Apothecary.getBuildCost();
         };
     }
 
@@ -39,6 +40,7 @@ public class BuildingFactory {
             case DOCK -> new Dock(hex);
             case MILITARY_STABLE -> new MilitaryStable(hex);
             case WALL, ROAD -> null;
+            case APOTHECARY -> new Apothecary(hex);
         };
     }
 }

@@ -24,6 +24,7 @@ private static final long serialVersionUID = 1L;
     }
 
     public boolean isTown() { return false; }
+    public boolean isApothecary(){return false;}
 
     public Cost getCost(){
         return cost;

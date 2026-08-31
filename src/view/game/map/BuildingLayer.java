@@ -37,6 +37,7 @@ public class BuildingLayer implements MapLayer {
         buildingImages.put("warriortribe", loader.loadImage("/utils/warriortribe.png"));
         buildingImages.put("tradertribe", loader.loadImage("/utils/tradertribe.png"));
         buildingImages.put("beachtribe", loader.loadImage("/utils/beachtribe.png"));
+        buildingImages.put("apothecaryhex", loader.loadImage("/utils/apothecaryhex.png"));
     }
 
 

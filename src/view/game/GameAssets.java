@@ -5,17 +5,7 @@ import model.building.edge.EdgeComponent;
 import model.building.edge.River;
 import model.building.edge.Road;
 import model.building.edge.Wall;
-import model.building.empire.Bazaar;
-import model.building.empire.Dock;
-import model.building.empire.Farm;
-import model.building.empire.IronMine;
-import model.building.empire.LumberMill;
-import model.building.empire.MilitaryStable;
-import model.building.empire.Monument;
-import model.building.empire.Stable;
-import model.building.empire.StoneMine;
-import model.building.empire.Town;
-import model.building.empire.TownHall;
+import model.building.empire.*;
 import model.building.other.TradingCenter;
 import model.building.tribes.BeachTribe;
 import model.building.tribes.FarmerTribe;
@@ -47,6 +37,7 @@ public final class GameAssets {
         if (structure instanceof WarriorTribe) return "warriortribe";
         if (structure instanceof TraderTribe) return "tradertribe";
         if (structure instanceof BeachTribe) return "beachtribe";
+        if (structure instanceof Apothecary) return "apothecaryhex";
         return null;
     }
 

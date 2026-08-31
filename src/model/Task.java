@@ -1,6 +1,7 @@
 package model;
 
 import model.building.Building;
+import model.building.empire.Apothecary;
 import model.building.empire.Bazaar;
 import model.building.empire.Dock;
 import model.building.empire.MilitaryStable;
@@ -27,6 +28,7 @@ public class Task {
         MILITARY_STABLE,
         WALL,
         ROAD,
+        APOTHECARY
     }
 
     public static List<TASK> getAvailableTasks(Hex hex, GameState gameState) {
@@ -40,6 +42,7 @@ public class Task {
                     availableTasks.add(TASK.MONUMENT);
                     if(gameState.getEmpireState().getTownHallLevel().ordinal()>=Bazaar.getLevel().ordinal()){availableTasks.add(TASK.BAZAAR);}
                     if(gameState.getEmpireState().getTownHallLevel().ordinal()>= MilitaryStable.getLevel().ordinal()){availableTasks.add(TASK.MILITARY_STABLE);}
+                    if(gameState.getEmpireState().getTownHallLevel().ordinal()>= Apothecary.getLevel().ordinal()){availableTasks.add(TASK.APOTHECARY);}
                     break;
                 }
                 case MEADOW: {
