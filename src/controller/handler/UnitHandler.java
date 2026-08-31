@@ -124,8 +124,13 @@ public class UnitHandler {
                     continue;
                 }
                 stat.getButton().addActionListener(e -> {
-                    selectionContext.setSelectedUnit(stat.getUnit());
-                    gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    if(selectionContext.getSelectedUnit()!=null && selectionContext.getSelectedUnit()==stat.getUnit()){
+                        selectionContext.setSelectedUnit(null);
+                        gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    }else{
+                        selectionContext.setSelectedUnit(stat.getUnit());
+                        gamePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    }
                     gamePanel.repaint();
                 });
             }

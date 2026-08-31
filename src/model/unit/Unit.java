@@ -63,6 +63,7 @@ private static final long serialVersionUID = 1L;
     private int HP;
     private int health;
     private int maxHealth;
+    private boolean usedItem;
     protected Cost cookCost;
 
 
@@ -80,6 +81,7 @@ private static final long serialVersionUID = 1L;
         this.HP = maxHP;
         this.maxHealth = unitType.getHealth();
         this.health = maxHealth;
+        this.usedItem = false;
     }
 
 
@@ -139,6 +141,12 @@ private static final long serialVersionUID = 1L;
     }
     public int getAttackPower(){
         return unitType.getAttackPower();
+    }
+    public boolean isUsedItem() {
+        return usedItem;
+    }
+    public void setUsedItem(boolean usedItem) {
+        this.usedItem = usedItem;
     }
 
     @Override
