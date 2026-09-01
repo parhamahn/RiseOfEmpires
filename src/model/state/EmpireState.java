@@ -56,6 +56,7 @@ private static final long serialVersionUID = 1L;
         this.researchedTechnologies = new ArrayList<>();
         this.buildings = new ArrayList<>();
         this.allies = new  ArrayList<>();
+        this.units = new ArrayList<>();
         this.warHappinessEffect = 0;
         this.happiness = 0;
         this.happinessBase = 0;

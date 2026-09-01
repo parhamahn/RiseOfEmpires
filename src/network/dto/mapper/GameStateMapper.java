@@ -56,9 +56,7 @@ public enum GameStateMapper implements DtoMapper<GameState, GameStateDTO> {
         return dto;
     }
 
-    public GameState fromDTO(GameStateDTO dto) {
-        UUID playerId = UUID.randomUUID();
-
+    public GameState fromDTO(GameStateDTO dto, UUID playerId) {
         Map map = MapMapper.INSTANCE.fromDTO(dto.map, playerId);
 
         java.util.Map<String, Tribe> tribesById = new HashMap<>();

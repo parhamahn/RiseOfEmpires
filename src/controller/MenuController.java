@@ -1,8 +1,6 @@
 package controller;
 import helpers.sound.SoundEffects;
 import model.state.GameState;
-import network.server.GameServer;
-import network.server.Server;
 import view.game.GamePanel;
 import view.menu.MenuPanel;
 import view.multiplayer.MultiplayerOption;
@@ -59,15 +57,10 @@ public class MenuController {
 
     public void multiplayerAction(){
         int option = MultiplayerOption.hostOrJoin();
-        if(option==JOptionPane.NO_OPTION){
-            MultiplayerOption.joinAddress();
-        }else if(option==JOptionPane.YES_OPTION){
-            Server server = new Server();
-            server.start();
-            lobbyController.setServer(server);
-
-            CardLayout cl = (CardLayout) (cards.getLayout());
-            cl.show(cards, "lobby");
+        if(option==JOptionPane.YES_OPTION){
+            lobbyController.startAsHost();
+        }else if(option==JOptionPane.NO_OPTION){
+            lobbyController.startAsJoiner();
         }
     }
 

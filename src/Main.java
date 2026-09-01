@@ -45,13 +45,13 @@ public class Main {
             SettingsPanel settingsPanel = new SettingsPanel();
             SettingsController settingsController = new SettingsController(settingsPanel, cards);
 
-            LobbyPanel lobbyPanel = new LobbyPanel();
-            LobbyController lobbyController = new LobbyController(lobbyPanel, cards);
-
             HUDPanel hudPanel = new HUDPanel(gameState);
             MapPanel mapPanel = new MapPanel(map, gameState, selectionContext);
             GamePanel gamePanel = new GamePanel(hudPanel, mapPanel);
             gamePanel.getMapPanel().setMap(map);
+
+            LobbyPanel lobbyPanel = new LobbyPanel();
+            LobbyController lobbyController = new LobbyController(lobbyPanel, cards, gameState, gamePanel, selectionContext);
 
             GameController gameController = new GameController(gamePanel, cards, gameState, selectionContext);
 

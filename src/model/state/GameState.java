@@ -39,6 +39,12 @@ private static final long serialVersionUID = 2L;
         restartGame();
     }
 
+    public GameState(Map map) {
+        this.rng = new Random();
+        this.worldState = new WorldState(map);
+        map.setResources(rng);
+    }
+
     public EmpireState addPlayer(UUID playerId, Storage storage, Production production) {
         return addPlayer(playerId, new EmpireState(storage, production));
     }
