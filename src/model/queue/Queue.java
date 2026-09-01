@@ -49,6 +49,10 @@ private static final long serialVersionUID = 1L;
         this.delay += turns;
     }
 
+    public int getDelay() {
+        return delay;
+    }
+
 
     public abstract boolean execute(GameState gameState);
 

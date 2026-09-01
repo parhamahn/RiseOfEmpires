@@ -3,6 +3,7 @@ package network.server.tcp;
 import com.google.gson.JsonObject;
 import network.common.JsonSerializer;
 import network.common.Message;
+import network.request.JoinLobbyRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class TCPClientHandler implements Runnable{
 
-    private final UUID clientID;
+    private UUID clientID;
     private final Socket socket;
     private final TCPServer server;
     private PrintWriter writer;
@@ -40,23 +41,18 @@ public class TCPClientHandler implements Runnable{
     public UUID getClientID() {
         return clientID;
     }
-
     public Socket getSocket() {
         return socket;
     }
-
     public PrintWriter getWriter() {
         return writer;
     }
-
     public BufferedReader getReader() {
         return reader;
     }
-
     public boolean isConnected() {
         return connected;
     }
-
     public void setConnected(boolean connected) {
         this.connected = connected;
     }
@@ -64,17 +60,38 @@ public class TCPClientHandler implements Runnable{
 
     @Override
     public void run() {
-        String messageString;
         try {
+
+            String first = reader.readLine();
+            if (first == null) {
+                disconnect();
+                return;
+            }
+
+            Message firstMessage = JsonSerializer.fromJson(JsonSerializer.GSON.fromJson(first, JsonObject.class));
+            if (!(firstMessage instanceof JoinLobbyRequest join) || join.getSenderID() == null) {
+                System.err.println("First message from a client was not a valid JoinLobbyRequest, dropping connection");
+                disconnect();
+                return;
+            }
+
+            this.clientID = join.getSenderID();
+            server.registerClient(clientID, this);
+            server.processMessage(clientID, join);
+
+            String messageString;
             while (connected && (messageString = reader.readLine()) != null) {
-                System.out.println("Received from client " + clientID);
-                JsonObject json = JsonSerializer.GSON.fromJson(messageString, JsonObject.class);
-                Message message = JsonSerializer.fromJson(json);
-                server.processMessage(clientID, message);
+                try {
+                    JsonObject json = JsonSerializer.GSON.fromJson(messageString, JsonObject.class);
+                    Message message = JsonSerializer.fromJson(json);
+                    server.processMessage(clientID, message);
+                } catch (Exception e) {
+                    System.err.println("Malformed message from " + clientID + ": " + e.getMessage());
+                }
             }
         } catch (IOException e) {
             if (connected) {
-                System.out.println("Client " + clientID + " connection error: " + e.getMessage());
+                System.out.println("Client connection error: " + e.getMessage());
             }
         } finally {
             disconnect();

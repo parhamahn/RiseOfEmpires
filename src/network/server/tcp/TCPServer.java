@@ -48,6 +48,10 @@ public class TCPServer implements Messenger, Runnable {
         clients.put(clientID, clientHandler);
     }
 
+    public void registerClient(UUID clientID, TCPClientHandler handler) {
+        clients.put(clientID, handler);
+    }
+
     public void processMessage(UUID clientID, Message message){
         gameServer.processMessage(clientID, message);
     }

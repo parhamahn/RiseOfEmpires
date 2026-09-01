@@ -10,6 +10,9 @@ public class StorageDTO {
     public int stoneMax;
     public int ironMax;
     public int foodMax;
+    public int teleportItemCount;
+    public int actionItemCount;
+    public int combatItemCount;
 
     public StorageDTO() {}
 }

@@ -7,7 +7,8 @@ public class QueueDTO {
     public int turnCost;
     public int startTurn;
     public int delay;
-
+    public Integer cookHexC;
+    public Integer cookHexR;
     public String cookingUnitType;
     public String technology;
     public String targetLevel;

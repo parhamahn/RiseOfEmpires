@@ -23,4 +23,16 @@ public enum HexMapper implements DtoMapper<Hex, HexDTO> {
         }
         return dto;
     }
+
+    public Hex fromDTO(HexDTO dto) {
+        Hex hex = new Hex(dto.c, dto.r, Hex.TerrainType.valueOf(dto.terrainType));
+        hex.setDiscovered(dto.discovered);
+        if (dto.resources != null) {
+            for (java.util.Map.Entry<String, Integer> entry : dto.resources.entrySet()) {
+                hex.getResources().put(Hex.ResourceType.valueOf(entry.getKey()), entry.getValue());
+            }
+        }
+        return hex;
+    }
+
 }

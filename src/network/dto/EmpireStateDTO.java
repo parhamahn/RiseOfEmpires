@@ -15,6 +15,7 @@ public class EmpireStateDTO {
     public List<QueueDTO> queues = new ArrayList<>();
     public List<String> researchedTechnologies = new ArrayList<>();
     public String townHallLevel;
+    public int happinessBase;
     public int happiness;
     public boolean dockDiscount;
     public List<String> allyTribeIds = new ArrayList<>();
