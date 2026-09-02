@@ -6,26 +6,20 @@ import network.common.Request;
 import java.util.UUID;
 
 public class MoveUnitRequest extends Request {
-
-    private int fromCol;
-    private int fromRow;
+    private UUID unitId;
     private int toCol;
     private int toRow;
 
-    public MoveUnitRequest() {
-        super();
-    }
+    public MoveUnitRequest() { super(); }
 
-    public MoveUnitRequest(UUID senderID, int fromCol, int fromRow, int toCol, int toRow) {
+    public MoveUnitRequest(UUID senderID, UUID unitId, int toCol, int toRow) {
         super(MessageType.MOVE_UNIT_REQUEST, senderID, System.currentTimeMillis());
-        this.fromCol = fromCol;
-        this.fromRow = fromRow;
+        this.unitId = unitId;
         this.toCol = toCol;
         this.toRow = toRow;
     }
 
-    public int getFromCol() { return fromCol; }
-    public int getFromRow() { return fromRow; }
+    public UUID getUnitId() { return unitId; }
     public int getToCol() { return toCol; }
     public int getToRow() { return toRow; }
 }
