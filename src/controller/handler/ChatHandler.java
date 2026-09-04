@@ -1,5 +1,6 @@
 package controller.handler;
 
+import model.Player;
 import model.state.GameState;
 import view.game.ChatSection;
 import view.game.GamePanel;
@@ -7,6 +8,7 @@ import view.game.GamePanel;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.UUID;
 
 public class ChatHandler {
 
@@ -46,9 +48,11 @@ public class ChatHandler {
 
     public void sendMessage(){
         ChatSection chatSection = gamePanel.getChatSection();
+        UUID senderID = gameState.getLocalPlayerId();
         String string = chatSection.getChatInput().getText();
         if(string!=null && !string.isBlank() && chatSection.isVisible()){
-            chatSection.addChat(string+"\n");
+            String senderName = gameState.getPlayerName(senderID);
+            chatSection.addChat(senderName, string);
             chatSection.getChatInput().setText("");
         }
     }

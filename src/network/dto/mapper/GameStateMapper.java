@@ -54,6 +54,11 @@ public enum GameStateMapper implements DtoMapper<GameState, GameStateDTO> {
         }
 
         dto.empires.add(EmpireStateMapper.INSTANCE.toDTO(empireState, "player-1"));
+
+        for (java.util.Map.Entry<UUID, String> entry : gameState.getPlayerNames().entrySet()) {
+            dto.playerNames.put(entry.getKey().toString(), entry.getValue());
+        }
+
         return dto;
     }
 
@@ -154,6 +159,10 @@ public enum GameStateMapper implements DtoMapper<GameState, GameStateDTO> {
         EmpireState realEmpire = gameState.addPlayer(playerId, storage, loadedEmpire.getProduction());
         realEmpire.loadFrom(loadedEmpire);
         gameState.setLocalPlayerId(playerId);
+
+        for (java.util.Map.Entry<String, String> entry : dto.playerNames.entrySet()) {
+            gameState.getPlayerNames().put(UUID.fromString(entry.getKey()), entry.getValue());
+        }
 
         Season.processSeason(gameState);
 

@@ -49,6 +49,7 @@ public class StartGameHandler implements MessageHandler<StartGameRequest> {
 
             List<UUID> order = new ArrayList<>(lobby.getPlayers().keySet());
             for (UUID playerId : order) {
+                gameState.getPlayerNames().put(playerId, lobby.getPlayers().get(playerId).getName());
                 gameState.addPlayer(playerId, new Storage(), new Production());
             }
             gameState.startMatch(map, order);

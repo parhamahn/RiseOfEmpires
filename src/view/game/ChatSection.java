@@ -3,13 +3,13 @@ package view.game;
 import view.common.UITheme;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
+import javax.swing.text.*;
 import java.awt.*;
 
 public class ChatSection extends JPanel {
 
     private JTextField chatInput;
-    private JTextArea chatList;
+    private JTextPane chatList;
 
     public ChatSection(){
 
@@ -22,7 +22,7 @@ public class ChatSection extends JPanel {
         chatInput.setMaximumSize(inputSize);
         chatInput.setPreferredSize(inputSize);
 
-        chatList = new JTextArea();
+        chatList = new JTextPane();
         Dimension listSize = new Dimension(GamePanel.CHAT_WIDTH_HALF*2, GamePanel.CHAT_HEIGHT-50);
 
         DefaultCaret caret = (DefaultCaret) chatList.getCaret();
@@ -35,7 +35,6 @@ public class ChatSection extends JPanel {
         chatList.setEditable(false);
         chatList.setFocusable(false);
 
-        chatList.setMargin(new Insets(8, 10, 8, 10));
         chatInput.setMargin(new Insets(5, 8, 5, 8));
 
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
@@ -51,7 +50,7 @@ public class ChatSection extends JPanel {
         return chatInput;
     }
 
-    public JTextArea getChatList() {
+    public JTextPane getChatList() {
         return chatList;
     }
 
@@ -63,9 +62,19 @@ public class ChatSection extends JPanel {
         this.setVisible(true);
     }
 
-    public void addChat(String string){
-        this.chatList.append(string);
-        this.chatList.setCaretPosition(this.chatList.getDocument().getLength());
+    public void addChat(String name, String message){
+        StyledDocument doc = chatList.getStyledDocument();
+
+        SimpleAttributeSet nameAttr = new SimpleAttributeSet();
+        StyleConstants.setForeground(nameAttr, new Color(100, 160, 255));
+        StyleConstants.setBold(nameAttr, true);
+
+        try {
+            doc.insertString(doc.getLength(), name + ": ", nameAttr);
+            doc.insertString(doc.getLength(), message + "\n", new SimpleAttributeSet());
+        } catch (BadLocationException ignored) {}
+
+        chatList.setCaretPosition(doc.getLength());
     }
 
 }

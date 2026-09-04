@@ -23,6 +23,7 @@ public class GameState implements Serializable {
 private static final long serialVersionUID = 2L;
 
     private final java.util.Map<UUID, EmpireState> empireStates = new ConcurrentHashMap<>();
+    private final java.util.Map<UUID, String> playerNames = new ConcurrentHashMap<>();
     private final List<UUID> turnOrder = new ArrayList<>();
     private int turnIndex = 0;
     private UUID localPlayerId;
@@ -100,6 +101,8 @@ private static final long serialVersionUID = 2L;
 
     public EmpireState getEmpireState(UUID playerId) { return empireStates.get(playerId); }
     public java.util.Map<UUID, EmpireState> getEmpireStates() { return empireStates; }
+    public java.util.Map<UUID, String> getPlayerNames() { return playerNames; }
+    public String getPlayerName(UUID playerId) { return playerNames.getOrDefault(playerId, "Unknown"); }
     public List<UUID> getTurnOrder() { return turnOrder; }
     public UUID getCurrentPlayerId() { return turnOrder.isEmpty() ? null : turnOrder.get(turnIndex); }
     public void nextPlayerTurn() { if (!turnOrder.isEmpty()) turnIndex = (turnIndex + 1) % turnOrder.size(); }
@@ -171,6 +174,8 @@ private static final long serialVersionUID = 2L;
         this.worldState.loadFrom(loaded.getWorldState());
         this.empireStates.clear();
         this.empireStates.putAll(loaded.getEmpireStates());
+        this.playerNames.clear();
+        this.playerNames.putAll(loaded.getPlayerNames());
         this.turnOrder.clear();
         this.turnOrder.addAll(loaded.getTurnOrder());
         this.turnIndex = loaded.turnIndex;
