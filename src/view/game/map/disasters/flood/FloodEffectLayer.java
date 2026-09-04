@@ -1,6 +1,6 @@
 package view.game.map.disasters.flood;
 
-import view.game.map.disasters.water.WaterEffectLayer;
+import view.game.map.disasters.tsunami.WaterEffectLayer;
 
 import java.awt.*;
 

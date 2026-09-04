@@ -1,4 +1,4 @@
-package view.game.map.disasters;
+package view.game.map.disasters.tsunami;
 
 import controller.SelectionContext;
 import model.map.Hex;

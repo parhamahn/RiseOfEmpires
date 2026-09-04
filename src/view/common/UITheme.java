@@ -24,6 +24,9 @@ public class UITheme {
     public static final Font GAME_FONT_SMALL = baseFont.deriveFont(Font.PLAIN, 14);
     public static final Font GAME_FONT_LARGE = baseFont.deriveFont(Font.PLAIN, 32);
 
+    public static final Font CHAT_INPUT_FONT = new Font("Serif", Font.PLAIN, 18);
+    public static final Font CHAT_LIST_FONT = new Font("Serif", Font.PLAIN, 22);
+
     public static final Color GOLD = new Color(255, 203, 87);
     public static final Color PANEL_BG = new Color(28, 28, 28);
     public static final Color MENU_BG = new Color(38, 38, 38);

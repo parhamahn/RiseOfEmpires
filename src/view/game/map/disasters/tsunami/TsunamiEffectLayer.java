@@ -1,7 +1,5 @@
 package view.game.map.disasters.tsunami;
 
-import view.game.map.disasters.water.WaterEffectLayer;
-
 import java.awt.*;
 
 public class TsunamiEffectLayer extends WaterEffectLayer {

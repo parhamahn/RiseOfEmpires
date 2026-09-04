@@ -32,6 +32,7 @@ public class GameController {
         CombatHandler combatHandler = new CombatHandler(gameState, gamePanel, selectionContext);
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler, tradingCenterHandler, tribeHandler, combatHandler);
         TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
+        ChatHandler chatHandler = new ChatHandler(gameState, gamePanel);
 
         new CameraHandler(gamePanel).attachCameraListeners();
 
@@ -43,6 +44,7 @@ public class GameController {
         tribeHandler.attachHandlers();
         gamePanel.getMapPanel().setOnUnitArrived(this::onArrive);
         combatHandler.attachHandlers();
+        chatHandler.attachHandlers();
 
     }
 

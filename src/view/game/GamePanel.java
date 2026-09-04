@@ -24,6 +24,8 @@ public class GamePanel extends JPanel {
     private static final int FPS = 30;
     private static final int SIDE_PANEL_WIDTH = 100;
     private static final int SIDE_PANEL_HEIGHT = 200;
+    public static final int CHAT_WIDTH_HALF = 400;
+    public static final int CHAT_HEIGHT = 200;
 
     private HUDPanel hudPanel;
     private MapPanel mapPanel;
@@ -42,6 +44,8 @@ public class GamePanel extends JPanel {
     private boolean anyPanelOpen;
     private boolean combatActive;
     private ItemListPanel itemListPanel;
+    private ChatSection chatSection;
+    private boolean chatOpened;
 
     public HUDPanel getHudPanel() { return hudPanel; }
     public MapPanel getMapPanel() { return mapPanel; }
@@ -60,6 +64,7 @@ public class GamePanel extends JPanel {
     public GiftPanel getGiftPanel() { return giftPanel; }
     public TribeTradePanel getTribeTradePanel() { return tribeTradePanel; }
     public CombatMainPanel getCombatMainPanel() { return combatMainPanel; }
+    public ChatSection getChatSection(){return chatSection;}
 
 
     public GamePanel(HUDPanel hudPanel, MapPanel mapPanel) {
@@ -118,6 +123,11 @@ public class GamePanel extends JPanel {
         pausePanel = new PausePanel();
         layeredPane.add(pausePanel, JLayeredPane.MODAL_LAYER);
 
+        chatSection = new ChatSection();
+        layeredPane.add(chatSection, JLayeredPane.MODAL_LAYER);
+
+        chatOpened = false;
+
         new Timer(1000 / FPS, e -> {
             mapPanel.tick();
         }).start();
@@ -139,6 +149,7 @@ public class GamePanel extends JPanel {
         tradingCenterPanel.setBounds(0, 0, size.width, size.height);
         combatMainPanel.setBounds(0, 0, size.width, size.height);
         pausePanel.setBounds(0, 0, size.width, size.height);
+        chatSection.setBounds(size.width/2 - CHAT_WIDTH_HALF, size.height - CHAT_HEIGHT-10, 2*CHAT_WIDTH_HALF, CHAT_HEIGHT);
     }
 
     public void reset(){
