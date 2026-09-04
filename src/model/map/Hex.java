@@ -8,10 +8,7 @@ import model.building.edge.Wall;
 import model.unit.Unit;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Hex implements Serializable {
 private static final long serialVersionUID = 1L;
@@ -24,7 +21,7 @@ private static final long serialVersionUID = 1L;
     public enum ResourceType {NONE, WOOD, STONE, IRON, WHEAT, RICE, COW, SHEEP, FISH}
 
     private int c,r;
-    private boolean discovered;
+    private Set<UUID> discoveredBy = new HashSet<>();
     private UUID borderOwner;
     private TerrainType terrainType;
     private HashMap<ResourceType, Integer> resources;
@@ -62,8 +59,10 @@ private static final long serialVersionUID = 1L;
     }
     public int getC() {return c;}
     public int getR() {return r;}
-    public boolean isDiscovered() {return discovered;}
-    public void setDiscovered(boolean discovered) {this.discovered = discovered;}
+    public boolean isDiscoveredBy(UUID playerId) {return playerId != null && discoveredBy.contains(playerId);}
+    public void discoverBy(UUID playerId) {if (playerId != null) discoveredBy.add(playerId);}
+    public void discoverByAll(Collection<UUID> playerIds) {discoveredBy.addAll(playerIds);}
+    public Set<UUID> getDiscoveredBy() {return discoveredBy;}
     public TerrainType getTerrainType() {return terrainType;}
     public void setTerrainType(TerrainType terrainType) {this.terrainType = terrainType;}
     public HashMap<ResourceType, Integer> getResources() {return resources;}

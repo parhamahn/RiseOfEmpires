@@ -32,9 +32,13 @@ public class Task {
     }
 
     public static List<TASK> getAvailableTasks(Hex hex, GameState gameState) {
+        return getAvailableTasks(hex, gameState, gameState.resolveActivePlayerId());
+    }
+
+    public static List<TASK> getAvailableTasks(Hex hex, GameState gameState, java.util.UUID playerId) {
         List<TASK> availableTasks = new ArrayList<>();
         if(hex.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || hex.getTerrainType()== Hex.TerrainType.SEA) {return availableTasks;}
-        if (hex.isDiscovered() && hex.getBuilding()==null) {
+        if (hex.isDiscoveredBy(playerId) && hex.getBuilding()==null) {
             availableTasks.add(TASK.TOWN);
             switch (hex.getTerrainType()) {
                 case PLAIN: {
@@ -70,11 +74,11 @@ public class Task {
             if(gameState.getEmpireState().getTownHallLevel().ordinal() >= Dock.getLevel().ordinal()
                     && gameState.getWorldState().getMap().getNeighbourHexes(hex).stream()
                     .filter(Objects::nonNull)
-                    .anyMatch(h -> h.getTerrainType() == Hex.TerrainType.SEA && h.isDiscovered() && h.getResources().containsKey(Hex.ResourceType.FISH))){
+                    .anyMatch(h -> h.getTerrainType() == Hex.TerrainType.SEA && h.isDiscoveredBy(playerId) && h.getResources().containsKey(Hex.ResourceType.FISH))){
                 availableTasks.add(TASK.DOCK);
             }
         }
-        if (hex.isDiscovered()) {
+        if (hex.isDiscoveredBy(playerId)) {
             availableTasks.add(TASK.WALL);
             availableTasks.add(TASK.ROAD);
         }

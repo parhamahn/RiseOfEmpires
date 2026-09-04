@@ -44,12 +44,13 @@ public class BuildingLayer implements MapLayer {
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         int r2 = camera.getHexRadius();
+        java.util.UUID playerId = gameState.getLocalPlayerId();
 
         for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
                 if (hex == null) continue;
-                if (!hex.isDiscovered()) continue;
+                if (!hex.isDiscoveredBy(playerId)) continue;
                 MapStructure building = hex.getBuilding();
                 if (building == null) continue;
 

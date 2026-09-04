@@ -35,7 +35,6 @@ public class TextMap {
                     } else {
                         hex = new Hex(c, r, getTerrain(ch));
                     }
-                    hex.setDiscovered(false);
                     map.setHex(r, c, hex);
                 }
             }

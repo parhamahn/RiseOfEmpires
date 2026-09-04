@@ -5,6 +5,7 @@ import network.dto.DtoMapper;
 import network.dto.HexDTO;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public enum HexMapper implements DtoMapper<Hex, HexDTO> {
     INSTANCE;
@@ -15,7 +16,25 @@ public enum HexMapper implements DtoMapper<Hex, HexDTO> {
         dto.c = hex.getC();
         dto.r = hex.getR();
         dto.terrainType = hex.getTerrainType().name();
-        dto.discovered = hex.isDiscovered();
+        for (UUID id : hex.getDiscoveredBy()) {
+            dto.discoveredByPlayerIds.add(id.toString());
+        }
+        dto.inEmpireBorder = hex.isInEmpireBorder();
+        dto.resources = new HashMap<>();
+        for (HashMap.Entry<Hex.ResourceType, Integer> entry : hex.getResources().entrySet()) {
+            dto.resources.put(entry.getKey().name(), entry.getValue());
+        }
+        return dto;
+    }
+
+    public HexDTO toDTO(Hex hex, UUID recipientId) {
+        HexDTO dto = new HexDTO();
+        dto.c = hex.getC();
+        dto.r = hex.getR();
+        dto.terrainType = hex.getTerrainType().name();
+        if (recipientId != null && hex.isDiscoveredBy(recipientId)) {
+            dto.discoveredByPlayerIds.add(recipientId.toString());
+        }
         dto.inEmpireBorder = hex.isInEmpireBorder();
         dto.resources = new HashMap<>();
         for (HashMap.Entry<Hex.ResourceType, Integer> entry : hex.getResources().entrySet()) {
@@ -26,7 +45,11 @@ public enum HexMapper implements DtoMapper<Hex, HexDTO> {
 
     public Hex fromDTO(HexDTO dto) {
         Hex hex = new Hex(dto.c, dto.r, Hex.TerrainType.valueOf(dto.terrainType));
-        hex.setDiscovered(dto.discovered);
+        if (dto.discoveredByPlayerIds != null) {
+            for (String idStr : dto.discoveredByPlayerIds) {
+                hex.discoverBy(UUID.fromString(idStr));
+            }
+        }
         if (dto.resources != null) {
             for (java.util.Map.Entry<String, Integer> entry : dto.resources.entrySet()) {
                 hex.getResources().put(Hex.ResourceType.valueOf(entry.getKey()), entry.getValue());

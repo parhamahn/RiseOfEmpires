@@ -1,4 +1,4 @@
-package view.game.map.disasters.water;
+package view.game.map.disasters;
 
 import controller.SelectionContext;
 import model.map.Hex;
@@ -46,7 +46,7 @@ public abstract class WaterEffectLayer implements MapLayer {
     public void addWater(Hex center, List<Hex> hexes) {
         activeHexes.removeIf(w -> hexes.contains(w.hex));
         for (Hex hex : hexes) {
-            if (hex == null || !hex.isDiscovered()) continue;
+            if (hex == null) continue;
             WaterHex w = new WaterHex();
             w.hex = hex;
             w.delayTicks = hexDistance(center, hex) * staggerPerRing();

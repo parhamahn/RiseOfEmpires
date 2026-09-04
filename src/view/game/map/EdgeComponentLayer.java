@@ -31,6 +31,7 @@ public class EdgeComponentLayer implements MapLayer {
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         if (map == null) return;
 
+        java.util.UUID playerId = gameState.getLocalPlayerId();
         Set<EdgeComponent> allComponents = new HashSet<>();
         for (Hex hex : map.getAllHexes()) {
             allComponents.addAll(hex.getWallsWith());
@@ -41,7 +42,7 @@ public class EdgeComponentLayer implements MapLayer {
         int thickness = Math.max(6, camera.getHexRadius() / 6);
 
         for (EdgeComponent component : allComponents) {
-            if(!component.getHexA().isDiscovered() && !component.getHexB().isDiscovered()) {continue;}
+            if(!component.getHexA().isDiscoveredBy(playerId) && !component.getHexB().isDiscoveredBy(playerId)) {continue;}
             BufferedImage image = getImage(GameAssets.edgeImage(component));
             if (image == null) continue;
 

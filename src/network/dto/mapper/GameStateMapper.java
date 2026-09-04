@@ -27,12 +27,13 @@ public enum GameStateMapper implements DtoMapper<GameState, GameStateDTO> {
 
     @Override
     public GameStateDTO toDTO(GameState gameState) {
+        UUID recipientId = gameState.getActiveContextId();
         EmpireState empireState = gameState.getEmpireState();
         int turnNumber = gameState.getWorldState().getTurnNumber();
 
         GameStateDTO dto = new GameStateDTO();
         dto.turnNumber = turnNumber;
-        dto.map = MapMapper.INSTANCE.toDTO(gameState.getWorldState().getMap());
+        dto.map = MapMapper.INSTANCE.toDTO(gameState.getWorldState().getMap(), recipientId);
 
         for (Unit unit : empireState.getUnits()) {
             dto.units.add(UnitMapper.INSTANCE.toDTO(unit));
@@ -49,7 +50,7 @@ public enum GameStateMapper implements DtoMapper<GameState, GameStateDTO> {
         }
 
         for (Tribe tribe : gameState.getWorldState().getTribes()) {
-            dto.tribes.add(TribeMapper.INSTANCE.toDTO(tribe));
+            dto.tribes.add(TribeMapper.INSTANCE.toDTO(tribe, recipientId));
         }
 
         dto.empires.add(EmpireStateMapper.INSTANCE.toDTO(empireState, "player-1"));

@@ -40,10 +40,11 @@ public class DisasterHandler {
 
     private void animateEarthquake(Earthquake eq) {
         if (eq.getCenter() == null) return;
+        java.util.UUID playerId = gameState.getLocalPlayerId();
         List<Hex> cracks = new ArrayList<>();
         boolean anyDiscovered = false;
         for (Hex involved : eq.getInvolvedHexes()) {
-            if (involved.isDiscovered()) {
+            if (involved.isDiscoveredBy(playerId)) {
                 cracks.add(involved);
                 anyDiscovered = true;
             }
@@ -57,9 +58,10 @@ public class DisasterHandler {
 
     private void animateFlood(Flood flood) {
         if (flood.getCenter() == null) return;
+        java.util.UUID playerId = gameState.getLocalPlayerId();
         List<Hex> visibleHexes = new ArrayList<>();
         for (Hex involved : flood.getInvolvedHexes()) {
-            if (involved.isDiscovered()) {
+            if (involved.isDiscoveredBy(playerId)) {
                 visibleHexes.add(involved);
             }
         }
@@ -71,9 +73,10 @@ public class DisasterHandler {
 
     private void animateTsunami(Tsunami tsunami) {
         if (tsunami.getCenter() == null) return;
+        java.util.UUID playerId = gameState.getLocalPlayerId();
         List<Hex> visibleHexes = new ArrayList<>();
         for (Hex involved : tsunami.getInvolvedHexes()) {
-            if (involved.isDiscovered()) {
+            if (involved.isDiscoveredBy(playerId)) {
                 visibleHexes.add(involved);
             }
         }
@@ -85,7 +88,8 @@ public class DisasterHandler {
 
     private void animateBearAttack(BearAttack bearAttack) {
         if (bearAttack.getCenter() == null) return;
-        boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(Hex::isDiscovered);
+        java.util.UUID playerId = gameState.getLocalPlayerId();
+        boolean anyDiscovered = bearAttack.getInvolvedHexes().stream().anyMatch(h -> h.isDiscoveredBy(playerId));
         if (anyDiscovered) {
             WarningDialogs.bearAttack();
         }

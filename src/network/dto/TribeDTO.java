@@ -1,5 +1,8 @@
 package network.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TribeDTO {
 
     public String id;
@@ -11,7 +14,7 @@ public class TribeDTO {
     public int maxHp;
     public int relation;
     public String relationStatus;
-    public boolean discovered;
+    public List<String> discoveredByPlayerIds = new ArrayList<>();
     public boolean permanentReward;
     public boolean usedThisTurn;
     public int allianceLockTurns;

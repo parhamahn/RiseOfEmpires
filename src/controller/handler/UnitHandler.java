@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class UnitHandler {
     private final GameState gameState;
@@ -116,7 +117,7 @@ public class UnitHandler {
     private void handleBorderExpansion(Hex clicked, Unit unit) {
         java.util.UUID owner = gameState.resolveActivePlayerId();
         for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selectionContext.getSelectedHex())) {
-            if (!neighbor.isInEmpireBorder() && neighbor.isDiscovered()) {
+            if (!neighbor.isInEmpireBorder() && neighbor.isDiscoveredBy(owner)) {
                 neighbor.setBorderOwner(owner);
             }
         }
@@ -192,23 +193,24 @@ public class UnitHandler {
         Hex selected = selectionContext.getSelectedHex();
         if (selected == null) return;
 
+        UUID playerId = gameState.resolveActivePlayerId();
         boolean discoveredAny = false;
 
         for (Unit unit : selected.getUnits()) {
             if (unit.isExplorer()) {
                 for (Hex neighbor : gameState.getWorldState().getMap().getNeighbourHexes(selected)) {
-                    if (neighbor != null && !neighbor.isDiscovered()) {
-                        neighbor.setDiscovered(true);
-                        markStructureDiscovered(neighbor);
+                    if (neighbor != null && !neighbor.isDiscoveredBy(playerId)) {
+                        neighbor.discoverBy(playerId);
+                        markStructureDiscovered(neighbor, playerId);
                         discoveredAny = true;
                     }
                 }
             }
         }
 
-        if (!selected.isDiscovered()) {
-            selected.setDiscovered(true);
-            markStructureDiscovered(selected);
+        if (!selected.isDiscoveredBy(playerId)) {
+            selected.discoverBy(playerId);
+            markStructureDiscovered(selected, playerId);
             discoveredAny = true;
         }
 
@@ -217,9 +219,9 @@ public class UnitHandler {
         }
     }
 
-    private void markStructureDiscovered(Hex hex) {
+    private void markStructureDiscovered(Hex hex, UUID playerId) {
         if (hex.getBuilding() instanceof Tribe tribe) {
-            tribe.setDiscovered(true);
+            tribe.discoverBy(playerId);
         }
     }
 }

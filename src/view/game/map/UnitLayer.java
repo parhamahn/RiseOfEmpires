@@ -25,13 +25,14 @@ public class UnitLayer implements MapLayer {
     @Override
     public void draw(Graphics2D g2, Map map, GameState gameState, SelectionContext selection, Camera camera) {
         int unitSize = Math.max(20, camera.getHexRadius() / 2);
+        java.util.UUID playerId = gameState.getLocalPlayerId();
 
         List<Unit> units = new ArrayList<>();
         for(Unit unit:gameState.getWorldState().getEnemies())units.add(unit);
         for(Unit unit:gameState.getEmpireState().getUnits())units.add(unit);{}
 
         for (Unit unit : units) {
-            if (unit.getHex() == null || !unit.getHex().isDiscovered()) continue;
+            if (unit.getHex() == null || !unit.getHex().isDiscoveredBy(playerId)) continue;
             if (unit.isMoving() || (!unit.isAssigned()
                     && (unit.getHex().getBuilding() == null || !unit.getHex().getBuilding().isTownHall()))) {
                 if(unit.getHex().getTerrainType()== Hex.TerrainType.SEA && !unit.isMoving()){continue;}

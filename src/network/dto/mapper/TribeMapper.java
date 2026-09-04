@@ -8,6 +8,8 @@ import model.mission.WarriorMission;
 import network.dto.DtoMapper;
 import network.dto.TribeDTO;
 
+import java.util.UUID;
+
 public enum TribeMapper implements DtoMapper<Tribe, TribeDTO> {
     INSTANCE;
 
@@ -23,7 +25,34 @@ public enum TribeMapper implements DtoMapper<Tribe, TribeDTO> {
         dto.maxHp = tribe.getMaxHP();
         dto.relation = tribe.getRelation();
         dto.relationStatus = tribe.getRelationStatus().name();
-        dto.discovered = tribe.isDiscovered();
+        for (UUID id : tribe.getDiscoveredBy()) {
+            dto.discoveredByPlayerIds.add(id.toString());
+        }
+        dto.permanentReward = tribe.isPermanentReward();
+        dto.usedThisTurn = tribe.isUsedThisTurn();
+        dto.allianceLockTurns = tribe.getAllianceLockTurns();
+        dto.lastMissionTurn = tribe.getLastMissionTurn();
+        if (tribe.getActiveMission() != null) {
+            dto.activeMission = MissionMapper.INSTANCE.toDTO(tribe.getActiveMission());
+        }
+        dto.tradeRate = tribe.getTradeStrategy() != null ? tribe.getTradeStrategy().getRate() : 0;
+        return dto;
+    }
+
+    public TribeDTO toDTO(Tribe tribe, UUID recipientId) {
+        TribeDTO dto = new TribeDTO();
+        dto.id = tribe.getId().toString();
+        dto.type = tribe.getClass().getSimpleName();
+        dto.hexC = tribe.getHex().getC();
+        dto.hexR = tribe.getHex().getR();
+        dto.name = tribe.getName();
+        dto.hp = tribe.getHP();
+        dto.maxHp = tribe.getMaxHP();
+        dto.relation = tribe.getRelation();
+        dto.relationStatus = tribe.getRelationStatus().name();
+        if (recipientId != null && tribe.isDiscoveredBy(recipientId)) {
+            dto.discoveredByPlayerIds.add(recipientId.toString());
+        }
         dto.permanentReward = tribe.isPermanentReward();
         dto.usedThisTurn = tribe.isUsedThisTurn();
         dto.allianceLockTurns = tribe.getAllianceLockTurns();
@@ -50,7 +79,11 @@ public enum TribeMapper implements DtoMapper<Tribe, TribeDTO> {
         tribe.setName(dto.name);
         tribe.setRelation(dto.relation);
         tribe.setRelationStatus(RelationStatus.valueOf(dto.relationStatus));
-        tribe.setDiscovered(dto.discovered);
+        if (dto.discoveredByPlayerIds != null) {
+            for (String idStr : dto.discoveredByPlayerIds) {
+                tribe.discoverBy(UUID.fromString(idStr));
+            }
+        }
         tribe.setPermanentReward(dto.permanentReward);
         tribe.setUsedThisTurn(dto.usedThisTurn);
         tribe.setAllianceLockTurns(dto.allianceLockTurns);

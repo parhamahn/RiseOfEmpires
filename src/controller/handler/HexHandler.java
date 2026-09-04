@@ -18,6 +18,7 @@ import view.game.map.MapPanel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.UUID;
 
 public class HexHandler {
     private final GameState gameState;
@@ -51,6 +52,8 @@ public class HexHandler {
                 if (clicked == null) return;
                 if(gamePanel.isAnyPanelOpen())return;
 
+                UUID playerId = gameState.resolveActivePlayerId();
+
 
                 if(selectionContext.getTeleportItemUsed()!=null){
                     TeleportItem item = selectionContext.getTeleportItemUsed();
@@ -69,14 +72,14 @@ public class HexHandler {
                 }
 
                 if (selectionContext.getWallOriginHex() != null) {
-                    if(!clicked.isDiscovered() || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
+                    if(!clicked.isDiscoveredBy(playerId) || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
                     buildingHandler.handleWallTask(selectionContext.getWallOriginHex(), clicked);
                     gamePanel.repaint();
                     return;
                 }
 
                 if (selectionContext.getRoadOriginHex() != null) {
-                    if(!clicked.isDiscovered() || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
+                    if(!clicked.isDiscoveredBy(playerId) || clicked.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN || clicked.getTerrainType()== Hex.TerrainType.SEA) return;
                     buildingHandler.handleRoadTask(selectionContext.getRoadOriginHex(), clicked);
                     gamePanel.repaint();
                     return;
@@ -102,7 +105,7 @@ public class HexHandler {
 
                 boolean discoveredNeighbour = false;
                 for (Hex hex : gameState.getWorldState().getMap().getNeighbourHexes(clicked)) {
-                    if (hex != null && hex.isDiscovered()) {
+                    if (hex != null && hex.isDiscoveredBy(playerId)) {
                         discoveredNeighbour = true;
                         break;
                     }
@@ -122,12 +125,12 @@ public class HexHandler {
                         bazaarHandler.setBazaar((Bazaar) clicked.getBuilding());
                         gamePanel.getBazaarPanel().open();
                         SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
-                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isDiscovered() && clicked.isInEmpireBorder()) {
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof TradingCenter && clicked.isDiscoveredBy(playerId) && clicked.isInEmpireBorder()) {
                         gamePanel.setAnyPanelOpen(true);
                         tradingCenterHandler.setTradingCenter((TradingCenter) clicked.getBuilding());
                         gamePanel.getTradingCenterPanel().open();
                         SoundEffects.getInstance().startBazaarBackgroundSoundEffect();
-                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe && clicked.isDiscovered()) {
+                    } else if (selectionContext.getSelectedHex() == clicked && clicked.getBuilding() != null && clicked.getBuilding() instanceof Tribe && clicked.isDiscoveredBy(playerId)) {
                         gamePanel.setAnyPanelOpen(true);
                         tribeHandler.setTribe((Tribe) clicked.getBuilding());
                         gamePanel.getTribeMainPanel().open();

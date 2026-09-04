@@ -41,7 +41,7 @@ public class CrackEffectLayer implements MapLayer {
 
     public void addCracks(List<Hex> hexes) {
         for (Hex hex : hexes) {
-            if (hex == null || !hex.isDiscovered()) continue;
+            if (hex == null) continue;
             HexCrack crack = new HexCrack();
             crack.hex = hex;
             crack.image = CRACK_IMAGES[rand.nextInt(CRACK_IMAGES.length)];

@@ -12,9 +12,7 @@ import model.unit.Unit;
 import model.unit.enemy.Guard;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class Tribe extends MapStructure implements Serializable {
 private static final long serialVersionUID = 1L;
@@ -25,7 +23,7 @@ private static final long serialVersionUID = 1L;
     private Mission activeMission;
     private boolean isPermanentReward;
     private boolean usedThisTurn;
-    private boolean discovered;
+    private Set<UUID> discoveredBy = new HashSet<>();
     private int allianceLockTurns;
     private int lastMissionTurn;
     private int lastAttackedTurn = -1;
@@ -35,7 +33,6 @@ private static final long serialVersionUID = 1L;
         super(hex, maxHP);
         this.name = RandomNameGenerator.generateRandomName();
         this.isPermanentReward = false;
-        this.discovered = false;
         this.allianceLockTurns = 0;
         this.lastMissionTurn = 0;
         changeRelation(0, Collections.emptyList());
@@ -149,12 +146,16 @@ private static final long serialVersionUID = 1L;
         this.usedThisTurn = usedThisTurn;
     }
 
-    public boolean isDiscovered() {
-        return discovered;
+    public boolean isDiscoveredBy(UUID playerId) {
+        return playerId != null && discoveredBy.contains(playerId);
     }
 
-    public void setDiscovered(boolean discovered) {
-        this.discovered = discovered;
+    public void discoverBy(UUID playerId) {
+        if (playerId != null) discoveredBy.add(playerId);
+    }
+
+    public Set<UUID> getDiscoveredBy() {
+        return discoveredBy;
     }
 
     public int getAllianceLockTurns() {

@@ -38,11 +38,12 @@ public class ResourceLayer implements MapLayer {
         int iconSize = Math.max(10, r2 / 5);
         int badgeRadius = iconSize / 2 + 7;
         int spacing = badgeRadius * 2 + 4;
+        java.util.UUID playerId = gameState.getLocalPlayerId();
 
         for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
                 Hex hex = map.getHex(c, r);
-                if (hex == null || !hex.isDiscovered() || hex.getBuilding() != null) continue;
+                if (hex == null || !hex.isDiscoveredBy(playerId) || hex.getBuilding() != null) continue;
 
                 HashMap<Hex.ResourceType, Integer> resources = hex.getResources();
                 if (resources.isEmpty()) continue;

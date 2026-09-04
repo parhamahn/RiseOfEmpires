@@ -32,6 +32,7 @@ public class TerrainLayer implements MapLayer {
         if (map == null) return;
 
         int r2 = camera.getHexRadius();
+        java.util.UUID playerId = gameState.getLocalPlayerId();
 
         for (int r = camera.getVisibleStartRow(); r < camera.getVisibleEndRow(map.getRows()); r++) {
             for (int c = camera.getVisibleStartCol(); c < camera.getVisibleEndCol(map.getCols()); c++) {
@@ -41,7 +42,7 @@ public class TerrainLayer implements MapLayer {
                 Point center = camera.getHexCenter(c, r);
                 Polygon tile = camera.translatePolygon(camera.getHexShape(), center.x, center.y);
 
-                if (hex.isDiscovered()) {
+                if (hex.isDiscoveredBy(playerId)) {
                     BufferedImage img = terrainImages.get(hex.getTerrainType());
                     if (img == null) continue;
                     Shape oldClip = g2.getClip();

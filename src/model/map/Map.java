@@ -81,16 +81,13 @@ private static final long serialVersionUID = 1L;
                 }
 
                 grid[r][c] = new Hex(c, r, seedTerrain[nearest]);
-                grid[r][c].setDiscovered(false);
             }
         }
 
         Hex townHallHex = getHex(cols / 2, rows / 2);
         townHallHex.setTerrainType(Hex.TerrainType.PLAIN);
-        townHallHex.setDiscovered(true);
         boolean jungleInNeighbour = false;
         for(Hex neighbour:getNeighbourHexes(townHallHex)){
-            neighbour.setDiscovered(true);
             if (neighbour.getTerrainType()== Hex.TerrainType.FOREST){
                 jungleInNeighbour = true;
             }

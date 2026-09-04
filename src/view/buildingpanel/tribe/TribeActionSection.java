@@ -123,7 +123,7 @@ public class TribeActionSection extends BaseSection {
             StyledButtons.goldBorder(askAlliance);
             StyledButtons.setDisabled(askAlliance, false, null);
         }
-        if(!tribe.isDiscovered()){
+        if(!tribe.isDiscoveredBy(gameState.getLocalPlayerId())){
             StyledButtons.setDisabled(viewReward, true, "Tribe is not discovered yet");
             viewReward.setBorder(null);
         }else{

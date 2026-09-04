@@ -47,7 +47,7 @@ public class TeleportItem extends Item{
         else if(!toHex.getUnits().isEmpty()){
             return "Can't teleport to a hex with units";
         }
-        else if(!toHex.isDiscovered()){
+        else if(!toHex.isDiscoveredBy(getUnit().getOwnerID())){
             return "Can't teleport to a not-discovered hex";
         }
         else if(toHex.getTerrainType()== Hex.TerrainType.SEA || toHex.getTerrainType()== Hex.TerrainType.TALL_MOUNTAIN){
