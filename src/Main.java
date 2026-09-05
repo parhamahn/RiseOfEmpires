@@ -54,6 +54,7 @@ public class Main {
             LobbyController lobbyController = new LobbyController(lobbyPanel, cards, gameState, gamePanel, selectionContext);
 
             GameController gameController = new GameController(gamePanel, cards, gameState, selectionContext);
+            lobbyController.setGameController(gameController);
 
             MenuPanel menuPanel = new MenuPanel();
             MenuController menuController = new MenuController(menuPanel, cards, gameState, gamePanel, selectionContext, lobbyController);

@@ -1,7 +1,8 @@
 package controller.handler;
 
-import model.Player;
 import model.state.GameState;
+import network.client.NetworkManager;
+import network.request.ChatMessageRequest;
 import view.game.ChatSection;
 import view.game.GamePanel;
 
@@ -14,6 +15,7 @@ public class ChatHandler {
 
     private GameState gameState;
     private GamePanel gamePanel;
+    private NetworkManager networkManager;
 
     public ChatHandler(GameState gameState, GamePanel gamePanel) {
 
@@ -50,11 +52,14 @@ public class ChatHandler {
         ChatSection chatSection = gamePanel.getChatSection();
         UUID senderID = gameState.getLocalPlayerId();
         String string = chatSection.getChatInput().getText();
-        if(string!=null && !string.isBlank() && chatSection.isVisible()){
-            String senderName = gameState.getPlayerName(senderID);
-            chatSection.addChat(senderName, string);
+        if(string!=null && !string.isBlank() && chatSection.isVisible() && networkManager != null){
+            networkManager.sendUdp(new ChatMessageRequest(senderID, string));
             chatSection.getChatInput().setText("");
         }
+    }
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        this.networkManager = networkManager;
     }
 
 }

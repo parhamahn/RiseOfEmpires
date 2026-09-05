@@ -9,6 +9,7 @@ import controller.handler.building.tribe.TribeHandler;
 import controller.handler.combat.CombatHandler;
 import model.map.Hex;
 import model.state.GameState;
+import network.client.NetworkManager;
 import view.game.GamePanel;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class GameController {
     private GamePanel gamePanel;
     private UnitHandler unitHandler;
     private BuildingHandler buildingHandler;
+    private ChatHandler chatHandler;
 
     public GameController(GamePanel gamePanel, JPanel cards, GameState gameState, SelectionContext selectionContext){
         this.gamePanel = gamePanel;
@@ -33,6 +35,7 @@ public class GameController {
         HexHandler hexHandler = new HexHandler(gameState, gamePanel, unitHandler, buildingHandler, selectionContext, bazaarHandler, tradingCenterHandler, tribeHandler, combatHandler);
         TownHallHandler townHallHandler = new TownHallHandler(gameState, gamePanel, buildingHandler);
         ChatHandler chatHandler = new ChatHandler(gameState, gamePanel);
+        this.chatHandler = chatHandler;
 
         new CameraHandler(gamePanel).attachCameraListeners();
 
@@ -53,6 +56,10 @@ public class GameController {
         buildingHandler.updateTaskListPanel();
         unitHandler.discover();
         gamePanel.repaint();
+    }
+
+    public void setNetworkManager(NetworkManager networkManager) {
+        chatHandler.setNetworkManager(networkManager);
     }
 
 }

@@ -16,6 +16,7 @@ public class GameServer {
     private volatile GameState game;
     private Lobby lobby;
     private Messenger messenger;
+    private Messenger udpMessenger;
 
     public void setGameState(GameState game) { this.game = game; }
     public GameState getGameState() { return game; }
@@ -23,6 +24,8 @@ public class GameServer {
     public Lobby getLobby() { return lobby; }
     public void setMessenger(Messenger messenger) { this.messenger = messenger; }
     public Messenger getMessenger() { return messenger; }
+    public void setUdpMessenger(Messenger udpMessenger) { this.udpMessenger = udpMessenger; }
+    public Messenger getUdpMessenger() { return udpMessenger; }
 
     public <T extends Message> void register(Class<T> type, MessageHandler<T> handler) {
         handlers.put(type, handler);

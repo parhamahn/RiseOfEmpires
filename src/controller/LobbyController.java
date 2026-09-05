@@ -4,6 +4,7 @@ import model.state.GameState;
 import network.client.NetworkManager;
 import network.common.Message;
 import network.dto.mapper.GameStateMapper;
+import network.notif.ChatMessageNotif;
 import network.notif.GameStateNotif;
 import network.notif.LobbyStateNotif;
 import network.request.EndTurnRequest;
@@ -36,6 +37,7 @@ public class LobbyController {
     private final GamePanel gamePanel;
     private final SelectionContext selectionContext;
 
+    private GameController gameController;
     private Server hostedServer;
     private NetworkManager networkManager;
     private UUID myPlayerId;
@@ -119,6 +121,7 @@ public class LobbyController {
 
         try {
             networkManager.connect(host, PORT, myPlayerId);
+            if (gameController != null) gameController.setNetworkManager(networkManager);
             networkManager.send(new JoinLobbyRequest(myPlayerId, myPlayerName));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not connect to " + host + ": " + e.getMessage(),
@@ -142,6 +145,8 @@ public class LobbyController {
             handleGameState(notif);
         } else if (message instanceof ActionResultResponse response && !response.isSuccess()) {
             JOptionPane.showMessageDialog(lobbyPanel, response.getErrorMessage(), "Action Rejected", JOptionPane.WARNING_MESSAGE);
+        } else if (message instanceof ChatMessageNotif notif) {
+            gamePanel.getChatSection().addChat(notif.getSenderName(), notif.getContent());
         }
     }
 
@@ -219,4 +224,5 @@ public class LobbyController {
 
     public NetworkManager getNetworkManager() { return networkManager; }
     public UUID getMyPlayerId() { return myPlayerId; }
+    public void setGameController(GameController gameController) { this.gameController = gameController; }
 }

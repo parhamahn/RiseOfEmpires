@@ -1,16 +1,20 @@
 package network.server;
 
 import model.state.Lobby;
+import network.request.ChatMessageRequest;
 import network.request.EndTurnRequest;
 import network.request.JoinLobbyRequest;
 import network.request.ReadyToggleRequest;
 import network.request.SelectMapRequest;
 import network.request.StartGameRequest;
+import network.server.handlers.ChatMessageHandler;
 import network.server.handlers.EndTurnHandler;
 import network.server.handlers.JoinLobbyHandler;
 import network.server.handlers.ReadyToggleHandler;
 import network.server.handlers.SelectMapHandler;
 import network.server.handlers.StartGameHandler;
+import network.server.handlers.UdpPingHandler;
+import network.request.UdpPingRequest;
 import network.server.tcp.TCPServer;
 import network.server.udp.UDPServer;
 
@@ -33,6 +37,7 @@ public class Server {
         udpServer.setGameServer(gameServer);
         gameServer.setLobby(lobby);
         gameServer.setMessenger(tcpServer);
+        gameServer.setUdpMessenger(udpServer);
 
         this.TCPThread = new Thread(tcpServer);
         this.UDPThread = new Thread(udpServer);
@@ -46,6 +51,8 @@ public class Server {
         gameServer.register(SelectMapRequest.class, new SelectMapHandler(gameServer));
         gameServer.register(StartGameRequest.class, new StartGameHandler(gameServer));
         gameServer.register(EndTurnRequest.class, new EndTurnHandler(gameServer));
+        gameServer.register(ChatMessageRequest.class, new ChatMessageHandler(gameServer));
+        gameServer.register(UdpPingRequest.class, new UdpPingHandler());
     }
 
     public void start() {
