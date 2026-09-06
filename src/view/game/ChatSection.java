@@ -62,7 +62,7 @@ public class ChatSection extends JPanel {
         this.setVisible(true);
     }
 
-    public void addChat(String name, String message){
+    public void addChat(String name, String message, String timeStamp){
         StyledDocument doc = chatList.getStyledDocument();
 
         SimpleAttributeSet nameAttr = new SimpleAttributeSet();
@@ -70,7 +70,7 @@ public class ChatSection extends JPanel {
         StyleConstants.setBold(nameAttr, true);
 
         try {
-            doc.insertString(doc.getLength(), name + ": ", nameAttr);
+            doc.insertString(doc.getLength(), "[ "+ timeStamp+ " ] " + name + ": ", nameAttr);
             doc.insertString(doc.getLength(), message + "\n", new SimpleAttributeSet());
         } catch (BadLocationException ignored) {}
 

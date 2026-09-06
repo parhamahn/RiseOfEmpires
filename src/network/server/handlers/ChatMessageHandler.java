@@ -32,6 +32,6 @@ public class ChatMessageHandler implements MessageHandler<ChatMessageRequest> {
             if (player != null) senderName = player.getName();
         }
 
-        udpMessenger.broadcast(new ChatMessageNotif(null, senderID, senderName, req.getContent(), System.currentTimeMillis()));
+        udpMessenger.broadcast(new ChatMessageNotif(null, senderID, senderName, req.getContent()));
     }
 }

@@ -52,8 +52,13 @@ public class ChatHandler {
         ChatSection chatSection = gamePanel.getChatSection();
         UUID senderID = gameState.getLocalPlayerId();
         String string = chatSection.getChatInput().getText();
-        if(string!=null && !string.isBlank() && chatSection.isVisible() && networkManager != null){
-            networkManager.sendUdp(new ChatMessageRequest(senderID, string));
+        if(string!=null && !string.isBlank() && chatSection.isVisible()){
+            if (networkManager != null) {
+                networkManager.sendUdp(new ChatMessageRequest(senderID, string));
+            } else {
+                chatSection.addChat("You", string,
+                        new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date()));
+            }
             chatSection.getChatInput().setText("");
         }
     }

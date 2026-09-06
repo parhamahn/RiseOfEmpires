@@ -146,7 +146,7 @@ public class LobbyController {
         } else if (message instanceof ActionResultResponse response && !response.isSuccess()) {
             JOptionPane.showMessageDialog(lobbyPanel, response.getErrorMessage(), "Action Rejected", JOptionPane.WARNING_MESSAGE);
         } else if (message instanceof ChatMessageNotif notif) {
-            gamePanel.getChatSection().addChat(notif.getSenderName(), notif.getContent());
+            gamePanel.getChatSection().addChat(notif.getSenderName(), notif.getContent(), notif.getSentAt());
         }
     }
 
