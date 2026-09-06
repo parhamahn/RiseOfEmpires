@@ -1,5 +1,6 @@
 package controller.handler;
 
+import model.Cheat;
 import model.state.GameState;
 import network.client.NetworkManager;
 import network.request.ChatMessageRequest;
@@ -45,6 +46,7 @@ public class ChatHandler {
         }else{
             gamePanel.setAnyPanelOpen(true);
             chatSection.showChat();
+            chatSection.getChatInput().requestFocus();
         }
     }
 
@@ -53,6 +55,23 @@ public class ChatHandler {
         UUID senderID = gameState.getLocalPlayerId();
         String string = chatSection.getChatInput().getText();
         if(string!=null && !string.isBlank() && chatSection.isVisible()){
+
+            if(string.startsWith("/")){
+                String cmd = string.toLowerCase().replace("/", "");
+                switch (cmd) {
+                    case "marco" -> Cheat.marco(gameState, senderID);
+                    case "greedisgood" -> Cheat.greedIsGood(gameState.getEmpireState(senderID));
+                    case "redbull" -> Cheat.redbull(gameState.getEmpireState(senderID));
+                }
+                gamePanel.getHudPanel().refresh();
+                gamePanel.getMapPanel().markStaticDirty();
+                gamePanel.getMapPanel().repaint();
+                gamePanel.getUnitListPanel().repaint();
+                gamePanel.getTaskListPanel().repaint();
+                chatSection.getChatInput().setText("");
+                return;
+            }
+
             if (networkManager != null) {
                 networkManager.sendUdp(new ChatMessageRequest(senderID, string));
             } else {
