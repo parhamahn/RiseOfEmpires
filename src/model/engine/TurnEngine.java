@@ -65,6 +65,7 @@ public class TurnEngine {
         spawnWarriorAllyHelpers(gameState);
         resetTradingCenters(gameState);
         advanceWorld(gameState, events);
+        checkWinCondition(gameState, events);
         return events;
     }
 
@@ -314,5 +315,13 @@ public class TurnEngine {
             }
         }
         return null;
+    }
+
+    private static void checkWinCondition(GameState gameState, List<GameEvent> events){
+        List<EmpireState> notEliminated = new ArrayList<>();
+        for(EmpireState empireState:gameState.getEmpireStates().values()){
+            if(!empireState.isEliminated())notEliminated.add(empireState);
+        }
+        if(gameState.getEmpireStates().size() > 1 && notEliminated.size() == 1)events.add(new GameEvent(GameEvent.Type.GAME_OVER));
     }
 }

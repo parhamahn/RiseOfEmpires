@@ -96,6 +96,7 @@ public class TurnHandler {
                             Season.SeasonType.valueOf(parts[0]), Season.SeasonType.valueOf(parts[1]));
                 }
                 case QUEUE_COMPLETED -> mapNeedsRefresh = true;
+                case GAME_OVER -> gameOver();
                 default -> { }
             }
         }
@@ -103,5 +104,11 @@ public class TurnHandler {
             gamePanel.getMapPanel().markStaticDirty();
             gamePanel.getMapPanel().repaint();
         }
+    }
+
+    public void gameOver(){
+        EmpireState winner = gameState.getEmpireStates().values().stream().filter(e->!(e.isEliminated())).toList().get(0);
+        JOptionPane.showMessageDialog(null, gameState.getPlayerName(winner.getTownHallHex().getBuilding().getOwnerID())+" won the game.");
+
     }
 }

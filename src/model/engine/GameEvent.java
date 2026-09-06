@@ -15,7 +15,8 @@ public class GameEvent {
         TRIBE_NOW_ENEMY,
         SEASON_CHANGED,
         QUEUE_COMPLETED,
-        TRIBE_ATTACKED_PLAYER
+        TRIBE_ATTACKED_PLAYER,
+        GAME_OVER
     }
 
     private final Type type;
